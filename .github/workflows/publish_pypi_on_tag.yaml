@@ -1,8 +1,9 @@
+name: Publish release to pypi
+
 on:
   push:
-    tags: # push on each tag
-      - '*'
-# .github/workflows/ci-cd.yml
+    tags:
+      - "*"
 jobs:
   pypi-publish:
     name: Upload release to PyPI
@@ -11,12 +12,10 @@ jobs:
       name: pypi
       url: https://pypi.org/p/earthdaily
     permissions:
-      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
     steps:
-    # retrieve your distributions here
-
-    - name: Publish package distributions to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-	  with:
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}

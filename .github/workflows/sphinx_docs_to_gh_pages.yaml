@@ -25,7 +25,7 @@ jobs:
       - name: Installing the library
         shell: bash -l {0}
         run: |
-          python setup.py install
+          pip install .
       - name: Running the Sphinx to gh-pages Action
         env:
             EDS_CLIENT_ID: ${{ secrets.EDS_CLIENT_ID }}
