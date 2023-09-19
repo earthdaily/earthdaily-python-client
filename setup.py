@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 # Retrieve release number from text file VERSION.
 # See https://packaging.python.org/guides/single-sourcing-package-version/.
@@ -6,12 +6,10 @@ with open("earthdaily/__init__.py", encoding="utf8") as f:
     for line in f:
         if line.startswith("__version__"):
             version = line.split("=")[1].split('"')[1]
-# with open('requirements.txt') as f:
-#     required = f.read().splitlines()
 
 setup(
     name="earthdaily",
-    packages=["earthdaily"],
+    packages=find_packages(),
     version=version,
     description="earthdaily: easy authentication, search and retrieval of Earth Data Store collections data",
     author="EarthDaily Agro",
