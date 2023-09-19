@@ -1,9 +1,9 @@
 name: Publish release to pypi
 
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types: [created]
+    
 jobs:
   pypi-publish:
     name: Upload release to PyPI
