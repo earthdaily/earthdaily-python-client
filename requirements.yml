@@ -1,0 +1,23 @@
+name: earthdaily
+channels:
+ - conda-forge
+ - defaults
+dependencies:
+ - numpy
+ - gdal
+ - pandas
+ - geopandas
+ - rasterio
+ - scipy
+ - pystac-client
+ - requests
+ - matplotlib
+ - xarray
+ - rioxarray
+ - h5netcdf 
+ - netcdf4
+ - pystac
+ - stackstac
+ - odc-stac
+ - tqdm
+ - joblib

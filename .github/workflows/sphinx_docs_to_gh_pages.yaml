@@ -1,0 +1,41 @@
+name: Sphinx docs to gh-pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sphinx_docs_to_gh-pages:
+    runs-on: ubuntu-latest
+    name: Sphinx docs to gh-pages
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Make conda environment
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          micromamba-version: '1.5.1-0'
+          environment-file: requirements_dev.yml    # Path to the documentation conda environment
+          environment-name: earthdaily_env
+          cache-environment: true
+          post-cleanup: 'all'
+          init-shell: bash
+      - name: Installing the library
+        shell: bash -l {0}
+        run: |
+          python setup.py install
+      - name: Running the Sphinx to gh-pages Action
+        env:
+            EDS_CLIENT_ID: ${{ secrets.EDS_CLIENT_ID }}
+            EDS_AUTH_URL: ${{ secrets.EDS_AUTH_URL }}
+            EDS_SECRET: ${{ secrets.EDS_SECRET }} 
+            EDS_API_URL: ${{ secrets.EDS_API_URL }}
+        uses: uibcdf/action-sphinx-docs-to-gh-pages@v1.1.0
+        with:
+          branch: main
+          dir_docs: docs
+          sphinxapiopts: '--separate -o . ../'
+          sphinxapiexclude: '../*setup* ../*.ipynb'
+          sphinxopts: ''
