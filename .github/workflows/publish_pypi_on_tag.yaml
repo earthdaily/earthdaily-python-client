@@ -3,7 +3,7 @@ name: Publish release to pypi
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 jobs:
   pypi-publish:
     name: Upload release to PyPI
