@@ -17,7 +17,7 @@ jobs:
         with:
           micromamba-version: '1.5.1-0'
           environment-file: requirements_dev.yml    # Path to the documentation conda environment
-          environment-name: earthdaily_env
+          environment-name: earthdaily
           cache-environment: true
           post-cleanup: 'all'
           init-shell: bash
@@ -37,4 +37,4 @@ jobs:
           dir_docs: docs
           sphinxapiopts: '--separate -o . ../'
           sphinxapiexclude: '../*setup* ../*.ipynb'
-          sphinxopts: ''
+          sphinxopts: '-W'

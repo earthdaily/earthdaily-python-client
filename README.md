@@ -1,15 +1,16 @@
-# earthdaily python package
+# Earthdaily Python Package
 
-The earthdaily python package provides an API to use the Stac catalog Earth Data Store. Based onto 
-It uses best practices for datacube creation (convert to reflectance, automatic clipping to area of interest...), dask compatible preprocesses...
+## Your Gateway to the Stac Catalog Earth Data Store
+
+In the realm of geospatial data analysis and Earth observation, the EarthDaily Python package emerges as a powerful toolset that seamlessly connects you to the vast and invaluable Stac catalog Earth Data Store. This package is designed with the vision of simplifying and optimizing your workflow, ensuring that you can harness the full potential of Earth observation data with ease and efficiency.
+
+Our package is built upon a foundation of best practices, meticulously crafted to elevate your data analysis experience. With EarthDaily, you can effortlessly navigate the complexities of datacube creation, including crucial processes like conversion to reflectance and automatic clipping to your area of interest. Additionally, we've taken care to make EarthDaily fully compatible with Dask, enabling you to scale your data preprocessing tasks with confidence and precision.
 
 ## Install
 
-### Using mamba (recommended)
+### Using pip 
 
-We recommend using mamba instead of conda.
-From a fresh install, download latest mambaforge : 
-https://github.com/conda-forge/miniforge#mambaforge
+`pip install earthdaily`
 
-Then in your terminal (unix) or in Mambaforge Prompt on Windows install in your env (here we name it earthdaily. If the env does not exist, it will create it):
-> mamba env update --name earthdaily --file requirements.yml
+### Planned : Using conda/mamba
+
