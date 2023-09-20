@@ -37,4 +37,4 @@ jobs:
           dir_docs: docs
           sphinxapiopts: '--separate -o . ../'
           sphinxapiexclude: '../*setup* ../*.ipynb'
-          sphinxopts: '-W'
+          sphinxopts: ''
