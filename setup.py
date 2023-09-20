@@ -34,6 +34,7 @@ setup(
         "stackstac",
         "odc-stac",
         "tqdm",
+        "rich",
     ],
     license="Commercial",
     zip_safe=False,
