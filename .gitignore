@@ -63,3 +63,5 @@ docs/_*
 # PyBuilder
 target/
 
+# Auth
+.env

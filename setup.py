@@ -36,6 +36,7 @@ setup(
         "odc-stac",
         "tqdm",
         "rich",
+        "python-dotenv"
     ],
     license="Commercial",
     zip_safe=False,
