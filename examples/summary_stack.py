@@ -13,6 +13,10 @@ from rich.table import Table
 from rich.console import Console
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+
 console = Console()
 
 
