@@ -4,7 +4,6 @@ from pystac_client import Client
 from pystac.item_collection import ItemCollection
 import requests
 import geopandas as gpd
-
 import os
 import operator
 from earthdaily.earthdatastore import mask, _scales_collections
@@ -142,7 +141,10 @@ def _get_client(config=None):
     tokens = json.loads(token_response.text)
     client = Client.open(
         eds_url,
-        headers={"Authorization": f"bearer {tokens['access_token']}"},
+        headers={
+            "Authorization": f"bearer {tokens['access_token']}",
+            "X-Signed-Asset-Urls": "True",
+        },
     )
     return client
 
@@ -380,7 +382,6 @@ class Auth:
             add_default_scale_factor=add_default_scale_factor,
             **search_kwargs,
         )
-
         xr_datacube = datacube(
             items, intersects=intersects, bbox=bbox, assets=assets, **kwargs
         )
