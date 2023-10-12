@@ -21,3 +21,4 @@ dependencies:
  - odc-stac
  - tqdm
  - joblib
+ - python-dotenv

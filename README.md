@@ -14,3 +14,13 @@ Our package is built upon a foundation of best practices, meticulously crafted t
 
 ### Planned : Using conda/mamba
 
+## Authentication
+Authentication credentials are accessed from environment variables. As a convenience python-dotenv is supported. 
+Copy the `.env.sample` file and rename to simply `.env` and update with your credentials. This file is gitignored. 
+Then add to your script/notebook:
+
+```python3
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+```

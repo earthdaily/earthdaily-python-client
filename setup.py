@@ -13,7 +13,7 @@ setup(
     version=version,
     description="earthdaily: easy authentication, search and retrieval of Earth Data Store collections data",
     author="EarthDaily Agro",
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     install_requires=[
         "numpy",
         "scipy",
@@ -36,6 +36,7 @@ setup(
         "odc-stac",
         "tqdm",
         "rich",
+        "python-dotenv"
     ],
     license="Commercial",
     zip_safe=False,
