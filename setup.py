@@ -14,6 +14,8 @@ setup(
     description="earthdaily: easy authentication, search and retrieval of Earth Data Store collections data",
     author="EarthDaily Agro",
     python_requires=">=3.10",
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     install_requires=[
         "numpy",
         "scipy",
@@ -35,9 +37,10 @@ setup(
         "stackstac",
         "odc-stac",
         "tqdm",
+        "python-dotenv",
         "rich",
     ],
-    license="Commercial",
+    license="MIT",
     zip_safe=False,
     keywords=["Earth Data Store", "earthdaily", "earthdailyagro", "stac"],
 )
