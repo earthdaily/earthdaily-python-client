@@ -8,7 +8,6 @@ dependencies:
  - pandas
  - geopandas
  - rasterio
- - scipy
  - pystac-client
  - requests
  - matplotlib

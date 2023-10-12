@@ -35,7 +35,7 @@ earthdaily documentation
    :maxdepth: 3
    :caption: Documentation API
 
-   api
+   earthdaily
    CONTRIBUTING
    CHANGELOG
 
