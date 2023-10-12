@@ -9,7 +9,6 @@ import xarray as xr
 import rioxarray as rxr
 import tqdm
 
-
 def _xrmode(arr, **kwargs):
     values, counts = np.unique(arr, return_counts=True)
     isnan = np.isnan(values)
@@ -32,7 +31,7 @@ def zonal_stats(
     dataset : xr.Dataset
         Dataset with time dimension.
     gdf : gpd.GeoDataFrame
-        dataframe index will be store in "feature" dimension.
+        dataframe index will be store in "feature_name" dimension.
     operations : list, optional
         List of mathematical operations you want to apply. The default is ["mean"].
         Available : ["count", "mean", "median", "max", "min", "std", "mode"]
@@ -52,9 +51,9 @@ def zonal_stats(
     Returns
     -------
     xr.Dataset
-        3 dimensions (feature, stats, time)
+        3 dimensions (feature_name, stats, time)
 
-            feature : Index value of the input feature.
+            feature_name : Index value of the input feature.
 
             stats : list of chosen operations.
 
@@ -92,11 +91,10 @@ def zonal_stats(
                     else:
                         operation_func = getattr(subset.groupby("time"), operation)
                         stats[operation] = operation_func(...)
-                stats[operation] = stats[operation].expand_dims(
-                    dim={"stats": [operation]}
-                )
+                    stats[operation].expand_dims(dim={"stats": [operation]})
+
             ds_stats_ = xr.merge(list(stats.values()))
-            ds_stats_ = ds_stats_.expand_dims(dim={"feature": [feat.name]})
+            ds_stats_ = ds_stats_.expand_dims(dim={"feature_name": [feat.name]})
             if idx == 0:
                 ds_stats = ds_stats_.copy()
             else:

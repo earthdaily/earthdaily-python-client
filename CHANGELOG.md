@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `zonal_stats` output "feature" (not "feature_name") and `stats` dimensions
 
+
 ## [0.0.1-rc1] 2023-10-12
 
 ### Added
