@@ -2,7 +2,7 @@
 Generate a Sentinel-2 Datacube with SCL cloudmask
 ===============================================================
 
-Using Skyfox."""
+Using EarthDataStore."""
 
 ##############################################################################
 # Import librairies

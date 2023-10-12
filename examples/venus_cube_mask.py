@@ -1,8 +1,8 @@
 """
-Venus datacube with native mask
+Venus datacube
 =================================================================
 
-According to a theia location and max cloud cover, using Skyfox."""
+According to a theia location and max cloud cover, using earthdatastore."""
 
 ##############################################################################
 # Import librairies
@@ -12,7 +12,7 @@ from earthdaily import earthdatastore
 
 
 ##############################################################################
-# Init earthdatastore with env params
+# Load credentials and init earthdatastore
 # -------------------------------------------
 
 eds = earthdatastore.Auth()
@@ -30,28 +30,53 @@ query = {
 }
 
 ##############################################################################
+# Search for items
+# -------------------------------------------
+
+
+##############################################################################
+# Search for items
+# -------------------------------------------
+
+items = eds.search(collection, query=query, prefer_http=True)
+
+##############################################################################
+# .. note::
+#   We specify prefer_http=True because we didn't set any s3 credentials.
+
+
+print(f"{theia_location} venus location has {len(items)} items.")
+
+##############################################################################
+# Create the datacube and bandname mapping
+# -------------------------------------------
+
+
+##############################################################################
+# .. note::
+#   As transform and other metadata are missing in assets,
+#   compute them for first asset
+
+epsg, resolution = items[0].properties["proj:epsg"], items[0].properties["gsd"]
+
+##############################################################################
 # .. note::
 #   Instead of giving list of assets, you can provide a dict, with
 #   key as the asset you want, and the value as the name you want.
 
-venus = eds.datacube(
-    collection,
-    search_kwargs=dict(query=query),
+
+venus_datacube = earthdatastore.datacube(
+    items,
     assets={
         "image_file_SRE_B3": "blue",
         "image_file_SRE_B4": "green",
         "image_file_SRE_B7": "red",
     },
-    epsg="32614",
-    datetime="2018-11",
-    resolution=5,
-    mask_with="native",
+    epsg=epsg,
+    resolution=resolution,
 )
+print(venus_datacube)
 
-venus.isel(x=slice(4000, 4500), y=slice(4000, 4500))[["red", "green", "blue"]].to_array(
-    dim="band"
-).plot.imshow(vmin=0, vmax=0.33, col="time")
-
-##############################################################################
-# Create the datacube in one function
-# -------------------------------------------
+venus_datacube.isel(time=33, x=slice(4000, 4500), y=slice(4000, 4500))[
+    ["red", "green", "blue"]
+].to_array(dim="band").plot.imshow(vmin=0, vmax=0.33)
