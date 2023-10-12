@@ -1,8 +1,8 @@
 """
-Agricultural plot evolution with cloudmask
+Field evolution and zonal stats
 =================================================================
 
-Using SCL data from L2A"""
+Using SCL data from L2A, zonal stats for evolution"""
 
 ##############################################################################
 # Import librairies
@@ -47,6 +47,8 @@ cube_majority_clear = pivot_cube.sel(
     time=pivot_cube.time[pivot_cube.clear_percent_scl > 50]
 )
 
+cube_majority_clear = cube_majority_clear.load()
+
 cube_majority_clear.to_array(dim="band").plot.imshow(
     vmin=0, vmax=0.33, col="time", col_wrap=3
 )
@@ -54,3 +56,12 @@ cube_majority_clear.to_array(dim="band").plot.imshow(
 plt.title("Clear cover percent with SCL")
 plt.title("Pivot evolution with SCL masks")
 plt.show()
+
+
+#####################################################################da#########
+# Compute zonal stats for the pivot
+# ----------------------------------------------------
+zonal_stats = earthdatastore.cube_utils.zonal_stats(cube_majority_clear, pivot)
+zonal_stats.isel(feature=0).sel(stats="mean").to_array(dim="band").plot.line(
+    x="time", col="band"
+)
