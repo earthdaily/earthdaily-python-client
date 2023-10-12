@@ -1,8 +1,9 @@
 """
-Datacube creation with odc-stac or stackstac
+Datacube creation with cloudmask and stats
 =================================================================
 
-Just choose your engine !"""
+A simple datacube for Sentinel-2 cloudmasked with SCL
+"""
 
 ##############################################################################
 # Import librairies
@@ -10,14 +11,13 @@ Just choose your engine !"""
 
 from earthdaily import earthdatastore
 import geopandas as gpd
-from matplotlib import pyplot as plt
 
 ##############################################################################
-# Init earthdaily
+# Init earthdatastore with env params
 # -------------------------------------------
 
 eds = earthdatastore.Auth()
-bbox = "1.2235878938028861,43.642464388086324,1.254365582002663,43.65799608988672"
+bbox = "-123.017178,49.433027,-122.936668,49.471750"
 
 ##############################################################################
 # One way (item+datacube at the same time)
@@ -25,25 +25,23 @@ bbox = "1.2235878938028861,43.642464388086324,1.254365582002663,43.6579960898867
 
 datacube = eds.datacube(
     "sentinel-2-l2a",
+    datetime="2022-07",
     bbox=bbox,
-    datetime="2023-04",
     assets=["red", "green", "blue"],
-    mask_with="scl",
+    mask_with="native",
+    mask_statistics=True,
 )
-datacube.isel(time=0).to_array(dim="band").plot.imshow(vmin=0, vmax=0.23)
-plt.show()
-
 
 ##############################################################################
-# stackstac
+# Plot clear cover per day
+# -------------------------------------------
 
-datacube = eds.datacube(
-    "sentinel-2-l2a",
-    bbox=bbox,
-    datetime="2023-04",
-    assets=["red", "green", "blue"],
-    engine="stackstac",  # or "odc", default one
-    mask_with="scl",
+datacube.clear_percent_scl.plot.scatter(x="time")
+
+##############################################################################
+# Plot where clear cover > 50
+# -------------------------------------------
+
+datacube.sel(time=datacube.clear_percent_scl > 50).to_array(dim="band").plot.imshow(
+    vmin=0, vmax=0.25, col="time", col_wrap=3
 )
-datacube.isel(time=0).to_array(dim="band").plot.imshow(vmin=0, vmax=0.23)
-plt.show()
