@@ -5,7 +5,7 @@ dependencies:
   - python>=3.11
   - numpy
   - pandas
-  - gdal>=3.6.1
+  - gdal>=3.7.0
   - geopandas
   - shapely
   - xarray

@@ -4,7 +4,6 @@ from pystac_client import Client
 from pystac.item_collection import ItemCollection
 import requests
 import geopandas as gpd
-
 import os
 import operator
 from earthdaily.earthdatastore import mask, _scales_collections
@@ -129,7 +128,7 @@ def _get_client(config=None):
     eds_url = config("EDS_API_URL", "https://api.eds.earthdaily.com/archive/v1/stac/v1")
     if auth_url is None or secret is None or client_id is None:
         raise AttributeError(
-            "You need to hav env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
+            "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
         )
 
     token_response = requests.post(
@@ -142,7 +141,10 @@ def _get_client(config=None):
     tokens = json.loads(token_response.text)
     client = Client.open(
         eds_url,
-        headers={"Authorization": f"bearer {tokens['access_token']}"},
+        headers={
+            "Authorization": f"bearer {tokens['access_token']}",
+            "X-Signed-Asset-Urls": "True",
+        },
     )
     return client
 
@@ -380,7 +382,6 @@ class Auth:
             add_default_scale_factor=add_default_scale_factor,
             **search_kwargs,
         )
-
         xr_datacube = datacube(
             items, intersects=intersects, bbox=bbox, assets=assets, **kwargs
         )

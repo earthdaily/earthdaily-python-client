@@ -42,6 +42,19 @@ sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.abspath(".."))
 
 
+__version__ = re.search(
+    r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]',  # It excludes inline comment too
+    open("../earthdaily/__init__.py").read(),
+).group(1)
+
+source_suffix = [".rst"]
+
+# The master toctree document.
+
+version = __version__
+# The full version, including alpha/beta/rc tags.
+release = __version__
+
 sphinx_gallery_conf = {
     "backreferences_dir": os.path.join("_modules", "backreferences"),
     "doc_module": "earthdaily",

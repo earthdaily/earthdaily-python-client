@@ -1,6 +1,8 @@
 API Reference
 =============
    
-.. automodapi:: earthdaily
-    :no-inheritance-diagram:
-    :inherited-members:
+.. toctree::
+   :maxdepth: 3
+   :caption: Documentation API
+
+   earthdaily

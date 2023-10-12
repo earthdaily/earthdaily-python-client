@@ -9,18 +9,19 @@ earthdaily documentation
 
 .. sidebar:: About earthdaily
 
-    :Author: EarthDaily DataScience Team
-    :Source code: `Git project <https://github.com/GEOSYS/earthdaily>`_
-    :Bug tracker: `Git issues <https://github.com/GEOSYS/earthdaily/issues>`_
-    :Generated: |today|
-    :Version: |release|
+    | **Author**: EarthDaily DataScience Team
+    | **Source code**: `Git project <https://github.com/GEOSYS/earthdaily>`_
+    | **Bug tracker**: `Git issues <https://github.com/GEOSYS/earthdaily/issues>`_
+    | **Generated**: |today|
+	**License**: MIT
+    | **Version**: |release|
 
 .. include:: ../README.md
    :parser: myst_parser.sphinx_
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    self
    
