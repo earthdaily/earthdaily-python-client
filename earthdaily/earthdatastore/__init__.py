@@ -128,7 +128,7 @@ def _get_client(config=None):
     eds_url = config("EDS_API_URL", "https://api.eds.earthdaily.com/archive/v1/stac/v1")
     if auth_url is None or secret is None or client_id is None:
         raise AttributeError(
-            "You need to hav env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
+            "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
         )
 
     token_response = requests.post(
