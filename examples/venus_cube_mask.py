@@ -2,7 +2,7 @@
 Venus datacube with native mask
 =================================================================
 
-According to a theia location and max cloud cover, using Skyfox."""
+According to a theia location and max cloud cover, using earthdatastore."""
 
 ##############################################################################
 # Import librairies

@@ -39,7 +39,6 @@ s2 = eds.datacube(
     intersects=polygon,
     datetime=datetime,
     assets=["blue", "green", "red", "nir"],
-    prefer_http=True,
 )
 
 ##############################################################################
@@ -62,7 +61,6 @@ venus = eds.datacube(
     epsg=s2.rio.crs.to_epsg(),
     resampling=Resampling.nearest,  # cubic
     assets=venus_assets,
-    prefer_http=True,
 )
 
 

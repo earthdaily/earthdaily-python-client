@@ -1,4 +1,4 @@
-"""
+ww"""
 Datacube creation with odc-stac or stackstac
 =================================================================
 
@@ -22,11 +22,11 @@ bbox = "1.2235878938028861,43.642464388086324,1.254365582002663,43.6579960898867
 ##############################################################################
 # One way (item+datacube at the same time)
 # -------------------------------------------
-
+sw
 datacube = eds.datacube(
     "sentinel-2-l2a",
     bbox=bbox,
-    datetime="2023-04",
+    datetime=["2023-04", "2023-04-15"],
     assets=["red", "green", "blue"],
     mask_with="scl",
 )
@@ -40,7 +40,7 @@ plt.show()
 datacube = eds.datacube(
     "sentinel-2-l2a",
     bbox=bbox,
-    datetime="2023-04",
+    datetime=["2023-04", "2023-04-15"],
     assets=["red", "green", "blue"],
     engine="stackstac",  # or "odc", default one
     mask_with="scl",

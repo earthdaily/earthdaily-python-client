@@ -2,7 +2,7 @@
 Generate a Sentinel-2 Datacube with SCL cloudmask
 ===============================================================
 
-Using Skyfox."""
+Using EarthDataStore."""
 
 ##############################################################################
 # Import librairies
@@ -42,6 +42,27 @@ plt.title("Percentage of clear pixels on the study site")
 plt.show()
 print(s2_datacube)
 
+s2_datacube = s2_datacube.load()  # load in memory
+
 s2_datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
     vmin=0, vmax=0.22, col="time", col_wrap=4
+)
+
+###########################################################
+# Compute zonal stats
+# ----------------------------------------
+
+geometry_stats = earthdatastore.cube_utils.zonal_stats(
+    s2_datacube, geometry, operations=["mean"]
+)
+
+print(geometry_stats)
+
+###########################################################
+# Plot mean values
+# ----------------------------------------
+# Plot mean values from the first feature.
+
+geometry_stats.isel(feature=0).sel(stats="mean").to_array(dim="band").plot.line(
+    x="time", col="band"
 )
