@@ -38,7 +38,7 @@ query = {
 # Search for items
 # -------------------------------------------
 
-items = eds.search(collection, query=query, prefer_http=True)
+items = eds.search(collection, query=query, prefer_alternate="download")
 
 ##############################################################################
 # .. note::
