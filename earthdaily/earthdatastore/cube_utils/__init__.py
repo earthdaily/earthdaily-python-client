@@ -3,12 +3,10 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 from shapely.geometry import box
-from earthdaily.earthdatastore.cube_utils.zonal import zonal_stats
+from earthdaily.earthdatastore.cube_utils._zonal import zonal_stats, zonal_stats_numpy
 from rasterio.enums import Resampling
 from rasterio.mask import geometry_mask
 import xarray as xr
-import rioxarray as rxr
-import tqdm
 
 
 def _bbox_to_intersects(bbox):

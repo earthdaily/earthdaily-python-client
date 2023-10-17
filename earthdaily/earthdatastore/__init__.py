@@ -3,6 +3,7 @@ import json
 from pystac_client import Client
 from pystac.item_collection import ItemCollection
 import requests
+import pandas as pd
 import geopandas as gpd
 import os
 import operator
@@ -589,3 +590,38 @@ class Auth:
         collections = list(items_id.keys())
         ids = [x for n in (items_id.values()) for x in n]
         return self.search(collections=collections, ids=ids)
+
+
+def item_property_to_df(
+    item,
+    asset="data",
+    property_name="raster:bands",
+    sub_property_name="classification:classes",
+):
+    df = pd.DataFrame()
+    properties = {}
+
+    if item is not None and item.assets is not None:
+        asset = item.assets.get(asset)
+        if asset is not None and asset.to_dict() is not None:
+            try:
+                properties = asset.to_dict()[property_name]
+            except:
+                print(
+                    f'No property "{property_name}" has been found in the asset "{asset}".'
+                )
+                return None
+
+    property_as_list = {}
+
+    # find the corresponding property in bands
+    for property in properties:
+        if sub_property_name in property:
+            property_as_list = property[sub_property_name]
+            break
+
+    # build the dataframe from property list
+    for data_dict in property_as_list:
+        df = df.append(data_dict, ignore_index=True)
+
+    return df
