@@ -6,6 +6,7 @@ from shapely.geometry import box
 from earthdaily.earthdatastore.cube_utils._zonal import zonal_stats, zonal_stats_numpy
 from rasterio.enums import Resampling
 from rasterio.mask import geometry_mask
+import rioxarray as rxr
 import xarray as xr
 
 

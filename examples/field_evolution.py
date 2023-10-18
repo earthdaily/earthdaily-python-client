@@ -61,9 +61,12 @@ plt.show()
 #####################################################################da#########
 # Compute zonal stats for the pivot
 # ----------------------------------------------------
+
 zonal_stats = earthdatastore.cube_utils.zonal_stats(
-    cube_majority_clear, pivot, operations=["mean", "max", "min", "mode"]
+    cube_majority_clear, pivot, operations=["mean", "max", "min"]
 )
+zonal_stats = zonal_stats.load()
+
 zonal_stats.isel(feature=0).to_array(dim="band").plot.line(
     x="time", col="band", hue="stats"
 )

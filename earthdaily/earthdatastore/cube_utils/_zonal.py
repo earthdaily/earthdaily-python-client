@@ -16,7 +16,9 @@ from .preprocessing import rasterize
 
 def _compute_M(data):
     cols = np.arange(data.size)
-    return csr_matrix((cols, (data.ravel(), cols)), shape=(data.max() + 1, data.size))
+    return csr_matrix(
+        (cols, (data.ravel(), cols)), shape=(data.max() + 1, data.size)
+    )
 
 
 def _indices_sparse(data):
@@ -51,15 +53,23 @@ def _rasterize(gdf, dataset, all_touched=False):
 
 
 def zonal_stats_numpy(
-    dataset, gdf, operations=dict(mean=np.nanmean), all_touched=False
+    dataset,
+    gdf,
+    operations=dict(mean=np.nanmean),
+    all_touched=False,
+    preload_datavar=False,
 ):
     tqdm_bar = tqdm.tqdm(total=len(dataset.data_vars) * dataset.time.size)
 
-    feats, yx_pos, idx_start = _rasterize(gdf, dataset, all_touched=all_touched)
+    feats, yx_pos, idx_start = _rasterize(
+        gdf, dataset, all_touched=all_touched
+    )
     ds = []
     for data_var in dataset.data_vars:
         tqdm_bar.set_description(data_var)
         dataset_var = dataset[data_var]
+        if preload_datavar:
+            dataset_var = dataset_var.load()
         vals = {}
         for t in range(dataset_var.time.size):
             tqdm_bar.update(1)
@@ -93,7 +103,6 @@ def zonal_stats(
     operations=["mean"],
     all_touched=False,
     method="optimized",
-    batch_rasterize=True,
     verbose=False,
 ):
     tqdm_bar = tqdm.tqdm(total=gdf.shape[0])
@@ -107,7 +116,9 @@ def zonal_stats(
     zonal_ds_list = []
 
     if method == "optimized":
-        feats, yx_pos, idx_start = _rasterize(gdf, dataset, all_touched=all_touched)
+        feats, yx_pos, idx_start = _rasterize(
+            gdf, dataset, all_touched=all_touched
+        )
 
         for gdf_idx in tqdm.trange(gdf.shape[0], disable=not verbose):
             tqdm_bar.update(1)
@@ -118,12 +129,12 @@ def zonal_stats(
             )
             del yx_pos_idx
             zonal_ds_list.append(
-                datacube_time_stats(datacube_spatial_subset, operations).expand_dims(
-                    dim={"feature": [gdf.iloc[gdf_idx].name]}
-                )
+                datacube_time_stats(
+                    datacube_spatial_subset, operations
+                ).expand_dims(dim={"feature": [gdf.iloc[gdf_idx].name]})
             )
 
-        del yx_pos, feats, shapes
+        del yx_pos, feats
 
     elif method == "standard":
         for idx_gdb, feat in tqdm.tqdm(
@@ -134,7 +145,9 @@ def zonal_stats(
                 shapes = feat.geometry.geoms
             else:
                 shapes = [feat.geometry]
-            datacube_spatial_subset = dataset.rio.clip(shapes, all_touched=all_touched)
+            datacube_spatial_subset = dataset.rio.clip(
+                shapes, all_touched=all_touched
+            )
 
             zonal_feat = datacube_time_stats(
                 datacube_spatial_subset, operations
@@ -142,5 +155,7 @@ def zonal_stats(
 
             zonal_ds_list.append(zonal_feat)
     else:
-        raise NotImplementedError('method available are : "standard" or "optimized"')
+        raise NotImplementedError(
+            'method available are : "standard" or "optimized"'
+        )
     return xr.concat(zonal_ds_list, dim="feature")

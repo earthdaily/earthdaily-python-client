@@ -4,7 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.1-rc3]
+## [0.0.1-rc3] 2023-10-18
+
+### Added
+
+- `earthdaily.earthdatastore.cube_utils.zonal_stats_numpy` to compute local statistics using numpy functions.
+
+### Changed
+
+- `zonal_stats` default parameters rasterizes now whole vector in order to be
+really faster faster. Previous behavior is available by selecting `method="standard"`.
+ 
+### Fixed
+
+- Fix when number of ag_cloud_mask is lower than number of sensor items
 
 ## [0.0.1-rc2] 2023-10-12
 

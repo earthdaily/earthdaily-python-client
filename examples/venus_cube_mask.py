@@ -10,7 +10,6 @@ According to a theia location and max cloud cover, using earthdatastore."""
 
 from earthdaily import earthdatastore
 
-
 ##############################################################################
 # Load credentials and init earthdatastore
 # -------------------------------------------
@@ -57,7 +56,10 @@ print(f"{theia_location} venus location has {len(items)} items.")
 #   As transform and other metadata are missing in assets,
 #   compute them for first asset
 
-epsg, resolution = items[0].properties["proj:epsg"], items[0].properties["gsd"]
+epsg, resolution = (
+    items[0].properties["proj:epsg"],
+    items[0].properties["gsd"],
+)
 
 ##############################################################################
 # .. note::
@@ -77,6 +79,8 @@ venus_datacube = earthdatastore.datacube(
 )
 print(venus_datacube)
 
-venus_datacube.isel(time=33, x=slice(4000, 4500), y=slice(4000, 4500))[
-    ["red", "green", "blue"]
-].to_array(dim="band").plot.imshow(vmin=0, vmax=0.33)
+venus_datacube.isel(
+    time=slice(29, 33), x=slice(4000, 4500), y=slice(4000, 4500)
+)[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
+    col="time", vmin=0, vmax=0.33
+)
