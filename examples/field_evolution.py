@@ -32,7 +32,7 @@ eds = earthdatastore.Auth()
 pivot_cube = eds.datacube(
     "sentinel-2-l2a",
     intersects=pivot,
-    datetime=["2022-08"],
+    datetime=["2022-08-01", "2022-08-08"],
     assets=["red", "green", "blue"],
     mask_with="native",  # same as scl
     mask_statistics=True,
@@ -61,7 +61,12 @@ plt.show()
 #####################################################################da#########
 # Compute zonal stats for the pivot
 # ----------------------------------------------------
-zonal_stats = earthdatastore.cube_utils.zonal_stats(cube_majority_clear, pivot)
-zonal_stats.isel(feature=0).sel(stats="mean").to_array(dim="band").plot.line(
-    x="time", col="band"
+
+zonal_stats = earthdatastore.cube_utils.zonal_stats(
+    cube_majority_clear, pivot, operations=["mean", "max", "min"]
+)
+zonal_stats = zonal_stats.load()
+
+zonal_stats.isel(feature=0).to_array(dim="band").plot.line(
+    x="time", col="band", hue="stats"
 )
