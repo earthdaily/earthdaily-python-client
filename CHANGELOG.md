@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.1]
 
+### Changed
 
+- only keeping sensor items that have `eda:ag_cloud_mask_available=True` when asking to mask with `ag_cloud_mask`.
 
 ## [0.0.1-rc3] 2023-10-18
 
