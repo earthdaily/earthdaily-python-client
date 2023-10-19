@@ -10,6 +10,7 @@ import operator
 from earthdaily.earthdatastore import mask, _scales_collections
 from earthdaily.earthdatastore.cube_utils import datacube, metacube
 import logging
+import json
 
 
 logging.getLogger("earthdaily-earthdatastore")
@@ -18,27 +19,30 @@ logging.getLogger("earthdaily-earthdatastore")
 def post_query_items(items, query):
     items_ = []
     for idx, item in enumerate(items):
-        item_already_checked = False
-        while not item_already_checked:
-            for k, v in query.items():
-                for v_op, v_val in v.items():
-                    if isinstance(v_val, list):
-                        for v_val_ in v_val:
-                            operation = operator.__dict__[v_op](
-                                item.properties[k], v_val_
-                            )
-
-                            if operation:
-                                items_.append(item)
-                                item_already_checked = True
-                    else:
+        queries_results = 0
+        for k, v in query.items():
+            if k not in item.properties.keys():
+                continue
+            for v_op, v_val in v.items():
+                if isinstance(v_val, list):
+                    results = 0
+                    for v_val_ in v_val:
                         operation = operator.__dict__[v_op](
-                            item.properties[k], v_val
+                            item.properties[k], v_val_
                         )
+
+                        if operation:
+                            results += 1
+                    if results == len(v_val):
+                        queries_results += 1
+                else:
+                    operation = operator.__dict__[v_op](
+                        item.properties[k], v_val
+                    )
                     if operation:
-                        items_.append(item)
-                        item_already_checked = True
-            break
+                        queries_results += 1
+        if queries_results == len(query.keys()):
+            items_.append(item)
 
     items = ItemCollection(items_)
     return items
@@ -355,6 +359,27 @@ class Auth:
             return self._staccollectionexplorer.get(collection)
         return sorted(c.id for c in self.client.get_all_collections())
 
+    def _update_search_kwargs_for_ag_cloud_mask(
+        self, search_kwargs, collections
+    ):
+        search_kwargs = search_kwargs.copy()
+        # to get only items that have a ag_cloud_mask
+        ag_query = {"eda:ag_cloud_mask_available": {"eq": True}}
+        queryables = self.client._stac_io.request(
+            self.client.get_root_link().href
+            + f"/queryables?collections={collections[0] if isinstance(collections,list) else collections}"
+        )
+        queryables = json.loads(queryables)
+        queryables = queryables["properties"]
+        if "eda:ag_cloud_mask_available" not in queryables.keys():
+            target_param = "post_query"
+        else:
+            target_param = "query"
+        query = search_kwargs.get(target_param, {})
+        query.update(ag_query)
+        search_kwargs[target_param] = query
+        return search_kwargs
+
     def datacube(
         self,
         collections: str | list,
@@ -384,11 +409,10 @@ class Auth:
             else:
                 collection = collections
 
-        if mask_with == "ag_cloud_mask":
-            # to get only items that have a ag_cloud_mask
-            query = search_kwargs.get("query", {})
-            query.update({"eda:ag_cloud_mask_available": {"eq": True}})
-            search_kwargs["query"] = query
+            if mask_with == "ag_cloud_mask":
+                search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
+                    search_kwargs, collections
+                )
 
         items = self.search(
             collections=collections,
