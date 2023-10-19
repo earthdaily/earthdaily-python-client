@@ -365,17 +365,22 @@ class Auth:
         search_kwargs = search_kwargs.copy()
         # to get only items that have a ag_cloud_mask
         ag_query = {"eda:ag_cloud_mask_available": {"eq": True}}
-        queryables = self.client._stac_io.request(
-            self.client.get_root_link().href
-            + f"/queryables?collections={collections[0] if isinstance(collections,list) else collections}"
-        )
-        queryables = json.loads(queryables)
-        queryables = queryables["properties"]
-        if "eda:ag_cloud_mask_available" not in queryables.keys():
-            target_param = "post_query"
-        else:
-            target_param = "query"
-        query = search_kwargs.get(target_param, {})
+        target_param = "query"
+
+        # to check if field is queryable
+        # =============================================================================
+        #         queryables = self.client._stac_io.request(
+        #             self.client.get_root_link().href
+        #             + f"/queryables?collections={collections[0] if isinstance(collections,list) else collections}"
+        #         )
+        #         queryables = json.loads(queryables)
+        #         queryables = queryables["properties"]
+        #         if "eda:ag_cloud_mask_available" not in queryables.keys():
+        #             target_param = "post_query"
+        #         else:
+        #             target_param = "query"
+        # =============================================================================
+        query = search_kwargs.get("target_param", {})
         query.update(ag_query)
         search_kwargs[target_param] = query
         return search_kwargs

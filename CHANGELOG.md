@@ -12,8 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- search `post_query` do not block if some properties are not available on all items
-- if `eda:ag_cloud_mask_available` is not queryable, transform query to post_query.
+- search `post_query` do not block if some properties are not available on all items.
 
 ## [0.0.1-rc4] 2023-10-19
 
