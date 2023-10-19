@@ -4,11 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.1-rc4] 
+
+### Changed
+
+- When asking `ag_cloud_mask`, keep only sensor items that have `eda:ag_cloud_mask_available=True`.
+
 ## [0.0.1-rc3] 2023-10-18
 
 ### Added
 
-- `earthdaily.earthdatastore.cube_utils.zonal_stats_numpy` to compute local statistics using numpy functions.
+- `earthdaily.earthdatastore.cube_utils.zonal_stats_numpy` to compute local statistics using numpy functions. Best when high number of geometries.
 
 ### Changed
 
@@ -17,7 +23,7 @@ really faster faster. Previous behavior is available by selecting `method="stand
  
 ### Fixed
 
-- Fix when number of ag_cloud_mask is lower than number of sensor items
+- Fix when number of `ag_cloud_mask` is lower than number of sensor items
 
 ## [0.0.1-rc2] 2023-10-12
 

@@ -56,7 +56,9 @@ s2_datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
 ###########################################################
 # Request items
 
-items = eds.search("sentinel-2-l2a", intersects=geometry, datetime=["2022-07"])
+items = eds.search(
+    "sentinel-2-l2a", intersects=geometry, datetime=["2022-07"]
+)
 
 ###########################################################
 # Creata datacube (independent from being log into earthdatastore)

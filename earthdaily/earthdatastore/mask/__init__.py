@@ -55,7 +55,9 @@ class Mask:
         )  # rm nano second
         self._obj["time"] = self._obj.time.dt.round("s")  # rm nano second
         #
-        dc = self._obj.where(acm_datacube["agriculture-cloud-mask"] == 1)
+        self._obj = self._obj.where(
+            acm_datacube["agriculture-cloud-mask"] == 1
+        )
         if add_mask_var:
             self._obj["agriculture-cloud-mask"] = acm_datacube[
                 "agriculture-cloud-mask"
