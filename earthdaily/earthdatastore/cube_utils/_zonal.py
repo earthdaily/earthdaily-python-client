@@ -60,7 +60,7 @@ def zonal_stats_numpy(
     preload_datavar=False,
 ):
     tqdm_bar = tqdm.tqdm(total=len(dataset.data_vars) * dataset.time.size)
-
+    dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)
     feats, yx_pos, idx_start = _rasterize(
         gdf, dataset, all_touched=all_touched
     )
@@ -74,7 +74,7 @@ def zonal_stats_numpy(
         for t in range(dataset_var.time.size):
             tqdm_bar.update(1)
             vals[t] = []
-            mem_asset = dataset_var.isel(time=t).to_numpy()
+            mem_asset = dataset_var.isel(time=t)
             for i in range(gdf.shape[0]):
                 pos = yx_pos[i + idx_start]
                 data = mem_asset[pos]

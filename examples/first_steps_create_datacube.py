@@ -40,7 +40,7 @@ s2_datacube = eds.datacube(
     mask_statistics=True,
 )
 
-s2_datacube.clear_percent_scl.plot.scatter(x="time")
+s2_datacube.clear_percent.plot.scatter(x="time")
 plt.title("Percentage of clear pixels on the study site")
 plt.show()
 print(s2_datacube)

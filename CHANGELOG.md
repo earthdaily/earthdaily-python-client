@@ -4,11 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.1]
+## [0.0.1-rc5]
+
+### Added
+
+- `clear_cover` in the datacube method when using the `earthdatastore.Auth` method.
 
 ### Changed
 
-- all queries in `post_query` must return True to keep the item.
+- masks statistics are not anymore suffixed with the cloudmask type : `clear_percent`and `clear_pixels`. Warns with a DeprecationWarning.
+- all queries in `post_query` must return True to keep the item. If a key doesn't exist, considers the result as False (instead of failling).
 
 ### Fixed
 

@@ -36,7 +36,7 @@ def get_cube(rescale=True):
         datetime=["2022-01-01", "2022-03-10"],
         assets=["red", "green", "blue"],
         mask_with="native",  # same as scl
-        mask_statistics=-1,  # boolean or int (n_jobs) to compute in parallel if small
+        clear_cover=50,  # at least 50% of the polygon must be clear
         rescale=rescale,
     )
     return pivot_cube
@@ -47,15 +47,16 @@ def get_cube(rescale=True):
 # ----------------------------------------------------
 
 pivot_cube = get_cube(rescale=False) * 0.0001
-pivot_cube.clear_percent_scl.plot.scatter(x="time")
 plt.show()
 
 #####################################################################da#########
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
-pivot_cube = pivot_cube.sel(time=pivot_cube.time[pivot_cube.clear_percent_scl > 50])
 
-pivot_cube.to_array(dim="band").plot.imshow(vmin=0, vmax=0.33, col="time", col_wrap=3)
+
+pivot_cube.to_array(dim="band").plot.imshow(
+    vmin=0, vmax=0.33, col="time", col_wrap=3
+)
 
 plt.show()
 
@@ -64,14 +65,16 @@ plt.show()
 # ----------------------------------------------------
 
 pivot_cube = get_cube()
-pivot_cube.clear_percent_scl.plot.scatter(x="time")
+pivot_cube.clear_percent.plot.scatter(x="time")
 plt.show()
 
 #####################################################################da#########
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
-pivot_cube = pivot_cube.sel(time=pivot_cube.time[pivot_cube.clear_percent_scl > 50])
 
-pivot_cube.to_array(dim="band").plot.imshow(vmin=0, vmax=0.33, col="time", col_wrap=3)
+
+pivot_cube.to_array(dim="band").plot.imshow(
+    vmin=0, vmax=0.33, col="time", col_wrap=3
+)
 
 plt.show()

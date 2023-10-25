@@ -11,10 +11,6 @@ from joblib import Parallel, delayed
 
 dask.config.set(**{"array.slicing.split_large_chunks": True})
 
-warnings.simplefilter(
-    "ignore", category=xr.core.extensions.AccessorRegistrationWarning
-)
-
 _available_masks = [
     "native",
     "venus_detailed_cloud_mask",
@@ -173,6 +169,10 @@ class Mask:
         self._obj = self._obj.assign_coords(
             {f"clear_pixels_{cloudmask_name}": ("time", n_pixels_as_labels)}
         )
+        self._obj.coords["clear_pixels"] = self._obj.coords[
+            f"clear_pixels_{cloudmask_name}"
+        ]
+
         self._obj = self._obj.assign_coords(
             {
                 f"clear_percent_{cloudmask_name}": (
@@ -184,6 +184,15 @@ class Mask:
                 )
             }
         )
+
+        self._obj.coords["clear_percent"] = self._obj.coords[
+            f"clear_percent_{cloudmask_name}"
+        ]
+        warnings.warn(
+            f"Removed in 0.0.2 : The two coordinates 'clear_pixels_{cloudmask_name}' and 'clear_percent_{cloudmask_name}' will be deleted to keep only the prefix 'clear_percent' and 'clear_pixels'",
+            category=DeprecationWarning,
+        )
+
         return self._obj
 
     def compute_available_pixels(self):
@@ -253,3 +262,7 @@ def QA_PIXEL_cloud_detection(arr):
     cloudfree_pixels = cloudfree[cloudfree != 0]
     cloudmask = np.isin(arr, cloudfree_pixels).astype(int)
     return cloudmask
+
+
+def filter_clear_cover(dataset, clear_cover, coordinate="clear_percent"):
+    return dataset.sel(time=dataset.time[dataset.clear_percent > clear_cover])

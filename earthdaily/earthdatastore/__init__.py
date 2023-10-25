@@ -11,7 +11,7 @@ from earthdaily.earthdatastore import mask, _scales_collections
 from earthdaily.earthdatastore.cube_utils import datacube, metacube
 import logging
 import json
-
+import warnings
 
 logging.getLogger("earthdaily-earthdatastore")
 
@@ -67,7 +67,10 @@ def _cloud_path_to_http(cloud_path):
 
 
 def enhance_assets(
-    items, alternate="s3", use_http_url=False, add_default_scale_factor=False
+    items,
+    alternate="download",
+    use_http_url=False,
+    add_default_scale_factor=False,
 ):
     if any((alternate, use_http_url, add_default_scale_factor)):
         for idx, item in enumerate(items):
@@ -394,12 +397,12 @@ class Auth:
         bbox=None,
         mask_with: None | str = None,
         mask_statistics: bool | int = False,
-        prefer_alternate: (str, False) = "s3",
-        prefer_http: bool = True,
+        clear_cover: (int, float) = None,
+        prefer_alternate: (str, False) = "download",
         search_kwargs: dict = {},
         add_default_scale_factor: bool = True,
         **kwargs,
-    ):
+    ) -> xr.Dataset:
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise ValueError(
@@ -424,7 +427,6 @@ class Auth:
             bbox=bbox,
             intersects=intersects,
             datetime=datetime,
-            prefer_http=prefer_http,
             prefer_alternate=prefer_alternate,
             add_default_scale_factor=add_default_scale_factor,
             **search_kwargs,
@@ -433,6 +435,12 @@ class Auth:
             items, intersects=intersects, bbox=bbox, assets=assets, **kwargs
         )
         if mask_with:
+            if clear_cover and mask_statistics is False:
+                mask_statistics = True
+                warnings.warn(
+                    "Forcing mask_statistics in order to filter by clear coverage.",
+                    category=Warning,
+                )
             if mask_with == "native":
                 mask_with = mask._native_mask_def_mapping.get(
                     collection, None
@@ -451,6 +459,7 @@ class Auth:
                     groupby_date="max",
                     epsg=xr_datacube.rio.crs.to_epsg(),
                     resolution=xr_datacube.rio.resolution()[0],
+                    prefer_alternate="download",
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
@@ -476,6 +485,9 @@ class Auth:
 
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
+
+            if clear_cover:
+                xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
         return xr_datacube
 
     def search(
@@ -485,7 +497,6 @@ class Auth:
         bbox=None,
         post_query=None,
         prefer_alternate=None,
-        prefer_http=False,
         add_default_scale_factor=False,
         **kwargs,
     ):
@@ -504,8 +515,6 @@ class Auth:
             DESCRIPTION. The default is None.
         prefer_alternate : TYPE, optional
             DESCRIPTION. The default is None.
-        prefer_http : TYPE, optional
-            DESCRIPTION. The default is False.
         **kwargs : TYPE
             DESCRIPTION.
 
@@ -606,11 +615,10 @@ class Auth:
             **kwargs,
         )
         items_collection = items_collection.item_collection()
-        if any((prefer_alternate, prefer_http, add_default_scale_factor)):
+        if any((prefer_alternate, add_default_scale_factor)):
             items_collection = enhance_assets(
                 items_collection.clone(),
                 alternate=prefer_alternate,
-                use_http_url=prefer_http,
                 add_default_scale_factor=add_default_scale_factor,
             )
         if post_query:

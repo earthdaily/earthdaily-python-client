@@ -40,7 +40,7 @@ console.print(table)
 # Explore a specific collection
 # -------------------------------------------
 
-collection = eds.explore("sentinel-2-l2a")
+collection = eds.explore("venus-l2a")
 console.log(collection.properties)
 
 ##############################################################################
