@@ -91,18 +91,18 @@ common_date = [
 # Plot sentinel-2
 # -------------------------------------------
 
-s2.sel(time=common_date)[["red", "green", "blue"]].to_array(
-    dim="band"
-).plot.imshow(vmin=0, vmax=0.2)
+s2.sel(time=common_date)[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
+    vmin=0, vmax=0.2
+)
 plt.title(f"Sentinel-2 on {common_date}")
 plt.show()
 
 ##############################################################################
 # Plot venus
 # -------------------------------------------
-venus.sel(time=common_date, method="nearest")[
-    ["red", "green", "blue"]
-].to_array(dim="band").plot.imshow(vmin=0, vmax=0.2)
+venus.sel(time=common_date, method="nearest")[["red", "green", "blue"]].to_array(
+    dim="band"
+).plot.imshow(vmin=0, vmax=0.2)
 plt.title(f"Venus on {common_date}")
 
 plt.show()

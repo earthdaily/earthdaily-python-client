@@ -4,7 +4,6 @@ from rasterio.features import geometry_mask
 from earthdaily.earthdatastore.cube_utils import _bbox_to_intersects
 import geopandas as gpd
 import warnings
-import json
 import numpy as np
 import tqdm
 from joblib import Parallel, delayed
@@ -46,18 +45,12 @@ class Mask:
         add_mask_var=False,
         mask_statistics=False,
     ):
-        acm_datacube["time"] = acm_datacube.time.dt.round(
-            "s"
-        )  # rm nano second
+        acm_datacube["time"] = acm_datacube.time.dt.round("s")  # rm nano second
         self._obj["time"] = self._obj.time.dt.round("s")  # rm nano second
         #
-        self._obj = self._obj.where(
-            acm_datacube["agriculture-cloud-mask"] == 1
-        )
+        self._obj = self._obj.where(acm_datacube["agriculture-cloud-mask"] == 1)
         if add_mask_var:
-            self._obj["agriculture-cloud-mask"] = acm_datacube[
-                "agriculture-cloud-mask"
-            ]
+            self._obj["agriculture-cloud-mask"] = acm_datacube["agriculture-cloud-mask"]
         if mask_statistics:
             self.compute_clear_coverage(
                 acm_datacube["agriculture-cloud-mask"],
@@ -78,9 +71,7 @@ class Mask:
         fill_value=np.nan,
     ):
         if cloud_asset not in self._obj.data_vars:
-            raise ValueError(
-                f"Asset '{cloud_asset}' needed to compute cloudmask."
-            )
+            raise ValueError(f"Asset '{cloud_asset}' needed to compute cloudmask.")
         else:
             cloud_layer = self._obj[cloud_asset].copy()
         _assets = [a for a in self._obj.data_vars if a != cloud_asset]
@@ -119,9 +110,7 @@ class Mask:
             mask_statistics=mask_statistics,
         )
 
-    def venus_detailed_cloud_mask(
-        self, add_mask_var=False, mask_statistics=False
-    ):
+    def venus_detailed_cloud_mask(self, add_mask_var=False, mask_statistics=False):
         return self.cloudmask_from_asset(
             "detailed_cloud_mask",
             0,
@@ -138,15 +127,13 @@ class Mask:
         labels_are_clouds=True,
         n_jobs=1,
     ):
-        def compute_clear_pixels(
-            cloudmask_array, labels, labels_are_clouds=False
-        ):
+        def compute_clear_pixels(cloudmask_array, labels, labels_are_clouds=False):
             cloudmask_array = cloudmask_array.data.compute()
 
             if labels_are_clouds:
-                labels_sum = np.sum(
-                    ~np.in1d(cloudmask_array, labels)
-                ) - np.sum(np.isnan(cloudmask_array))
+                labels_sum = np.sum(~np.in1d(cloudmask_array, labels)) - np.sum(
+                    np.isnan(cloudmask_array)
+                )
             else:
                 labels_sum = np.sum(np.in1d(cloudmask_array, labels))
             return labels_sum
@@ -265,6 +252,4 @@ def QA_PIXEL_cloud_detection(arr):
 
 
 def filter_clear_cover(dataset, clear_cover, coordinate="clear_percent"):
-    return dataset.sel(
-        time=dataset.time[dataset.clear_percent >= clear_cover]
-    )
+    return dataset.sel(time=dataset.time[dataset.clear_percent >= clear_cover])

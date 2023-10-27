@@ -72,8 +72,6 @@ venus_datacube = earthdatastore.datacube(
 )
 print(venus_datacube)
 
-venus_datacube.isel(
-    time=slice(29, 32), x=slice(4000, 4500), y=slice(4000, 4500)
-)[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
-    col="time", vmin=0, vmax=0.33
-)
+venus_datacube.isel(time=slice(29, 32), x=slice(4000, 4500), y=slice(4000, 4500))[
+    ["red", "green", "blue"]
+].to_array(dim="band").plot.imshow(col="time", vmin=0, vmax=0.33)

@@ -54,9 +54,7 @@ plt.show()
 # ----------------------------------------------------
 
 
-pivot_cube.to_array(dim="band").plot.imshow(
-    vmin=0, vmax=0.33, col="time", col_wrap=3
-)
+pivot_cube.to_array(dim="band").plot.imshow(vmin=0, vmax=0.33, col="time", col_wrap=3)
 
 plt.show()
 
@@ -73,8 +71,6 @@ plt.show()
 # ----------------------------------------------------
 
 
-pivot_cube.to_array(dim="band").plot.imshow(
-    vmin=0, vmax=0.33, col="time", col_wrap=3
-)
+pivot_cube.to_array(dim="band").plot.imshow(vmin=0, vmax=0.33, col="time", col_wrap=3)
 
 plt.show()

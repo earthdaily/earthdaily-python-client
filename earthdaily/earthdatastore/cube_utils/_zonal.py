@@ -16,9 +16,7 @@ from .preprocessing import rasterize
 
 def _compute_M(data):
     cols = np.arange(data.size)
-    return csr_matrix(
-        (cols, (data.ravel(), cols)), shape=(data.max() + 1, data.size)
-    )
+    return csr_matrix((cols, (data.ravel(), cols)), shape=(data.max() + 1, data.size))
 
 
 def _indices_sparse(data):
@@ -61,9 +59,7 @@ def zonal_stats_numpy(
 ):
     tqdm_bar = tqdm.tqdm(total=len(dataset.data_vars) * dataset.time.size)
     dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)
-    feats, yx_pos, idx_start = _rasterize(
-        gdf, dataset, all_touched=all_touched
-    )
+    feats, yx_pos, idx_start = _rasterize(gdf, dataset, all_touched=all_touched)
     ds = []
     for data_var in dataset.data_vars:
         tqdm_bar.set_description(data_var)
@@ -116,9 +112,7 @@ def zonal_stats(
     zonal_ds_list = []
 
     if method == "optimized":
-        feats, yx_pos, idx_start = _rasterize(
-            gdf, dataset, all_touched=all_touched
-        )
+        feats, yx_pos, idx_start = _rasterize(gdf, dataset, all_touched=all_touched)
 
         for gdf_idx in tqdm.trange(gdf.shape[0], disable=not verbose):
             tqdm_bar.update(1)
@@ -129,9 +123,9 @@ def zonal_stats(
             )
             del yx_pos_idx
             zonal_ds_list.append(
-                datacube_time_stats(
-                    datacube_spatial_subset, operations
-                ).expand_dims(dim={"feature": [gdf.iloc[gdf_idx].name]})
+                datacube_time_stats(datacube_spatial_subset, operations).expand_dims(
+                    dim={"feature": [gdf.iloc[gdf_idx].name]}
+                )
             )
 
         del yx_pos, feats
@@ -145,9 +139,7 @@ def zonal_stats(
                 shapes = feat.geometry.geoms
             else:
                 shapes = [feat.geometry]
-            datacube_spatial_subset = dataset.rio.clip(
-                shapes, all_touched=all_touched
-            )
+            datacube_spatial_subset = dataset.rio.clip(shapes, all_touched=all_touched)
 
             zonal_feat = datacube_time_stats(
                 datacube_spatial_subset, operations
@@ -155,7 +147,5 @@ def zonal_stats(
 
             zonal_ds_list.append(zonal_feat)
     else:
-        raise NotImplementedError(
-            'method available are : "standard" or "optimized"'
-        )
+        raise NotImplementedError('method available are : "standard" or "optimized"')
     return xr.concat(zonal_ds_list, dim="feature")

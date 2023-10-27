@@ -35,7 +35,7 @@ s2_datacube = eds.datacube(
     "sentinel-2-l2a",
     assets=["blue", "green", "red", "nir"],
     intersects=geometry,
-    datetime=["2022-07", "2022-07-09"],
+    datetime=["2022-08-01", "2022-08-09"],
     mask_with="native",  # equal to "scl" for sentinel-2
     mask_statistics=True,
     clear_cover=50,
@@ -58,7 +58,7 @@ s2_datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
 # Request items
 
 items = eds.search(
-    "sentinel-2-l2a", intersects=geometry, datetime=["2022-07"]
+    "sentinel-2-l2a", intersects=geometry, datetime=["2022-08-01", "2022-08-09"]
 )
 
 ###########################################################
