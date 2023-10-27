@@ -21,7 +21,7 @@ asset_mapper_collections = {
     ],
     "landsat-c2l2-sr": [
         {
-            "coastal4'": "coastal",
+            "coastal44": "coastal",
             "coastal": "coastal",
             "blue": "blue",
             "green": "green",
