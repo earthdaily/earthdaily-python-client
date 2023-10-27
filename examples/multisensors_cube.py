@@ -9,11 +9,11 @@ With Sentinel-2 and Venus, using Sentinel-2 spatial resolutino for demo purpose"
 # Import librairies
 # -------------------------------------------
 
-from earthdaily import earthdatastore
 import geopandas as gpd
-from rasterio.enums import Resampling
 from matplotlib import pyplot as plt
+from rasterio.enums import Resampling
 
+from earthdaily import earthdatastore
 
 ##############################################################################
 # Import librairies
@@ -33,26 +33,18 @@ datetime = ["2019-08"]
 # Generate s2 cube
 # -------------------------------------------
 
+assets = ["blue", "green", "red", "nir"]
 
 s2 = eds.datacube(
     "sentinel-2-l2a",
     intersects=polygon,
     datetime=datetime,
-    assets=["blue", "green", "red", "nir"],
-    prefer_http=True,
+    assets=assets,
 )
 
 ##############################################################################
 # Generate venus cube
 # -------------------------------------------
-
-venus_assets = dict(
-    image_file_SRE_B3="blue",
-    image_file_SRE_B4="green",
-    image_file_SRE_B5="yellow",
-    image_file_SRE_B7="red",
-    image_file_SRE_B11="nir",
-)
 
 venus = eds.datacube(
     "venus-l2a",
@@ -61,21 +53,33 @@ venus = eds.datacube(
     datetime=datetime,
     epsg=s2.rio.crs.to_epsg(),
     resampling=Resampling.nearest,  # cubic
-    assets=venus_assets,
-    prefer_http=True,
+    assets=assets,
 )
 
+##############################################################################
+# Generate Landsat cube
+# -------------------------------------------
 
+
+landsat = eds.datacube(
+    "landsat-c2l2-sr",
+    intersects=polygon,
+    datetime=datetime,
+    resampling=Resampling.nearest,
+    epsg=s2.rio.crs.to_epsg(),
+    resolution=s2.rio.resolution()[0],
+    assets=assets,
+)
 ##############################################################################
 # Create supercube
 # -------------------------------------------
 
 print("create metacube")
-supercube = earthdatastore.metacube(s2, venus)
+supercube = earthdatastore.metacube(s2, venus, landsat)
 
 ##############################################################################
-# Get the first common date for plotting
-# -------------------------------------------
+# Get the first common date between S2 and Venus for plotting
+# ---------------------------------------------------------------
 
 common_date = [
     day
@@ -87,18 +91,18 @@ common_date = [
 # Plot sentinel-2
 # -------------------------------------------
 
-s2.sel(time=common_date)[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
-    vmin=0, vmax=0.15
-)
+s2.sel(time=common_date)[["red", "green", "blue"]].to_array(
+    dim="band"
+).plot.imshow(vmin=0, vmax=0.15)
 plt.title(f"Sentinel-2 on {common_date}")
 plt.show()
 
 ##############################################################################
 # Plot venus
 # -------------------------------------------
-venus.sel(time=common_date, method="nearest")[["red", "green", "blue"]].to_array(
-    dim="band"
-).plot.imshow(vmin=0, vmax=0.15)
+venus.sel(time=common_date, method="nearest")[
+    ["red", "green", "blue"]
+].to_array(dim="band").plot.imshow(vmin=0, vmax=0.15)
 plt.title(f"Venus on {common_date}")
 
 plt.show()

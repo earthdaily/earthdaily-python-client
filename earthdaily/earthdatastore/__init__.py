@@ -12,8 +12,7 @@ from pystac.item_collection import ItemCollection
 from pystac_client import Client
 
 from earthdaily.earthdatastore import _scales_collections, mask
-from earthdaily.earthdatastore.cube_utils import datacube
-from earthdaily.earthdatastore.cube_utils.asset_mapper._asset_mapper import AssetMapper
+from earthdaily.earthdatastore.cube_utils import datacube, metacube
 
 logging.getLogger("earthdaily-earthdatastore")
 
@@ -29,14 +28,18 @@ def post_query_items(items, query):
                 if isinstance(v_val, list):
                     results = 0
                     for v_val_ in v_val:
-                        operation = operator.__dict__[v_op](item.properties[k], v_val_)
+                        operation = operator.__dict__[v_op](
+                            item.properties[k], v_val_
+                        )
 
                         if operation:
                             results += 1
                     if results == len(v_val):
                         queries_results += 1
                 else:
-                    operation = operator.__dict__[v_op](item.properties[k], v_val)
+                    operation = operator.__dict__[v_op](
+                        item.properties[k], v_val
+                    )
                     if operation:
                         queries_results += 1
         if queries_results == len(query.keys()):
@@ -88,7 +91,9 @@ def enhance_assets(
                 if use_http_url:
                     href = item.assets[asset].to_dict().get("href", {})
                     if href:
-                        items[idx].assets[asset].href = _cloud_path_to_http(href)
+                        items[idx].assets[asset].href = _cloud_path_to_http(
+                            href
+                        )
                 if add_default_scale_factor:
                     scale_factor_collection = (
                         _scales_collections.scale_factor_collections.get(
@@ -110,15 +115,15 @@ def enhance_assets(
                                 .extra_fields["raster:bands"][0]
                                 .get("scale")
                             ):
-                                items[idx].assets[asset].extra_fields["raster:bands"][
-                                    0
-                                ]["scale"] = scales_collection["scale"]
-                                items[idx].assets[asset].extra_fields["raster:bands"][
-                                    0
-                                ]["offset"] = scales_collection["offset"]
-                                items[idx].assets[asset].extra_fields["raster:bands"][
-                                    0
-                                ]["nodata"] = scales_collection["nodata"]
+                                items[idx].assets[asset].extra_fields[
+                                    "raster:bands"
+                                ][0]["scale"] = scales_collection["scale"]
+                                items[idx].assets[asset].extra_fields[
+                                    "raster:bands"
+                                ][0]["offset"] = scales_collection["offset"]
+                                items[idx].assets[asset].extra_fields[
+                                    "raster:bands"
+                                ][0]["nodata"] = scales_collection["nodata"]
 
     return items
 
@@ -133,7 +138,9 @@ def _get_client(config=None):
     auth_url = config("EDS_AUTH_URL")
     secret = config("EDS_SECRET")
     client_id = config("EDS_CLIENT_ID")
-    eds_url = config("EDS_API_URL", "https://api.eds.earthdaily.com/archive/v1/stac/v1")
+    eds_url = config(
+        "EDS_API_URL", "https://api.eds.earthdaily.com/archive/v1/stac/v1"
+    )
     if auth_url is None or secret is None or client_id is None:
         raise AttributeError(
             "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
@@ -173,7 +180,10 @@ class StacCollectionExplorer:
 
     @property
     def item_properties(self):
-        return {k: self.item.properties[k] for k in sorted(self.item.properties.keys())}
+        return {
+            k: self.item.properties[k]
+            for k in sorted(self.item.properties.keys())
+        }
 
     def assets(self, asset_name=None):
         if asset_name:
@@ -347,13 +357,15 @@ class Auth:
         """
         if collection:
             if collection not in self._staccollectionexplorer.keys():
-                self._staccollectionexplorer[collection] = StacCollectionExplorer(
-                    self.client, collection
-                )
+                self._staccollectionexplorer[
+                    collection
+                ] = StacCollectionExplorer(self.client, collection)
             return self._staccollectionexplorer.get(collection)
         return sorted(c.id for c in self.client.get_all_collections())
 
-    def _update_search_kwargs_for_ag_cloud_mask(self, search_kwargs, collections):
+    def _update_search_kwargs_for_ag_cloud_mask(
+        self, search_kwargs, collections
+    ):
         search_kwargs = search_kwargs.copy()
         # to get only items that have a ag_cloud_mask
         ag_query = {"eda:ag_cloud_mask_available": {"eq": True}}
@@ -390,16 +402,20 @@ class Auth:
         prefer_alternate: (str, False) = "download",
         search_kwargs: dict = {},
         add_default_scale_factor: bool = True,
+        common_band_names=True,
         **kwargs,
     ) -> xr.Dataset:
+        if mask_with and common_band_names:
+            if isinstance(collections, list):
+                if len(collections) > 1:
+                    raise ValueError(
+                        "Mask_with and assets_mapping only manage one collection at a time."
+                    )
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise ValueError(
                     f"Specified mask '{mask_with}' is not available.\ Currently available masks provider are : {mask._available_masks}"
                 )
-            if isinstance(collections, list):
-                if len(collections) > 1:
-                    raise ValueError("Mask_with only manage one collection at a time.")
                 collection = collections[0]
             else:
                 collection = collections
@@ -419,14 +435,12 @@ class Auth:
             **search_kwargs,
         )
 
-        # Band mapping
-        # Disclaimer : Only works with a single collection
-        asset_mapper = AssetMapper()
-
-        mapped_assets = asset_mapper._map(collections[0], assets)
-
         xr_datacube = datacube(
-            items, intersects=intersects, bbox=bbox, assets=mapped_assets, **kwargs
+            items,
+            intersects=intersects,
+            bbox=bbox,
+            assets=assets,
+            **kwargs,
         )
         if mask_with:
             if clear_cover and mask_statistics is False:
@@ -436,7 +450,9 @@ class Auth:
                     category=Warning,
                 )
             if mask_with == "native":
-                mask_with = mask._native_mask_def_mapping.get(collection, None)
+                mask_with = mask._native_mask_def_mapping.get(
+                    collection, None
+                )
                 if mask_with is None:
                     raise ValueError(
                         f"Sorry, there's no native mask available for {collection}. Only these collections have native cloudmask : {list(mask._native_mask_mapping.keys())}."
@@ -479,7 +495,9 @@ class Auth:
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
 
             if clear_cover:
-                xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
+                xr_datacube = mask.filter_clear_cover(
+                    xr_datacube, clear_cover
+                )
         return xr_datacube
 
     def search(
@@ -625,7 +643,9 @@ class Auth:
             for item in items:
                 if not item.properties.get("eda:ag_cloud_mask_available"):
                     continue
-                collection = item.properties["eda:ag_cloud_mask_collection_id"]
+                collection = item.properties[
+                    "eda:ag_cloud_mask_collection_id"
+                ]
                 if products.get(collection, None) is None:
                     products[collection] = []
                 products[collection].append(
