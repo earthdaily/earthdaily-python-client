@@ -28,16 +28,17 @@ geometry = gpd.read_file("pivot.geojson")
 eds = earthdatastore.Auth()  # using config from ENV
 
 ###########################################################
-# Create datacube (all in one)
+# Create datacube (in one step)
 # --------------------------------------------------
 
 s2_datacube = eds.datacube(
     "sentinel-2-l2a",
     assets=["blue", "green", "red", "nir"],
     intersects=geometry,
-    datetime=["2022-07"],
+    datetime=["2022-08-01", "2022-08-09"],
     mask_with="native",  # equal to "scl" for sentinel-2
     mask_statistics=True,
+    clear_cover=50,
 )
 
 s2_datacube.clear_percent.plot.scatter(x="time")
@@ -57,7 +58,7 @@ s2_datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
 # Request items
 
 items = eds.search(
-    "sentinel-2-l2a", intersects=geometry, datetime=["2022-07"]
+    "sentinel-2-l2a", intersects=geometry, datetime=["2022-08-01", "2022-08-09"]
 )
 
 ###########################################################
@@ -77,6 +78,9 @@ s2_datacube = earthdatastore.mask.Mask(s2_datacube, intersects=geometry).scl(
     mask_statistics=True
 )
 
+s2_datacube = earthdatastore.mask.filter_clear_cover(
+    s2_datacube, 50
+)  # at least 50% of clear pixels
 #
 s2_datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
     vmin=0, vmax=0.2, col="time", col_wrap=4

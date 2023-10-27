@@ -8,7 +8,7 @@ class CustomOperations:
     def _np_mode(arr, **kwargs):
         if not isinstance(arr, np.ndarray):
             arr = arr.compute()
-            # or it will output 
+            # or it will output
             # NotImplementedError: Slicing an array with unknown chunks with a dask.array of ints is not supported
         values, counts = np.unique(arr, return_counts=True)
         rm = np.isnan(values)

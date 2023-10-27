@@ -7,6 +7,9 @@ from earthdaily.earthdatastore.cube_utils._zonal import (
     zonal_stats,
     zonal_stats_numpy,
 )
+from earthdaily.earthdatastore.cube_utils.asset_mapper._asset_mapper import (
+    AssetMapper,
+)
 from rasterio.enums import Resampling
 from rasterio.mask import geometry_mask
 import rioxarray as rxr
@@ -27,14 +30,10 @@ def _apply_nodata(ds, nodata_assets: dict):
 
 
 def _autofix_unfrozen_coords_dtype(ds):
-    attrs = {
-        c: ds.coords[c].data.tolist() for c in ds.coords if c not in ds.dims
-    }
+    attrs = {c: ds.coords[c].data.tolist() for c in ds.coords if c not in ds.dims}
     # force str
     for attr in attrs:
-        if not isinstance(
-            attrs[attr], (str, int, float, np.ndarray, list, tuple)
-        ):
+        if not isinstance(attrs[attr], (str, int, float, np.ndarray, list, tuple)):
             ds.coords[attr] = str(attrs[attr])
             ds.coords[attr] = ds.coords[attr].astype(str)
     return ds
@@ -49,7 +48,7 @@ def _cube_odc(items_collection, assets=None, times=None, **kwargs):
     if "resampling" in kwargs:
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
-    chunks = kwargs.get("chunks", dict(x=2048, y=2048, time=1))
+    chunks = kwargs.get("chunks", dict(x="auto", y="auto", time="auto"))
     kwargs.pop("chunks", None)
 
     ds = stac.load(
@@ -97,6 +96,7 @@ def datacube(
     engine="odc",
     rescale=True,
     groupby_date="mean",
+    common_band_names=True,
     **kwargs,
 ):
     logging.info(f"Building datacube with {len(items_collection)} items")
@@ -113,6 +113,10 @@ def datacube(
         raise NotImplementedError(
             f"Engine '{engine}' not supported. Only {' and '.join(list(engines.keys()))} are currently supported."
         )
+    if common_band_names:
+        asset_mapper = AssetMapper()
+        assets = asset_mapper._map(items_collection[0].collection_id, assets)
+
     if isinstance(assets, dict):
         assets_keys = list(assets.keys())
     ds = engines[engine](
@@ -136,9 +140,7 @@ def datacube(
                 continue
             nodata = (
                 item.assets[asset]
-                .extra_fields.get("raster:bands", empty_dict_list)[
-                    band_idx - 1
-                ]
+                .extra_fields.get("raster:bands", empty_dict_list)[band_idx - 1]
                 .get("nodata")
             )
             if nodata == 0 or nodata:
@@ -171,9 +173,9 @@ def datacube(
             invert=True,
         )
 
-        mask_ = xr.DataArray(
-            data=clip_mask_arr, coords=dict(y=ds.y, x=ds.x)
-        ).chunk(chunks=dict(x=ds.chunks["x"][0], y=ds.chunks["y"][0]))
+        mask_ = xr.DataArray(data=clip_mask_arr, coords=dict(y=ds.y, x=ds.x)).chunk(
+            chunks=dict(x=ds.chunks["x"][0], y=ds.chunks["y"][0])
+        )
 
         ds = ds.where(mask_)
         del mask_, clip_mask_arr
@@ -206,9 +208,7 @@ def rescale_assets_with_items(
             if item.datetime in unique_dt.keys():
                 for asset in item.assets.keys():
                     if asset not in unique_dt[item.datetime].assets.keys():
-                        unique_dt[item.datetime].assets[asset] = item.assets[
-                            asset
-                        ]
+                        unique_dt[item.datetime].assets[asset] = item.assets[asset]
             else:
                 unique_dt[item.datetime] = item
             # items_collection_unique_dt.append(item)
@@ -220,9 +220,9 @@ def rescale_assets_with_items(
 
     for idx, time in enumerate(ds.time.values):
         current_item = items_collection[idx]
-        if pd.Timestamp(time).strftime(
+        if pd.Timestamp(time).strftime("%Y%m%d") != current_item.datetime.strftime(
             "%Y%m%d"
-        ) != current_item.datetime.strftime("%Y%m%d"):
+        ):
             raise ValueError(
                 "Mismatch between items and datacube, cannot scale data. Please set rescale to False."
             )
@@ -296,10 +296,7 @@ def rescale_assets_with_items(
                     times = list(set(scales[asset][scale][offset]))
                     if len(times) != len(scales[asset][scale][offset]):
                         for time in times:
-                            d = (
-                                ds[[asset]].loc[dict(time=time)] * scale
-                                + offset
-                            )
+                            d = ds[[asset]].loc[dict(time=time)] * scale + offset
                             ds_scaled[asset].append(d)
                     else:
                         d = ds[[asset]].loc[dict(time=times)] * scale + offset
@@ -338,9 +335,7 @@ def _drop_unfrozen_coords(ds):
 
 
 def _common_data_vars(*cubes):
-    data_vars = list(
-        set([k for cube in cubes for k in list(cube.data_vars.keys())])
-    )
+    data_vars = list(set([k for cube in cubes for k in list(cube.data_vars.keys())]))
     return data_vars
 
 
@@ -377,8 +372,6 @@ def metacube(*cubes, concat_dim="time", by="time.date", how="mean"):
                     cubes[idx][data_var] == np.nan, other=np.nan
                 )
 
-    cube = xr.concat(
-        [_drop_unfrozen_coords(cube) for cube in cubes], dim=concat_dim
-    )
+    cube = xr.concat([_drop_unfrozen_coords(cube) for cube in cubes], dim=concat_dim)
     cube = _groupby(cube, by=by, how=how)
     return _propagade_rio(cubes[0], cube)
