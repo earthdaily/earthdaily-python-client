@@ -265,4 +265,6 @@ def QA_PIXEL_cloud_detection(arr):
 
 
 def filter_clear_cover(dataset, clear_cover, coordinate="clear_percent"):
-    return dataset.sel(time=dataset.time[dataset.clear_percent > clear_cover])
+    return dataset.sel(
+        time=dataset.time[dataset.clear_percent >= clear_cover]
+    )

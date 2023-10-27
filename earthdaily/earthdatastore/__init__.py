@@ -440,6 +440,7 @@ class Auth:
             intersects=intersects,
             bbox=bbox,
             assets=assets,
+            common_band_names=common_band_names,
             **kwargs,
         )
         if mask_with:

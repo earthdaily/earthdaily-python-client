@@ -52,7 +52,7 @@ def _cube_odc(items_collection, assets=None, times=None, **kwargs):
     if "resampling" in kwargs:
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
-    chunks = kwargs.get("chunks", dict(x="auto",y="auto",time="auto"))
+    chunks = kwargs.get("chunks", dict(x="auto", y="auto", time="auto"))
     kwargs.pop("chunks", None)
 
     ds = stac.load(
@@ -100,7 +100,7 @@ def datacube(
     engine="odc",
     rescale=True,
     groupby_date="mean",
-    assets_common_name=True,
+    common_band_names=True,
     **kwargs,
 ):
     logging.info(f"Building datacube with {len(items_collection)} items")
@@ -117,7 +117,7 @@ def datacube(
         raise NotImplementedError(
             f"Engine '{engine}' not supported. Only {' and '.join(list(engines.keys()))} are currently supported."
         )
-    if assets_common_name:
+    if common_band_names:
         asset_mapper = AssetMapper()
         assets = asset_mapper._map(items_collection[0].collection_id, assets)
 

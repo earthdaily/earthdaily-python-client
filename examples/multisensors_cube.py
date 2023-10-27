@@ -93,7 +93,7 @@ common_date = [
 
 s2.sel(time=common_date)[["red", "green", "blue"]].to_array(
     dim="band"
-).plot.imshow(vmin=0, vmax=0.15)
+).plot.imshow(vmin=0, vmax=0.2)
 plt.title(f"Sentinel-2 on {common_date}")
 plt.show()
 
@@ -102,7 +102,7 @@ plt.show()
 # -------------------------------------------
 venus.sel(time=common_date, method="nearest")[
     ["red", "green", "blue"]
-].to_array(dim="band").plot.imshow(vmin=0, vmax=0.15)
+].to_array(dim="band").plot.imshow(vmin=0, vmax=0.2)
 plt.title(f"Venus on {common_date}")
 
 plt.show()
@@ -114,7 +114,7 @@ plt.show()
 
 supercube.sel(time=common_date)[["red", "green", "blue"]].to_array(
     dim="band"
-).plot.imshow(vmin=0, vmax=0.15)
+).plot.imshow(vmin=0, vmax=0.2)
 plt.title(f"Fusion of Venus/Sentinel-2 on {common_date}")
 
 plt.show()
