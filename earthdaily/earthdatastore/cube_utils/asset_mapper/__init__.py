@@ -1,11 +1,11 @@
-from earthdaily.earthdatastore.cube_utils.asset_mapper._asset_mapper_config import (
-    asset_mapper_collections,
-)
+from . import _asset_mapper_config
 
 
 class AssetMapper:
-    def _map(self, collection, bands):
-        if collection not in asset_mapper_collections:
+    def map_collection_bands(self, collection, bands):
+        if isinstance(bands,dict):
+            return bands
+        if collection not in _asset_mapper_config.asset_mapper_collections:
             return bands
 
         # HANDLE LIST TO DICT CONVERSION
@@ -14,7 +14,7 @@ class AssetMapper:
 
         output_bands = {}
 
-        config = asset_mapper_collections[collection]
+        config = _asset_mapper_config.asset_mapper_collections[collection]
 
         # Try to map each band
         for band in bands:

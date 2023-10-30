@@ -12,6 +12,7 @@ from pystac.item_collection import ItemCollection
 from pystac_client import Client
 
 from earthdaily.earthdatastore import _scales_collections, mask
+from earthdaily.earthdatastore import cube_utils
 from earthdaily.earthdatastore.cube_utils import datacube, metacube
 
 logging.getLogger("earthdaily-earthdatastore")

@@ -3,13 +3,8 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 from shapely.geometry import box
-from earthdaily.earthdatastore.cube_utils._zonal import (
-    zonal_stats,
-    zonal_stats_numpy,
-)
-from earthdaily.earthdatastore.cube_utils.asset_mapper._asset_mapper import (
-    AssetMapper,
-)
+from ._zonal import zonal_stats, zonal_stats_numpy
+from .asset_mapper import AssetMapper
 from rasterio.enums import Resampling
 from rasterio.mask import geometry_mask
 import rioxarray as rxr
@@ -113,9 +108,9 @@ def datacube(
         raise NotImplementedError(
             f"Engine '{engine}' not supported. Only {' and '.join(list(engines.keys()))} are currently supported."
         )
-    if common_band_names:
-        asset_mapper = AssetMapper()
-        assets = asset_mapper._map(items_collection[0].collection_id, assets)
+    if common_band_names and not isinstance(assets,dict):
+        aM = AssetMapper()
+        assets = aM.map_collection_bands(items_collection[0].collection_id, assets)
 
     if isinstance(assets, dict):
         assets_keys = list(assets.keys())

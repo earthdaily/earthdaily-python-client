@@ -43,11 +43,8 @@ def datacube_time_stats(datacube, operations):
 
 def _rasterize(gdf, dataset, all_touched=False):
     feats = rasterize(gdf, dataset, all_touched=all_touched)
-    idx_start = 0
-    if 0 in feats:
-        idx_start = 1
     yx_pos = _indices_sparse(feats)
-    return feats, yx_pos, idx_start
+    return feats, yx_pos
 
 
 def zonal_stats_numpy(
@@ -59,8 +56,10 @@ def zonal_stats_numpy(
 ):
     tqdm_bar = tqdm.tqdm(total=len(dataset.data_vars) * dataset.time.size)
     dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)
-    feats, yx_pos, idx_start = _rasterize(gdf, dataset, all_touched=all_touched)
+    
+    feats, yx_pos = _rasterize(gdf, dataset, all_touched=all_touched)
     ds = []
+    features = []
     for data_var in dataset.data_vars:
         tqdm_bar.set_description(data_var)
         dataset_var = dataset[data_var]
@@ -70,11 +69,17 @@ def zonal_stats_numpy(
         for t in range(dataset_var.time.size):
             tqdm_bar.update(1)
             vals[t] = []
-            mem_asset = dataset_var.isel(time=t)
+            mem_asset = dataset_var.isel(time=t).to_numpy()
             for i in range(gdf.shape[0]):
-                pos = yx_pos[i + idx_start]
-                data = mem_asset[pos]
-                res = [operation(data) for operation in operations.values()]
+                features.append(i)
+                if len(yx_pos)<=i+1:
+                    break
+                pos = np.asarray(yx_pos[i + 1])                
+                data = mem_asset[*pos]
+                if data.size>0:
+                    res = [operation(data) for operation in operations.values()]
+                else:
+                    res = [np.nan for operation in operations]
                 vals[t].append(res)
         arr = np.asarray([vals[v] for v in vals])
 
@@ -83,15 +88,14 @@ def zonal_stats_numpy(
             dims=["time", "feature", "stats"],
             coords=dict(
                 time=dataset_var.time.values,
-                feature=gdf.index,
+                feature=gdf.index[np.nonzero(np.unique(feats))[0]-1],
                 stats=list(operations.keys()),
             ),
         )
         del arr, mem_asset, vals, dataset_var
         ds.append(da.to_dataset(name=data_var))
     tqdm_bar.close()
-    return xr.merge(ds)
-
+    return xr.merge(ds).transpose('feature','time','stats')
 
 def zonal_stats(
     dataset,
@@ -111,12 +115,18 @@ def zonal_stats(
 
     zonal_ds_list = []
 
+    dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)
+    
     if method == "optimized":
-        feats, yx_pos, idx_start = _rasterize(gdf, dataset, all_touched=all_touched)
+        feats, yx_pos  = _rasterize(gdf, dataset, all_touched=all_touched)
 
         for gdf_idx in tqdm.trange(gdf.shape[0], disable=not verbose):
             tqdm_bar.update(1)
-            yx_pos_idx = yx_pos[gdf_idx + idx_start]
+            if gdf_idx+1 >= len(yx_pos):
+                continue
+            yx_pos_idx = yx_pos[gdf_idx + 1]
+            if np.asarray(yx_pos_idx).size==0:
+                continue
             datacube_spatial_subset = dataset.isel(
                 x=xr.DataArray(yx_pos_idx[1], dims="xy"),
                 y=xr.DataArray(yx_pos_idx[0], dims="xy"),
