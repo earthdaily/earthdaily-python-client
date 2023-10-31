@@ -198,7 +198,7 @@ def rescale_assets_with_items(
     scales = dict()
     if len(items_collection) > ds.time.size:
         unique_dt = {}
-        items_collection_unique_dt = []
+        # items_collection_unique_dt = []
         for item in items_collection:
             if item.datetime in unique_dt.keys():
                 for asset in item.assets.keys():
@@ -251,7 +251,7 @@ def rescale_assets_with_items(
             scale = rasterbands.get("scale", None)
 
             if offset or scale:
-                if not ds_asset in scales:
+                if ds_asset not in scales:
                     scales[ds_asset] = {}
 
                 scale = rasterbands.get("scale", 1)

@@ -59,7 +59,6 @@ def zonal_stats_numpy(
 
     feats, yx_pos = _rasterize(gdf, dataset, all_touched=all_touched)
     ds = []
-    features = []
     for data_var in dataset.data_vars:
         tqdm_bar.set_description(data_var)
         dataset_var = dataset[data_var]

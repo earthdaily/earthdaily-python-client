@@ -658,7 +658,7 @@ def item_property_to_df(
         if asset is not None and asset.to_dict() is not None:
             try:
                 properties = asset.to_dict()[property_name]
-            except:
+            except NameError:
                 print(
                     f'No property "{property_name}" has been found in the asset "{asset}".'
                 )
