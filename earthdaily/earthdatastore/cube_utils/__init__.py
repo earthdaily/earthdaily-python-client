@@ -246,7 +246,7 @@ def rescale_assets_with_items(
             )[band_idx - 1]
 
             if rasterbands is False:
-                break
+                continue
             offset = rasterbands.get("offset", None)
             scale = rasterbands.get("scale", None)
 

@@ -20,7 +20,7 @@ class AssetMapper:
         return exists
 
     def map_collection_bands(self, collection, bands):
-        if isinstance(bands, dict):
+        if isinstance(bands, (dict|None)):
             return bands
         if not self._collection_exists(collection):
             return bands

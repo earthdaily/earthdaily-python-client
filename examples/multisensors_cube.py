@@ -56,26 +56,13 @@ venus = eds.datacube(
     assets=assets,
 )
 
-##############################################################################
-# Generate Landsat cube
-# -------------------------------------------
 
-
-landsat = eds.datacube(
-    "landsat-c2l2-sr",
-    intersects=polygon,
-    datetime=datetime,
-    resampling=Resampling.nearest,
-    epsg=s2.rio.crs.to_epsg(),
-    resolution=s2.rio.resolution()[0],
-    assets=assets,
-)
 ##############################################################################
 # Create supercube
 # -------------------------------------------
 
 print("create metacube")
-supercube = earthdatastore.metacube(s2, venus, landsat)
+supercube = earthdatastore.metacube(s2, venus)
 
 ##############################################################################
 # Get the first common date between S2 and Venus for plotting
