@@ -1,0 +1,45 @@
+name: pytest-main
+on:
+  push:
+    branches:
+      - main
+jobs:
+  pytest:
+    name: pytest
+    strategy: 
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        python-version:
+          - "3.10"
+          - "3.11"
+    runs-on:  ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Make conda environment
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          micromamba-version: 1.5.1-0
+          environment-file: requirements_dev.yml
+          environment-name: earthdaily
+          create-args: python=${{ matrix.python-version }}
+          cache-environment: true
+          post-cleanup: all
+          init-shell:  >-
+            bash
+      - name: Installing the library
+        shell: bash -l {0}
+        run: |
+          pip install .
+      - name: Run tests and coverage
+        shell: bash -l {0}
+        env:
+          EDS_CLIENT_ID: ${{ secrets.EDS_CLIENT_ID }}
+          EDS_AUTH_URL: ${{ secrets.EDS_AUTH_URL }}
+          EDS_SECRET: ${{ secrets.EDS_SECRET }}
+          EDS_API_URL: ${{ secrets.EDS_API_URL }}
+        run: pytest -v tests --cov=earthdaily
