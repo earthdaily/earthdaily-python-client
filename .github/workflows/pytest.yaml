@@ -8,7 +8,7 @@ on:
 jobs:
   pytest:
     runs-on: ubuntu-latest
-    name: Sphinx docs to gh-pages
+    name: pytest
     steps:
       - uses: actions/checkout@v3
         with:
@@ -26,7 +26,8 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install .
-      - name: tests and coverage
+      - name: Run tests and coverage
+        shell: bash
         env:
             EDS_CLIENT_ID: ${{ secrets.EDS_CLIENT_ID }}
             EDS_AUTH_URL: ${{ secrets.EDS_AUTH_URL }}
