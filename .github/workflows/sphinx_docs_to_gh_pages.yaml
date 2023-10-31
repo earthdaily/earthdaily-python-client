@@ -19,6 +19,7 @@ jobs:
           micromamba-version: '1.5.1-0'
           environment-file: requirements_dev.yml    # Path to the documentation conda environment
           environment-name: earthdaily
+          create-args: python=3.11
           cache-environment: true
           post-cleanup: 'all'
           init-shell: bash
