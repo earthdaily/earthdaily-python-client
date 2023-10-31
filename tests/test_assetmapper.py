@@ -3,7 +3,7 @@ import unittest
 from earthdaily.earthdatastore.cube_utils.asset_mapper import AssetMapper
 
 
-class TestZonalStats(unittest.TestCase):
+class TestAssetMapper(unittest.TestCase):
     def setUp(self):
         self.aM = AssetMapper()
 

@@ -1,0 +1,36 @@
+name: pytest-dev
+
+on:
+  push:
+    branches:
+        - dev
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    name: Sphinx docs to gh-pages
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Make conda environment
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          micromamba-version: '1.5.1-0'
+          environment-file: requirements_dev.yml   
+          environment-name: earthdaily
+          cache-environment: true
+          post-cleanup: 'all'
+          init-shell: bash
+      - name: Installing the library
+        shell: bash -l {0}
+        run: |
+          pip install .
+      - name: tests and coverage
+        env:
+            EDS_CLIENT_ID: ${{ secrets.EDS_CLIENT_ID }}
+            EDS_AUTH_URL: ${{ secrets.EDS_AUTH_URL }}
+            EDS_SECRET: ${{ secrets.EDS_SECRET }} 
+            EDS_API_URL: ${{ secrets.EDS_API_URL }}
+        run: |
+          pytest -v tests --cov=earthdaily

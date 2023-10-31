@@ -59,6 +59,7 @@ def zonal_stats_numpy(
 
     feats, yx_pos = _rasterize(gdf, dataset, all_touched=all_touched)
     ds = []
+    features_idx = []
     for data_var in dataset.data_vars:
         tqdm_bar.set_description(data_var)
         dataset_var = dataset[data_var]
@@ -70,7 +71,7 @@ def zonal_stats_numpy(
             vals[t] = []
             mem_asset = dataset_var.isel(time=t).to_numpy()
             for i in range(gdf.shape[0]):
-                features.append(i)
+                features_idx.append(i)
                 if len(yx_pos) <= i + 1:
                     break
                 pos = np.asarray(yx_pos[i + 1])
