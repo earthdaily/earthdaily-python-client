@@ -75,6 +75,7 @@ def zonal_stats_numpy(
                 if len(yx_pos) <= i + 1:
                     break
                 pos = np.asarray(yx_pos[i + 1])
+                # mem_asset[*pos] only for python>=3.11
                 if len(pos) == 2:
                     data = mem_asset[pos[0], pos[1]]
                 elif len(pos) == 1:
