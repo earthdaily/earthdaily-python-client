@@ -1,6 +1,7 @@
 # Earthdaily Python Package
 [![PyPI version](https://badge.fury.io/py/earthdaily.png)](https://badge.fury.io/py/earthdaily)
 [![Documentation](https://img.shields.io/badge/Documentation-html-green.svg)](https://geosys.github.io/earthdaily-python-client/)
+[![pytest](https://github.com/GEOSYS/earthdaily-python-client/actions/workflows/pytest.yaml/badge.svg?branch=main)](https://github.com/GEOSYS/earthdaily-python-client/actions/workflows/pytest.yaml)
 
 ## Your Gateway to the Stac Catalog Earth Data Store
 

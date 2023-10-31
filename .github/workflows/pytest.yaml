@@ -32,7 +32,6 @@ jobs:
           post-cleanup: all
           init-shell:  >-
             bash
-            powershell
       - name: Installing the library
         shell: bash -l {0}
         run: |

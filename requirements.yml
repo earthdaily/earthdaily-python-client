@@ -4,6 +4,7 @@ channels:
  - defaults
 dependencies:
  - numpy
+ - python>=3.10
  - gdal>=3.7.0
  - pandas
  - geopandas>=0.11
