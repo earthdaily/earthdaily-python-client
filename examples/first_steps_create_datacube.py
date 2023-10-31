@@ -37,7 +37,6 @@ s2_datacube = eds.datacube(
     intersects=geometry,
     datetime=["2022-08-01", "2022-08-09"],
     mask_with="native",  # equal to "scl" for sentinel-2
-    mask_statistics=True,
     clear_cover=50,
 )
 

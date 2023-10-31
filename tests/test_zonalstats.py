@@ -43,38 +43,24 @@ class TestZonalStats(unittest.TestCase):
             self.datacube,
             self.gdf,
             all_touched=True,
-            operations=dict(mean=np.nanmean, max=np.nanmax, min=np.nanmin),
+            operations=dict(mean=np.nanmean, max=np.nanmax, min=np.nanmin, mode=np.mode),
         )
-        self.assertTrue(
-            np.all(
-                zonalstats["first_var"].sel(stats="max").values
-                == np.asarray([[8, self.constant], [23, self.constant]])
-            )
-        )
-        self.assertTrue(
-            np.all(
-                zonalstats["first_var"].sel(stats="min").values
-                == np.asarray([[0, self.constant], [9, self.constant]])
-            )
-        )
+
+        for operation in ['min','max', 'mode']:
+            self._check_results(zonalstats["first_var"].sel(stats=operation).values, operation=operation)
 
     def test_basic(self):
         zonalstats = earthdaily.earthdatastore.cube_utils.zonal_stats(
-            self.datacube, self.gdf, all_touched=True, operations=["min", "max", "mean"]
+            self.datacube, self.gdf, all_touched=True, operations=["min", "max", "mode"]
         )
-        self.assertTrue(
-            np.all(
-                zonalstats["first_var"].sel(stats="max").values
-                == np.asarray([[8, self.constant], [23, self.constant]])
-            )
-        )
-        self.assertTrue(
-            np.all(
-                zonalstats["first_var"].sel(stats="min").values
-                == np.asarray([[0, self.constant], [9, self.constant]])
-            )
-        )
-
+        for operation in ['min','max','mode']:
+            self._check_results(zonalstats["first_var"].sel(stats=operation).values, operation=operation)
+            
+    def _check_results(self, stats_values,operation='min'):
+        results = {"min":np.asarray([[0, self.constant], [9, self.constant]]),
+                   "max":np.asarray([[8, self.constant], [23, self.constant]]),
+                   "mode":np.asarray([[0, self.constant], [9, self.constant]])}
+        self.assertTrue(np.all(stats_values == results[operation]))
 
 if __name__ == "__main__":
     unittest.main()

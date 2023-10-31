@@ -1,9 +1,9 @@
-name: pytest-dev
+name: pytest
 
 on:
   push:
     branches:
-        - dev
+        - [main,dev]
 
 jobs:
   pytest:
