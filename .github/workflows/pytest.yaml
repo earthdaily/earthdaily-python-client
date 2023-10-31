@@ -38,7 +38,7 @@ jobs:
         run: |
           pip install .
       - name: Run tests and coverage
-        shell: ${{ matrix.sys.shell }}
+        shell: ${{ matrix.sys.shell }} {0}
         env:
           EDS_CLIENT_ID: ${{ secrets.EDS_CLIENT_ID }}
           EDS_AUTH_URL: ${{ secrets.EDS_AUTH_URL }}
