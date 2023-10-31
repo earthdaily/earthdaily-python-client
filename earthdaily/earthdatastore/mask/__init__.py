@@ -10,7 +10,12 @@ from joblib import Parallel, delayed
 
 dask.config.set(**{"array.slicing.split_large_chunks": True})
 
-_available_masks = ["native",    "venus_detailed_cloud_mask",    "ag_cloud_mask",    "scl",]
+_available_masks = [
+    "native",
+    "venus_detailed_cloud_mask",
+    "ag_cloud_mask",
+    "scl",
+]
 _native_mask_def_mapping = {
     "sentinel-2-l2a": "scl",
     "venus-l2a": "venus_detailed_cloud_mask",
