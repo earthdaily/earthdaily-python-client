@@ -1,16 +1,19 @@
-import xarray as xr
 import json
-from pystac_client import Client
-from pystac.item_collection import ItemCollection
-import requests
-import pandas as pd
-import geopandas as gpd
-import os
-import operator
-from earthdaily.earthdatastore import mask, _scales_collections
-from earthdaily.earthdatastore.cube_utils import datacube, metacube
 import logging
+import operator
+import os
+import warnings
 
+import geopandas as gpd
+import pandas as pd
+import requests
+import xarray as xr
+from pystac.item_collection import ItemCollection
+from pystac_client import Client
+
+from earthdaily.earthdatastore import _scales_collections, mask
+from earthdaily.earthdatastore import cube_utils
+from earthdaily.earthdatastore.cube_utils import datacube, metacube
 
 logging.getLogger("earthdaily-earthdatastore")
 
@@ -18,27 +21,26 @@ logging.getLogger("earthdaily-earthdatastore")
 def post_query_items(items, query):
     items_ = []
     for idx, item in enumerate(items):
-        item_already_checked = False
-        while not item_already_checked:
-            for k, v in query.items():
-                for v_op, v_val in v.items():
-                    if isinstance(v_val, list):
-                        for v_val_ in v_val:
-                            operation = operator.__dict__[v_op](
-                                item.properties[k], v_val_
-                            )
+        queries_results = 0
+        for k, v in query.items():
+            if k not in item.properties.keys():
+                continue
+            for v_op, v_val in v.items():
+                if isinstance(v_val, list):
+                    results = 0
+                    for v_val_ in v_val:
+                        operation = operator.__dict__[v_op](item.properties[k], v_val_)
 
-                            if operation:
-                                items_.append(item)
-                                item_already_checked = True
-                    else:
-                        operation = operator.__dict__[v_op](
-                            item.properties[k], v_val
-                        )
+                        if operation:
+                            results += 1
+                    if results == len(v_val):
+                        queries_results += 1
+                else:
+                    operation = operator.__dict__[v_op](item.properties[k], v_val)
                     if operation:
-                        items_.append(item)
-                        item_already_checked = True
-            break
+                        queries_results += 1
+        if queries_results == len(query.keys()):
+            items_.append(item)
 
     items = ItemCollection(items_)
     return items
@@ -63,7 +65,10 @@ def _cloud_path_to_http(cloud_path):
 
 
 def enhance_assets(
-    items, alternate="s3", use_http_url=False, add_default_scale_factor=False
+    items,
+    alternate="download",
+    use_http_url=False,
+    add_default_scale_factor=False,
 ):
     if any((alternate, use_http_url, add_default_scale_factor)):
         for idx, item in enumerate(items):
@@ -83,9 +88,7 @@ def enhance_assets(
                 if use_http_url:
                     href = item.assets[asset].to_dict().get("href", {})
                     if href:
-                        items[idx].assets[asset].href = _cloud_path_to_http(
-                            href
-                        )
+                        items[idx].assets[asset].href = _cloud_path_to_http(href)
                 if add_default_scale_factor:
                     scale_factor_collection = (
                         _scales_collections.scale_factor_collections.get(
@@ -95,8 +98,8 @@ def enhance_assets(
                     for scales_collection in scale_factor_collection:
                         if asset in scales_collection.get("assets", []):
                             if (
-                                not "raster:bands"
-                                in items[idx].assets[asset].extra_fields
+                                "raster:bands"
+                                not in items[idx].assets[asset].extra_fields
                             ):
                                 items[idx].assets[asset].extra_fields[
                                     "raster:bands"
@@ -107,15 +110,15 @@ def enhance_assets(
                                 .extra_fields["raster:bands"][0]
                                 .get("scale")
                             ):
-                                items[idx].assets[asset].extra_fields[
-                                    "raster:bands"
-                                ][0]["scale"] = scales_collection["scale"]
-                                items[idx].assets[asset].extra_fields[
-                                    "raster:bands"
-                                ][0]["offset"] = scales_collection["offset"]
-                                items[idx].assets[asset].extra_fields[
-                                    "raster:bands"
-                                ][0]["nodata"] = scales_collection["nodata"]
+                                items[idx].assets[asset].extra_fields["raster:bands"][
+                                    0
+                                ]["scale"] = scales_collection["scale"]
+                                items[idx].assets[asset].extra_fields["raster:bands"][
+                                    0
+                                ]["offset"] = scales_collection["offset"]
+                                items[idx].assets[asset].extra_fields["raster:bands"][
+                                    0
+                                ]["nodata"] = scales_collection["nodata"]
 
     return items
 
@@ -130,9 +133,7 @@ def _get_client(config=None):
     auth_url = config("EDS_AUTH_URL")
     secret = config("EDS_SECRET")
     client_id = config("EDS_CLIENT_ID")
-    eds_url = config(
-        "EDS_API_URL", "https://api.eds.earthdaily.com/archive/v1/stac/v1"
-    )
+    eds_url = config("EDS_API_URL", "https://api.eds.earthdaily.com/archive/v1/stac/v1")
     if auth_url is None or secret is None or client_id is None:
         raise AttributeError(
             "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
@@ -172,10 +173,7 @@ class StacCollectionExplorer:
 
     @property
     def item_properties(self):
-        return {
-            k: self.item.properties[k]
-            for k in sorted(self.item.properties.keys())
-        }
+        return {k: self.item.properties[k] for k in sorted(self.item.properties.keys())}
 
     def assets(self, asset_name=None):
         if asset_name:
@@ -349,11 +347,35 @@ class Auth:
         """
         if collection:
             if collection not in self._staccollectionexplorer.keys():
-                self._staccollectionexplorer[
-                    collection
-                ] = StacCollectionExplorer(self.client, collection)
+                self._staccollectionexplorer[collection] = StacCollectionExplorer(
+                    self.client, collection
+                )
             return self._staccollectionexplorer.get(collection)
         return sorted(c.id for c in self.client.get_all_collections())
+
+    def _update_search_kwargs_for_ag_cloud_mask(self, search_kwargs, collections):
+        search_kwargs = search_kwargs.copy()
+        # to get only items that have a ag_cloud_mask
+        ag_query = {"eda:ag_cloud_mask_available": {"eq": True}}
+        target_param = "query"
+
+        # to check if field is queryable
+        # =============================================================================
+        #         queryables = self.client._stac_io.request(
+        #             self.client.get_root_link().href
+        #             + f"/queryables?collections={collections[0] if isinstance(collections,list) else collections}"
+        #         )
+        #         queryables = json.loads(queryables)
+        #         queryables = queryables["properties"]
+        #         if "eda:ag_cloud_mask_available" not in queryables.keys():
+        #             target_param = "post_query"
+        #         else:
+        #             target_param = "query"
+        # =============================================================================
+        query = search_kwargs.get("target_param", {})
+        query.update(ag_query)
+        search_kwargs[target_param] = query
+        return search_kwargs
 
     def datacube(
         self,
@@ -364,50 +386,60 @@ class Auth:
         bbox=None,
         mask_with: None | str = None,
         mask_statistics: bool | int = False,
-        prefer_alternate: (str, False) = "s3",
-        prefer_http: bool = True,
+        clear_cover: (int, float) = None,
+        prefer_alternate: (str, False) = "download",
         search_kwargs: dict = {},
         add_default_scale_factor: bool = True,
+        common_band_names=True,
         **kwargs,
-    ):
+    ) -> xr.Dataset:
+        if mask_with and common_band_names:
+            if isinstance(collections, list):
+                if len(collections) > 1:
+                    raise ValueError(
+                        "Mask_with and assets_mapping only manage one collection at a time."
+                    )
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise ValueError(
                     f"Specified mask '{mask_with}' is not available.\ Currently available masks provider are : {mask._available_masks}"
                 )
-            if isinstance(collections, list):
-                if len(collections) > 1:
-                    raise ValueError(
-                        "Mask_with only manage one collection at a time."
-                    )
                 collection = collections[0]
             else:
                 collection = collections
 
-        if mask_with == "ag_cloud_mask":
-            # to get only items that have a ag_cloud_mask
-            query = search_kwargs.get("query", {})
-            query.update({"eda:ag_cloud_mask_available": {"eq": True}})
-            search_kwargs["query"] = query
+            if mask_with == "ag_cloud_mask":
+                search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
+                    search_kwargs, collections
+                )
 
         items = self.search(
             collections=collections,
             bbox=bbox,
             intersects=intersects,
             datetime=datetime,
-            prefer_http=prefer_http,
             prefer_alternate=prefer_alternate,
             add_default_scale_factor=add_default_scale_factor,
             **search_kwargs,
         )
+
         xr_datacube = datacube(
-            items, intersects=intersects, bbox=bbox, assets=assets, **kwargs
+            items,
+            intersects=intersects,
+            bbox=bbox,
+            assets=assets,
+            common_band_names=common_band_names,
+            **kwargs,
         )
         if mask_with:
-            if mask_with == "native":
-                mask_with = mask._native_mask_def_mapping.get(
-                    collection, None
+            if clear_cover and mask_statistics is False:
+                mask_statistics = True
+                warnings.warn(
+                    "Forcing mask_statistics in order to filter by clear coverage.",
+                    category=Warning,
                 )
+            if mask_with == "native":
+                mask_with = mask._native_mask_def_mapping.get(collection, None)
                 if mask_with is None:
                     raise ValueError(
                         f"Sorry, there's no native mask available for {collection}. Only these collections have native cloudmask : {list(mask._native_mask_mapping.keys())}."
@@ -422,6 +454,7 @@ class Auth:
                     groupby_date="max",
                     epsg=xr_datacube.rio.crs.to_epsg(),
                     resolution=xr_datacube.rio.resolution()[0],
+                    prefer_alternate="download",
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
@@ -431,7 +464,7 @@ class Auth:
                 mask_assets = mask._native_mask_asset_mapping[collections]
                 if "groupby_date" in kwargs:
                     kwargs["groupby_date"] = "max"
-                if not "resolution" in kwargs:
+                if "resolution" not in kwargs:
                     kwargs["resolution"] = xr_datacube.rio.resolution()[0]
                 clouds_datacube = datacube(
                     items,
@@ -447,6 +480,9 @@ class Auth:
 
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
+
+            if clear_cover:
+                xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
         return xr_datacube
 
     def search(
@@ -456,7 +492,6 @@ class Auth:
         bbox=None,
         post_query=None,
         prefer_alternate=None,
-        prefer_http=False,
         add_default_scale_factor=False,
         **kwargs,
     ):
@@ -475,8 +510,6 @@ class Auth:
             DESCRIPTION. The default is None.
         prefer_alternate : TYPE, optional
             DESCRIPTION. The default is None.
-        prefer_http : TYPE, optional
-            DESCRIPTION. The default is False.
         **kwargs : TYPE
             DESCRIPTION.
 
@@ -577,11 +610,10 @@ class Auth:
             **kwargs,
         )
         items_collection = items_collection.item_collection()
-        if any((prefer_alternate, prefer_http, add_default_scale_factor)):
+        if any((prefer_alternate, add_default_scale_factor)):
             items_collection = enhance_assets(
                 items_collection.clone(),
                 alternate=prefer_alternate,
-                use_http_url=prefer_http,
                 add_default_scale_factor=add_default_scale_factor,
             )
         if post_query:
@@ -596,9 +628,7 @@ class Auth:
             for item in items:
                 if not item.properties.get("eda:ag_cloud_mask_available"):
                     continue
-                collection = item.properties[
-                    "eda:ag_cloud_mask_collection_id"
-                ]
+                collection = item.properties["eda:ag_cloud_mask_collection_id"]
                 if products.get(collection, None) is None:
                     products[collection] = []
                 products[collection].append(
@@ -628,7 +658,7 @@ def item_property_to_df(
         if asset is not None and asset.to_dict() is not None:
             try:
                 properties = asset.to_dict()[property_name]
-            except:
+            except NameError:
                 print(
                     f'No property "{property_name}" has been found in the asset "{asset}".'
                 )

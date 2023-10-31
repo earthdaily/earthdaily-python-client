@@ -68,19 +68,10 @@ epsg, resolution = (
 
 
 venus_datacube = earthdatastore.datacube(
-    items,
-    assets={
-        "image_file_SRE_B3": "blue",
-        "image_file_SRE_B4": "green",
-        "image_file_SRE_B7": "red",
-    },
-    epsg=epsg,
-    resolution=resolution,
+    items, assets=["blue", "green", "red"], epsg=epsg, resolution=resolution
 )
 print(venus_datacube)
 
-venus_datacube.isel(
-    time=slice(29, 33), x=slice(4000, 4500), y=slice(4000, 4500)
-)[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
-    col="time", vmin=0, vmax=0.33
-)
+venus_datacube.isel(time=slice(29, 32), x=slice(4000, 4500), y=slice(4000, 4500))[
+    ["red", "green", "blue"]
+].to_array(dim="band").plot.imshow(col="time", vmin=0, vmax=0.33)
