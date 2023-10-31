@@ -9,14 +9,14 @@ jobs:
     name: pytest
     strategy: 
       matrix:
-        sys:
-          - { os: windows-latest, shell: pwsh }
-          - { os: ubuntu-latest,  shell: bash  }
-          - { os: macos-latest,   shell: bash  }
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
         python-version:
           - "3.10"
           - "3.11"
-    runs-on:  ${{ matrix.sys.os }}
+    runs-on:  ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -38,7 +38,7 @@ jobs:
         run: |
           pip install .
       - name: Run tests and coverage
-        shell: ${{ matrix.sys.shell }} {0}
+        shell: bash -l {0}
         env:
           EDS_CLIENT_ID: ${{ secrets.EDS_CLIENT_ID }}
           EDS_AUTH_URL: ${{ secrets.EDS_AUTH_URL }}
