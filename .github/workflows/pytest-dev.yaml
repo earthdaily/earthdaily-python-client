@@ -4,8 +4,8 @@ on:
     branches:
       - dev
 jobs:
-  pytest:
-    name: pytest
+  pytest-dev:
+    name: pytest-dev
     strategy: 
       matrix:
         os:
