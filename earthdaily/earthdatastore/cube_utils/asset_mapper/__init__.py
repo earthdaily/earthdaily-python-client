@@ -2,10 +2,27 @@ from . import _asset_mapper_config
 
 
 class AssetMapper:
+    def __init__(self):
+        self.available_collections = list(
+            _asset_mapper_config.asset_mapper_collections.keys()
+        )
+
+    def collection_mapping(self, collection):
+        if self._collection_exists(collection, raise_warning=True):
+            return _asset_mapper_config.asset_mapper_collections[collection]
+
+    def _collection_exists(self, collection, raise_warning=False):
+        exists = True if collection in self.available_collections else False
+        if raise_warning and not exists:
+            raise NotImplementedError(
+                f"Collection {collection} has not been implemented"
+            )
+        return exists
+
     def map_collection_bands(self, collection, bands):
-        if isinstance(bands,dict):
+        if isinstance(bands, dict):
             return bands
-        if collection not in _asset_mapper_config.asset_mapper_collections:
+        if not self._collection_exists(collection):
             return bands
 
         # HANDLE LIST TO DICT CONVERSION
@@ -14,7 +31,7 @@ class AssetMapper:
 
         output_bands = {}
 
-        config = _asset_mapper_config.asset_mapper_collections[collection]
+        config = self.collection_mapping(collection)
 
         # Try to map each band
         for band in bands:

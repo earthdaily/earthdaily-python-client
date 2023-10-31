@@ -108,7 +108,7 @@ def datacube(
         raise NotImplementedError(
             f"Engine '{engine}' not supported. Only {' and '.join(list(engines.keys()))} are currently supported."
         )
-    if common_band_names and not isinstance(assets,dict):
+    if common_band_names and not isinstance(assets, dict):
         aM = AssetMapper()
         assets = aM.map_collection_bands(items_collection[0].collection_id, assets)
 

@@ -21,7 +21,7 @@ console = Console(force_interactive=True)
 #
 
 for collection,assets in asset_mapper._asset_mapper_config.asset_mapper_collections.items():
-    table = Table("asset","common name",title=f"Earthdaily common names for {collection}")
-    for asset, common_name in assets[0].items():
+    table = Table("asset","EarthDaily Common band name",title=f"Earthdaily common names for {collection}")
+    for common_name, asset  in assets[0].items():
         table.add_row(asset, common_name)
     console.print(table)
