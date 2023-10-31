@@ -9,7 +9,7 @@ jobs:
     name: pytest
     strategy: 
       matrix:
-        os:
+        sys:
           - { os: windows-latest, shell: pwsh }
           - { os: ubuntu-latest,  shell: bash  }
           - { os: macos-latest,   shell: bash  }
