@@ -43,7 +43,7 @@ def _cube_odc(items_collection, assets=None, times=None, **kwargs):
     if "resampling" in kwargs:
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
-    chunks = kwargs.get("chunks", dict(x="auto", y="auto", time="auto"))
+    chunks = kwargs.get("chunks", dict(x="256", y="256", time="auto"))
     kwargs.pop("chunks", None)
 
     ds = stac.load(
