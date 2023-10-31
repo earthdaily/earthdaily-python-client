@@ -2,8 +2,8 @@ name: pytest
 on:
   push:
     branches:
-      - - main
-        - dev
+      - main
+      - dev
 jobs:
   pytest:
     name: pytest
