@@ -27,11 +27,10 @@ jobs:
         run: |
           pip install .
       - name: Run tests and coverage
-        shell: bash
+        shell: micromamba-shell {0}
         env:
             EDS_CLIENT_ID: ${{ secrets.EDS_CLIENT_ID }}
             EDS_AUTH_URL: ${{ secrets.EDS_AUTH_URL }}
             EDS_SECRET: ${{ secrets.EDS_SECRET }} 
             EDS_API_URL: ${{ secrets.EDS_API_URL }}
-        run: |
-          pytest -v tests --cov=earthdaily
+        run: pytest -v tests --cov=earthdaily
