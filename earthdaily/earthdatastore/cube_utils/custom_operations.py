@@ -3,7 +3,6 @@ from xarray.core import groupby
 import numpy as np
 
 
-
 class CustomOperations:
     @staticmethod
     def _np_mode(arr, **kwargs):
@@ -34,5 +33,6 @@ class CustomOperations:
         xr.core.groupby.DataArrayGroupBy.mode = CustomOperations.mode
         xr.core.groupby.DatasetGroupBy.mode = CustomOperations.mode
         np.mode = CustomOperations._np_mode
+
 
 CustomOperations.register_custom_operations()

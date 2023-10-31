@@ -10,12 +10,7 @@ from joblib import Parallel, delayed
 
 dask.config.set(**{"array.slicing.split_large_chunks": True})
 
-_available_masks = [
-    "native",
-    "venus_detailed_cloud_mask",
-    "ag_cloud_mask",
-    "scl",
-]
+_available_masks = ["native",    "venus_detailed_cloud_mask",    "ag_cloud_mask",    "scl",]
 _native_mask_def_mapping = {
     "sentinel-2-l2a": "scl",
     "venus-l2a": "venus_detailed_cloud_mask",
@@ -29,8 +24,9 @@ _native_mask_asset_mapping = {
     "landsat-c2l2-st": "qa_pixel",
 }
 
+
 def _bool_or_int_to_njobs(var):
-    if isinstance(var,bool):
+    if isinstance(var, bool):
         if var:
             arg = 1
         else:
@@ -38,7 +34,7 @@ def _bool_or_int_to_njobs(var):
     else:
         arg = var
     return arg
-            
+
 
 class Mask:
     def __init__(self, dataset: xr.Dataset, intersects=None, bbox=None):
