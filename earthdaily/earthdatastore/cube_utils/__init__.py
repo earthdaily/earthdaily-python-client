@@ -192,7 +192,7 @@ def datacube(
 
 
 def rescale_assets_with_items(
-    items_collection, ds, assets=None, boa_offset_applied_control=True
+    items_collection, ds, assets=None, boa_offset_applied_control=True, force_boa_true_since_20220301=True,
 ):
     logging.info("rescale dataset")
     scales = dict()
@@ -228,6 +228,9 @@ def rescale_assets_with_items(
             boa_offset_applied = items_collection[idx].properties.get(
                 "earthsearch:boa_offset_applied", False
             )
+            if force_boa_true_since_20220301:
+                if np.datetime_as_string(time)[:10].replace('-','') >= '20220301':
+                    boa_offset_applied = True
         if assets is None:
             assets = list(ds.data_vars.keys())
         for ds_asset in assets:
