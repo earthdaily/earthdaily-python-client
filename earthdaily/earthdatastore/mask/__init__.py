@@ -139,7 +139,7 @@ class Mask:
         n_jobs=1,
     ):
         def compute_clear_pixels(cloudmask_array, labels, labels_are_clouds=False):
-            if isinstance(cloudmask_array.data,dask.array.core.Array):    
+            if isinstance(cloudmask_array.data, dask.array.core.Array):
                 cloudmask_array = cloudmask_array.data.compute()
 
             if labels_are_clouds:
