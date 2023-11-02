@@ -43,7 +43,7 @@ def _cube_odc(items_collection, assets=None, times=None, **kwargs):
     if "resampling" in kwargs:
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
-    chunks = kwargs.get("chunks", dict(x="256", y="256", time="auto"))
+    chunks = kwargs.get("chunks", dict(x="auto", y="auto", time="auto"))
     kwargs.pop("chunks", None)
 
     ds = stac.load(
@@ -55,6 +55,7 @@ def _cube_odc(items_collection, assets=None, times=None, **kwargs):
         groupby=None,
         **kwargs,
     )
+    ds = ds.chunk(dict(x=256, y=256))
 
     return ds
 
@@ -110,7 +111,7 @@ def datacube(
         )
     if common_band_names and not isinstance(assets, dict):
         aM = AssetMapper()
-        assets = aM.map_collection_bands(items_collection[0].collection_id, assets)
+        assets = aM.map_collection_assets(items_collection[0].collection_id, assets)
 
     if isinstance(assets, dict):
         assets_keys = list(assets.keys())

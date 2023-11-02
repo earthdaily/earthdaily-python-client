@@ -1,3 +1,3 @@
-from earthdaily import earthdatastore
+from . import earthdatastore, datasets
 
 __version__ = "0.0.1-rc5"

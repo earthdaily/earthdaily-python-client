@@ -13,14 +13,14 @@ import geopandas as gpd
 from matplotlib import pyplot as plt
 from rasterio.enums import Resampling
 
-from earthdaily import earthdatastore
+from earthdaily import earthdatastore, datasets
 
 ##############################################################################
 # Import librairies
 # -------------------------------------------
 
 eds = earthdatastore.Auth()
-polygon = gpd.read_file("pivot.geojson")
+polygon = datasets.load_pivot()
 # 500x500m
 polygon.geometry = (
     polygon.geometry.to_crs(epsg=3857).centroid.buffer(500).to_crs(epsg=4326)
