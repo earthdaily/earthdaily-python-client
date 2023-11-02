@@ -5,12 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [0.0.1-rc5] 2023-11-02
+## [0.0.1-rc5] 
 
 ### Added
 
 - `common_band_names` default set to True in datacube creation. It uses the new Assets Mapper in order to define to best suitable bands according to user needs.
 - `clear_cover` in the datacube method when using the `earthdatastore.Auth` method.
+- `datasets.load_pivot()` to load a GeoDataFrame of a pivot in Nebraska (alternates between corn or soy between years).
+- Several tests to check and validate code.
 
 ### Changed
 

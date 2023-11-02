@@ -8,7 +8,7 @@ Using SCL data from L2A, zonal stats for evolution"""
 # Import librairies
 # -------------------------------------------
 
-from earthdaily import earthdatastore
+from earthdaily import earthdatastore, datasets
 import geopandas as gpd
 from matplotlib import pyplot as plt
 
@@ -17,7 +17,7 @@ from matplotlib import pyplot as plt
 # -------------------------------------------
 
 # load geojson
-pivot = gpd.read_file("pivot.geojson")
+pivot = datasets.load_pivot()
 
 ##############################################################################
 # Init earthdatastore with env params

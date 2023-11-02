@@ -13,14 +13,14 @@ The second one is the most turnkey one, the one we recommend, it allows to do al
 # Import librairies
 # -------------------------------------------
 
-from earthdaily import earthdatastore
+from earthdaily import earthdatastore, datasets
 import geopandas as gpd
 from matplotlib import pyplot as plt
 
 ##########################
 # Loading geometry
 
-geometry = gpd.read_file("pivot.geojson")
+geometry = datasets.load_pivot()
 
 ##########################
 # Init earthdaily and check available assets
