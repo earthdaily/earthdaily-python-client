@@ -13,11 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `clear_cover` in the datacube method when using the `earthdatastore.Auth` method.
 - `datasets.load_pivot()` to load a GeoDataFrame of a pivot in Nebraska (alternates between corn or soy between years).
 - Several tests to check and validate code.
+- Better performances for cloud mask statistics by checking data type (still not dask friendly)
 
 ### Changed
 
 - masks statistics are not anymore suffixed with the cloudmask type : `clear_percent`and `clear_pixels`. Warns with a DeprecationWarning.
 - all queries in `post_query` must return True to keep the item. If a key doesn't exist, considers the result as False (instead of failling).
+- default chunks are now `x=512` and  `y=512`for odc-stac
 
 ### Fixed
 

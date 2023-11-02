@@ -139,7 +139,8 @@ class Mask:
         n_jobs=1,
     ):
         def compute_clear_pixels(cloudmask_array, labels, labels_are_clouds=False):
-            cloudmask_array = cloudmask_array.data.compute()
+            if isinstance(cloudmask_array.data,dask.array.core.Array):    
+                cloudmask_array = cloudmask_array.data.compute()
 
             if labels_are_clouds:
                 labels_sum = np.sum(~np.in1d(cloudmask_array, labels)) - np.sum(
