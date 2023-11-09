@@ -12,7 +12,7 @@ jobs:
     - uses: chartboost/ruff-action@v1
       with:
         src: "./earthdaily"
-        args: --ignore F401 E722
+        args: --ignore F401,E722
     - uses: chartboost/ruff-action@v1
       with:
         src: "./earthdaily"
