@@ -407,7 +407,6 @@ class Auth:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections
                 )
-        geom = None
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
         items = self.search(
