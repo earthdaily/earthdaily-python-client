@@ -11,9 +11,9 @@ import xarray as xr
 from pystac.item_collection import ItemCollection
 from pystac_client import Client
 
-from earthdaily.earthdatastore import _scales_collections, mask
-from earthdaily.earthdatastore import cube_utils
-from earthdaily.earthdatastore.cube_utils import datacube, metacube
+from . import _scales_collections, mask
+from . import cube_utils
+from .cube_utils import datacube, metacube
 
 logging.getLogger("earthdaily-earthdatastore")
 
@@ -44,11 +44,6 @@ def post_query_items(items, query):
 
     items = ItemCollection(items_)
     return items
-
-
-def _gdf_to_stac_intersects(gdf):
-    geom = gdf.to_crs(epsg=4326).iloc[[0]].to_json(drop_id=True)
-    return json.dumps(json.loads(geom)["features"][0]["geometry"])
 
 
 def _cloud_path_to_http(cloud_path):
@@ -412,7 +407,9 @@ class Auth:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections
                 )
-
+        geom = None
+        if intersects is not None:
+            intersects = cube_utils.GeometryManager(intersects).to_geopandas()
         items = self.search(
             collections=collections,
             bbox=bbox,
@@ -466,6 +463,9 @@ class Auth:
                     kwargs["groupby_date"] = "max"
                 if "resolution" not in kwargs:
                     kwargs["resolution"] = xr_datacube.rio.resolution()[0]
+                if "epsg"  not in kwargs:
+                    kwargs["epsg"] = xr_datacube.rio.crs.to_epsg()
+
                 clouds_datacube = datacube(
                     items,
                     intersects=intersects,
@@ -598,8 +598,8 @@ class Auth:
         """
         if isinstance(collections, str):
             collections = [collections]
-        if bbox is None and isinstance(intersects, gpd.GeoDataFrame):
-            intersects = _gdf_to_stac_intersects(intersects)
+        if bbox is None and intersects is not None:
+            intersects = cube_utils.GeometryManager(intersects).to_intersects(crs='4326')
         if bbox and intersects:
             bbox = None
         items_collection = self.client.search(

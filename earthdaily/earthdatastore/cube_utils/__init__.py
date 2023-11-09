@@ -5,6 +5,7 @@ import geopandas as gpd
 from shapely.geometry import box
 from ._zonal import zonal_stats, zonal_stats_numpy
 from .asset_mapper import AssetMapper
+from .geometry_manager import GeometryManager
 from rasterio.enums import Resampling
 from rasterio.mask import geometry_mask
 import rioxarray as rxr
@@ -43,15 +44,13 @@ def _cube_odc(items_collection, assets=None, times=None, **kwargs):
     if "resampling" in kwargs:
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
-    chunks = kwargs.get("chunks", dict(x=512, y=512, time=1))
-    kwargs.pop("chunks", None)
+    kwargs['chunks'] = kwargs.get("chunks", dict(x=512, y=512, time=1))
 
     ds = stac.load(
         items_collection,
         bands=assets,
-        chunks=chunks,
         preserve_original_order=True,
-        dtype="float64",
+        dtype="float32",
         groupby=None,
         **kwargs,
     )
@@ -111,7 +110,6 @@ def datacube(
     if common_band_names and not isinstance(assets, dict):
         aM = AssetMapper()
         assets = aM.map_collection_assets(items_collection[0].collection_id, assets)
-
     if isinstance(assets, dict):
         assets_keys = list(assets.keys())
     ds = engines[engine](
@@ -153,27 +151,10 @@ def datacube(
     if bbox and intersects is None:
         intersects = _bbox_to_intersects(bbox)
     if isinstance(intersects, gpd.GeoDataFrame):
-        itrscts = intersects.to_crs(ds.rio.crs).iloc[[0]]
+        # itrscts = intersects.to_crs(ds.rio.crs).iloc[[0]]
         # optimize by perclipping using bbox
-        ds = ds.sel(
-            x=slice(itrscts.bounds.minx[0], itrscts.bounds.maxx[0]),
-            y=slice(itrscts.bounds.maxy[0], itrscts.bounds.miny[0]),
-        )
-        # do the perfect clip :)
-        clip_mask_arr = geometry_mask(
-            geometries=itrscts.geometry,
-            out_shape=(int(ds.rio.height), int(ds.rio.width)),
-            transform=ds.rio.transform(recalc=True),
-            all_touched=False,
-            invert=True,
-        )
-
-        mask_ = xr.DataArray(data=clip_mask_arr, coords=dict(y=ds.y, x=ds.x)).chunk(
-            chunks=dict(x=ds.chunks["x"][0], y=ds.chunks["y"][0])
-        )
-
-        ds = ds.where(mask_)
-        del mask_, clip_mask_arr
+        ds = ds.rio.clip_box(*intersects.to_crs(ds.rio.crs).total_bounds)
+        ds = ds.rio.clip(intersects.to_crs(ds.rio.crs).geometry)
     # apply nodata
     ds = _apply_nodata(ds, nodatas)
     if rescale:

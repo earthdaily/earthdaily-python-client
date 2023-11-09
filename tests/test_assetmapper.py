@@ -40,6 +40,13 @@ class TestAssetMapper(unittest.TestCase):
             list(rededges.values()),
         )
 
+    def test_landsat(self):
+        collection = "landsat-c2l2-sr"
+
+        self.assertEqual(
+            list(self.aM.map_collection_assets(collection, ['qa_pixel']),
+            list(['qa_pixel'])))
+
 
 if __name__ == "__main__":
     unittest.main()

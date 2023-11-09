@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `intersects` argument in search/datacube now supports wkt/geojson/geopandas
 - `common_band_names` default set to True in datacube creation. It uses the new Assets Mapper in order to define to best suitable bands according to user needs.
 - `clear_cover` in the datacube method when using the `earthdatastore.Auth` method.
 - `datasets.load_pivot()` to load a GeoDataFrame of a pivot in Nebraska (alternates between corn or soy between years).
@@ -25,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - search `post_query` do not block if some properties are not available on all items.
 - some scale/offsets were not supported due to missing scale/offsets from previous assets.
+- typo in landsat `qa_pixel`
+- `intersects` now supports several geometries and don't force selection on the first index.
+
 
 ## [0.0.1-rc4] 2023-10-19
 
