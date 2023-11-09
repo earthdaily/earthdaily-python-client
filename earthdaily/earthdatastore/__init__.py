@@ -462,7 +462,7 @@ class Auth:
                     kwargs["groupby_date"] = "max"
                 if "resolution" not in kwargs:
                     kwargs["resolution"] = xr_datacube.rio.resolution()[0]
-                if "epsg"  not in kwargs:
+                if "epsg" not in kwargs:
                     kwargs["epsg"] = xr_datacube.rio.crs.to_epsg()
 
                 clouds_datacube = datacube(
@@ -598,7 +598,9 @@ class Auth:
         if isinstance(collections, str):
             collections = [collections]
         if bbox is None and intersects is not None:
-            intersects = cube_utils.GeometryManager(intersects).to_intersects(crs='4326')
+            intersects = cube_utils.GeometryManager(intersects).to_intersects(
+                crs="4326"
+            )
         if bbox and intersects:
             bbox = None
         items_collection = self.client.search(
