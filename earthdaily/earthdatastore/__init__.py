@@ -451,12 +451,15 @@ class Auth:
                     groupby_date="max",
                     epsg=xr_datacube.rio.crs.to_epsg(),
                     resolution=xr_datacube.rio.resolution()[0],
-                    prefer_alternate="download"
-                    )
+                    prefer_alternate="download",
+                )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
                 acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
-                if preload_mask and psutil.virtual_memory().available > acm_datacube.nbytes:
+                if (
+                    preload_mask
+                    and psutil.virtual_memory().available > acm_datacube.nbytes
+                ):
                     acm_datacube = acm_datacube.load()
                 mask_kwargs.update(acm_datacube=acm_datacube)
             else:
@@ -474,10 +477,15 @@ class Auth:
                     bbox=bbox,
                     assets=[mask_assets],
                     resampling=0,
-                    **kwargs
-                    )
-                clouds_datacube = cube_utils._match_xy_dims(clouds_datacube, xr_datacube)
-                if preload_mask and psutil.virtual_memory().available > clouds_datacube.nbytes:
+                    **kwargs,
+                )
+                clouds_datacube = cube_utils._match_xy_dims(
+                    clouds_datacube, xr_datacube
+                )
+                if (
+                    preload_mask
+                    and psutil.virtual_memory().available > clouds_datacube.nbytes
+                ):
                     clouds_datacube = clouds_datacube.load()
                 xr_datacube = xr.merge(
                     (xr_datacube, clouds_datacube), compat="override"

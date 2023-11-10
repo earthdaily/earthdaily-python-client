@@ -11,7 +11,8 @@ from rasterio.mask import geometry_mask
 import rioxarray as rxr
 import xarray as xr
 
-def _match_xy_dims(src,dst):
+
+def _match_xy_dims(src, dst):
     if src.dims != dst.dims:
         src = src.rio.reproject_match(dst)
     return src
@@ -40,7 +41,7 @@ def _autofix_unfrozen_coords_dtype(ds):
     return ds
 
 
-def _cube_odc(items_collection, assets=None, times=None, dtype='float32', **kwargs):
+def _cube_odc(items_collection, assets=None, times=None, dtype="float32", **kwargs):
     from odc import stac
 
     if "epsg" in kwargs:

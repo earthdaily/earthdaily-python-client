@@ -162,7 +162,7 @@ class Mask:
                 cloudmask_array.time,
                 desc="Clear coverage statistics",
                 unit="item",
-                disable=True
+                disable=True,
             )
         )
 
