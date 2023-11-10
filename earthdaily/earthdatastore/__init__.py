@@ -3,7 +3,7 @@ import logging
 import operator
 import os
 import warnings
-
+import psutil
 import geopandas as gpd
 import pandas as pd
 import requests
@@ -377,15 +377,16 @@ class Auth:
         collections: str | list,
         datetime=None,
         assets: None | list | dict = None,
-        intersects: gpd.GeoDataFrame = None,
+        intersects: (gpd.GeoDataFrame, str, dict) = None,
         bbox=None,
-        mask_with: None | str = None,
+        mask_with: (None, str) = None,
         mask_statistics: bool | int = False,
         clear_cover: (int, float) = None,
         prefer_alternate: (str, False) = "download",
         search_kwargs: dict = {},
         add_default_scale_factor: bool = True,
         common_band_names=True,
+        preload_mask=True,
         **kwargs,
     ) -> xr.Dataset:
         if mask_with and common_band_names:
@@ -450,11 +451,13 @@ class Auth:
                     groupby_date="max",
                     epsg=xr_datacube.rio.crs.to_epsg(),
                     resolution=xr_datacube.rio.resolution()[0],
-                    prefer_alternate="download",
-                )
+                    prefer_alternate="download"
+                    )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
-
+                acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
+                if preload_mask and psutil.virtual_memory().available > acm_datacube.nbytes:
+                    acm_datacube = acm_datacube.load()
                 mask_kwargs.update(acm_datacube=acm_datacube)
             else:
                 mask_assets = mask._native_mask_asset_mapping[collections]
@@ -471,8 +474,11 @@ class Auth:
                     bbox=bbox,
                     assets=[mask_assets],
                     resampling=0,
-                    **kwargs,
-                )
+                    **kwargs
+                    )
+                clouds_datacube = cube_utils._match_xy_dims(clouds_datacube, xr_datacube)
+                if preload_mask and psutil.virtual_memory().available > clouds_datacube.nbytes:
+                    clouds_datacube = clouds_datacube.load()
                 xr_datacube = xr.merge(
                     (xr_datacube, clouds_datacube), compat="override"
                 )

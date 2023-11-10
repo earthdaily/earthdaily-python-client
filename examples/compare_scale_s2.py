@@ -36,7 +36,7 @@ def get_cube(rescale=True):
         assets=["red", "green", "blue"],
         mask_with="native",  # same as scl
         clear_cover=50,  # at least 50% of the polygon must be clear
-        rescale=rescale    )
+        rescale=rescale)
     return pivot_cube
 
 
