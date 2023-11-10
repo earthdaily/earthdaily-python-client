@@ -30,7 +30,7 @@ asset_mapper_collections = {
             "nir08": "nir08",
             "swir16": "swir16",
             "swir22": "swir22",
-            "native-cloud-mask": "qa-pixel",
+            "native-cloud-mask": "qa_pixel",
         }
     ],
     "landsat-c2l2-st": [

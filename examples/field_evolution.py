@@ -8,7 +8,7 @@ Using SCL data from L2A, zonal stats for evolution"""
 # Import librairies
 # -------------------------------------------
 
-from earthdaily import earthdatastore
+from earthdaily import earthdatastore, datasets
 import geopandas as gpd
 from matplotlib import pyplot as plt
 
@@ -17,7 +17,7 @@ from matplotlib import pyplot as plt
 # -------------------------------------------
 
 # load geojson
-pivot = gpd.read_file("pivot.geojson")
+pivot = datasets.load_pivot()
 
 ##############################################################################
 # Init earthdatastore with env params
@@ -34,10 +34,9 @@ pivot_cube = eds.datacube(
     intersects=pivot,
     datetime=["2022-08-01", "2022-08-09"],
     assets=["red", "green", "blue"],
-    mask_with="native",  # same as scl
+    mask_with="ag_cloud_mask",  # same as scl
     # mask_statistics=True, # as you ask `clear_cover`it will force computing mask_statistics
-    clear_cover=50,
-)
+    clear_cover=50)
 
 pivot_cube.clear_percent.plot.scatter(x="time")
 

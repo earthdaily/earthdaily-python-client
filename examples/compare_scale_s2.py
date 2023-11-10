@@ -8,7 +8,7 @@ Using SCL data from L2A"""
 # Import librairies
 # -------------------------------------------
 
-from earthdaily import earthdatastore
+from earthdaily import earthdatastore, datasets
 import geopandas as gpd
 from matplotlib import pyplot as plt
 
@@ -17,14 +17,13 @@ from matplotlib import pyplot as plt
 # -------------------------------------------
 
 # load geojson
-pivot = gpd.read_file("pivot.geojson")
+pivot = datasets.load_pivot()
 
 ##############################################################################
 # Init earthdatastore with env params
 # -------------------------------------------
 
 eds = earthdatastore.Auth()
-
 
 ##############################################################################
 # Search for collection items
@@ -37,8 +36,7 @@ def get_cube(rescale=True):
         assets=["red", "green", "blue"],
         mask_with="native",  # same as scl
         clear_cover=50,  # at least 50% of the polygon must be clear
-        rescale=rescale,
-    )
+        rescale=rescale)
     return pivot_cube
 
 

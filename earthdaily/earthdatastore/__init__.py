@@ -3,7 +3,7 @@ import logging
 import operator
 import os
 import warnings
-
+import psutil
 import geopandas as gpd
 import pandas as pd
 import requests
@@ -11,9 +11,9 @@ import xarray as xr
 from pystac.item_collection import ItemCollection
 from pystac_client import Client
 
-from earthdaily.earthdatastore import _scales_collections, mask
-from earthdaily.earthdatastore import cube_utils
-from earthdaily.earthdatastore.cube_utils import datacube, metacube
+from . import _scales_collections, mask
+from . import cube_utils
+from .cube_utils import datacube, metacube
 
 logging.getLogger("earthdaily-earthdatastore")
 
@@ -44,11 +44,6 @@ def post_query_items(items, query):
 
     items = ItemCollection(items_)
     return items
-
-
-def _gdf_to_stac_intersects(gdf):
-    geom = gdf.to_crs(epsg=4326).iloc[[0]].to_json(drop_id=True)
-    return json.dumps(json.loads(geom)["features"][0]["geometry"])
 
 
 def _cloud_path_to_http(cloud_path):
@@ -382,15 +377,16 @@ class Auth:
         collections: str | list,
         datetime=None,
         assets: None | list | dict = None,
-        intersects: gpd.GeoDataFrame = None,
+        intersects: (gpd.GeoDataFrame, str, dict) = None,
         bbox=None,
-        mask_with: None | str = None,
+        mask_with: (None, str) = None,
         mask_statistics: bool | int = False,
         clear_cover: (int, float) = None,
         prefer_alternate: (str, False) = "download",
         search_kwargs: dict = {},
         add_default_scale_factor: bool = True,
         common_band_names=True,
+        preload_mask=True,
         **kwargs,
     ) -> xr.Dataset:
         if mask_with and common_band_names:
@@ -412,7 +408,8 @@ class Auth:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections
                 )
-
+        if intersects is not None:
+            intersects = cube_utils.GeometryManager(intersects).to_geopandas()
         items = self.search(
             collections=collections,
             bbox=bbox,
@@ -458,7 +455,12 @@ class Auth:
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
-
+                acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
+                if (
+                    preload_mask
+                    and psutil.virtual_memory().available > acm_datacube.nbytes
+                ):
+                    acm_datacube = acm_datacube.load()
                 mask_kwargs.update(acm_datacube=acm_datacube)
             else:
                 mask_assets = mask._native_mask_asset_mapping[collections]
@@ -466,6 +468,9 @@ class Auth:
                     kwargs["groupby_date"] = "max"
                 if "resolution" not in kwargs:
                     kwargs["resolution"] = xr_datacube.rio.resolution()[0]
+                if "epsg" not in kwargs:
+                    kwargs["epsg"] = xr_datacube.rio.crs.to_epsg()
+
                 clouds_datacube = datacube(
                     items,
                     intersects=intersects,
@@ -474,6 +479,14 @@ class Auth:
                     resampling=0,
                     **kwargs,
                 )
+                clouds_datacube = cube_utils._match_xy_dims(
+                    clouds_datacube, xr_datacube
+                )
+                if (
+                    preload_mask
+                    and psutil.virtual_memory().available > clouds_datacube.nbytes
+                ):
+                    clouds_datacube = clouds_datacube.load()
                 xr_datacube = xr.merge(
                     (xr_datacube, clouds_datacube), compat="override"
                 )
@@ -598,8 +611,10 @@ class Auth:
         """
         if isinstance(collections, str):
             collections = [collections]
-        if bbox is None and isinstance(intersects, gpd.GeoDataFrame):
-            intersects = _gdf_to_stac_intersects(intersects)
+        if bbox is None and intersects is not None:
+            intersects = cube_utils.GeometryManager(intersects).to_intersects(
+                crs="4326"
+            )
         if bbox and intersects:
             bbox = None
         items_collection = self.client.search(

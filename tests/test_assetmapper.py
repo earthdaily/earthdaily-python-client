@@ -10,21 +10,21 @@ class TestAssetMapper(unittest.TestCase):
     def test_unknow_collection(self):
         collection = "earthdaily-unknow-collection"
         assets = ["blue", "green", "red", "lambda"]
-        self.assertEqual(self.aM.map_collection_bands(collection, assets), assets)
+        self.assertEqual(self.aM.map_collection_assets(collection, assets), assets)
         with self.assertRaises(NotImplementedError):
             self.aM._collection_exists(collection, raise_warning=True)
 
     def test_return_same_dict(self):
         collection = "sentinel-2-l2a"
         assets = {"key": "value", "source": "target", "sensorasset": "myoutputband"}
-        self.assertEqual(self.aM.map_collection_bands(collection, assets), assets)
+        self.assertEqual(self.aM.map_collection_assets(collection, assets), assets)
 
     def test_sentinel2(self):
         collection = "sentinel-2-l2a"
         assets = ["blue", "green", "red", "rededge74", "missing_band"]
         assets_s2 = ["blue", "green", "red", "rededge2"]
         self.assertEqual(
-            list(self.aM.map_collection_bands(collection, assets).keys()), assets_s2
+            list(self.aM.map_collection_assets(collection, assets).keys()), assets_s2
         )
 
     def test_venus_rededge(self):
@@ -36,10 +36,9 @@ class TestAssetMapper(unittest.TestCase):
         }
 
         self.assertEqual(
-            list(self.aM.map_collection_bands(collection, rededges.keys()).keys()),
+            list(self.aM.map_collection_assets(collection, rededges.keys()).keys()),
             list(rededges.values()),
         )
-
 
 if __name__ == "__main__":
     unittest.main()
