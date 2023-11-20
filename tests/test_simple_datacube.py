@@ -46,7 +46,7 @@ class TestEarthDataStore(unittest.TestCase):
             )
             if rescale is False:
                 blue = blue * scale + offset
-            self.assertEqual(blue, 0.136)
+            self.assertAlmostEqual(blue, 0.136)
 
     def test_sentinel1(self):
         collection = "sentinel-1-rtc"

@@ -25,7 +25,6 @@ polygon = datasets.load_pivot()
 polygon.geometry = (
     polygon.geometry.to_crs(epsg=3857).centroid.buffer(500).to_crs(epsg=4326)
 )
-
 datetime = ["2019-08"]
 
 

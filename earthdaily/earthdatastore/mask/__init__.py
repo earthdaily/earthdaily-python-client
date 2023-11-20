@@ -139,7 +139,7 @@ class Mask:
         n_jobs=1,
     ):
         def compute_clear_pixels(cloudmask_array, labels, labels_are_clouds=False):
-            if isinstance(cloudmask_array.data,dask.array.core.Array):    
+            if isinstance(cloudmask_array.data, dask.array.core.Array):
                 cloudmask_array = cloudmask_array.data.compute()
 
             if labels_are_clouds:
@@ -162,6 +162,7 @@ class Mask:
                 cloudmask_array.time,
                 desc="Clear coverage statistics",
                 unit="item",
+                disable=True,
             )
         )
 
@@ -223,7 +224,7 @@ class Mask:
 
     def _landsat_qa_pixel_convert(self):
         for time in self._obj.time:
-            data = self._obj["qa_pixel"].loc[dict(time=time)].data.compute()
+            data = self._obj["qa_pixel"].loc[dict(time=time)].data
             data_f = data.flatten()
             clm = QA_PIXEL_cloud_detection(data_f[~np.isnan(data_f)])
             clm = np.where(clm == 0, np.nan, clm)
