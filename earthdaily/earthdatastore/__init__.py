@@ -449,8 +449,8 @@ class Auth:
                     intersects=intersects,
                     bbox=bbox,
                     groupby_date="max",
-                    epsg=xr_datacube.rio.crs.to_epsg(),
-                    resolution=xr_datacube.rio.resolution()[0],
+                    # epsg=xr_datacube.rio.crs.to_epsg(),
+                    # resolution=xr_datacube.rio.resolution()[0],
                     prefer_alternate="download",
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")

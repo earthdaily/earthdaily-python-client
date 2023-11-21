@@ -10,11 +10,12 @@ from rasterio.enums import Resampling
 from rasterio.mask import geometry_mask
 import rioxarray as rxr
 import xarray as xr
+from rasterio.enums import Resampling
 
 
-def _match_xy_dims(src, dst):
+def _match_xy_dims(src, dst, resampling=Resampling.nearest):
     if src.dims != dst.dims:
-        src = src.rio.reproject_match(dst)
+        src = src.rio.reproject_match(dst, resampling=resampling)
     return src
 
 
@@ -105,7 +106,6 @@ def datacube(
         for d in items_collection
         if "datetime" in d.__dict__
     ]
-
     if len(times) == 0:
         times = None
     engines = {"odc": _cube_odc, "stackstac": _cube_stackstac}
@@ -156,6 +156,9 @@ def datacube(
             ds = ds.groupby("time").mean()
     if bbox and intersects is None:
         intersects = _bbox_to_intersects(bbox)
+    if intersects is not None:
+        intersects = GeometryManager(intersects).to_geopandas()
+    
     if isinstance(intersects, gpd.GeoDataFrame):
         # itrscts = intersects.to_crs(ds.rio.crs).iloc[[0]]
         # optimize by perclipping using bbox
@@ -179,7 +182,7 @@ def datacube(
 
 
 def rescale_assets_with_items(
-    items_collection, ds, assets=None, boa_offset_applied_control=True
+    items_collection, ds, assets=None, boa_offset_applied_control=True, boa_offset_applied_force_by_date=True,
 ):
     logging.info("rescale dataset")
     scales = dict()
@@ -199,7 +202,6 @@ def rescale_assets_with_items(
             raise ValueError(
                 "Mismatch between number of items and datacube time, so cannot scale data. Please set rescale to False."
             )
-
     for idx, time in enumerate(ds.time.values):
         current_item = items_collection[idx]
         if pd.Timestamp(time).strftime("%Y%m%d") != current_item.datetime.strftime(
@@ -212,9 +214,15 @@ def rescale_assets_with_items(
             current_item.collection_id == "sentinel-2-l2a"
             and boa_offset_applied_control
         ):
+                
             boa_offset_applied = items_collection[idx].properties.get(
                 "earthsearch:boa_offset_applied", False
             )
+            if boa_offset_applied_force_by_date:
+                yyyymmdd = np.datetime_as_string(time)[:10].replace('-','')
+                if yyyymmdd >= '20220228':
+                    boa_offset_applied = True
+            
         if assets is None:
             assets = list(ds.data_vars.keys())
         for ds_asset in assets:
@@ -253,6 +261,7 @@ def rescale_assets_with_items(
                             "blue",
                             "red",
                             "green",
+                            "nir",
                             "nir08",
                             "nir09",
                             "swir16",
