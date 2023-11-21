@@ -10,8 +10,6 @@ from rasterio.enums import Resampling
 from rasterio.mask import geometry_mask
 import rioxarray as rxr
 import xarray as xr
-from rasterio.enums import Resampling
-
 
 def _match_xy_dims(src, dst, resampling=Resampling.nearest):
     if src.dims != dst.dims:
