@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.1]
 
+### Fixed
+
+- issue with unlogged datacube and non-geodataframe intersects
+- for element84 sentinel-2-l2a collection, `boa_offset_applied`is set to True since 2022-02-28
+- added `nir` band in `boa_offset_applied` control
+- fix percentage in landsat agriculture cloudmask 
+
 ## [0.0.1-rc6] - 2023-11-10
 
 ### Fixed
