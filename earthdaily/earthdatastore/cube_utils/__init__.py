@@ -11,6 +11,7 @@ from rasterio.mask import geometry_mask
 import rioxarray as rxr
 import xarray as xr
 
+
 def _match_xy_dims(src, dst, resampling=Resampling.nearest):
     if src.dims != dst.dims:
         src = src.rio.reproject_match(dst, resampling=resampling)
@@ -156,7 +157,7 @@ def datacube(
         intersects = _bbox_to_intersects(bbox)
     if intersects is not None:
         intersects = GeometryManager(intersects).to_geopandas()
-    
+
     if isinstance(intersects, gpd.GeoDataFrame):
         # itrscts = intersects.to_crs(ds.rio.crs).iloc[[0]]
         # optimize by perclipping using bbox
@@ -180,7 +181,11 @@ def datacube(
 
 
 def rescale_assets_with_items(
-    items_collection, ds, assets=None, boa_offset_applied_control=True, boa_offset_applied_force_by_date=True,
+    items_collection,
+    ds,
+    assets=None,
+    boa_offset_applied_control=True,
+    boa_offset_applied_force_by_date=True,
 ):
     logging.info("rescale dataset")
     scales = dict()
@@ -212,15 +217,14 @@ def rescale_assets_with_items(
             current_item.collection_id == "sentinel-2-l2a"
             and boa_offset_applied_control
         ):
-                
             boa_offset_applied = items_collection[idx].properties.get(
                 "earthsearch:boa_offset_applied", False
             )
             if boa_offset_applied_force_by_date:
-                yyyymmdd = np.datetime_as_string(time)[:10].replace('-','')
-                if yyyymmdd >= '20220228':
+                yyyymmdd = np.datetime_as_string(time)[:10].replace("-", "")
+                if yyyymmdd >= "20220228":
                     boa_offset_applied = True
-            
+
         if assets is None:
             assets = list(ds.data_vars.keys())
         for ds_asset in assets:
