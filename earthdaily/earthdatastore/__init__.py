@@ -449,9 +449,8 @@ class Auth:
                     intersects=intersects,
                     bbox=bbox,
                     groupby_date="max",
-                    # epsg=xr_datacube.rio.crs.to_epsg(),
-                    # resolution=xr_datacube.rio.resolution()[0],
                     prefer_alternate="download",
+                    geobox=xr_datacube.odc.geobox
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
@@ -484,7 +483,7 @@ class Auth:
                 )
                 if (
                     preload_mask
-                    and psutil.virtual_memory().available > clouds_datacube.nbytes
+                    and psutil.virtual_memory().available > clouds_datacube.nbytes and mask_statistics is True
                 ):
                     clouds_datacube = clouds_datacube.load()
                 xr_datacube = xr.merge(
