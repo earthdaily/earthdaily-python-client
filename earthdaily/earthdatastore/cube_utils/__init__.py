@@ -1,15 +1,17 @@
 import logging
+
+import geopandas as gpd
 import numpy as np
 import pandas as pd
-import geopandas as gpd
+import rioxarray
+import xarray as xr
+from rasterio.enums import Resampling
 from shapely.geometry import box
-from ._zonal import zonal_stats, zonal_stats_numpy
+
 from .asset_mapper import AssetMapper
 from .geometry_manager import GeometryManager
-from rasterio.enums import Resampling
-from rasterio.mask import geometry_mask
-import rioxarray as rxr
-import xarray as xr
+
+__all__ = ["GeometryManager", "rioxarray"]
 
 
 def _match_xy_dims(src, dst):
