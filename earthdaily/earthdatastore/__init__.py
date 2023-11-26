@@ -21,6 +21,20 @@ logging.getLogger("earthdaily-earthdatastore")
 
 
 def post_query_items(items, query):
+    """Applies query to items fetched from the STAC catalog.
+
+    Parameters
+    ----------
+    items : list
+        List of items
+    query : dict
+        Query to post
+
+    Returns
+    -------
+    items : list
+        List of items
+    """
     items_ = []
     for idx, item in enumerate(items):
         queries_results = 0
@@ -49,6 +63,18 @@ def post_query_items(items, query):
 
 
 def _cloud_path_to_http(cloud_path):
+    """Convert a cloud path to HTTP URL.
+
+    Parameters
+    ----------
+    cloud_path : str
+        Cloud path
+
+    Returns
+    -------
+    url : str
+        HTTP URL
+    """
     endpoints = dict(s3="s3.amazonaws.com")
     cloud_provider = cloud_path.split("://")[0]
     container = cloud_path.split("/")[2]
@@ -67,6 +93,25 @@ def enhance_assets(
     use_http_url=False,
     add_default_scale_factor=False,
 ):
+    """Enhance assets with extra fields.
+
+    Parameters
+    ----------
+    items : ItemCollection
+        A PySTAC ItemCollection
+    alternate : str, optional
+        Alternate asset to use, by default "download"
+    use_http_url : bool, optional
+        Use HTTP URL instead of cloud path, by default False 
+    add_default_scale_factor : bool, optional
+        Add default scale, offset, nodata factor to assets, by default False
+
+    Returns
+    -------
+    items : ItemCollection
+        Updated PySTAC ItemCollection
+    """
+    
     if any((alternate, use_http_url, add_default_scale_factor)):
         for idx, item in enumerate(items):
             keys = list(item.assets.keys())
@@ -121,6 +166,22 @@ def enhance_assets(
 
 
 def _get_client(config=None, presign_urls=True):
+    """Get a client for interacting with the Earth Data Store API.
+
+    By default, Earth Data Store will look for environment variables called
+    EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
+
+    Parameters
+    ----------
+    config : str | dict, optional
+        A JSON string or a dictionary with the credentials for the Earth Data Store.
+
+    Returns
+    -------
+    client : Client
+        A PySTAC client for interacting with the Earth Data Store STAC API.
+
+    """
     if config is None:
         config = os.getenv
     else:
@@ -156,6 +217,20 @@ def _get_client(config=None, presign_urls=True):
 
 
 class StacCollectionExplorer:
+    """
+    A class to explore a STAC collection.
+
+    Parameters
+    ----------
+    client : Client
+        A PySTAC client for interacting with the Earth Data Store STAC API.
+    collection : str
+        The name of the collection to explore.
+
+    Returns
+    -------
+    None."""
+
     def __init__(self, client, collection):
         self.client = client
         self.collection = collection
@@ -164,6 +239,13 @@ class StacCollectionExplorer:
         self.properties = self.client_collection.to_dict()
 
     def __first_item(self):
+        """Get the first item of the STAC collection as an overview of the items content.
+
+        Returns
+        -------
+        item : Item
+            The first item of the collection.
+        """
         for item in self.client.get_collection(self.collection).get_items():
             self.item = item
             break
@@ -375,6 +457,15 @@ class Auth:
         return sorted(c.id for c in self.client.get_all_collections())
 
     def _update_search_kwargs_for_ag_cloud_mask(self, search_kwargs, collections):
+        """Update the STAC search kwargs to only get items that have an available agricultural cloud mask.
+
+        Args:
+            search_kwargs (dict): The search kwargs to be updated.
+            collections (str | list): The collection(s) to search.
+
+        Returns:
+            dict: The updated search kwargs.
+        """
         search_kwargs = search_kwargs.copy()
         # to get only items that have a ag_cloud_mask
         ag_query = {"eda:ag_cloud_mask_available": {"eq": True}}
