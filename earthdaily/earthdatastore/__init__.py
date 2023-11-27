@@ -3,17 +3,17 @@ import logging
 import operator
 import os
 import warnings
-import psutil
+
 import geopandas as gpd
 import pandas as pd
+import psutil
 import requests
 import xarray as xr
 from pystac.item_collection import ItemCollection
 from pystac_client import Client
 
-from . import _scales_collections, mask
-from . import cube_utils
-from .cube_utils import datacube, metacube
+from . import _scales_collections, cube_utils, mask
+from .cube_utils import datacube
 
 logging.getLogger("earthdaily-earthdatastore")
 

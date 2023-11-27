@@ -43,7 +43,7 @@ pivot_cube.clear_percent.plot.scatter(x="time")
 ##############################################################################
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
-
+pivot_cube = pivot_cube.load()
 pivot_cube.to_array(dim="band").plot.imshow(vmin=0, vmax=0.4, col="time", col_wrap=3)
 
 plt.title("Clear cover percent with SCL")
