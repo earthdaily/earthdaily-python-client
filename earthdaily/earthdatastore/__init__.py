@@ -398,7 +398,7 @@ class Auth:
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise ValueError(
-                    f"Specified mask '{mask_with}' is not available.\ Currently available masks provider are : {mask._available_masks}"
+                    f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}"
                 )
                 collection = collections[0]
             else:
