@@ -1,8 +1,10 @@
 import logging
+from datetime import datetime
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
+import pytz
 import rioxarray
 import xarray as xr
 from rasterio.enums import Resampling
@@ -99,6 +101,7 @@ def datacube(
     rescale=True,
     groupby_date="mean",
     common_band_names=True,
+    cross_cal_items: list | None = None,
     **kwargs,
 ):
     logging.info(f"Building datacube with {len(items_collection)} items")
@@ -171,6 +174,8 @@ def datacube(
         ds = rescale_assets_with_items(items_collection, ds, assets=assets)
     if engine == "stackstac":
         ds = _autofix_unfrozen_coords_dtype(ds)
+    if cross_cal_items is not None and len(cross_cal_items) > 0:
+        ds = apply_cross_calibration(items_collection, ds, cross_cal_items, assets)
     if groupby_date:
         if ds.time.size != np.unique(ds.time.dt.strftime("%Y%m%d")).size:
             ds = ds.groupby("time.date")
@@ -370,3 +375,166 @@ def metacube(*cubes, concat_dim="time", by="time.date", how="mean"):
     cube = xr.concat([_drop_unfrozen_coords(cube) for cube in cubes], dim=concat_dim)
     cube = _groupby(cube, by=by, how=how)
     return _propagade_rio(cubes[0], cube)
+
+
+def apply_cross_calibration(items_collection, ds, cross_cal_items, assets):
+    if assets is None:
+        assets = list(ds.data_vars.keys())
+
+    scaled_dataset = {}
+
+    # Initializing asset list
+    for asset in assets:
+        scaled_dataset[asset] = []
+
+    # For each item in the datacube
+    for idx, time in enumerate(ds.time.values):
+        print("-----")
+        current_item = items_collection[idx]
+        print(current_item)
+
+        # Filtering cross cal items
+        # Check si on a item avec la platform de l'item
+        # Si oui => on utilise ca
+        # Si non =>
+        # Check si item avec platform a "" (équivalent a coef pour tous les items)
+        # Si oui => on utilise ca
+        # Si non => on enleve l'image (pas de cross cal dispo)
+
+        platform = current_item.properties["platform"]
+
+        print(platform)
+
+        # Looking for platform/camera specific xcal coef
+        platform_xcal_items = [
+            item
+            for item in cross_cal_items
+            if item.properties["eda_cross_cal:source_platform"] == platform
+            and check_timerange(item, current_item.datetime)
+        ]
+
+        # at least one match
+        matching_xcal_item = None
+        if len(platform_xcal_items) > 0:
+            matching_xcal_item = platform_xcal_items[0]
+        else:
+            # Looking for global xcal coef
+            global_xcal_items = [
+                item
+                for item in cross_cal_items
+                if item.properties["eda_cross_cal:source_platform"] == ""
+                and check_timerange(item, current_item.datetime)
+            ]
+
+            if len(global_xcal_items) > 0:
+                matching_xcal_item = cross_cal_items[0]
+
+        if matching_xcal_item is not None:
+            print("XCAL COEF FOUND")
+            print(matching_xcal_item.id)
+
+            for ds_asset in assets:
+                # Loading Xcal coef for the specific band
+                asset_xcal_coef = matching_xcal_item.properties["eda_cross_cal:bands"][
+                    ds_asset
+                ]
+
+                if asset_xcal_coef:
+                    # Apply XCAL
+                    print("HERE WE APPLY THE CROSS CAL FOR " + ds_asset)
+                    # By default, we take the first item we have
+                    scaled_asset = apply_cross_calibration_to_asset(
+                        asset_xcal_coef[0][ds_asset],
+                        ds[[ds_asset]].loc[dict(time=time)],
+                        ds_asset,
+                    )
+                    scaled_dataset[ds_asset].append(scaled_asset)
+        else:
+            print("XCAL COEF NOT FOUND")
+
+    ds_ = []
+    for k, v in scaled_dataset.items():
+        ds_k = []
+        for d in v:
+            ds_k.append(d)
+        ds_.append(xr.concat(ds_k, dim="time"))
+    ds_ = xr.merge(ds_).sortby("time")
+    ds_.attrs = ds.attrs
+
+    return ds_
+
+
+def check_timerange(xcal_item, item_datetime):
+    start_date = datetime.strptime(
+        xcal_item.properties["published"], "%Y-%m-%dT%H:%M:%SZ"
+    )
+    start_date = start_date.replace(tzinfo=pytz.UTC)
+
+    # print("----------------")
+    # print(f"Item date : {item_datetime}")
+    # print(f"Range Start date : {start_date}")
+
+    if "expires" in xcal_item.properties:
+        end_date = datetime.strptime(
+            xcal_item.properties["expires"], "%Y-%m-%dT%H:%M:%SZ"
+        )
+        end_date = end_date.replace(tzinfo=pytz.UTC)
+
+        # print(f"Range End date : {end_date}")
+        # print(start_date <= item_datetime <= end_date)
+
+        return start_date <= item_datetime <= end_date
+    else:
+        # print(start_date <= item_datetime)
+        return start_date <= item_datetime
+
+
+def define_functions_from_xcal_item(functions):
+    possible_range = ["ge", "gt", "le", "lt"]
+
+    operator_mapping = {
+        "lt": "<",
+        "le": "<=",
+        "ge": ">=",
+        "gt": ">",
+    }
+
+    xarray_where_concat = ""
+    for idx_function, function in enumerate(functions):
+        coef_range = [function["range_start"], function["range_end"]]
+
+        for idx_coef, coef_border in enumerate(coef_range):
+            for range in possible_range:
+                if range in coef_border:
+                    threshold = coef_border[range]
+                    condition = operator_mapping.get(range)
+                    if idx_coef == 0:
+                        xarray_where_concat += f"xr.where((x{condition}{threshold})"
+                    else:
+                        xarray_where_concat += f" & (x{condition}{threshold})"
+
+        xarray_where_concat += f',x * {function["scale"]} + {function["offset"]},'
+
+        if idx_function == len(functions) - 1:
+            xarray_where_concat += "x"
+            function_parenthesis = 0
+
+            while function_parenthesis < len(functions):
+                xarray_where_concat += ")"
+                function_parenthesis += 1
+
+    # print(xarray_where_concat)
+
+    return xarray_where_concat
+
+
+def apply_cross_calibration_to_asset(functions, asset, band_name):
+    if len(functions) == 1:
+        # Single function
+        return asset * functions[0]["scale"] + functions[0]["offset"]
+    else:
+        # Multiple functions
+        x = asset[band_name]
+        xr_where_string = define_functions_from_xcal_item(functions)
+        asset[band_name] = eval(xr_where_string)
+        return asset

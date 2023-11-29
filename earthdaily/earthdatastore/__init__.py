@@ -410,6 +410,7 @@ class Auth:
         add_default_scale_factor: bool = True,
         common_band_names=True,
         preload_mask=True,
+        cross_callibration_collection: (None | str) = None,
         **kwargs,
     ) -> xr.Dataset:
         if mask_with and common_band_names:
@@ -443,6 +444,24 @@ class Auth:
             **search_kwargs,
         )
 
+        xcal_items = None
+        if cross_callibration_collection is not None:
+            try:
+                xcal_items = self.search(
+                    collections="edagro-landsat-cross-cal-coefficient",
+                    intersects=intersects,
+                    post_query={
+                        "eda_cross_cal:source_collection": {"eq": collections[0]},
+                        "eda_cross_cal:destination_collection": {
+                            "eq": cross_callibration_collection
+                        },
+                    },
+                )
+            except Warning:
+                raise Warning(
+                    "No cross calibration coefficient available for the specified collections."
+                )
+
         xr_datacube = datacube(
             items,
             intersects=intersects,
@@ -450,6 +469,7 @@ class Auth:
             assets=assets,
             common_band_names=common_band_names,
             **kwargs,
+            cross_cal_items=xcal_items,
         )
         if mask_with:
             if clear_cover and mask_statistics is False:
