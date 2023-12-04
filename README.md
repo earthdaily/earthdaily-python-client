@@ -31,6 +31,7 @@
 
 
 <div align="center">
+
 [![PyPI version](https://badge.fury.io/py/earthdaily.png)](https://badge.fury.io/py/earthdaily)
 [![Documentation](https://img.shields.io/badge/Documentation-html-green.svg)](https://earthdaily.github.io/earthdaily-python-client/)
 [![pytest-main](https://github.com/earthdaily/earthdaily-python-client/actions/workflows/pytest-prod.yaml/badge.svg)](https://github.com/earthdaily/earthdaily-python-client/actions/workflows/pytest-prod.yaml)
