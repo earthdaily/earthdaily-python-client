@@ -34,7 +34,9 @@ extensions = [
     "sphinx_automodapi.automodapi",  # for a page per function
     "myst_parser",
     "rst2pdf.pdfbuilder",
+    "sphinx_immaterial"
 ]
+
 #
 automodapi_toctreedirnm = "_API"
 numpydoc_show_class_members = False
@@ -99,7 +101,20 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # a list of builtin themes.
 #
 # html_theme = 'alabaster'
-html_theme = "sphinx_rtd_theme"
+# html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_immaterial"
+
+html_theme_options = {
+
+    "repo_url": "https://github.com/GEOSYS/earthdaily-client-python",
+    "repo_name": "GEOSYS/earthdaily",
+    "palette": { 
+        "scheme": "default",
+        "palette": { 
+            "primary": "cyan",
+            "accent": "green"  }
+        }
+}
 
 source_suffix = [".rst", ".md"]
 
