@@ -176,7 +176,7 @@ def datacube(
     if engine == "stackstac":
         ds = _autofix_unfrozen_coords_dtype(ds)
     if cross_cal_items is not None and len(cross_cal_items) > 0:
-        Harmonizer.harmonize(items_collection, ds, cross_cal_items, assets)
+        ds = Harmonizer.harmonize(items_collection, ds, cross_cal_items, assets)
     if groupby_date:
         if ds.time.size != np.unique(ds.time.dt.strftime("%Y%m%d")).size:
             ds = ds.groupby("time.date")
