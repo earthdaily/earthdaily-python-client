@@ -4,7 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.1]
+
+## [0.0.1] 
+
+### Added
+
+- tests for python 3.
+- reauth automatically to EarhtDataStore after 3600 seconds
+- handle cross calibration (harmonization) using private collection
+
+## [0.0.1-rc7] - 2023-11-22
+
+### Fixed
+
+- issue with unlogged datacube and non-geodataframe intersects
+- for element84 sentinel-2-l2a collection, `boa_offset_applied`is set to True since 2022-02-28
+- added `nir` band in `boa_offset_applied` control
+- fix percentage in landsat agriculture cloudmask 
 
 ## [0.0.1-rc6] - 2023-11-10
 

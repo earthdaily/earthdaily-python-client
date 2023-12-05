@@ -3,7 +3,7 @@ import logging
 import operator
 import os
 import warnings
-
+import time
 import geopandas as gpd
 import pandas as pd
 import psutil
@@ -118,7 +118,7 @@ def enhance_assets(
     return items
 
 
-def _get_client(config=None):
+def _get_client(config=None, force_presigned_url=True):
     if config is None:
         config = os.getenv
     else:
@@ -142,12 +142,13 @@ def _get_client(config=None):
     )
     token_response.raise_for_status()
     tokens = json.loads(token_response.text)
+    headers = {"Authorization": f"bearer {tokens['access_token']}"}
+    if force_presigned_url:
+        headers["X-Signed-Asset-Urls"] = "True"
+
     client = Client.open(
         eds_url,
-        headers={
-            "Authorization": f"bearer {tokens['access_token']}",
-            "X-Signed-Asset-Urls": "True",
-        },
+        headers=headers,
     )
     return client
 
@@ -215,9 +216,31 @@ class Auth:
         >>> print(len(items))
         132
         """
-        self.client = _get_client(config)
+        self._client = None
+        self.__auth_config = None
         self._first_items_ = {}
         self._staccollectionexplorer = {}
+        self.__time_eds_log = time.time()
+        self._client = self.client
+
+    @property
+    def client(self):
+        """
+                Create an instance of pystac client from EarthDataSTore
+
+                Returns
+                -------
+                catalog : A :class:`Client` instance for this Catalog.
+        .
+
+        """
+        if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
+            if t:
+                logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
+            self._client = _get_client(self.__auth_config)
+            self.__time_eds_log = time.time()
+
+        return self._client
 
     def explore(self, collection: str = None):
         """
@@ -399,7 +422,7 @@ class Auth:
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise ValueError(
-                    f"Specified mask '{mask_with}' is not available.\ Currently available masks provider are : {mask._available_masks}"
+                    f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}"
                 )
                 collection = collections[0]
             else:
@@ -425,9 +448,9 @@ class Auth:
         if cross_callibration_collection is not None:
             try:
                 xcal_items = self.search(
-                    collections="edagro-landsat-cross-cal-coefficient",
+                    collections="eda-cross-calibration",
                     intersects=intersects,
-                    post_query={
+                    query={
                         "eda_cross_cal:source_collection": {"eq": collections[0]},
                         "eda_cross_cal:destination_collection": {
                             "eq": cross_callibration_collection
@@ -469,9 +492,8 @@ class Auth:
                     intersects=intersects,
                     bbox=bbox,
                     groupby_date="max",
-                    epsg=xr_datacube.rio.crs.to_epsg(),
-                    resolution=xr_datacube.rio.resolution()[0],
                     prefer_alternate="download",
+                    geobox=xr_datacube.odc.geobox,
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
@@ -505,6 +527,7 @@ class Auth:
                 if (
                     preload_mask
                     and psutil.virtual_memory().available > clouds_datacube.nbytes
+                    and mask_statistics is True
                 ):
                     clouds_datacube = clouds_datacube.load()
                 xr_datacube = xr.merge(
