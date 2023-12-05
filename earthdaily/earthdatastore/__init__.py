@@ -142,11 +142,10 @@ def _get_client(config=None, force_presigned_url=True):
     )
     token_response.raise_for_status()
     tokens = json.loads(token_response.text)
-    headers={
-        "Authorization": f"bearer {tokens['access_token']}"}
+    headers = {"Authorization": f"bearer {tokens['access_token']}"}
     if force_presigned_url:
         headers["X-Signed-Asset-Urls"] = "True"
-    
+
     client = Client.open(
         eds_url,
         headers=headers,
@@ -223,26 +222,25 @@ class Auth:
         self._staccollectionexplorer = {}
         self.__time_eds_log = time.time()
         self._client = self.client
-        
+
     @property
     def client(self):
         """
-        Create an instance of pystac client from EarthDataSTore
+                Create an instance of pystac client from EarthDataSTore
 
-        Returns
-        -------
-        catalog : A :class:`Client` instance for this Catalog.
-.
+                Returns
+                -------
+                catalog : A :class:`Client` instance for this Catalog.
+        .
 
         """
-        if t:=(time.time()- self.__time_eds_log) > 3600 or self._client is None :
+        if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
             if t:
-                logging.log(level=logging.INFO, msg='Reauth to EarthDataStore')
+                logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
             self._client = _get_client(self.__auth_config)
             self.__time_eds_log = time.time()
 
         return self._client
-
 
     def explore(self, collection: str = None):
         """
