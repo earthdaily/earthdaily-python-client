@@ -448,9 +448,9 @@ class Auth:
         if cross_callibration_collection is not None:
             try:
                 xcal_items = self.search(
-                    collections="edagro-landsat-cross-cal-coefficient",
+                    collections="eda-cross-calibration",
                     intersects=intersects,
-                    post_query={
+                    query={
                         "eda_cross_cal:source_collection": {"eq": collections[0]},
                         "eda_cross_cal:destination_collection": {
                             "eq": cross_callibration_collection
