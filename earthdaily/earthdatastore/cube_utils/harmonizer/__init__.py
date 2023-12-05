@@ -5,7 +5,7 @@ import xarray as xr
 
 
 class Harmonizer:
-    def harmonize(self, items_collection, ds, cross_cal_items, assets):
+    def harmonize(items_collection, ds, cross_cal_items, assets):
         if assets is None:
             assets = list(ds.data_vars.keys())
 
@@ -18,8 +18,6 @@ class Harmonizer:
         # For each item in the datacube
         for idx, time in enumerate(ds.time.values):
             current_item = items_collection[idx]
-            print("****")
-            print(current_item.id)
 
             platform = current_item.properties["platform"]
 
@@ -28,7 +26,7 @@ class Harmonizer:
                 item
                 for item in cross_cal_items
                 if item.properties["eda_cross_cal:source_platform"] == platform
-                and self.check_timerange(item, current_item.datetime)
+                and Harmonizer.check_timerange(item, current_item.datetime)
             ]
 
             # at least one match
@@ -41,14 +39,13 @@ class Harmonizer:
                     item
                     for item in cross_cal_items
                     if item.properties["eda_cross_cal:source_platform"] == ""
-                    and self.check_timerange(item, current_item.datetime)
+                    and Harmonizer.check_timerange(item, current_item.datetime)
                 ]
 
                 if len(global_xcal_items) > 0:
                     matching_xcal_item = cross_cal_items[0]
 
             if matching_xcal_item is not None:
-                print(matching_xcal_item.id)
                 for ds_asset in assets:
                     # Loading Xcal coef for the specific band
                     bands_coefs = matching_xcal_item.properties["eda_cross_cal:bands"]
@@ -58,7 +55,7 @@ class Harmonizer:
                             "eda_cross_cal:bands"
                         ][ds_asset]
                         # By default, we take the first item we have
-                        scaled_asset = self.apply_to_asset(
+                        scaled_asset = Harmonizer.apply_to_asset(
                             asset_xcal_coef[0][ds_asset],
                             ds[[ds_asset]].loc[dict(time=time)],
                             ds_asset,
@@ -80,7 +77,7 @@ class Harmonizer:
 
         return ds_
 
-    def xcal_functions_parser(self, functions):
+    def xcal_functions_parser(functions):
         possible_range = ["ge", "gt", "le", "lt"]
 
         operator_mapping = {
@@ -116,7 +113,7 @@ class Harmonizer:
 
         return xarray_where_concat
 
-    def apply_to_asset(self, functions, asset, band_name):
+    def apply_to_asset(functions, asset, band_name):
         if len(functions) == 1:
             # Single function
             return asset * functions[0]["scale"] + functions[0]["offset"]
@@ -124,11 +121,11 @@ class Harmonizer:
             # Multiple functions
             # TO DO : Replace x variable and the eval(xr_where_string) by a native function
             x = asset[band_name]
-            xr_where_string = self.xcal_functions_parser(functions)
+            xr_where_string = Harmonizer.xcal_functions_parser(functions)
             asset[band_name] = eval(xr_where_string)
             return asset
 
-    def check_timerange(self, xcal_item, item_datetime):
+    def check_timerange(xcal_item, item_datetime):
         start_date = datetime.strptime(
             xcal_item.properties["published"], "%Y-%m-%dT%H:%M:%SZ"
         )

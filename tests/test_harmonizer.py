@@ -10,9 +10,6 @@ from earthdaily.earthdatastore.cube_utils.harmonizer import Harmonizer
 
 class TestHarmonizer(unittest.TestCase):
     def setUp(self):
-        self.harmonizer = Harmonizer()
-
-    def generate_fake_ds(self):
         times = ["1987-04-22", "1998-07-29"]
 
         x_values = np.arange(0, 4)
@@ -21,7 +18,7 @@ class TestHarmonizer(unittest.TestCase):
         data_values = np.arange(0, 12).reshape(3, 4)
         data_values = np.dstack((data_values, data_values))
 
-        return xr.Dataset(
+        self.fake_ds = xr.Dataset(
             {
                 "first_var": (("y", "x", "time"), data_values),
             },
@@ -101,9 +98,7 @@ class TestHarmonizer(unittest.TestCase):
 
         self.assertEqual(
             "xr.where((x>=0) & (x<1),x * 2 + -0.5,xr.where((x>=1) & (x<=1.2),x * 1 + 2,x))",
-            Harmonizer.xcal_functions_parser(
-                self.harmonizer, multiple_functions_item["red"][0]["red"]
-            ),
+            Harmonizer.xcal_functions_parser(multiple_functions_item["red"][0]["red"]),
         )
 
     def test_check_timerange(self):
@@ -120,13 +115,13 @@ class TestHarmonizer(unittest.TestCase):
         )
 
         self.assertTrue(
-            self.harmonizer.check_timerange(
+            Harmonizer.check_timerange(
                 xcal_item_from_20230901_to_20230915, valid_item_date
             )
         )
 
         self.assertFalse(
-            self.harmonizer.check_timerange(
+            Harmonizer.check_timerange(
                 xcal_item_from_20230901_to_20230915, invalid_item_date
             )
         )
@@ -136,13 +131,13 @@ class TestHarmonizer(unittest.TestCase):
             "single_func": [{"single_func": [{"scale": 2, "offset": 0.5}]}]
         }
 
-        fake_ds = self.generate_fake_ds()
+        fake_ds = self.fake_ds
 
         scaled_dataset = {}
         scaled_dataset["single_func"] = []
 
         for idx, time in enumerate(fake_ds.time.values):
-            scaled_asset = self.harmonizer.apply_to_asset(
+            scaled_asset = Harmonizer.apply_to_asset(
                 single_function_xcal["single_func"][0]["single_func"],
                 fake_ds[["first_var"]].loc[dict(time=time)],
                 "single_func",
@@ -194,13 +189,13 @@ class TestHarmonizer(unittest.TestCase):
         }
 
         # Creating simple dataset
-        fake_ds = self.generate_fake_ds()
+        fake_ds = self.fake_ds
 
         scaled_dataset = {}
         scaled_dataset["first_var"] = []
 
         for idx, time in enumerate(fake_ds.time.values):
-            scaled_asset = self.harmonizer.apply_to_asset(
+            scaled_asset = Harmonizer.apply_to_asset(
                 multiple_function_xcal["first_var"][0]["first_var"],
                 fake_ds[["first_var"]].loc[dict(time=time)],
                 "first_var",
@@ -230,7 +225,7 @@ class TestHarmonizer(unittest.TestCase):
             self.assertTrue(False, "Single Function xcal is not applied correctly")
 
     def test_different_xcal_by_date(self):
-        fake_ds = self.generate_fake_ds()
+        fake_ds = self.fake_ds
 
         # Creating fake xcal items
         xcal_item_from_1980_to_1990 = self.generate_fake_xcal_item(
@@ -262,7 +257,7 @@ class TestHarmonizer(unittest.TestCase):
 
         fake_items = [item_1987, item_1998]
 
-        harmonized_fake_ds = self.harmonizer.harmonize(
+        harmonized_fake_ds = Harmonizer.harmonize(
             fake_items, fake_ds, fake_xcal_item, ["first_var"]
         )
 
