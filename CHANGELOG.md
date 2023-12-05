@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- tests for python 3.12
+- tests for python 3.
+- reauth automatically to EarhtDataStore after 3600 seconds
 
 ## [0.0.1-rc7] - 2023-11-22
 
