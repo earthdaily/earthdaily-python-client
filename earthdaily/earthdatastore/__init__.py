@@ -3,7 +3,7 @@ import logging
 import operator
 import os
 import warnings
-
+import time
 import geopandas as gpd
 import pandas as pd
 import psutil
@@ -118,7 +118,7 @@ def enhance_assets(
     return items
 
 
-def _get_client(config=None):
+def _get_client(config=None, force_presigned_url=True):
     if config is None:
         config = os.getenv
     else:
@@ -142,12 +142,14 @@ def _get_client(config=None):
     )
     token_response.raise_for_status()
     tokens = json.loads(token_response.text)
+    headers={
+        "Authorization": f"bearer {tokens['access_token']}"}
+    if force_presigned_url:
+        headers["X-Signed-Asset-Urls"] = "True"
+    
     client = Client.open(
         eds_url,
-        headers={
-            "Authorization": f"bearer {tokens['access_token']}",
-            "X-Signed-Asset-Urls": "True",
-        },
+        headers=headers,
     )
     return client
 
@@ -215,9 +217,32 @@ class Auth:
         >>> print(len(items))
         132
         """
-        self.client = _get_client(config)
+        self._client = None
+        self.__auth_config = None
         self._first_items_ = {}
         self._staccollectionexplorer = {}
+        self.__time_eds_log = time.time()
+        self._client = self.client
+        
+    @property
+    def client(self):
+        """
+        Create an instance of pystac client from EarthDataSTore
+
+        Returns
+        -------
+        catalog : A :class:`Client` instance for this Catalog.
+.
+
+        """
+        if t:=(time.time()- self.__time_eds_log) > 3600 or self._client is None :
+            if t:
+                logging.log(level=logging.INFO, msg='Reauth to EarthDataStore')
+            self._client = _get_client(self.__auth_config)
+            self.__time_eds_log = time.time()
+
+        return self._client
+
 
     def explore(self, collection: str = None):
         """
