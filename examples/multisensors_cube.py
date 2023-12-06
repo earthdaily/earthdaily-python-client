@@ -21,11 +21,8 @@ from earthdaily import earthdatastore, datasets
 
 eds = earthdatastore.Auth()
 polygon = datasets.load_pivot()
-# 500x500m
-polygon.geometry = (
-    polygon.geometry.to_crs(epsg=3857).centroid.buffer(500).to_crs(epsg=4326)
-)
-datetime = ["2019-08"]
+
+datetime = ["2022-08"]
 
 
 ##############################################################################
@@ -45,14 +42,15 @@ s2 = eds.datacube(
 # Generate venus cube
 # -------------------------------------------
 
-venus = eds.datacube(
-    "venus-l2a",
+landsat = eds.datacube(
+    "landsat-c2l2-sr",
     intersects=polygon,
     resolution=s2.rio.resolution()[0],
     datetime=datetime,
     epsg=s2.rio.crs.to_epsg(),
     resampling=Resampling.nearest,  # cubic
     assets=assets,
+    cross_calibration_collection="sentinel-2-l2a" # cross calibrate using EarthDaily Agro coefficient
 )
 
 
@@ -61,7 +59,7 @@ venus = eds.datacube(
 # -------------------------------------------
 
 print("create metacube")
-supercube = earthdatastore.metacube(s2, venus)
+supercube = earthdatastore.metacube(s2, landsat)
 
 ##############################################################################
 # Get the first common date between S2 and Venus for plotting
@@ -70,7 +68,7 @@ supercube = earthdatastore.metacube(s2, venus)
 common_date = [
     day
     for day in s2.time.dt.strftime("%Y%m%d").values
-    if day in venus.time.dt.strftime("%Y%m%d").values
+    if day in landsat.time.dt.strftime("%Y%m%d").values
 ][0]
 
 ##############################################################################
@@ -86,10 +84,10 @@ plt.show()
 ##############################################################################
 # Plot venus
 # -------------------------------------------
-venus.sel(time=common_date, method="nearest")[["red", "green", "blue"]].to_array(
+landsat.sel(time=common_date, method="nearest")[["red", "green", "blue"]].to_array(
     dim="band"
 ).plot.imshow(vmin=0, vmax=0.2)
-plt.title(f"Venus on {common_date}")
+plt.title(f"Landsat on {common_date}")
 
 plt.show()
 #

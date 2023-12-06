@@ -74,32 +74,6 @@ class TestHarmonizer(unittest.TestCase):
             },
         )
 
-    def test_xcal_functions_parser_multiple_functions(self):
-        multiple_functions_item = {
-            "red": [
-                {
-                    "red": [
-                        {
-                            "scale": 2,
-                            "offset": -0.5,
-                            "range_start": {"ge": 0},
-                            "range_end": {"lt": 1},
-                        },
-                        {
-                            "scale": 1,
-                            "offset": 2,
-                            "range_start": {"ge": 1},
-                            "range_end": {"le": 1.2},
-                        },
-                    ]
-                }
-            ]
-        }
-
-        self.assertEqual(
-            "xr.where((x>=0) & (x<1),x * 2 + -0.5,xr.where((x>=1) & (x<=1.2),x * 1 + 2,x))",
-            Harmonizer.xcal_functions_parser(multiple_functions_item["red"][0]["red"]),
-        )
 
     def test_check_timerange(self):
         xcal_item_from_20230901_to_20230915 = self.generate_fake_xcal_item(

@@ -13,7 +13,8 @@ from pystac.item_collection import ItemCollection
 from pystac_client import Client
 
 from . import _scales_collections, cube_utils, mask
-from .cube_utils import datacube
+from .cube_utils import datacube,metacube
+__all__= ['datacube','metacube']
 
 logging.getLogger("earthdaily-earthdatastore")
 
@@ -410,9 +411,12 @@ class Auth:
         add_default_scale_factor: bool = True,
         common_band_names=True,
         preload_mask=True,
-        cross_callibration_collection: (None | str) = None,
+        cross_calibration_collection: (None | str) = None,
         **kwargs,
     ) -> xr.Dataset:
+        if isinstance(collections, str):
+            collections = [collections]
+
         if mask_with and common_band_names:
             if isinstance(collections, list):
                 if len(collections) > 1:
@@ -445,7 +449,7 @@ class Auth:
         )
 
         xcal_items = None
-        if cross_callibration_collection is not None:
+        if isinstance(cross_calibration_collection,str):
             try:
                 xcal_items = self.search(
                     collections="eda-cross-calibration",
@@ -453,7 +457,7 @@ class Auth:
                     query={
                         "eda_cross_cal:source_collection": {"eq": collections[0]},
                         "eda_cross_cal:destination_collection": {
-                            "eq": cross_callibration_collection
+                            "eq": cross_calibration_collection
                         },
                     },
                 )
@@ -468,8 +472,8 @@ class Auth:
             bbox=bbox,
             assets=assets,
             common_band_names=common_band_names,
+            cross_calibration_items=xcal_items,
             **kwargs,
-            cross_cal_items=xcal_items,
         )
         if mask_with:
             if clear_cover and mask_statistics is False:

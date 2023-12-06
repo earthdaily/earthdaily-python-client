@@ -102,7 +102,7 @@ def datacube(
     rescale=True,
     groupby_date="mean",
     common_band_names=True,
-    cross_cal_items: list | None = None,
+    cross_calibration_items: list | None = None,
     **kwargs,
 ):
     logging.info(f"Building datacube with {len(items_collection)} items")
@@ -175,8 +175,8 @@ def datacube(
         ds = rescale_assets_with_items(items_collection, ds, assets=assets)
     if engine == "stackstac":
         ds = _autofix_unfrozen_coords_dtype(ds)
-    if cross_cal_items is not None and len(cross_cal_items) > 0:
-        ds = Harmonizer.harmonize(items_collection, ds, cross_cal_items, assets)
+    if cross_calibration_items is not None and len(cross_calibration_items) > 0:
+        ds = Harmonizer.harmonize(items_collection, ds, cross_calibration_items, assets)
     if groupby_date:
         if ds.time.size != np.unique(ds.time.dt.strftime("%Y%m%d")).size:
             ds = ds.groupby("time.date")
@@ -378,7 +378,7 @@ def metacube(*cubes, concat_dim="time", by="time.date", how="mean"):
     return _propagade_rio(cubes[0], cube)
 
 
-def apply_cross_calibration(items_collection, ds, cross_cal_items, assets):
+def apply_cross_calibration(items_collection, ds, cross_calibration_items, assets):
     if assets is None:
         assets = list(ds.data_vars.keys())
 
@@ -407,28 +407,28 @@ def apply_cross_calibration(items_collection, ds, cross_cal_items, assets):
         print(platform)
 
         # Looking for platform/camera specific xcal coef
-        platform_xcal_items = [
+        platform_cross_calibration_items = [
             item
-            for item in cross_cal_items
+            for item in cross_calibration_items
             if item.properties["eda_cross_cal:source_platform"] == platform
             and check_timerange(item, current_item.datetime)
         ]
 
         # at least one match
         matching_xcal_item = None
-        if len(platform_xcal_items) > 0:
-            matching_xcal_item = platform_xcal_items[0]
+        if len(platform_cross_calibration_items) > 0:
+            matching_xcal_item = platform_cross_calibration_items[0]
         else:
             # Looking for global xcal coef
             global_xcal_items = [
                 item
-                for item in cross_cal_items
+                for item in cross_calibration_items
                 if item.properties["eda_cross_cal:source_platform"] == ""
                 and check_timerange(item, current_item.datetime)
             ]
 
             if len(global_xcal_items) > 0:
-                matching_xcal_item = cross_cal_items[0]
+                matching_xcal_item = cross_calibration_items[0]
 
         if matching_xcal_item is not None:
             print("XCAL COEF FOUND")

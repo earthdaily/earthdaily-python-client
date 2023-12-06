@@ -2,10 +2,31 @@ from datetime import datetime
 
 import pytz
 import xarray as xr
-
+import numpy as np
+import operator
 
 class Harmonizer:
     def harmonize(items_collection, ds, cross_cal_items, assets):
+        """
+        Harmonize a dataset using cross_cal items from EarthDaily collection.
+
+        Parameters
+        ----------
+        items_collection : TYPE
+            DESCRIPTION.
+        ds : TYPE
+            DESCRIPTION.
+        cross_cal_items : TYPE
+            DESCRIPTION.
+        assets : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        ds_ : TYPE
+            DESCRIPTION.
+
+        """
         if assets is None:
             assets = list(ds.data_vars.keys())
 
@@ -77,41 +98,22 @@ class Harmonizer:
 
         return ds_
 
-    def xcal_functions_parser(functions):
-        possible_range = ["ge", "gt", "le", "lt"]
-
-        operator_mapping = {
-            "lt": "<",
-            "le": "<=",
-            "ge": ">=",
-            "gt": ">",
-        }
-
-        xarray_where_concat = ""
+    def xcal_functions_parser(functions, dataarray:xr.DataArray):
+        xscaled_dataarray = []
         for idx_function, function in enumerate(functions):
             coef_range = [function["range_start"], function["range_end"]]
-
             for idx_coef, coef_border in enumerate(coef_range):
-                for range in possible_range:
-                    if range in coef_border:
-                        threshold = coef_border[range]
-                        condition = operator_mapping.get(range)
-                        if idx_coef == 0:
-                            xarray_where_concat += f"xr.where((x{condition}{threshold})"
-                        else:
-                            xarray_where_concat += f" & (x{condition}{threshold})"
+                for single_operator,threshold in coef_border.items():
+                    xr_condition = getattr(operator,single_operator)(dataarray,threshold)
+                    if idx_coef == 0:
+                        ops = xr_condition
+                    else:
+                        ops = np.logical_and(ops, xr_condition)
+            xscaled_dataarray.append(dict(condition=ops,scale=function["scale"],offset=function["offset"]))
 
-            xarray_where_concat += f',x * {function["scale"]} + {function["offset"]},'
-
-            if idx_function == len(functions) - 1:
-                xarray_where_concat += "x"
-                function_parenthesis = 0
-
-                while function_parenthesis < len(functions):
-                    xarray_where_concat += ")"
-                    function_parenthesis += 1
-
-        return xarray_where_concat
+        for op in xscaled_dataarray:
+            dataarray = xr.where(op['condition'],dataarray*op['scale']+op['offset'],dataarray)
+        return dataarray
 
     def apply_to_asset(functions, asset, band_name):
         if len(functions) == 1:
@@ -120,9 +122,7 @@ class Harmonizer:
         else:
             # Multiple functions
             # TO DO : Replace x variable and the eval(xr_where_string) by a native function
-            x = asset[band_name]
-            xr_where_string = Harmonizer.xcal_functions_parser(functions)
-            asset[band_name] = eval(xr_where_string)
+            asset[band_name] = Harmonizer.xcal_functions_parser(functions,asset[band_name])
             return asset
 
     def check_timerange(xcal_item, item_datetime):
