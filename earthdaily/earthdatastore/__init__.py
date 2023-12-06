@@ -13,8 +13,9 @@ from pystac.item_collection import ItemCollection
 from pystac_client import Client
 
 from . import _scales_collections, cube_utils, mask
-from .cube_utils import datacube,metacube
-__all__= ['datacube','metacube']
+from .cube_utils import datacube, metacube
+
+__all__ = ["datacube", "metacube"]
 
 logging.getLogger("earthdaily-earthdatastore")
 
@@ -449,7 +450,7 @@ class Auth:
         )
 
         xcal_items = None
-        if isinstance(cross_calibration_collection,str):
+        if isinstance(cross_calibration_collection, str):
             try:
                 xcal_items = self.search(
                     collections="eda-cross-calibration",

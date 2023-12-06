@@ -5,6 +5,7 @@ import xarray as xr
 import numpy as np
 import operator
 
+
 class Harmonizer:
     def harmonize(items_collection, ds, cross_cal_items, assets):
         """
@@ -98,21 +99,27 @@ class Harmonizer:
 
         return ds_
 
-    def xcal_functions_parser(functions, dataarray:xr.DataArray):
+    def xcal_functions_parser(functions, dataarray: xr.DataArray):
         xscaled_dataarray = []
         for idx_function, function in enumerate(functions):
             coef_range = [function["range_start"], function["range_end"]]
             for idx_coef, coef_border in enumerate(coef_range):
-                for single_operator,threshold in coef_border.items():
-                    xr_condition = getattr(operator,single_operator)(dataarray,threshold)
+                for single_operator, threshold in coef_border.items():
+                    xr_condition = getattr(operator, single_operator)(
+                        dataarray, threshold
+                    )
                     if idx_coef == 0:
                         ops = xr_condition
                     else:
                         ops = np.logical_and(ops, xr_condition)
-            xscaled_dataarray.append(dict(condition=ops,scale=function["scale"],offset=function["offset"]))
+            xscaled_dataarray.append(
+                dict(condition=ops, scale=function["scale"], offset=function["offset"])
+            )
 
         for op in xscaled_dataarray:
-            dataarray = xr.where(op['condition'],dataarray*op['scale']+op['offset'],dataarray)
+            dataarray = xr.where(
+                op["condition"], dataarray * op["scale"] + op["offset"], dataarray
+            )
         return dataarray
 
     def apply_to_asset(functions, asset, band_name):
@@ -122,7 +129,9 @@ class Harmonizer:
         else:
             # Multiple functions
             # TO DO : Replace x variable and the eval(xr_where_string) by a native function
-            asset[band_name] = Harmonizer.xcal_functions_parser(functions,asset[band_name])
+            asset[band_name] = Harmonizer.xcal_functions_parser(
+                functions, asset[band_name]
+            )
             return asset
 
     def check_timerange(xcal_item, item_datetime):
