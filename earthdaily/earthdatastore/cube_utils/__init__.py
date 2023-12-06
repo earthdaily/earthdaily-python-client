@@ -535,7 +535,5 @@ def apply_cross_calibration_to_asset(functions, asset, band_name):
         return asset * functions[0]["scale"] + functions[0]["offset"]
     else:
         # Multiple functions
-        x = asset[band_name]
-        xr_where_string = define_functions_from_xcal_item(functions)
-        asset[band_name] = eval(xr_where_string)
+        asset[band_name] = define_functions_from_xcal_item(functions,asset[band_name])
         return asset
