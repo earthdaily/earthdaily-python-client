@@ -78,13 +78,13 @@ class Harmonizer:
                         # By default, we take the first item we have
                         scaled_asset = Harmonizer.apply_to_asset(
                             asset_xcal_coef[0][ds_asset],
-                            ds[[ds_asset]].loc[dict(time=time)],
+                            ds[ds_asset].loc[dict(time=time)],
                             ds_asset,
                         )
                         scaled_dataset[ds_asset].append(scaled_asset)
                     else:
                         scaled_dataset[ds_asset].append(
-                            ds[[ds_asset]].loc[dict(time=time)]
+                            ds[ds_asset].loc[dict(time=time)]
                         )
 
         ds_ = []
@@ -115,15 +115,15 @@ class Harmonizer:
             dataarray = xr.where(op['condition'],dataarray*op['scale']+op['offset'],dataarray)
         return dataarray
 
-    def apply_to_asset(functions, asset, band_name):
+    def apply_to_asset(functions, dataarray:xr.DataArray, band_name):
         if len(functions) == 1:
             # Single function
-            return asset * functions[0]["scale"] + functions[0]["offset"]
+            dataarray = dataarray * functions[0]["scale"] + functions[0]["offset"]
         else:
             # Multiple functions
             # TO DO : Replace x variable and the eval(xr_where_string) by a native function
-            asset[band_name] = Harmonizer.xcal_functions_parser(functions,asset[band_name])
-            return asset
+            dataarray = Harmonizer.xcal_functions_parser(functions, dataarray)
+        return dataarray
 
     def check_timerange(xcal_item, item_datetime):
         start_date = datetime.strptime(

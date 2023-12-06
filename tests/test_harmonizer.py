@@ -171,7 +171,7 @@ class TestHarmonizer(unittest.TestCase):
         for idx, time in enumerate(fake_ds.time.values):
             scaled_asset = Harmonizer.apply_to_asset(
                 multiple_function_xcal["first_var"][0]["first_var"],
-                fake_ds[["first_var"]].loc[dict(time=time)],
+                fake_ds["first_var"].loc[dict(time=time)],
                 "first_var",
             )
             scaled_dataset["first_var"].append(scaled_asset)
