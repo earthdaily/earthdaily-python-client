@@ -429,7 +429,9 @@ class Auth:
                 raise ValueError(
                     f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}"
                 )
-            collection = collections[0] if isinstance(collections,list) else collections
+            collection = (
+                collections[0] if isinstance(collections, list) else collections
+            )
 
             if mask_with == "ag_cloud_mask":
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
