@@ -122,7 +122,7 @@ class Harmonizer:
             )
         return dataarray
 
-    def apply_to_asset(functions, dataarray:xr.DataArray, band_name):
+    def apply_to_asset(functions, dataarray: xr.DataArray, band_name):
         if len(functions) == 1:
             # Single function
             dataarray = dataarray * functions[0]["scale"] + functions[0]["offset"]
