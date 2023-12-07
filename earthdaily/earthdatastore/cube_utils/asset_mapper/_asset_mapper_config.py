@@ -34,7 +34,7 @@ asset_mapper_collections = {
         }
     ],
     "landsat-c2l2-st": [
-        {"lwir": "lwir11", "lwir11": "lwir11", "native-cloud-mask": "qa-pixel"}
+        {"lwir": "lwir11", "lwir11": "lwir11", "native-cloud-mask": "qa_pixel"}
     ],
     "venus-l2a": [
         {

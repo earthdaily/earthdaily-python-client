@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [0.0.1-rc8] - 2023-07-12
+
+### Added
+
+- Tests for python 3.12.
+- handle cross calibration (harmonization) using private collection.
+- `Auth` automatically to EarhtDataStore after 3600 seconds.
+- `Auth` now supports presign_urls parameter.
+- `load_pivot_corumba` in datasets
+
+### Fixed
+
+- Perfect dimension compatibility between cloudmask and sensor datacube using `geobox` .
+- Force loading native landsat cloudmask because not compatible with dask.
+
 ## [0.0.1-rc7] - 2023-11-22
 
 ### Fixed

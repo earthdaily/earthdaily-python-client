@@ -224,7 +224,7 @@ class Mask:
 
     def _landsat_qa_pixel_convert(self):
         for time in self._obj.time:
-            data = self._obj["qa_pixel"].loc[dict(time=time)].data
+            data = self._obj["qa_pixel"].loc[dict(time=time)].load().data
             data_f = data.flatten()
             clm = QA_PIXEL_cloud_detection(data_f[~np.isnan(data_f)])
             clm = np.where(clm == 0, np.nan, clm)

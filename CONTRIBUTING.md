@@ -8,12 +8,12 @@
 * Update README when needed
 * Submit a pull request to upstream repo
 * Add description of your changes
-* Ensure tests are passing
+* Add and ensure tests are passing
 * Ensure branch is mergeable
 
 ## Testing
 
-* Please make sure tests pass with `./script/test`
+* Please make sure tests pass with `./tests`
 
 ## Doc building
 inside docs/ : "sphinx-build -b html . html"

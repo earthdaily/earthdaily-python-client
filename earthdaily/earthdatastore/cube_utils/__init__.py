@@ -1,15 +1,20 @@
 import logging
+from datetime import datetime
+
+import geopandas as gpd
 import numpy as np
 import pandas as pd
-import geopandas as gpd
-from shapely.geometry import box
-from ._zonal import zonal_stats, zonal_stats_numpy
-from .asset_mapper import AssetMapper
-from .geometry_manager import GeometryManager
-from rasterio.enums import Resampling
-from rasterio.mask import geometry_mask
-import rioxarray as rxr
+import pytz
 import xarray as xr
+from rasterio.enums import Resampling
+from shapely.geometry import box
+from .geometry_manager import GeometryManager
+from ._zonal import zonal_stats, zonal_stats_numpy
+from .harmonizer import Harmonizer
+from .asset_mapper import AssetMapper
+import rioxarray
+
+__all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
 
 
 def _match_xy_dims(src, dst, resampling=Resampling.nearest):
@@ -97,6 +102,7 @@ def datacube(
     rescale=True,
     groupby_date="mean",
     common_band_names=True,
+    cross_calibration_items: list | None = None,
     **kwargs,
 ):
     logging.info(f"Building datacube with {len(items_collection)} items")
@@ -169,6 +175,8 @@ def datacube(
         ds = rescale_assets_with_items(items_collection, ds, assets=assets)
     if engine == "stackstac":
         ds = _autofix_unfrozen_coords_dtype(ds)
+    if cross_calibration_items is not None and len(cross_calibration_items) > 0:
+        ds = Harmonizer.harmonize(items_collection, ds, cross_calibration_items, assets)
     if groupby_date:
         if ds.time.size != np.unique(ds.time.dt.strftime("%Y%m%d")).size:
             ds = ds.groupby("time.date")

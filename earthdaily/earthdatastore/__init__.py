@@ -3,17 +3,19 @@ import logging
 import operator
 import os
 import warnings
-import psutil
+import time
 import geopandas as gpd
 import pandas as pd
+import psutil
 import requests
 import xarray as xr
 from pystac.item_collection import ItemCollection
 from pystac_client import Client
 
-from . import _scales_collections, mask
-from . import cube_utils
+from . import _scales_collections, cube_utils, mask
 from .cube_utils import datacube, metacube
+
+__all__ = ["datacube", "metacube", "xr"]
 
 logging.getLogger("earthdaily-earthdatastore")
 
@@ -118,7 +120,7 @@ def enhance_assets(
     return items
 
 
-def _get_client(config=None):
+def _get_client(config=None, presign_urls=True):
     if config is None:
         config = os.getenv
     else:
@@ -142,12 +144,13 @@ def _get_client(config=None):
     )
     token_response.raise_for_status()
     tokens = json.loads(token_response.text)
+    headers = {"Authorization": f"bearer {tokens['access_token']}"}
+    if presign_urls:
+        headers["X-Signed-Asset-Urls"] = "True"
+
     client = Client.open(
         eds_url,
-        headers={
-            "Authorization": f"bearer {tokens['access_token']}",
-            "X-Signed-Asset-Urls": "True",
-        },
+        headers=headers,
     )
     return client
 
@@ -188,7 +191,7 @@ class StacCollectionExplorer:
 
 
 class Auth:
-    def __init__(self, config: str | dict = None):
+    def __init__(self, config: str | dict = None, presign_urls=True):
         """
         A client for interacting with the Earth Data Store API.
         By default, Earth Data Store will look for environment variables called
@@ -215,9 +218,32 @@ class Auth:
         >>> print(len(items))
         132
         """
-        self.client = _get_client(config)
+        self._client = None
+        self.__auth_config = None
+        self.__presign_urls = presign_urls
         self._first_items_ = {}
         self._staccollectionexplorer = {}
+        self.__time_eds_log = time.time()
+        self._client = self.client
+
+    @property
+    def client(self):
+        """
+                Create an instance of pystac client from EarthDataSTore
+
+                Returns
+                -------
+                catalog : A :class:`Client` instance for this Catalog.
+        .
+
+        """
+        if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
+            if t:
+                logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
+            self._client = _get_client(self.__auth_config, self.__presign_urls)
+            self.__time_eds_log = time.time()
+
+        return self._client
 
     def explore(self, collection: str = None):
         """
@@ -387,8 +413,12 @@ class Auth:
         add_default_scale_factor: bool = True,
         common_band_names=True,
         preload_mask=True,
+        cross_calibration_collection: (None | str) = None,
         **kwargs,
     ) -> xr.Dataset:
+        if isinstance(collections, str):
+            collections = [collections]
+
         if mask_with and common_band_names:
             if isinstance(collections, list):
                 if len(collections) > 1:
@@ -398,11 +428,11 @@ class Auth:
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise ValueError(
-                    f"Specified mask '{mask_with}' is not available.\ Currently available masks provider are : {mask._available_masks}"
+                    f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}"
                 )
-                collection = collections[0]
-            else:
-                collection = collections
+            collection = (
+                collections[0] if isinstance(collections, list) else collections
+            )
 
             if mask_with == "ag_cloud_mask":
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
@@ -420,12 +450,31 @@ class Auth:
             **search_kwargs,
         )
 
+        xcal_items = None
+        if isinstance(cross_calibration_collection, str):
+            try:
+                xcal_items = self.search(
+                    collections="eda-cross-calibration",
+                    intersects=intersects,
+                    query={
+                        "eda_cross_cal:source_collection": {"eq": collections[0]},
+                        "eda_cross_cal:destination_collection": {
+                            "eq": cross_calibration_collection
+                        },
+                    },
+                )
+            except Warning:
+                raise Warning(
+                    "No cross calibration coefficient available for the specified collections."
+                )
+
         xr_datacube = datacube(
             items,
             intersects=intersects,
             bbox=bbox,
             assets=assets,
             common_band_names=common_band_names,
+            cross_calibration_items=xcal_items,
             **kwargs,
         )
         if mask_with:
@@ -458,17 +507,18 @@ class Auth:
                 if (
                     preload_mask
                     and psutil.virtual_memory().available > acm_datacube.nbytes
+                    and mask_statistics is True
                 ):
                     acm_datacube = acm_datacube.load()
                 mask_kwargs.update(acm_datacube=acm_datacube)
             else:
-                mask_assets = mask._native_mask_asset_mapping[collections]
+                mask_assets = mask._native_mask_asset_mapping[collection]
                 if "groupby_date" in kwargs:
                     kwargs["groupby_date"] = "max"
-                if "resolution" not in kwargs:
-                    kwargs["resolution"] = xr_datacube.rio.resolution()[0]
-                if "epsg" not in kwargs:
-                    kwargs["epsg"] = xr_datacube.rio.crs.to_epsg()
+                if "resolution" in kwargs:
+                    kwargs.pop("resolution")
+                if "epsg" in kwargs:
+                    kwargs.pop("epsg")
 
                 clouds_datacube = datacube(
                     items,
@@ -476,6 +526,7 @@ class Auth:
                     bbox=bbox,
                     assets=[mask_assets],
                     resampling=0,
+                    geobox=xr_datacube.odc.geobox,
                     **kwargs,
                 )
                 clouds_datacube = cube_utils._match_xy_dims(
