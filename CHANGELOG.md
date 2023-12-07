@@ -5,13 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [0.0.1] 
+## [0.0.1-rc8] 
 
 ### Added
 
-- tests for python 3.
-- reauth automatically to EarhtDataStore after 3600 seconds
-- handle cross calibration (harmonization) using private collection
+- Tests for python 3.12.
+- reauth automatically to EarhtDataStore after 3600 seconds.
+- handle cross calibration (harmonization) using private collection.
+
+### Fixed
+
+- Perfect dimension compatibility between cloudmask and sensor datacube using `geobox` .
+- Force loading native landsat cloudmask because not compatible with dask.
 
 ## [0.0.1-rc7] - 2023-11-22
 

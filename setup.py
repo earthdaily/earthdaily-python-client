@@ -9,7 +9,7 @@ with open("earthdaily/__init__.py", encoding="utf8") as f:
 
 setup(
     name="earthdaily",
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests']),
     version=version,
     description="earthdaily: easy authentication, search and retrieval of Earth Data Store collections data",
     author="EarthDaily Agro",
