@@ -15,7 +15,7 @@ from pystac_client import Client
 from . import _scales_collections, cube_utils, mask
 from .cube_utils import datacube, metacube
 
-__all__ = ["datacube", "metacube"]
+__all__ = ["datacube", "metacube", "xr"]
 
 logging.getLogger("earthdaily-earthdatastore")
 
@@ -120,7 +120,7 @@ def enhance_assets(
     return items
 
 
-def _get_client(config=None, force_presigned_url=True):
+def _get_client(config=None, presign_urls=True):
     if config is None:
         config = os.getenv
     else:
@@ -145,7 +145,7 @@ def _get_client(config=None, force_presigned_url=True):
     token_response.raise_for_status()
     tokens = json.loads(token_response.text)
     headers = {"Authorization": f"bearer {tokens['access_token']}"}
-    if force_presigned_url:
+    if presign_urls:
         headers["X-Signed-Asset-Urls"] = "True"
 
     client = Client.open(
@@ -191,7 +191,7 @@ class StacCollectionExplorer:
 
 
 class Auth:
-    def __init__(self, config: str | dict = None):
+    def __init__(self, config: str | dict = None, presign_urls=True):
         """
         A client for interacting with the Earth Data Store API.
         By default, Earth Data Store will look for environment variables called
@@ -220,6 +220,7 @@ class Auth:
         """
         self._client = None
         self.__auth_config = None
+        self.__presign_urls = presign_urls
         self._first_items_ = {}
         self._staccollectionexplorer = {}
         self.__time_eds_log = time.time()
@@ -239,7 +240,7 @@ class Auth:
         if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
             if t:
                 logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
-            self._client = _get_client(self.__auth_config)
+            self._client = _get_client(self.__auth_config, self.__presign_urls)
             self.__time_eds_log = time.time()
 
         return self._client
