@@ -10,8 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Tests for python 3.12.
-- reauth automatically to EarhtDataStore after 3600 seconds.
 - handle cross calibration (harmonization) using private collection.
+- `Auth` automatically to EarhtDataStore after 3600 seconds.
+- `Auth` now supports presign_urls parameter.
 
 ### Fixed
 
