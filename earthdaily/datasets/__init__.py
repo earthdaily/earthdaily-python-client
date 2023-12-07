@@ -3,7 +3,8 @@ import geopandas as gpd
 
 __pathFile = os.path.dirname(os.path.realpath(__file__))
 
-def _load_json(path, to_wkt:bool=False, to_geojson:bool=False):
+
+def _load_json(path, to_wkt: bool = False, to_geojson: bool = False):
     pivot = gpd.read_file(path)
     if to_wkt:
         pivot = pivot.to_wkt()["geometry"].iloc[0]
@@ -29,7 +30,11 @@ def load_pivot(to_wkt: bool = False, to_geojson: bool = False):
         DESCRIPTION.
 
     """
-    return _load_json(os.path.join(__pathFile, f"data{os.path.sep}pivot.geojson"), to_wkt=to_wkt, to_geojson=to_geojson)
+    return _load_json(
+        os.path.join(__pathFile, f"data{os.path.sep}pivot.geojson"),
+        to_wkt=to_wkt,
+        to_geojson=to_geojson,
+    )
 
 
 def load_pivot_corumba(to_wkt: bool = False, to_geojson: bool = False):
@@ -49,4 +54,8 @@ def load_pivot_corumba(to_wkt: bool = False, to_geojson: bool = False):
         DESCRIPTION.
 
     """
-    return _load_json(os.path.join(__pathFile, f"data{os.path.sep}pivot_corumba.geojson"), to_wkt=to_wkt, to_geojson=to_geojson)
+    return _load_json(
+        os.path.join(__pathFile, f"data{os.path.sep}pivot_corumba.geojson"),
+        to_wkt=to_wkt,
+        to_geojson=to_geojson,
+    )
