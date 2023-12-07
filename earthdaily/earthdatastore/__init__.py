@@ -518,7 +518,7 @@ class Auth:
                     kwargs.pop("resolution")
                 if "epsg" in kwargs:
                     kwargs.pop("epsg")
-                    
+
                 clouds_datacube = datacube(
                     items,
                     intersects=intersects,
