@@ -504,6 +504,7 @@ class Auth:
                 if (
                     preload_mask
                     and psutil.virtual_memory().available > acm_datacube.nbytes
+                    and mask_statistics is True
                 ):
                     acm_datacube = acm_datacube.load()
                 mask_kwargs.update(acm_datacube=acm_datacube)
@@ -511,17 +512,18 @@ class Auth:
                 mask_assets = mask._native_mask_asset_mapping[collection]
                 if "groupby_date" in kwargs:
                     kwargs["groupby_date"] = "max"
-                if "resolution" not in kwargs:
-                    kwargs["resolution"] = xr_datacube.rio.resolution()[0]
-                if "epsg" not in kwargs:
-                    kwargs["epsg"] = xr_datacube.rio.crs.to_epsg()
-
+                if "resolution" in kwargs:
+                    kwargs.pop("resolution")
+                if "epsg" in kwargs:
+                    kwargs.pop("epsg")
+                    
                 clouds_datacube = datacube(
                     items,
                     intersects=intersects,
                     bbox=bbox,
                     assets=[mask_assets],
                     resampling=0,
+                    geobox=xr_datacube.odc.geobox,
                     **kwargs,
                 )
                 clouds_datacube = cube_utils._match_xy_dims(
