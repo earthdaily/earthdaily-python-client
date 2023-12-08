@@ -124,8 +124,8 @@ def datacube(
         assets = aM.map_collection_assets(items_collection[0].collection_id, assets)
     if isinstance(assets, dict):
         assets_keys = list(assets.keys())
-    if engine == 'odc' and intersects is not None:
-        kwargs['geopolygon'] = intersects
+    if engine == "odc" and intersects is not None:
+        kwargs["geopolygon"] = intersects
     ds = engines[engine](
         items_collection,
         assets=assets_keys if isinstance(assets, dict) else assets,
