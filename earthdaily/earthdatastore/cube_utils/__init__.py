@@ -55,8 +55,9 @@ def _cube_odc(items_collection, assets=None, times=None, dtype="float32", **kwar
     if "resampling" in kwargs:
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
-    kwargs["chunks"] = kwargs.get("chunks", dict(x=512, y=512, time=1))
-
+    kwargs["chunks"] = kwargs.get("chunks", dict(x="auto", y="auto", time=1))
+    if "geobox" in kwargs.keys() and "geopolygon" in kwargs.keys():
+        kwargs.pop("geobox")
     ds = stac.load(
         items_collection,
         bands=assets,
@@ -123,6 +124,8 @@ def datacube(
         assets = aM.map_collection_assets(items_collection[0].collection_id, assets)
     if isinstance(assets, dict):
         assets_keys = list(assets.keys())
+    if engine == 'odc' and intersects is not None:
+        kwargs['geopolygon'] = intersects
     ds = engines[engine](
         items_collection,
         assets=assets_keys if isinstance(assets, dict) else assets,
@@ -165,9 +168,9 @@ def datacube(
         intersects = GeometryManager(intersects).to_geopandas()
 
     if isinstance(intersects, gpd.GeoDataFrame):
-        # itrscts = intersects.to_crs(ds.rio.crs).iloc[[0]]
         # optimize by perclipping using bbox
-        ds = ds.rio.clip_box(*intersects.to_crs(ds.rio.crs).total_bounds)
+        # no need anymore thanks to geobox/geopolygon in doc
+        # ds = ds.rio.clip_box(*intersects.to_crs(ds.rio.crs).total_bounds)
         ds = ds.rio.clip(intersects.to_crs(ds.rio.crs).geometry)
     # apply nodata
     ds = _apply_nodata(ds, nodatas)
