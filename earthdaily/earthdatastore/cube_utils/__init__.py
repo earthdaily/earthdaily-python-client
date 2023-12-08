@@ -57,7 +57,7 @@ def _cube_odc(items_collection, assets=None, times=None, dtype="float32", **kwar
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
     kwargs["chunks"] = kwargs.get("chunks", dict(x="auto", y="auto", time=1))
     if "geobox" in kwargs.keys() and "geopolygon" in kwargs.keys():
-        kwargs.pop("geobox")
+        kwargs.pop("geopolygon")
     ds = stac.load(
         items_collection,
         bands=assets,
