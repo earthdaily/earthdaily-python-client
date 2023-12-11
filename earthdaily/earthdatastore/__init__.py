@@ -498,7 +498,9 @@ class Auth:
                     bbox=bbox,
                     groupby_date="max",
                     prefer_alternate="download",
-                    geobox=xr_datacube.odc.geobox if hasattr(xr_datacube,'odc') else None,
+                    geobox=xr_datacube.odc.geobox
+                    if hasattr(xr_datacube, "odc")
+                    else None,
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
@@ -519,7 +521,9 @@ class Auth:
                     bbox=bbox,
                     assets=[mask_assets],
                     resampling=0,
-                    geobox=xr_datacube.odc.geobox if hasattr(xr_datacube,'odc') else None,
+                    geobox=xr_datacube.odc.geobox
+                    if hasattr(xr_datacube, "odc")
+                    else None,
                     **kwargs,
                 )
                 clouds_datacube = cube_utils._match_xy_dims(

@@ -86,7 +86,7 @@ class Mask:
         else:
             cloud_layer = self._obj[cloud_asset].copy()
         _assets = [a for a in self._obj.data_vars if a != cloud_asset]
-        
+
         if fill_value:
             if labels_are_clouds:
                 self._obj = self._obj[_assets].where(
@@ -142,21 +142,25 @@ class Mask:
         if self._obj.attrs.get("usable_pixels", None) is None:
             self.compute_available_pixels()
 
-        n_pixels_as_labels = cloudmask_array.isin(labels).sum(dim=('x','y')).values
+        n_pixels_as_labels = cloudmask_array.isin(labels).sum(dim=("x", "y")).values
         if labels_are_clouds:
-            n_pixels_as_labels = self._obj.attrs['usable_pixels'] - n_pixels_as_labels
+            n_pixels_as_labels = self._obj.attrs["usable_pixels"] - n_pixels_as_labels
 
         self._obj = self._obj.assign_coords(
             {"clear_pixels": ("time", n_pixels_as_labels)}
-            )
-        
+        )
+
         self._obj = self._obj.assign_coords(
-            {"clear_percent": ("time", np.multiply(
+            {
+                "clear_percent": (
+                    "time",
+                    np.multiply(
                         n_pixels_as_labels / self._obj.attrs["usable_pixels"],
                         100,
-                    ).astype(np.int8)
-                )}
-            )
+                    ).astype(np.int8),
+                )
+            }
+        )
 
         return self._obj
 

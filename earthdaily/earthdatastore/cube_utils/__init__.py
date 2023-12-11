@@ -56,7 +56,7 @@ def _cube_odc(items_collection, assets=None, times=None, dtype="float32", **kwar
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
     kwargs["chunks"] = kwargs.get("chunks", dict(x="auto", y="auto", time=1))
-    
+
     if "geobox" in kwargs.keys() and "geopolygon" in kwargs.keys():
         kwargs.pop("geopolygon")
     ds = stac.load(
@@ -77,8 +77,8 @@ def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
     if "epsg" in kwargs:
         kwargs["epsg"] = int(kwargs["epsg"])
     if "geobox" in kwargs:
-        kwargs.pop('geobox')
-        
+        kwargs.pop("geobox")
+
     ds = stack(
         items_collection,
         assets=assets,
@@ -131,7 +131,9 @@ def datacube(
     if engine == "odc" and intersects is not None:
         kwargs["geopolygon"] = GeometryManager(intersects).to_geopandas()
     if engine == "stackstac" and intersects is not None:
-        kwargs["bounds_latlon"] =  list(GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds)
+        kwargs["bounds_latlon"] = list(
+            GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds
+        )
 
     ds = engines[engine](
         items_collection,
