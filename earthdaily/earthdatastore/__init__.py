@@ -219,7 +219,7 @@ class Auth:
         132
         """
         self._client = None
-        self.__auth_config = None
+        self.__auth_config = config
         self.__presign_urls = presign_urls
         self._first_items_ = {}
         self._staccollectionexplorer = {}
@@ -412,7 +412,6 @@ class Auth:
         search_kwargs: dict = {},
         add_default_scale_factor: bool = True,
         common_band_names=True,
-        preload_mask=True,
         cross_calibration_collection: (None | str) = None,
         **kwargs,
     ) -> xr.Dataset:
@@ -499,17 +498,11 @@ class Auth:
                     bbox=bbox,
                     groupby_date="max",
                     prefer_alternate="download",
-                    geobox=xr_datacube.odc.geobox,
+                    geobox=xr_datacube.odc.geobox if hasattr(xr_datacube,'odc') else None,
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
                 acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
-                if (
-                    preload_mask
-                    and psutil.virtual_memory().available > acm_datacube.nbytes
-                    and mask_statistics is True
-                ):
-                    acm_datacube = acm_datacube.load()
                 mask_kwargs.update(acm_datacube=acm_datacube)
             else:
                 mask_assets = mask._native_mask_asset_mapping[collection]
@@ -526,18 +519,12 @@ class Auth:
                     bbox=bbox,
                     assets=[mask_assets],
                     resampling=0,
-                    geobox=xr_datacube.odc.geobox,
+                    geobox=xr_datacube.odc.geobox if hasattr(xr_datacube,'odc') else None,
                     **kwargs,
                 )
                 clouds_datacube = cube_utils._match_xy_dims(
                     clouds_datacube, xr_datacube
                 )
-                if (
-                    preload_mask
-                    and psutil.virtual_memory().available > clouds_datacube.nbytes
-                    and mask_statistics is True
-                ):
-                    clouds_datacube = clouds_datacube.load()
                 xr_datacube = xr.merge(
                     (xr_datacube, clouds_datacube), compat="override"
                 )
@@ -666,7 +653,7 @@ class Auth:
             intersects = cube_utils.GeometryManager(intersects).to_intersects(
                 crs="4326"
             )
-        if bbox and intersects:
+        if bbox is not None and intersects is not None:
             bbox = None
         items_collection = self.client.search(
             collections=collections,

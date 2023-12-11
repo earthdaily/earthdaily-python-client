@@ -56,6 +56,7 @@ def _cube_odc(items_collection, assets=None, times=None, dtype="float32", **kwar
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
     kwargs["chunks"] = kwargs.get("chunks", dict(x="auto", y="auto", time=1))
+    
     if "geobox" in kwargs.keys() and "geopolygon" in kwargs.keys():
         kwargs.pop("geopolygon")
     ds = stac.load(
@@ -75,6 +76,9 @@ def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
 
     if "epsg" in kwargs:
         kwargs["epsg"] = int(kwargs["epsg"])
+    if "geobox" in kwargs:
+        kwargs.pop('geobox')
+        
     ds = stack(
         items_collection,
         assets=assets,
@@ -84,7 +88,7 @@ def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
         **kwargs,
     )
     ds = ds.to_dataset(dim="band")
-    if "band" in ds.dims:
+    if "band" in ds.sizes:
         ds = ds.drop_dims("band")
     for data_vars in ds.data_vars:
         ds[data_vars] = ds[data_vars].rio.write_crs(ds.rio.crs)
@@ -125,7 +129,10 @@ def datacube(
     if isinstance(assets, dict):
         assets_keys = list(assets.keys())
     if engine == "odc" and intersects is not None:
-        kwargs["geopolygon"] = intersects
+        kwargs["geopolygon"] = GeometryManager(intersects).to_geopandas()
+    if engine == "stackstac" and intersects is not None:
+        kwargs["bounds_latlon"] =  list(GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds)
+
     ds = engines[engine](
         items_collection,
         assets=assets_keys if isinstance(assets, dict) else assets,
@@ -162,7 +169,7 @@ def datacube(
             ds = getattr(ds, groupby_date)()
         else:
             ds = ds.groupby("time").mean()
-    if bbox and intersects is None:
+    if bbox is not None and intersects is None:
         intersects = _bbox_to_intersects(bbox)
     if intersects is not None:
         intersects = GeometryManager(intersects).to_geopandas()

@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.1]
 
+### Added
+
+- Optimization (dask-native) for cloudmasks (Sentinel-2, Venus, ag-cloud-mask), except Landsat.
+
 ### Changed
 
 - Default chunks using odc is now `x="auto"` and `y="auto"`.
 - `geobox` or `geopolygon` is used to have a preclipped datacube to the bounding box of the geometry. It enhances performances.
+
+### Fixed
+
+- Load json config for `Auth`.
 
 ## [0.0.1-rc8] - 2023-07-12
 
