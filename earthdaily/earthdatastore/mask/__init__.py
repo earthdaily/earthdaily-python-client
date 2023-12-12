@@ -86,6 +86,7 @@ class Mask:
         else:
             cloud_layer = self._obj[cloud_asset].copy()
         _assets = [a for a in self._obj.data_vars if a != cloud_asset]
+
         if fill_value:
             if labels_are_clouds:
                 self._obj = self._obj[_assets].where(
@@ -138,44 +139,20 @@ class Mask:
         labels_are_clouds=True,
         n_jobs=1,
     ):
-        def compute_clear_pixels(cloudmask_array, labels, labels_are_clouds=False):
-            if isinstance(cloudmask_array.data, dask.array.core.Array):
-                cloudmask_array = cloudmask_array.data.compute()
-
-            if labels_are_clouds:
-                labels_sum = np.sum(~np.in1d(cloudmask_array, labels)) - np.sum(
-                    np.isnan(cloudmask_array)
-                )
-            else:
-                labels_sum = np.sum(np.in1d(cloudmask_array, labels))
-            return labels_sum
-
         if self._obj.attrs.get("usable_pixels", None) is None:
             self.compute_available_pixels()
-        n_pixels_as_labels = Parallel(n_jobs=n_jobs)(
-            delayed(compute_clear_pixels)(
-                cloudmask_array.sel(time=time),
-                labels=labels,
-                labels_are_clouds=labels_are_clouds,
-            )
-            for time in tqdm.tqdm(
-                cloudmask_array.time,
-                desc="Clear coverage statistics",
-                unit="item",
-                disable=True,
-            )
-        )
+
+        n_pixels_as_labels = cloudmask_array.isin(labels).sum(dim=("x", "y")).values
+        if labels_are_clouds:
+            n_pixels_as_labels = self._obj.attrs["usable_pixels"] - n_pixels_as_labels
 
         self._obj = self._obj.assign_coords(
-            {f"clear_pixels_{cloudmask_name}": ("time", n_pixels_as_labels)}
+            {"clear_pixels": ("time", n_pixels_as_labels)}
         )
-        self._obj.coords["clear_pixels"] = self._obj.coords[
-            f"clear_pixels_{cloudmask_name}"
-        ]
 
         self._obj = self._obj.assign_coords(
             {
-                f"clear_percent_{cloudmask_name}": (
+                "clear_percent": (
                     "time",
                     np.multiply(
                         n_pixels_as_labels / self._obj.attrs["usable_pixels"],
@@ -183,14 +160,6 @@ class Mask:
                     ).astype(np.int8),
                 )
             }
-        )
-
-        self._obj.coords["clear_percent"] = self._obj.coords[
-            f"clear_percent_{cloudmask_name}"
-        ]
-        warnings.warn(
-            f"Removed in 0.0.2 : The two coordinates 'clear_pixels_{cloudmask_name}' and 'clear_percent_{cloudmask_name}' will be deleted to keep only the prefix 'clear_percent' and 'clear_pixels'",
-            category=DeprecationWarning,
         )
 
         return self._obj

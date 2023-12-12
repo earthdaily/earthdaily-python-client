@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.0.1-rc9] - 2023-12-12
+
+### Added
+
+- Optimization (dask-native) for cloudmasks (Sentinel-2, Venus, ag-cloud-mask), except Landsat.
+
+### Changed
+
+- Default chunks using odc is now `x="auto"` and `y="auto"`.
+- `geobox` or `geopolygon` is used to have a preclipped datacube to the bounding box of the geometry. It enhances performances.
+
+### Fixed
+
+- Load json config for `Auth`.
+- Remove kwargs of `geobox` for native cloudmask in order to parse new `geobox`.
+
 ## [0.0.1-rc8] - 2023-07-12
 
 ### Added
@@ -13,21 +29,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - handle cross calibration (harmonization) using private collection.
 - `Auth` automatically to EarhtDataStore after 3600 seconds.
 - `Auth` now supports presign_urls parameter.
-- `load_pivot_corumba` in datasets
+- `load_pivot_corumba` in datasets.
 
 ### Fixed
 
-- Perfect dimension compatibility between cloudmask and sensor datacube using `geobox` .
+- Perfect dimension compatibility between cloudmask and sensor datacube using `geobox`.
 - Force loading native landsat cloudmask because not compatible with dask.
 
 ## [0.0.1-rc7] - 2023-11-22
 
 ### Fixed
 
-- issue with unlogged datacube and non-geodataframe intersects
-- for element84 sentinel-2-l2a collection, `boa_offset_applied`is set to True since 2022-02-28
-- added `nir` band in `boa_offset_applied` control
-- fix percentage in landsat agriculture cloudmask 
+- issue with unlogged datacube and non-geodataframe intersects.
+- for element84 sentinel-2-l2a collection, `boa_offset_applied`is set to True since 2022-02-28.
+- added `nir` band in `boa_offset_applied` control.
+- fix percentage in landsat agriculture cloudmask .
 
 ## [0.0.1-rc6] - 2023-11-10
 
@@ -39,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `intersects` argument in search/datacube now supports wkt/geojson/geopandas
+- `intersects` argument in search/datacube now supports wkt/geojson/geopandas.
 - `common_band_names` default set to True in datacube creation. It uses the new Assets Mapper in order to define to best suitable bands according to user needs.
 - `clear_cover` argument in the datacube method when using the `earthdatastore.Auth` method.
 - `datasets.load_pivot()` to load a GeoDataFrame of a pivot in Nebraska (alternates between corn or soy between years).
@@ -103,16 +119,16 @@ really faster faster. Previous behavior is available by selecting `method="stand
 
 ### Changed
 
-- Python version must be at least 3.10
-- Gdal version must be at least 3.7.0
-- A better documentation
+- Python version must be at least 3.10.
+- Gdal version must be at least 3.7.0.
+- A better documentation.
 
 
 ## [0.0.1-beta] 2023-09-20
 
 ### Added 
 
-- First public release under the name of earthdaily
-- module earthdatastore gathers all cube fonctions
-- earthdatastore.Auth() allows methods for search and datacube creation
-- Add if missing default scale/offset factor to collection (landsat-c2l2-sr, landsat-c2l2-st, landsat-c2l1)
+- First public release under the name of earthdaily.
+- module earthdatastore gathers all cube fonctions.
+- earthdatastore.Auth() allows methods for search and datacube creation.
+- Add if missing default scale/offset factor to collection (landsat-c2l2-sr, landsat-c2l2-st, landsat-c2l1).
