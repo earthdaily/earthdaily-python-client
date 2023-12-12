@@ -30,7 +30,6 @@ _native_mask_asset_mapping = {
 }
 
 
-
 def _bool_or_int_to_njobs(var):
     if isinstance(var, bool):
         if var:
