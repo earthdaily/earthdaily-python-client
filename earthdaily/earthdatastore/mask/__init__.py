@@ -30,6 +30,71 @@ _native_mask_asset_mapping = {
 }
 
 
+
+
+def mask_datacube(datacube,):
+    if clear_cover and mask_statistics is False:
+        mask_statistics = True
+        warnings.warn(
+            "Forcing mask_statistics in order to filter by clear coverage.",
+            category=Warning,
+        )
+    if mask_with == "native":
+        mask_with = mask._native_mask_def_mapping.get(collection, None)
+        if mask_with is None:
+            raise ValueError(
+                f"Sorry, there's no native mask available for {collection}. Only these collections have native cloudmask : {list(mask._native_mask_mapping.keys())}."
+            )
+    mask_kwargs = dict(mask_statistics=mask_statistics)
+    
+    if mask_with == "ag_cloud_mask":
+        acm_items = self.ag_cloud_mask_items(items)
+        acm_datacube = datacube(
+            acm_items,
+            intersects=intersects,
+            bbox=bbox,
+            groupby_date="max",
+            geobox=xr_datacube.odc.geobox
+            if hasattr(xr_datacube, "odc")
+            else None,
+        )
+        xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
+        acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
+        acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
+        mask_kwargs.update(acm_datacube=acm_datacube)
+    else:
+        mask_assets = mask._native_mask_asset_mapping[collection]
+        if "groupby_date" in kwargs:
+            kwargs["groupby_date"] = "max"
+        if "resolution" in kwargs:
+            kwargs.pop("resolution")
+        if "epsg" in kwargs:
+            kwargs.pop("epsg")
+
+        clouds_datacube = datacube(
+            items,
+            intersects=intersects,
+            bbox=bbox,
+            assets=[mask_assets],
+            resampling=0,
+            geobox=xr_datacube.odc.geobox
+            if hasattr(xr_datacube, "odc")
+            else None,
+            **kwargs,
+        )
+        clouds_datacube = cube_utils._match_xy_dims(
+            clouds_datacube, xr_datacube
+        )
+        xr_datacube = xr.merge(
+            (xr_datacube, clouds_datacube), compat="override"
+        )
+
+    Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
+    xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
+
+    if clear_cover:
+        xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
+    return xr_datacube
 def _bool_or_int_to_njobs(var):
     if isinstance(var, bool):
         if var:

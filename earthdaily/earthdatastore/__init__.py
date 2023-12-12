@@ -514,6 +514,8 @@ class Auth:
                     kwargs.pop("resolution")
                 if "epsg" in kwargs:
                     kwargs.pop("epsg")
+                if "geobox" in kwargs:
+                    kwargs.pop("geobox")
 
                 clouds_datacube = datacube(
                     items,
