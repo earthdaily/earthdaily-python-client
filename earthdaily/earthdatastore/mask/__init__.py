@@ -7,7 +7,7 @@ import warnings
 import numpy as np
 import tqdm
 from joblib import Parallel, delayed
-import psutil 
+import psutil
 
 dask.config.set(**{"array.slicing.split_large_chunks": True})
 
@@ -195,7 +195,7 @@ class Mask:
     def _landsat_qa_pixel_convert(self):
         # load all time series to fasten next step
         if psutil.virtual_memory().available > self._obj["qa_pixel"].nbytes:
-            self._obj['qa_pixel'] = self._obj['qa_pixel'].load()
+            self._obj["qa_pixel"] = self._obj["qa_pixel"].load()
         for time in self._obj.time:
             data = self._obj["qa_pixel"].loc[dict(time=time)].load().data
             data_f = data.flatten()
