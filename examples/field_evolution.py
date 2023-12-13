@@ -30,13 +30,15 @@ eds = earthdatastore.Auth()
 # where at least 50% of the field is clear according to the native cloudmask.
 
 pivot_cube = eds.datacube(
-    "sentinel-2-l2a",
+    ["sentinel-2-l2a","landsat-c2l2-sr"],
     intersects=pivot,
-    datetime=["2022-08-01", "2022-08-09"],
+    datetime=["2022-07-01", "2022-08-31"],
     assets=["red", "green", "blue"],
     mask_with="ag_cloud_mask",
     # mask_statistics=True, # as you ask `clear_cover`it will force computing mask_statistics
-    clear_cover=50)
+    clear_cover=50,
+    resampling="cubic",
+    cross_calibration_collection="sentinel-2-l2a")
 
 pivot_cube.clear_percent.plot.scatter(x="time")
 

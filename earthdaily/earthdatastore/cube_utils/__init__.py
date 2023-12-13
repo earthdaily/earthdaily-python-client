@@ -13,8 +13,31 @@ from ._zonal import zonal_stats, zonal_stats_numpy
 from .harmonizer import Harmonizer
 from .asset_mapper import AssetMapper
 import rioxarray
+from functools import wraps
 
 __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
+
+
+def _datacubes(method):
+    @wraps(method)
+    def _impl(self, *args, **kwargs):
+        collections = kwargs.get('collections',args[0])
+        if isinstance(collections, list) and len(collections)>1:
+            if "collections" in kwargs.keys():
+                kwargs.pop('collections')
+            else:
+                args = args[1:]
+            datacubes = []
+            for idx, collection in enumerate(collections):
+                datacube = method(self, collections=collection, *args, **kwargs)
+                if idx==0:
+                    kwargs['geobox'] = datacube.odc.geobox
+                datacubes.append(datacube)
+            datacube = metacube(*datacubes)  
+        else:
+            datacube = method(self, *args, **kwargs)
+        return datacube
+    return _impl
 
 
 def _match_xy_dims(src, dst, resampling=Resampling.nearest):
@@ -384,7 +407,6 @@ def metacube(*cubes, concat_dim="time", by="time.date", how="mean"):
                 cubes[idx][data_var] = cubes[idx][data_var].where(
                     cubes[idx][data_var] == np.nan, other=np.nan
                 )
-
-    cube = xr.concat([_drop_unfrozen_coords(cube) for cube in cubes], dim=concat_dim)
+    cube = xr.concat([cube for cube in cubes], dim=concat_dim)
     cube = _groupby(cube, by=by, how=how)
     return _propagade_rio(cubes[0], cube)
