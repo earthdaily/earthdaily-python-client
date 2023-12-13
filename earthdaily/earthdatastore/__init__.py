@@ -19,6 +19,7 @@ __all__ = ["datacube", "metacube", "xr"]
 
 logging.getLogger("earthdaily-earthdatastore")
 
+
 def post_query_items(items, query):
     items_ = []
     for idx, item in enumerate(items):
@@ -396,7 +397,7 @@ class Auth:
         query.update(ag_query)
         search_kwargs[target_param] = query
         return search_kwargs
-    
+
     @_datacubes
     def datacube(
         self,
@@ -450,7 +451,10 @@ class Auth:
         )
 
         xcal_items = None
-        if isinstance(cross_calibration_collection, str) and cross_calibration_collection != collections[0]:
+        if (
+            isinstance(cross_calibration_collection, str)
+            and cross_calibration_collection != collections[0]
+        ):
             try:
                 xcal_items = self.search(
                     collections="eda-cross-calibration",

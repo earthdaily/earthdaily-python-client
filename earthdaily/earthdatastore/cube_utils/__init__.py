@@ -21,22 +21,23 @@ __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
 def _datacubes(method):
     @wraps(method)
     def _impl(self, *args, **kwargs):
-        collections = kwargs.get('collections',args[0])
-        if isinstance(collections, list) and len(collections)>1:
+        collections = kwargs.get("collections", args[0])
+        if isinstance(collections, list) and len(collections) > 1:
             if "collections" in kwargs.keys():
-                kwargs.pop('collections')
+                kwargs.pop("collections")
             else:
                 args = args[1:]
             datacubes = []
             for idx, collection in enumerate(collections):
                 datacube = method(self, collections=collection, *args, **kwargs)
-                if idx==0:
-                    kwargs['geobox'] = datacube.odc.geobox
+                if idx == 0:
+                    kwargs["geobox"] = datacube.odc.geobox
                 datacubes.append(datacube)
-            datacube = metacube(*datacubes)  
+            datacube = metacube(*datacubes)
         else:
             datacube = method(self, *args, **kwargs)
         return datacube
+
     return _impl
 
 
