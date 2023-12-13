@@ -416,27 +416,103 @@ class Auth:
         cross_calibration_collection: (None | str) = None,
         **kwargs,
     ) -> xr.Dataset:
+        """
+        Create a datacube.
+
+        Parameters
+        ----------
+        collections : str | list
+            If several collections, the first collection will be the reference collection (for spatial resolution).
+        datetime: Either a single datetime or datetime range used to filter results.
+            You may express a single datetime using a :class:`datetime.datetime`
+            instance, a `RFC 3339-compliant <https://tools.ietf.org/html/rfc3339>`__
+            timestamp, or a simple date string (see below). Instances of
+            :class:`datetime.datetime` may be either
+            timezone aware or unaware. Timezone aware instances will be converted to
+            a UTC timestamp before being passed
+            to the endpoint. Timezone unaware instances are assumed to represent UTC
+            timestamps. You may represent a
+            datetime range using a ``"/"`` separated string as described in the
+            spec, or a list, tuple, or iterator
+            of 2 timestamps or datetime instances. For open-ended ranges, use either
+            ``".."`` (``'2020-01-01:00:00:00Z/..'``,
+            ``['2020-01-01:00:00:00Z', '..']``) or a value of ``None``
+            (``['2020-01-01:00:00:00Z', None]``).
+
+            If using a simple date string, the datetime can be specified in
+            ``YYYY-mm-dd`` format, optionally truncating
+            to ``YYYY-mm`` or just ``YYYY``. Simple date strings will be expanded to
+            include the entire time period, for example:
+
+            - ``2017`` expands to ``2017-01-01T00:00:00Z/2017-12-31T23:59:59Z``
+            - ``2017-06`` expands to ``2017-06-01T00:00:00Z/2017-06-30T23:59:59Z``
+            - ``2017-06-10`` expands to
+              ``2017-06-10T00:00:00Z/2017-06-10T23:59:59Z``
+
+            If used in a range, the end of the range expands to the end of that
+            day/month/year, for example:
+
+            - ``2017/2018`` expands to
+              ``2017-01-01T00:00:00Z/2018-12-31T23:59:59Z``
+            - ``2017-06/2017-07`` expands to
+              ``2017-06-01T00:00:00Z/2017-07-31T23:59:59Z``
+            - ``2017-06-10/2017-06-11`` expands to
+              ``2017-06-10T00:00:00Z/2017-06-11T23:59:59Z``
+        assets : None | list | dict, optional
+            DESCRIPTION. The default is None.
+        intersects : (gpd.GeoDataFrame, str(wkt), dict(json)), optional
+            DESCRIPTION. The default is None.
+        bbox : TYPE, optional
+            DESCRIPTION. The default is None.
+        mask_with : (None, str), optional
+            "native" mask, or "ag_cloud_mask".
+            The default is None.
+        mask_statistics : bool | int, optional
+            DESCRIPTION. The default is False.
+        clear_cover : (int, float), optional
+            Percent of clear data above a field (from 0 to 100).
+            The default is None.
+        prefer_alternate : (str, False), optional
+            Uses the alternate/download href instead of the default href.
+            The default is "download".
+        search_kwargs : dict, optional
+            DESCRIPTION. The default is {}.
+        add_default_scale_factor : bool, optional
+            DESCRIPTION. The default is True.
+        common_band_names : TYPE, optional
+            DESCRIPTION. The default is True.
+        cross_calibration_collection : (None | str), optional
+            DESCRIPTION. The default is None.
+        **kwargs : TYPE
+            DESCRIPTION.
+         : TYPE
+            DESCRIPTION.
+
+        Raises
+        ------
+        ValueError
+            DESCRIPTION.
+        Warning
+            DESCRIPTION.
+
+        Returns
+        -------
+        xr_datacube : TYPE
+            DESCRIPTION.
+
+        """
         if isinstance(collections, str):
             collections = [collections]
 
-        if mask_with and common_band_names:
-            if isinstance(collections, list):
-                if len(collections) > 1:
-                    raise ValueError(
-                        "Mask_with and assets_mapping only manage one collection at a time."
-                    )
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise ValueError(
                     f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}"
                 )
-            collection = (
-                collections[0] if isinstance(collections, list) else collections
-            )
 
             if mask_with == "ag_cloud_mask":
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
-                    search_kwargs, collections
+                    search_kwargs, collections[0]
                 )
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
@@ -488,10 +564,10 @@ class Auth:
                     category=Warning,
                 )
             if mask_with == "native":
-                mask_with = mask._native_mask_def_mapping.get(collection, None)
+                mask_with = mask._native_mask_def_mapping.get(collections[0], None)
                 if mask_with is None:
                     raise ValueError(
-                        f"Sorry, there's no native mask available for {collection}. Only these collections have native cloudmask : {list(mask._native_mask_mapping.keys())}."
+                        f"Sorry, there's no native mask available for {collections[0]}. Only these collections have native cloudmask : {list(mask._native_mask_mapping.keys())}."
                     )
             mask_kwargs = dict(mask_statistics=mask_statistics)
 
@@ -511,7 +587,7 @@ class Auth:
                 acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
                 mask_kwargs.update(acm_datacube=acm_datacube)
             else:
-                mask_assets = mask._native_mask_asset_mapping[collection]
+                mask_assets = mask._native_mask_asset_mapping[collections[0]]
                 if "groupby_date" in kwargs:
                     kwargs["groupby_date"] = "max"
                 if "resolution" in kwargs:

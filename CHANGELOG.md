@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Auth datacube function now manage multiple collections
+- Auth datacube `earthdaily.earthdatastore.Auth().datacube(...)` function now manage multiple collections.
 
 ## [0.0.1-rc9] - 2023-12-12
 

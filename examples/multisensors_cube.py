@@ -2,7 +2,7 @@
 Create a multisensor cube
 =================================================================
 
-With Sentinel-2 and Venus, using Sentinel-2 spatial resolutino for demo purpose"""
+With Sentinel-2 and Landsat, using Sentinel-2 spatial resolution."""
 
 
 ##############################################################################
@@ -11,7 +11,6 @@ With Sentinel-2 and Venus, using Sentinel-2 spatial resolutino for demo purpose"
 
 import geopandas as gpd
 from matplotlib import pyplot as plt
-from rasterio.enums import Resampling
 
 from earthdaily import earthdatastore, datasets
 
@@ -46,11 +45,11 @@ datacube = datacube.load()
 # -------------------------------------------
 
 datacube[['red','green','blue']].to_array(dim="band").plot.imshow(col='time',col_wrap=3,vmax=0.2)
-
+plt.show()
 
 ##############################################################################
 # See the NDVI evolution
 # -------------------------------------------
 
-datacube['ndvi'].plot.imshow(col='time',col_wrap=3,vmin=0, vmax=0.8, cmap="RdYlGn")
-datacube['ndvi'].groupby('time').mean(...).plot(x="time")
+datacube['ndvi'].plot.imshow(col='time',col_wrap=3,vmin=0, vmax=0.8, cmap="RdYlGn");plt.show()
+datacube['ndvi'].groupby('time').mean(...).plot(x="time");plt.plot()

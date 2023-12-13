@@ -30,7 +30,7 @@ eds = earthdatastore.Auth()
 # where at least 50% of the field is clear according to the native cloudmask.
 
 pivot_cube = eds.datacube(
-    ["sentinel-2-l2a","landsat-c2l2-sr"],
+    "sentinel-2-l2a",
     intersects=pivot,
     datetime=["2022-07-01", "2022-08-31"],
     assets=["red", "green", "blue"],
