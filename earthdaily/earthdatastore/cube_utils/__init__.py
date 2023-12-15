@@ -100,12 +100,12 @@ def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
 
     if "epsg" in kwargs:
         kwargs["epsg"] = int(kwargs["epsg"])
-    if kwargs.get('geobox') is not None:
-        kwargs['resolution'] = kwargs['geobox'].resolution.x
-        kwargs['epsg'] = kwargs['geobox'].crs.to_epsg()
+    if kwargs.get("geobox") is not None:
+        kwargs["resolution"] = kwargs["geobox"].resolution.x
+        kwargs["epsg"] = kwargs["geobox"].crs.to_epsg()
     if "geobox" in kwargs.keys():
         kwargs.pop("geobox")
-        
+
     ds = stack(
         items_collection,
         assets=assets,
