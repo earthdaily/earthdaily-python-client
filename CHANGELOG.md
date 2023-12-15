@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Auth datacube `earthdaily.earthdatastore.Auth().datacube(...)` function now manage multiple collections.
 - Uses `fields` to query only assets asked over Skyfox/EDS (enhance performance).
 
+### Changed
+
+- `asset_mapper` has now all assets from available collections.
+
 ## [0.0.1-rc9] - 2023-12-12
 
 ### Added

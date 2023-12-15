@@ -43,7 +43,6 @@ s2_datacube = eds.datacube(
 s2_datacube.clear_percent.plot.scatter(x="time")
 plt.title("Percentage of clear pixels on the study site")
 plt.show()
-print(s2_datacube)
 
 s2_datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
     vmin=0, vmax=0.2, col="time", col_wrap=4
@@ -57,7 +56,9 @@ s2_datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
 # Request items
 
 items = eds.search(
-    "sentinel-2-l2a", intersects=geometry, datetime=["2022-08-01", "2022-08-09"]
+    "sentinel-2-l2a",
+    intersects=geometry,
+    datetime=["2022-08-01", "2022-08-09"],
 )
 
 ###########################################################
