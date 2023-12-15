@@ -516,7 +516,7 @@ class Auth:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections[0]
                 )
-                
+
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
         items = self.search(
@@ -614,10 +614,10 @@ class Auth:
                 xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
 
         return xr_datacube
-    
+
     def _update_search_for_assets(self, assets):
         fields = {
-                "include": [
+            "include": [
                 "id",
                 "type",
                 "collection",
@@ -626,11 +626,12 @@ class Auth:
                 "collection",
                 "geometry",
                 "bbox",
-                "properties"
-            ]}
-        fields['include'].extend([f'assets.{asset}' for asset in assets])
+                "properties",
+            ]
+        }
+        fields["include"].extend([f"assets.{asset}" for asset in assets])
         return fields
-        
+
     def search(
         self,
         collections: str | list,
@@ -744,7 +745,7 @@ class Auth:
 
         """
         if assets is not None:
-            kwargs['fields'] = self._update_search_for_assets(assets)
+            kwargs["fields"] = self._update_search_for_assets(assets)
         if isinstance(collections, str):
             collections = [collections]
         if bbox is None and intersects is not None:
