@@ -100,7 +100,10 @@ def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
 
     if "epsg" in kwargs:
         kwargs["epsg"] = int(kwargs["epsg"])
-    if "geobox" in kwargs:
+    if kwargs.get("geobox") is not None:
+        kwargs["resolution"] = kwargs["geobox"].resolution.x
+        kwargs["epsg"] = kwargs["geobox"].crs.to_epsg()
+    if "geobox" in kwargs.keys():
         kwargs.pop("geobox")
 
     ds = stack(
@@ -408,6 +411,6 @@ def metacube(*cubes, concat_dim="time", by="time.date", how="mean"):
                 cubes[idx][data_var] = cubes[idx][data_var].where(
                     cubes[idx][data_var] == np.nan, other=np.nan
                 )
-    cube = xr.concat([cube for cube in cubes], dim=concat_dim)
+    cube = xr.concat([_drop_unfrozen_coords(cube) for cube in cubes], dim=concat_dim)
     cube = _groupby(cube, by=by, how=how)
     return _propagade_rio(cubes[0], cube)

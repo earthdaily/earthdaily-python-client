@@ -41,7 +41,7 @@ setup(
         "rich",
     ],
     include_package_data=True,
-    package_data={"":['*.geojson']},
+    package_data={"":['*.geojson','*.json']},
     license="MIT",
     zip_safe=False,
     keywords=["Earth Data Store", "earthdaily", "earthdailyagro", "stac"],

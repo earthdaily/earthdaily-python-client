@@ -11,11 +11,11 @@ import requests
 import xarray as xr
 from pystac.item_collection import ItemCollection
 from pystac_client import Client
-
+from odc import stac
 from . import _scales_collections, cube_utils, mask
 from .cube_utils import datacube, metacube, _datacubes
 
-__all__ = ["datacube", "metacube", "xr"]
+__all__ = ["datacube", "metacube", "xr", "stac"]
 
 logging.getLogger("earthdaily-earthdatastore")
 
