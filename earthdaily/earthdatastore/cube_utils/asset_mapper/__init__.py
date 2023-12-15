@@ -2,9 +2,7 @@ import os
 import json
 
 __pathFile = os.path.dirname(os.path.realpath(__file__))
-__asset_mapper_config_path = os.path.join(
-    __pathFile, "asset_mapper_config.json"
-)
+__asset_mapper_config_path = os.path.join(__pathFile, "asset_mapper_config.json")
 _asset_mapper_config = json.load(open(__asset_mapper_config_path))
 
 
