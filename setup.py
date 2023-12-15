@@ -26,6 +26,7 @@ setup(
         "pandas",
         "geopandas",
         "rasterio",
+        "dask",
         "pystac-client",
         "pystac",
         "requests",

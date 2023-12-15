@@ -2,7 +2,7 @@
 Create a multisensor cube
 =================================================================
 
-With Sentinel-2 and Venus, using Sentinel-2 spatial resolutino for demo purpose"""
+With Sentinel-2 and Landsat, using Sentinel-2 spatial resolution."""
 
 
 ##############################################################################
@@ -11,94 +11,61 @@ With Sentinel-2 and Venus, using Sentinel-2 spatial resolutino for demo purpose"
 
 import geopandas as gpd
 from matplotlib import pyplot as plt
-from rasterio.enums import Resampling
 
 from earthdaily import earthdatastore, datasets
 
 ##############################################################################
-# Import librairies
+# Set parameters
 # -------------------------------------------
 
 eds = earthdatastore.Auth()
-polygon = datasets.load_pivot()
-
-datetime = ["2022-08"]
-
-
-##############################################################################
-# Generate Sentinel-2 cube
-# -------------------------------------------
-
+collections = ["sentinel-2-l2a", "landsat-c2l2-sr"]
+datetime = ["2022-07-01", "2022-09-01"]
+intersects = datasets.load_pivot_corumba()
 assets = ["blue", "green", "red", "nir"]
+mask_with = "ag_cloud_mask"
+clear_cover = 50
+resampling = "cubic"
+cross_calibration_collection = "sentinel-2-l2a"
 
-s2 = eds.datacube(
-    "sentinel-2-l2a",
-    intersects=polygon,
-    datetime=datetime,
+##############################################################################
+# Create the multisensors datacube
+# -------------------------------------------
+
+datacube = eds.datacube(
+    collections,
     assets=assets,
-)
-
-##############################################################################
-# Generate Landsat cube
-# -------------------------------------------
-
-landsat = eds.datacube(
-    "landsat-c2l2-sr",
-    intersects=polygon,
-    resolution=s2.rio.resolution()[0],
     datetime=datetime,
-    epsg=s2.rio.crs.to_epsg(),
-    resampling=Resampling.nearest,  # cubic
-    assets=assets,
-    cross_calibration_collection="sentinel-2-l2a" # cross calibrate using EarthDaily Agro coefficient
+    intersects=intersects,
+    mask_with=mask_with,
+    clear_cover=clear_cover,
+    cross_calibration_collection=cross_calibration_collection,
 )
 
-
-##############################################################################
-# Create supercube
-# -------------------------------------------
-
-print("create metacube")
-supercube = earthdatastore.metacube(s2, landsat)
-
-##############################################################################
-# Get the first common date between S2 and Venus for plotting
-# ---------------------------------------------------------------
-
-common_date = [
-    day
-    for day in s2.time.dt.strftime("%Y%m%d").values
-    if day in landsat.time.dt.strftime("%Y%m%d").values
-][0]
-
-##############################################################################
-# Plot sentinel-2
-# -------------------------------------------
-
-s2.sel(time=common_date)[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
-    vmin=0, vmax=0.2
+# Add the NDVI
+datacube["ndvi"] = (datacube["nir"] - datacube["red"]) / (
+    datacube["nir"] + datacube["red"]
 )
-plt.title(f"Sentinel-2 on {common_date}")
+
+# Load in memory
+datacube = datacube.load()
+
+##############################################################################
+# See the evolution in RGB
+# -------------------------------------------
+
+datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
+    col="time", col_wrap=3, vmax=0.2
+)
 plt.show()
 
 ##############################################################################
-# Plot venus
-# -------------------------------------------
-landsat.sel(time=common_date, method="nearest")[["red", "green", "blue"]].to_array(
-    dim="band"
-).plot.imshow(vmin=0, vmax=0.2)
-plt.title(f"Landsat on {common_date}")
-
-plt.show()
-#
-
-##############################################################################
-# Plot the fusion
+# See the NDVI evolution
 # -------------------------------------------
 
-supercube.sel(time=common_date)[["red", "green", "blue"]].to_array(
-    dim="band"
-).plot.imshow(vmin=0, vmax=0.2)
-plt.title(f"Fusion of Venus/Sentinel-2 on {common_date}")
-
+datacube["ndvi"].plot.imshow(
+    col="time", col_wrap=3, vmin=0, vmax=0.8, cmap="RdYlGn"
+)
+datacube["ndvi"].groupby("time").mean(...).plot.line(x="time")
+plt.title("NDVI evolution")
 plt.show()

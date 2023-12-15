@@ -32,11 +32,11 @@ eds = earthdatastore.Auth()
 pivot_cube = eds.datacube(
     "sentinel-2-l2a",
     intersects=pivot,
-    datetime=["2022-08-01", "2022-08-09"],
+    datetime=["2022-07-01", "2022-08-31"],
     assets=["red", "green", "blue"],
     mask_with="ag_cloud_mask",
-    # mask_statistics=True, # as you ask `clear_cover`it will force computing mask_statistics
-    clear_cover=50)
+    clear_cover=50,
+)
 
 pivot_cube.clear_percent.plot.scatter(x="time")
 
@@ -44,7 +44,9 @@ pivot_cube.clear_percent.plot.scatter(x="time")
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
 pivot_cube = pivot_cube.load()
-pivot_cube.to_array(dim="band").plot.imshow(vmin=0, vmax=0.4, col="time", col_wrap=3)
+pivot_cube.to_array(dim="band").plot.imshow(
+    vmin=0, vmax=0.4, col="time", col_wrap=3
+)
 
 plt.title("Clear cover percent with SCL")
 plt.title("Pivot evolution with SCL masks")

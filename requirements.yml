@@ -6,7 +6,7 @@ dependencies:
  - numpy
  - python>=3.10
  - gdal>=3.7.0
- - pandas
+ - pandas>=2
  - geopandas>=0.11
  - rasterio
  - pystac-client
@@ -15,10 +15,8 @@ dependencies:
  - xarray
  - rioxarray
  - h5netcdf 
- - netcdf4
  - pystac
- - stackstac
- - odc-stac
+ - odc-stac>=0.3.7
  - tqdm
  - joblib
  - python-dotenv

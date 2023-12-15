@@ -1,0 +1,694 @@
+{
+    "sentinel-2-l2a": [
+        {
+            "coastal44": "coastal",
+            "coastal": "coastal",
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "nir08": "nir08",
+            "nir09": "nir09",
+            "swir16": "swir16",
+            "swir22": "swir22",
+            "rededge": "rededge2",
+            "rededge70": "rededge1",
+            "rededge74": "rededge2",
+            "rededge78": "rededge3",
+            "watervapor": "wvp",
+            "native-cloud-mask": "scl",
+            "aot": "aot",
+            "visual": "visual",
+            "aot-jp2": "aot-jp2",
+            "nir-jp2": "nir-jp2",
+            "red-jp2": "red-jp2",
+            "scl-jp2": "scl-jp2",
+            "wvp-jp2": "wvp-jp2",
+            "blue-jp2": "blue-jp2",
+            "green-jp2": "green-jp2",
+            "nir08-jp2": "nir08-jp2",
+            "nir09-jp2": "nir09-jp2",
+            "thumbnail": "thumbnail",
+            "swir16-jp2": "swir16-jp2",
+            "swir22-jp2": "swir22-jp2",
+            "visual-jp2": "visual-jp2",
+            "coastal-jp2": "coastal-jp2",
+            "rededge1-jp2": "rededge1-jp2",
+            "rededge2-jp2": "rededge2-jp2",
+            "rededge3-jp2": "rededge3-jp2",
+            "granule_metadata": "granule_metadata",
+            "tileinfo_metadata": "tileinfo_metadata"
+        }
+    ],
+    "landsat-c2l2-sr": [
+        {
+            "coastal44": "coastal",
+            "coastal": "coastal",
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir08",
+            "nir08": "nir08",
+            "swir16": "swir16",
+            "swir22": "swir22",
+            "native-cloud-mask": "qa_pixel",
+            "SAA": "SAA",
+            "SZA": "SZA",
+            "VAA": "VAA",
+            "VZA": "VZA",
+            "index": "index",
+            "ANG.txt": "ANG.txt",
+            "MTL.txt": "MTL.txt",
+            "MTL.xml": "MTL.xml",
+            "MTL.json": "MTL.json",
+            "qa_radsat": "qa_radsat",
+            "thumbnail": "thumbnail",
+            "qa_aerosol": "qa_aerosol",
+            "reduced_resolution_browse": "reduced_resolution_browse"
+        }
+    ],
+    "landsat-c2l2-st": [
+        {
+            "lwir": "lwir11",
+            "lwir11": "lwir11",
+            "native-cloud-mask": "qa_pixel",
+            "qa": "qa",
+            "SAA": "SAA",
+            "SZA": "SZA",
+            "VAA": "VAA",
+            "VZA": "VZA",
+            "DRAD": "DRAD",
+            "EMIS": "EMIS",
+            "EMSD": "EMSD",
+            "TRAD": "TRAD",
+            "URAD": "URAD",
+            "ATRAN": "ATRAN",
+            "CDIST": "CDIST",
+            "index": "index",
+            "ANG.txt": "ANG.txt",
+            "MTL.txt": "MTL.txt",
+            "MTL.xml": "MTL.xml",
+            "MTL.json": "MTL.json",
+            "qa_radsat": "qa_radsat",
+            "thumbnail": "thumbnail",
+            "reduced_resolution_browse": "reduced_resolution_browse"
+        }
+    ],
+    "venus-l2a": [
+        {
+            "coastal42": "image_file_SRE_B1",
+            "coastal44": "image_file_SRE_B2",
+            "coastal": "image_file_SRE_B2",
+            "blue": "image_file_SRE_B3",
+            "green": "image_file_SRE_B4",
+            "yellow": "image_file_SRE_B5",
+            "red": "image_file_SRE_B7",
+            "nir": "image_file_SRE_B11",
+            "nir08": "image_file_SRE_B11",
+            "nir09": "image_file_SRE_B12",
+            "rededge": "image_file_SRE_B09",
+            "rededge70": "image_file_SRE_B08",
+            "rededge74": "image_file_SRE_B09",
+            "rededge78": "image_file_SRE_B10",
+            "native-cloud-mask": "detailed_cloud_mask",
+            "mask": "mask",
+            "license": "license",
+            "stac_json": "stac_json",
+            "thumbnail": "thumbnail",
+            "edge_image": "edge_image",
+            "pixel_mask": "pixel_mask",
+            "solar_data": "solar_data",
+            "quality_mask": "quality_mask",
+            "useful_image": "useful_image",
+            "viewing_data": "viewing_data",
+            "saturation_mask": "saturation_mask",
+            "image_file_FRE_B1": "image_file_FRE_B1",
+            "image_file_FRE_B2": "image_file_FRE_B2",
+            "image_file_FRE_B3": "image_file_FRE_B3",
+            "image_file_FRE_B4": "image_file_FRE_B4",
+            "image_file_FRE_B5": "image_file_FRE_B5",
+            "image_file_FRE_B6": "image_file_FRE_B6",
+            "image_file_FRE_B7": "image_file_FRE_B7",
+            "image_file_FRE_B8": "image_file_FRE_B8",
+            "image_file_FRE_B9": "image_file_FRE_B9",
+            "image_file_SRE_B6": "image_file_SRE_B6",
+            "image_file_SRE_B8": "image_file_SRE_B8",
+            "image_file_SRE_B9": "image_file_SRE_B9",
+            "useful_image_data": "useful_image_data",
+            "image_file_FRE_B10": "image_file_FRE_B10",
+            "image_file_FRE_B11": "image_file_FRE_B11",
+            "image_file_FRE_B12": "image_file_FRE_B12",
+            "job_processing_data": "job_processing_data",
+            "interpolated_pixel_mask": "interpolated_pixel_mask",
+            "atmospheric_biophysical_parameters": "atmospheric_biophysical_parameters"
+        }
+    ],
+    "earthdaily-simulated-cloudless-l2a-cog-edagro": [
+        {
+            "coastal44": "image_file_C",
+            "coastal": "image_file_C",
+            "blue": "image_file_B",
+            "green": "image_file_G",
+            "yellow": "image_file_Y",
+            "red": "image_file_R",
+            "nir": "image_file_NIR",
+            "nir08": "image_file_NIR",
+            "swir12": "image_file_SWIR1",
+            "swir16": "image_file_SWIR2",
+            "cirrus": "image_file_CI",
+            "rededge": "image_file_RE2",
+            "rededge70": "image_file_RE1",
+            "rededge74": "image_file_RE2",
+            "rededge78": "image_file_RE3",
+            "watervapor1": "image_file_RWVP1",
+            "watervapor2": "image_file_RWVP2",
+            "lwir": "image_file_ST",
+            "lwir11": "image_file_ST",
+            "tir1": "image_file_TIR",
+            "tir2": "image_file_TIR2",
+            "tir3": "image_file_TIR3",
+            "aqua": "image_file_A",
+            "wildfire": "image_file_W",
+            "me1": "image_file_ME1",
+            "me2": "image_file_ME2",
+            "solar_data": "solar_data",
+            "viewing_data": "viewing_data",
+            "atmospheric_biophysical_parameters": "atmospheric_biophysical_parameters"
+        }
+    ],
+    "alsat-1b-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "cbers-4-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "deimos-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir"
+        }
+    ],
+    "gaofen-1-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "gaofen-6-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "kazstsat-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "huanjing-2-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "dmc-l2a-cog-edagro": [
+        {
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "resourcesat-2-l2a-cog-edagro": [
+        {
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "alsat-1b-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "cbers-4-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "cbers4-mux": [
+        {
+            "B5": "B5",
+            "B6": "B6",
+            "B7": "B7",
+            "B8": "B8",
+            "metadata": "metadata",
+            "thumbnail": "thumbnail"
+        }
+    ],
+    "cropland-data-layer-us": [
+        {
+            "data": "data",
+            "metadata": "metadata",
+            "full_data": "full_data"
+        }
+    ],
+    "deimos-1-l2a-cog-edagro": [
+        {
+            "raster": "raster"
+        }
+    ],
+    "deimos-1-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "deimos1-catalog": [
+        {
+            "browse": "browse",
+            "readme": "readme",
+            "license": "license",
+            "metadata": "metadata",
+            "thumbnail": "thumbnail",
+            "cloud_mask": "cloud_mask",
+            "geolocation": "geolocation"
+        }
+    ],
+    "dmc-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "ecmwf-mars": [
+        {
+            "weather": "weather"
+        }
+    ],
+    "ecmwf-open-data": [
+        {
+            "r": "r",
+            "t": "t",
+            "u": "u",
+            "v": "v",
+            "sp": "sp",
+            "tp": "tp",
+            "tcwv": "tcwv"
+        }
+    ],
+    "eda-albedo-map": [
+        {
+            "albedo-map": "albedo-map"
+        }
+    ],
+    "eda-analysis-ready-mosaic": [
+        {
+            "mosaic": "mosaic",
+            "thumbnail": "thumbnail",
+            "cloud_mask": "cloud_mask",
+            "data_source_map": "data_source_map",
+            "data_source_metadata": "data_source_metadata"
+        }
+    ],
+    "eda-dem": [
+        {
+            "dem": "dem"
+        }
+    ],
+    "eda-geoid": [
+        {
+            "geoid": "geoid"
+        }
+    ],
+    "eda-landcover": [
+        {
+            "landcover": "landcover"
+        }
+    ],
+    "eda-reference-image": [
+        {
+            "reference-image": "reference-image"
+        }
+    ],
+    "eda-water-mask": [
+        {
+            "water-mask": "water-mask"
+        }
+    ],
+    "edagro-analytics-crops-layer": [
+        {
+            "data": "data"
+        }
+    ],
+    "edagro-analytics-field-borders-layer": [
+        {
+            "data": "data"
+        }
+    ],
+    "gaofen-1-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "gaofen-6-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "goes": [
+        {
+            "OR_ABI-L2-AODF-M6_G16_s20233490810206_e20233490819514_c20233490820523.nc": "OR_ABI-L2-AODF-M6_G16_s20233490810206_e20233490819514_c20233490820523.nc"
+        }
+    ],
+    "himawari-l1b": [
+        {
+            "HS_H09_20231215_0550_B01_FLDK_R10_S0110.DAT.bz2": "HS_H09_20231215_0550_B01_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B02_FLDK_R10_S0110.DAT.bz2": "HS_H09_20231215_0550_B02_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B03_FLDK_R05_S0110.DAT.bz2": "HS_H09_20231215_0550_B03_FLDK_R05_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B04_FLDK_R10_S0110.DAT.bz2": "HS_H09_20231215_0550_B04_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B05_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B05_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B06_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B06_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B07_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B07_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B08_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B08_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B09_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B09_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B10_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B10_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B11_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B11_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B12_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B12_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B13_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B13_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B14_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B14_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B15_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B15_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B16_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B16_FLDK_R20_S0110.DAT.bz2"
+        }
+    ],
+    "himawari-l2-cloud": [
+        {
+            "AHI-CHGT_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc": "AHI-CHGT_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc",
+            "AHI-CMSK_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc": "AHI-CMSK_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc",
+            "AHI-CPHS_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc": "AHI-CPHS_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc"
+        }
+    ],
+    "huanjing-2-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "kazstsat-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "landsat-c2l1": [
+        {
+            "SAA": "SAA",
+            "SZA": "SZA",
+            "VAA": "VAA",
+            "VZA": "VZA",
+            "pan": "pan",
+            "red": "red",
+            "blue": "blue",
+            "green": "green",
+            "index": "index",
+            "nir08": "nir08",
+            "cirrus": "cirrus",
+            "lwir11": "lwir11",
+            "lwir12": "lwir12",
+            "swir16": "swir16",
+            "swir22": "swir22",
+            "ANG.txt": "ANG.txt",
+            "MTL.txt": "MTL.txt",
+            "MTL.xml": "MTL.xml",
+            "coastal": "coastal",
+            "MTL.json": "MTL.json",
+            "qa_pixel": "qa_pixel",
+            "qa_radsat": "qa_radsat",
+            "thumbnail": "thumbnail",
+            "reduced_resolution_browse": "reduced_resolution_browse"
+        }
+    ],
+    "landsat-l2-cog-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "modis-43A4-061": [
+        {
+            "hdf": "hdf",
+            "metadata": "metadata",
+            "tilejson": "tilejson",
+            "rendered_preview": "rendered_preview",
+            "Nadir_Reflectance_Band1": "Nadir_Reflectance_Band1",
+            "Nadir_Reflectance_Band2": "Nadir_Reflectance_Band2",
+            "Nadir_Reflectance_Band3": "Nadir_Reflectance_Band3",
+            "Nadir_Reflectance_Band4": "Nadir_Reflectance_Band4",
+            "Nadir_Reflectance_Band5": "Nadir_Reflectance_Band5",
+            "Nadir_Reflectance_Band6": "Nadir_Reflectance_Band6",
+            "Nadir_Reflectance_Band7": "Nadir_Reflectance_Band7",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band1": "BRDF_Albedo_Band_Mandatory_Quality_Band1",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band2": "BRDF_Albedo_Band_Mandatory_Quality_Band2",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band3": "BRDF_Albedo_Band_Mandatory_Quality_Band3",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band4": "BRDF_Albedo_Band_Mandatory_Quality_Band4",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band5": "BRDF_Albedo_Band_Mandatory_Quality_Band5",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band6": "BRDF_Albedo_Band_Mandatory_Quality_Band6",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band7": "BRDF_Albedo_Band_Mandatory_Quality_Band7"
+        }
+    ],
+    "modis-aqua-calibrated-radiance": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-calibrated-radiance": [
+        {
+            "s3": "s3",
+            "data": "data",
+            "service": "service",
+            "documentation": "documentation"
+        }
+    ],
+    "modis-mod04-l2-061": [
+        {
+            "data": "data",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod07-l2-061": [
+        {
+            "data": "data",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod35-l2-061": [
+        {
+            "data": "data",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd35-l2-061": [
+        {
+            "data": "data",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "mrc-catalog": [
+        {
+            "browse": "browse",
+            "readme": "readme",
+            "license": "license",
+            "metadata": "metadata",
+            "thumbnail": "thumbnail",
+            "cloud_mask": "cloud_mask",
+            "geolocation": "geolocation"
+        }
+    ],
+    "msg-seviri": [
+        {
+            "Metadata": "Metadata",
+            "Product download": "Product download",
+            "Metadata in JSON format": "Metadata in JSON format"
+        }
+    ],
+    "msg-seviri-cloud-mask": [
+        {
+            "Metadata": "Metadata",
+            "Product download": "Product download",
+            "Metadata in JSON format": "Metadata in JSON format"
+        }
+    ],
+    "resourcesat-2-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "sentinel-1-grd": [
+        {
+            "data": "data",
+            "thumbnail": "thumbnail",
+            "manifest.safe": "manifest.safe",
+            "productInfo.json": "productInfo.json",
+            "annotation/iw-vh.xml": "annotation/iw-vh.xml",
+            "annotation/iw-vv.xml": "annotation/iw-vv.xml",
+            "preview/thumbnail.png": "preview/thumbnail.png",
+            "measurement/iw-vh.tiff": "measurement/iw-vh.tiff",
+            "measurement/iw-vv.tiff": "measurement/iw-vv.tiff",
+            "preview/icons/logo.png": "preview/icons/logo.png",
+            "preview/quick-look.png": "preview/quick-look.png",
+            "preview/map-overlay.kml": "preview/map-overlay.kml",
+            "report-20231206T225118.pdf": "report-20231206T225118.pdf",
+            "support/s1-level-1-rfi.xsd": "support/s1-level-1-rfi.xsd",
+            "support/s1-map-overlay.xsd": "support/s1-map-overlay.xsd",
+            "support/s1-object-types.xsd": "support/s1-object-types.xsd",
+            "annotation/rfi/rfi-iw-vh.xml": "annotation/rfi/rfi-iw-vh.xml",
+            "annotation/rfi/rfi-iw-vv.xml": "annotation/rfi/rfi-iw-vv.xml",
+            "preview/product-preview.html": "preview/product-preview.html",
+            "support/s1-level-1-noise.xsd": "support/s1-level-1-noise.xsd",
+            "support/s1-level-1-product.xsd": "support/s1-level-1-product.xsd",
+            "support/s1-product-preview.xsd": "support/s1-product-preview.xsd",
+            "support/s1-level-1-quicklook.xsd": "support/s1-level-1-quicklook.xsd",
+            "support/s1-level-1-calibration.xsd": "support/s1-level-1-calibration.xsd",
+            "support/s1-level-1-measurement.xsd": "support/s1-level-1-measurement.xsd",
+            "annotation/calibration/noise-iw-vh.xml": "annotation/calibration/noise-iw-vh.xml",
+            "annotation/calibration/noise-iw-vv.xml": "annotation/calibration/noise-iw-vv.xml",
+            "annotation/calibration/calibration-iw-vh.xml": "annotation/calibration/calibration-iw-vh.xml",
+            "annotation/calibration/calibration-iw-vv.xml": "annotation/calibration/calibration-iw-vv.xml"
+        }
+    ],
+    "sentinel-1-rtc": [
+        {
+            "vh": "vh",
+            "vv": "vv",
+            "tilejson": "tilejson",
+            "rendered_preview": "rendered_preview"
+        }
+    ],
+    "sentinel-2-l1c": [
+        {
+            "data": "data",
+            "B01.jp2": "B01.jp2",
+            "B02.jp2": "B02.jp2",
+            "B03.jp2": "B03.jp2",
+            "B04.jp2": "B04.jp2",
+            "B05.jp2": "B05.jp2",
+            "B06.jp2": "B06.jp2",
+            "B07.jp2": "B07.jp2",
+            "B08.jp2": "B08.jp2",
+            "B09.jp2": "B09.jp2",
+            "B10.jp2": "B10.jp2",
+            "B11.jp2": "B11.jp2",
+            "B12.jp2": "B12.jp2",
+            "B8A.jp2": "B8A.jp2",
+            "TCI.jp2": "TCI.jp2",
+            "metadata": "metadata",
+            "thumbnail": "thumbnail",
+            "preview.jp2": "preview.jp2",
+            "preview.jpg": "preview.jpg",
+            "metadata.xml": "metadata.xml",
+            "tileInfo.json": "tileInfo.json",
+            "preview/B01.jp2": "preview/B01.jp2",
+            "preview/B02.jp2": "preview/B02.jp2",
+            "preview/B03.jp2": "preview/B03.jp2",
+            "preview/B04.jp2": "preview/B04.jp2",
+            "preview/B05.jp2": "preview/B05.jp2",
+            "preview/B06.jp2": "preview/B06.jp2",
+            "preview/B07.jp2": "preview/B07.jp2",
+            "preview/B08.jp2": "preview/B08.jp2",
+            "preview/B09.jp2": "preview/B09.jp2",
+            "preview/B10.jp2": "preview/B10.jp2",
+            "preview/B11.jp2": "preview/B11.jp2",
+            "preview/B12.jp2": "preview/B12.jp2",
+            "preview/B8A.jp2": "preview/B8A.jp2",
+            "auxiliary/CAMSFO": "auxiliary/CAMSFO",
+            "auxiliary/ECMWFT": "auxiliary/ECMWFT",
+            "productInfo.json": "productInfo.json",
+            "qi/CLASSI_B00.jp2": "qi/CLASSI_B00.jp2",
+            "qi/DETFOO_B01.jp2": "qi/DETFOO_B01.jp2",
+            "qi/DETFOO_B02.jp2": "qi/DETFOO_B02.jp2",
+            "qi/DETFOO_B03.jp2": "qi/DETFOO_B03.jp2",
+            "qi/DETFOO_B04.jp2": "qi/DETFOO_B04.jp2",
+            "qi/DETFOO_B05.jp2": "qi/DETFOO_B05.jp2",
+            "qi/DETFOO_B06.jp2": "qi/DETFOO_B06.jp2",
+            "qi/DETFOO_B07.jp2": "qi/DETFOO_B07.jp2",
+            "qi/DETFOO_B08.jp2": "qi/DETFOO_B08.jp2",
+            "qi/DETFOO_B09.jp2": "qi/DETFOO_B09.jp2",
+            "qi/DETFOO_B10.jp2": "qi/DETFOO_B10.jp2",
+            "qi/DETFOO_B11.jp2": "qi/DETFOO_B11.jp2",
+            "qi/DETFOO_B12.jp2": "qi/DETFOO_B12.jp2",
+            "qi/DETFOO_B8A.jp2": "qi/DETFOO_B8A.jp2",
+            "qi/QUALIT_B01.jp2": "qi/QUALIT_B01.jp2",
+            "qi/QUALIT_B02.jp2": "qi/QUALIT_B02.jp2",
+            "qi/QUALIT_B03.jp2": "qi/QUALIT_B03.jp2",
+            "qi/QUALIT_B04.jp2": "qi/QUALIT_B04.jp2",
+            "qi/QUALIT_B05.jp2": "qi/QUALIT_B05.jp2",
+            "qi/QUALIT_B06.jp2": "qi/QUALIT_B06.jp2",
+            "qi/QUALIT_B07.jp2": "qi/QUALIT_B07.jp2",
+            "qi/QUALIT_B08.jp2": "qi/QUALIT_B08.jp2",
+            "qi/QUALIT_B09.jp2": "qi/QUALIT_B09.jp2",
+            "qi/QUALIT_B10.jp2": "qi/QUALIT_B10.jp2",
+            "qi/QUALIT_B11.jp2": "qi/QUALIT_B11.jp2",
+            "qi/QUALIT_B12.jp2": "qi/QUALIT_B12.jp2",
+            "qi/QUALIT_B8A.jp2": "qi/QUALIT_B8A.jp2",
+            "product/inspire.xml": "product/inspire.xml",
+            "product/metadata.xml": "product/metadata.xml",
+            "product/manifest.safe": "product/manifest.safe",
+            "qi/SENSOR_QUALITY.xml": "qi/SENSOR_QUALITY.xml",
+            "qi/GENERAL_QUALITY.xml": "qi/GENERAL_QUALITY.xml",
+            "product/productInfo.json": "product/productInfo.json",
+            "qi/GEOMETRIC_QUALITY.xml": "qi/GEOMETRIC_QUALITY.xml",
+            "qi/FORMAT_CORRECTNESS.xml": "qi/FORMAT_CORRECTNESS.xml",
+            "product/datastrip/0/metadata.xml": "product/datastrip/0/metadata.xml",
+            "product/datastrip/0/qi/SENSOR_QUALITY_report.xml": "product/datastrip/0/qi/SENSOR_QUALITY_report.xml",
+            "product/datastrip/0/qi/GENERAL_QUALITY_report.xml": "product/datastrip/0/qi/GENERAL_QUALITY_report.xml",
+            "product/datastrip/0/qi/GEOMETRIC_QUALITY_report.xml": "product/datastrip/0/qi/GEOMETRIC_QUALITY_report.xml",
+            "product/datastrip/0/qi/FORMAT_CORRECTNESS_report.xml": "product/datastrip/0/qi/FORMAT_CORRECTNESS_report.xml",
+            "product/datastrip/0/qi/RADIOMETRIC_QUALITY_report.xml": "product/datastrip/0/qi/RADIOMETRIC_QUALITY_report.xml"
+        }
+    ],
+    "sentinel-2-l2a-cog-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "sentinel-2-l2a-cog-ag-cloud-mask-geosys-private": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "sentinel-2-methane-product": [
+        {
+            "colourized_geotiff": "colourized_geotiff"
+        }
+    ]
+}
