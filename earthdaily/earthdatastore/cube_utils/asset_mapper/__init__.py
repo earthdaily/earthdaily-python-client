@@ -1,15 +1,20 @@
-from . import _asset_mapper_config
+import os
+import json
+
+__pathFile = os.path.dirname(os.path.realpath(__file__))
+__asset_mapper_config_path = os.path.join(
+    __pathFile, "asset_mapper_config.json"
+)
+_asset_mapper_config = json.load(open(__asset_mapper_config_path))
 
 
 class AssetMapper:
     def __init__(self):
-        self.available_collections = list(
-            _asset_mapper_config.asset_mapper_collections.keys()
-        )
+        self.available_collections = list(_asset_mapper_config.keys())
 
     def collection_mapping(self, collection):
         if self._collection_exists(collection, raise_warning=True):
-            return _asset_mapper_config.asset_mapper_collections[collection]
+            return _asset_mapper_config[collection]
 
     def _collection_exists(self, collection, raise_warning=False):
         exists = True if collection in self.available_collections else False
