@@ -509,11 +509,14 @@ class Auth:
                 raise ValueError(
                     f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}"
                 )
-
+            elif assets is not None:
+                mask_with = mask._native_mask_def_mapping.get(collections[0], None)
+                assets.append(mask_with)
             if mask_with == "ag_cloud_mask":
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections[0]
                 )
+
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
         items = self.search(
@@ -559,18 +562,7 @@ class Auth:
         if mask_with:
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
-                warnings.warn(
-                    "Forcing mask_statistics in order to filter by clear coverage.",
-                    category=Warning,
-                )
-            if mask_with == "native":
-                mask_with = mask._native_mask_def_mapping.get(collections[0], None)
-                if mask_with is None:
-                    raise ValueError(
-                        f"Sorry, there's no native mask available for {collections[0]}. Only these collections have native cloudmask : {list(mask._native_mask_mapping.keys())}."
-                    )
             mask_kwargs = dict(mask_statistics=mask_statistics)
-
             if mask_with == "ag_cloud_mask":
                 acm_items = self.ag_cloud_mask_items(items)
                 acm_datacube = datacube(
@@ -623,6 +615,23 @@ class Auth:
 
         return xr_datacube
 
+    def _update_search_for_assets(self, assets):
+        fields = {
+            "include": [
+                "id",
+                "type",
+                "collection",
+                "stac_version",
+                "stac_extensions",
+                "collection",
+                "geometry",
+                "bbox",
+                "properties",
+            ]
+        }
+        fields["include"].extend([f"assets.{asset}" for asset in assets])
+        return fields
+
     def search(
         self,
         collections: str | list,
@@ -631,6 +640,7 @@ class Auth:
         post_query=None,
         prefer_alternate=None,
         add_default_scale_factor=False,
+        assets=None,
         **kwargs,
     ):
         """
@@ -734,6 +744,8 @@ class Auth:
         }
 
         """
+        if assets is not None:
+            kwargs["fields"] = self._update_search_for_assets(assets)
         if isinstance(collections, str):
             collections = [collections]
         if bbox is None and intersects is not None:
