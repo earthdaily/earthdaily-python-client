@@ -66,6 +66,12 @@ plt.show()
 datacube["ndvi"].plot.imshow(
     col="time", col_wrap=3, vmin=0, vmax=0.8, cmap="RdYlGn"
 )
+plt.show()
+
+##############################################################################
+# See the NDVI mean evolution
+# -------------------------------------------
+
 datacube["ndvi"].groupby("time").mean(...).plot.line(x="time")
 plt.title("NDVI evolution")
 plt.show()
