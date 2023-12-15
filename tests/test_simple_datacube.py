@@ -42,7 +42,7 @@ class TestEarthDataStore(unittest.TestCase):
             blue = (
                 datacube["image_file_SRE_B3"]
                 .isel(x=4000, y=4000, time=0)
-                .data.compute()
+                .data.load()
             )
             if rescale is False:
                 blue = blue * scale + offset
