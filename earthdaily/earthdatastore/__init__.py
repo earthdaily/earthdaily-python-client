@@ -175,6 +175,8 @@ def _get_client(config=None, presign_urls=True):
     ----------
     config : str | dict, optional
         A JSON string or a dictionary with the credentials for the Earth Data Store.
+    presign_urls : bool, optional
+        Use presigned URLs, by default True
 
     Returns
     -------
