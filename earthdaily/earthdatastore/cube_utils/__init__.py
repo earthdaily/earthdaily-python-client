@@ -21,7 +21,7 @@ __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
 def _datacubes(method):
     @wraps(method)
     def _impl(self, *args, **kwargs):
-        collections = kwargs.get("collections", args[0] if len(args)>0 else None)
+        collections = kwargs.get("collections", args[0] if len(args) > 0 else None)
         if isinstance(collections, list) and len(collections) > 1:
             if "collections" in kwargs.keys():
                 kwargs.pop("collections")
