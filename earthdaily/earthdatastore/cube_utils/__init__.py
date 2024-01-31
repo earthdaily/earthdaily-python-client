@@ -21,7 +21,7 @@ __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
 def _datacubes(method):
     @wraps(method)
     def _impl(self, *args, **kwargs):
-        collections = kwargs.get("collections", args[0])
+        collections = kwargs.get("collections", args[0] if len(args) > 0 else None)
         if isinstance(collections, list) and len(collections) > 1:
             if "collections" in kwargs.keys():
                 kwargs.pop("collections")
@@ -42,7 +42,7 @@ def _datacubes(method):
 
 
 def _match_xy_dims(src, dst, resampling=Resampling.nearest):
-    if src.dims != dst.dims:
+    if src.sizes != dst.sizes:
         src = src.rio.reproject_match(dst, resampling=resampling)
     return src
 
@@ -61,7 +61,7 @@ def _apply_nodata(ds, nodata_assets: dict):
 
 
 def _autofix_unfrozen_coords_dtype(ds):
-    attrs = {c: ds.coords[c].data.tolist() for c in ds.coords if c not in ds.dims}
+    attrs = {c: ds.coords[c].data.tolist() for c in ds.coords if c not in ds.sizes}
     # force str
     for attr in attrs:
         if not isinstance(attrs[attr], (str, int, float, np.ndarray, list, tuple)):
@@ -369,7 +369,7 @@ def _propagade_rio(src, ds):
 
 
 def _drop_unfrozen_coords(ds):
-    unfrozen_coords = [i for i in list(ds.coords) if i not in ds.dims]
+    unfrozen_coords = [i for i in list(ds.coords) if i not in ds.sizes]
     ds = ds.drop(unfrozen_coords)
     return ds
 
@@ -391,8 +391,8 @@ def _groupby(ds, by="time.date", how="mean"):
 
 
 def _have_same_xy(*cubes):
-    x_size = list(set(cube.dims["x"] for cube in cubes))
-    y_size = list(set(cube.dims["y"] for cube in cubes))
+    x_size = list(set(cube.sizes["x"] for cube in cubes))
+    y_size = list(set(cube.sizes["y"] for cube in cubes))
     if len(x_size) == 1 and len(y_size) == 1:
         return True
     return False
@@ -413,4 +413,5 @@ def metacube(*cubes, concat_dim="time", by="time.date", how="mean"):
                 )
     cube = xr.concat([_drop_unfrozen_coords(cube) for cube in cubes], dim=concat_dim)
     cube = _groupby(cube, by=by, how=how)
+    cube = cube.sortby(cube.time)
     return _propagade_rio(cubes[0], cube)
