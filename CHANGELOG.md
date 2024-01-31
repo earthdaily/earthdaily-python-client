@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.4]
  
+### Fixed
+
+- "collections" from datacube now supports in args.
+
+### Changed
+
+- Modify dims attributs to sizes for xarray.
+
 ## [0.0.3] - 2023-12-15
 
 ### Added
