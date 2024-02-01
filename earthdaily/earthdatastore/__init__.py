@@ -414,6 +414,8 @@ class Auth:
         add_default_scale_factor: bool = True,
         common_band_names=True,
         cross_calibration_collection: (None | str) = None,
+        properties: (bool | str | list)= False,
+        groupby_date: str ="mean",
         **kwargs,
     ) -> xr.Dataset:
         """
@@ -483,6 +485,8 @@ class Auth:
             DESCRIPTION. The default is True.
         cross_calibration_collection : (None | str), optional
             DESCRIPTION. The default is None.
+        properties : (bool | str | list), optional
+            Retrieve properties per item.
         **kwargs : TYPE
             DESCRIPTION.
          : TYPE
@@ -501,6 +505,8 @@ class Auth:
             DESCRIPTION.
 
         """
+        if properties and groupby_date is not None:
+            print(Warning('You must set `groupby_date=None` to ensure correct properties per item.'))
         if isinstance(collections, str):
             collections = [collections]
 
@@ -557,6 +563,8 @@ class Auth:
             assets=assets,
             common_band_names=common_band_names,
             cross_calibration_items=xcal_items,
+            properties=properties,
+            groupby_date=groupby_date,
             **kwargs,
         )
         if mask_with:
@@ -580,8 +588,6 @@ class Auth:
                 mask_kwargs.update(acm_datacube=acm_datacube)
             else:
                 mask_assets = mask._native_mask_asset_mapping[collections[0]]
-                if "groupby_date" in kwargs:
-                    kwargs["groupby_date"] = "max"
                 if "resolution" in kwargs:
                     kwargs.pop("resolution")
                 if "epsg" in kwargs:
@@ -591,6 +597,7 @@ class Auth:
 
                 clouds_datacube = datacube(
                     items,
+                    groupby_date="max",
                     intersects=intersects,
                     bbox=bbox,
                     assets=[mask_assets],
