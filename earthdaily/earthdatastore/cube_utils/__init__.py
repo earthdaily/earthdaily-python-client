@@ -70,7 +70,14 @@ def _autofix_unfrozen_coords_dtype(ds):
     return ds
 
 
-def _cube_odc(items_collection, assets=None, times=None, dtype="float32", properties=False, **kwargs):
+def _cube_odc(
+    items_collection,
+    assets=None,
+    times=None,
+    dtype="float32",
+    properties=False,
+    **kwargs,
+):
     from odc import stac
 
     if "epsg" in kwargs:
@@ -94,23 +101,24 @@ def _cube_odc(items_collection, assets=None, times=None, dtype="float32", proper
     if properties:
         metadata = defaultdict(list)
         for i in items_collection:
-            if isinstance(properties,str):
+            if isinstance(properties, str):
                 metadata[properties].append(i.properties[properties])
             else:
                 for k, v in i.properties.items():
-                    if isinstance(properties,list):
-                        if k not in properties:                    
+                    if isinstance(properties, list):
+                        if k not in properties:
                             continue
                     if isinstance(v, list):
                         v = str(v)
                     metadata[k].append(v)
         # to avoid mismatch if some properties are not available on all items
-        df = pd.DataFrame.from_dict(metadata,orient='index').T
+        df = pd.DataFrame.from_dict(metadata, orient="index").T
         # convert to xarray needs
-        metadata = {k: ("time",v.tolist()) for k,v in df.items()}
+        metadata = {k: ("time", v.tolist()) for k, v in df.items()}
         # assign metadata as coords
         ds = ds.assign_coords(**metadata)
     return ds
+
 
 def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
     from stackstac import stack
@@ -151,7 +159,7 @@ def datacube(
     groupby_date="mean",
     common_band_names=True,
     cross_calibration_items: list | None = None,
-    properties:(bool | str | list) = False,
+    properties: (bool | str | list) = False,
     **kwargs,
 ):
     logging.info(f"Building datacube with {len(items_collection)} items")
@@ -178,7 +186,7 @@ def datacube(
         kwargs["bounds_latlon"] = list(
             GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds
         )
-        
+
     ds = engines[engine](
         items_collection,
         assets=assets_keys if isinstance(assets, dict) else assets,
