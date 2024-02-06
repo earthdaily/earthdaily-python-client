@@ -6,15 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.5] - 
 
+### Fixed
+
+- `groupby_date=None` also when using `mask_with`.
+
 ### Added
 
-- "properties" parameters for datacube creation.
+- `properties` parameters for datacube creation.
 
 ## [0.0.4] - 2024-01-24
  
 ### Fixed
 
-- "collections" from datacube now supports in args.
+- `collections` from datacube now supports in args.
 
 ### Changed
 
