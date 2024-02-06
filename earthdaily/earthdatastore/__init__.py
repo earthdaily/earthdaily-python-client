@@ -572,6 +572,7 @@ class Auth:
             **kwargs,
         )
         if mask_with:
+            groupby_date_mask = "max" if isinstance(groupby_date,str) else None
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
             mask_kwargs = dict(mask_statistics=mask_statistics)
@@ -581,7 +582,7 @@ class Auth:
                     acm_items,
                     intersects=intersects,
                     bbox=bbox,
-                    groupby_date="max",
+                    groupby_date=groupby_date_mask,
                     geobox=xr_datacube.odc.geobox
                     if hasattr(xr_datacube, "odc")
                     else None,
@@ -601,7 +602,7 @@ class Auth:
 
                 clouds_datacube = datacube(
                     items,
-                    groupby_date="max",
+                    groupby_date=groupby_date_mask,
                     intersects=intersects,
                     bbox=bbox,
                     assets=[mask_assets],

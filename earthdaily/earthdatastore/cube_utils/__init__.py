@@ -101,6 +101,7 @@ def _cube_odc(
     if properties:
         metadata = defaultdict(list)
         for i in items_collection:
+            # if properties is only a key
             if isinstance(properties, str):
                 metadata[properties].append(i.properties[properties])
             else:
@@ -217,13 +218,11 @@ def datacube(
 
     # drop na dates
     ds = ds.isel(dict(time=np.where(~np.isnan(ds.time))[0]))
-    if ds.time.size != np.unique(ds.time).size:
-        # get grouped value if several tiles at same exactly date
-        if groupby_date:
+    if groupby_date:
+        if ds.time.size != np.unique(ds.time).size:
             ds = ds.groupby("time")
             ds = getattr(ds, groupby_date)()
-        else:
-            ds = ds.groupby("time").mean()
+            # get grouped value if several tiles at same exactly date
     if bbox is not None and intersects is None:
         intersects = _bbox_to_intersects(bbox)
     if intersects is not None:
