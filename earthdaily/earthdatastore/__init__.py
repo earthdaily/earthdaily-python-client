@@ -525,7 +525,7 @@ class Auth:
                 )
             else:
                 mask_with = mask._native_mask_def_mapping.get(collections[0], None)
-                if isinstance(assets,list):
+                if isinstance(assets, list):
                     assets.append(mask_with)
 
         if intersects is not None:
