@@ -519,13 +519,14 @@ class Auth:
                 raise ValueError(
                     f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}"
                 )
-            elif assets is not None:
-                mask_with = mask._native_mask_def_mapping.get(collections[0], None)
-                assets.append(mask_with)
             if mask_with == "ag_cloud_mask":
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections[0]
                 )
+            else:
+                mask_with = mask._native_mask_def_mapping.get(collections[0], None)
+                if isinstance(assets,list):
+                    assets.append(mask_with)
 
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()

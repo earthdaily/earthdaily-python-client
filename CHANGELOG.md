@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `groupby_date=None` also when using `mask_with`.
+- `mask_with="native"` also works when no assets is given.
 
 ### Added
 
