@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.5] - 
+## [0.0.5] - 2024-02-19
 
 ### Fixed
 
-- `groupby_date=None` also when using `mask_with`.
+- `groupby_date=None` is also transferred to `mask_with`.
 - `mask_with="native"` also works when no assets is given.
+- `clear_cover` is greater or equal (and not anymore greater).
 
 ### Added
 

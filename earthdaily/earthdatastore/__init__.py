@@ -414,7 +414,7 @@ class Auth:
         add_default_scale_factor: bool = True,
         common_band_names=True,
         cross_calibration_collection: (None | str) = None,
-        properties: (bool | str | list) = False,
+        properties: (bool | str | list) = None,
         groupby_date: str = "mean",
         **kwargs,
     ) -> xr.Dataset:
@@ -505,12 +505,9 @@ class Auth:
             DESCRIPTION.
 
         """
-        if properties and groupby_date is not None:
-            print(
-                Warning(
-                    "You must set `groupby_date=None` to ensure correct properties per item."
-                )
-            )
+        if properties is not None and groupby_date is not None:
+            raise NotImplementedError("You must set `groupby_date=None` to have properties per item.")
+    
         if isinstance(collections, str):
             collections = [collections]
 
