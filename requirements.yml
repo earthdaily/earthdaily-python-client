@@ -4,6 +4,7 @@ channels:
  - defaults
 dependencies:
  - numpy
+ - libtiff
  - python>=3.10
  - gdal>=3.7.0
  - pandas>=2
