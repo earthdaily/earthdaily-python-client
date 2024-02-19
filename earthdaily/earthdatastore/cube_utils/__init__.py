@@ -1,9 +1,9 @@
 import logging
 from datetime import datetime
-
+from collections import defaultdict
+import pandas as pd
 import geopandas as gpd
 import numpy as np
-import pandas as pd
 import pytz
 import xarray as xr
 from rasterio.enums import Resampling
@@ -70,7 +70,14 @@ def _autofix_unfrozen_coords_dtype(ds):
     return ds
 
 
-def _cube_odc(items_collection, assets=None, times=None, dtype="float32", **kwargs):
+def _cube_odc(
+    items_collection,
+    assets=None,
+    times=None,
+    dtype="float32",
+    properties=False,
+    **kwargs,
+):
     from odc import stac
 
     if "epsg" in kwargs:
@@ -91,7 +98,26 @@ def _cube_odc(items_collection, assets=None, times=None, dtype="float32", **kwar
         groupby=None,
         **kwargs,
     )
-
+    if properties:
+        metadata = defaultdict(list)
+        for i in items_collection:
+            # if properties is only a key
+            if isinstance(properties, str):
+                metadata[properties].append(i.properties[properties])
+            else:
+                for k, v in i.properties.items():
+                    if isinstance(properties, list):
+                        if k not in properties:
+                            continue
+                    if isinstance(v, list):
+                        v = str(v)
+                    metadata[k].append(v)
+        # to avoid mismatch if some properties are not available on all items
+        df = pd.DataFrame.from_dict(metadata, orient="index").T
+        # convert to xarray needs
+        metadata = {k: ("time", v.tolist()) for k, v in df.items()}
+        # assign metadata as coords
+        ds = ds.assign_coords(**metadata)
     return ds
 
 
@@ -111,7 +137,6 @@ def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
         assets=assets,
         rescale=False,
         xy_coords="center",
-        properties=True,
         **kwargs,
     )
     ds = ds.to_dataset(dim="band")
@@ -135,6 +160,7 @@ def datacube(
     groupby_date="mean",
     common_band_names=True,
     cross_calibration_items: list | None = None,
+    properties: (bool | str | list) = False,
     **kwargs,
 ):
     logging.info(f"Building datacube with {len(items_collection)} items")
@@ -166,6 +192,7 @@ def datacube(
         items_collection,
         assets=assets_keys if isinstance(assets, dict) else assets,
         times=times,
+        properties=properties,
         **kwargs,
     )
     nodatas = {}
@@ -191,13 +218,11 @@ def datacube(
 
     # drop na dates
     ds = ds.isel(dict(time=np.where(~np.isnan(ds.time))[0]))
-    if ds.time.size != np.unique(ds.time).size:
-        # get grouped value if several tiles at same exactly date
-        if groupby_date:
+    if groupby_date:
+        if ds.time.size != np.unique(ds.time).size:
             ds = ds.groupby("time")
             ds = getattr(ds, groupby_date)()
-        else:
-            ds = ds.groupby("time").mean()
+            # get grouped value if several tiles at same exactly date
     if bbox is not None and intersects is None:
         intersects = _bbox_to_intersects(bbox)
     if intersects is not None:

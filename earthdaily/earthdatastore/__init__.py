@@ -414,6 +414,8 @@ class Auth:
         add_default_scale_factor: bool = True,
         common_band_names=True,
         cross_calibration_collection: (None | str) = None,
+        properties: (bool | str | list) = None,
+        groupby_date: str = "mean",
         **kwargs,
     ) -> xr.Dataset:
         """
@@ -483,6 +485,8 @@ class Auth:
             DESCRIPTION. The default is True.
         cross_calibration_collection : (None | str), optional
             DESCRIPTION. The default is None.
+        properties : (bool | str | list), optional
+            Retrieve properties per item.
         **kwargs : TYPE
             DESCRIPTION.
          : TYPE
@@ -501,6 +505,11 @@ class Auth:
             DESCRIPTION.
 
         """
+        if properties is not None and groupby_date is not None:
+            raise NotImplementedError(
+                "You must set `groupby_date=None` to have properties per item."
+            )
+
         if isinstance(collections, str):
             collections = [collections]
 
@@ -509,13 +518,14 @@ class Auth:
                 raise ValueError(
                     f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}"
                 )
-            elif assets is not None:
-                mask_with = mask._native_mask_def_mapping.get(collections[0], None)
-                assets.append(mask_with)
             if mask_with == "ag_cloud_mask":
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections[0]
                 )
+            else:
+                mask_with = mask._native_mask_def_mapping.get(collections[0], None)
+                if isinstance(assets, list):
+                    assets.append(mask_with)
 
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
@@ -557,9 +567,12 @@ class Auth:
             assets=assets,
             common_band_names=common_band_names,
             cross_calibration_items=xcal_items,
+            properties=properties,
+            groupby_date=groupby_date,
             **kwargs,
         )
         if mask_with:
+            groupby_date_mask = "max" if isinstance(groupby_date, str) else None
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
             mask_kwargs = dict(mask_statistics=mask_statistics)
@@ -569,7 +582,7 @@ class Auth:
                     acm_items,
                     intersects=intersects,
                     bbox=bbox,
-                    groupby_date="max",
+                    groupby_date=groupby_date_mask,
                     geobox=xr_datacube.odc.geobox
                     if hasattr(xr_datacube, "odc")
                     else None,
@@ -580,8 +593,6 @@ class Auth:
                 mask_kwargs.update(acm_datacube=acm_datacube)
             else:
                 mask_assets = mask._native_mask_asset_mapping[collections[0]]
-                if "groupby_date" in kwargs:
-                    kwargs["groupby_date"] = "max"
                 if "resolution" in kwargs:
                     kwargs.pop("resolution")
                 if "epsg" in kwargs:
@@ -591,6 +602,7 @@ class Auth:
 
                 clouds_datacube = datacube(
                     items,
+                    groupby_date=groupby_date_mask,
                     intersects=intersects,
                     bbox=bbox,
                     assets=[mask_assets],
