@@ -506,8 +506,10 @@ class Auth:
 
         """
         if properties is not None and groupby_date is not None:
-            raise NotImplementedError("You must set `groupby_date=None` to have properties per item.")
-    
+            raise NotImplementedError(
+                "You must set `groupby_date=None` to have properties per item."
+            )
+
         if isinstance(collections, str):
             collections = [collections]
 
