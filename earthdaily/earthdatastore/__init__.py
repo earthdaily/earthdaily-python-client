@@ -102,7 +102,7 @@ def enhance_assets(
     alternate : str, optional
         Alternate asset to use, by default "download"
     use_http_url : bool, optional
-        Use HTTP URL instead of cloud path, by default False 
+        Use HTTP URL instead of cloud path, by default False
     add_default_scale_factor : bool, optional
         Add default scale, offset, nodata factor to assets, by default False
 
@@ -111,7 +111,7 @@ def enhance_assets(
     items : ItemCollection
         Updated PySTAC ItemCollection
     """
-    
+
     if any((alternate, use_http_url, add_default_scale_factor)):
         for idx, item in enumerate(items):
             keys = list(item.assets.keys())
@@ -896,6 +896,7 @@ class Auth:
         pystac.ItemCollection
             The filtered item collection.
         """
+
         def ag_cloud_mask_from_items(items):
             products = {}
             for item in items:
