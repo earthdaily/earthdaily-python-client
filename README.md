@@ -8,14 +8,10 @@
 
 <!-- PROJECT LOGO -->
 <br />
-<p align="center">
-  <a href="https://github.com/earthdaily">
-    <img src="https://earthdailyagro.com/wp-content/uploads/2022/01/logo-new-green.png" alt="EarthDaily Agro Logo" width="400" height="auto">
-  </a>
+<p>
+  <h1 >EarthDaily Python Client</h3>
 
-  <h1 align="center">EarthDaily Python Client</h3>
-
-  <p align="center">
+  <p>
     Your gateway to the Earth Data Store STAC Catalog.
     <br />
     <a href="https://earthdailyagro.com/"><strong>Who we are</strong></a>
@@ -30,7 +26,7 @@
 </p>
 
 
-<div align="center">
+<div>
 
 [![PyPI version](https://badge.fury.io/py/earthdaily.png)](https://badge.fury.io/py/earthdaily)
 [![Documentation](https://img.shields.io/badge/Documentation-html-green.svg)](https://earthdaily.github.io/earthdaily-python-client/)
