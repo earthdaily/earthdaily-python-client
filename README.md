@@ -10,7 +10,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/earthdaily">
-    <img src="https://earthdailyagro.com/wp-content/uploads/2022/01/logo-new-green.png" alt="EarthDaily Agro Logo" width="400">
+    <img src="https://earthdailyagro.com/wp-content/uploads/2022/01/logo-new-green.png" alt="EarthDaily Agro Logo" width="400" height="auto">
   </a>
 
   <h1 align="center">EarthDaily Python Client</h3>
@@ -36,14 +36,6 @@
 [![Documentation](https://img.shields.io/badge/Documentation-html-green.svg)](https://earthdaily.github.io/earthdaily-python-client/)
 [![pytest-main](https://github.com/earthdaily/earthdaily-python-client/actions/workflows/pytest-prod.yaml/badge.svg)](https://github.com/earthdaily/earthdaily-python-client/actions/workflows/pytest-prod.yaml)
 
-[![LinkedIn][linkedin-shield]][linkedin-url]
-[![Twitter][twitter-shield]][twitter-url]
-[![Youtube][youtube-shield]][youtube-url]
-[![languages][language-python-shiedl]][issues-url]
-<!-- [![CITest][CITest-shield]][CITest-url]-->
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-  
 </div>
 
 
