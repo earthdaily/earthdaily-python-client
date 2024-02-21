@@ -10,7 +10,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/earthdaily">
-    <img src="https://earthdailyagro.com/wp-content/uploads/2022/01/Logo.svg" alt="Logo" width="400" height="200">
+    <img src="https://earthdailyagro.com/wp-content/uploads/2022/01/logo-new-green.png" alt="EarthDaily Agro Logo" width="400">
   </a>
 
   <h1 align="center">EarthDaily Python Client</h3>
@@ -21,7 +21,7 @@
     <a href="https://earthdailyagro.com/"><strong>Who we are</strong></a>
     <br />
     <br />
-    <a href="https://github.com/earthdaily/earthdaily">Project description</a>
+    <a href="https://github.com/earthdaily/earthdaily-python-client/">Project description</a>
     ·
     <a href="https://github.com/earthdaily/earthdaily-python-client/issues">Report Bug</a>
     ·
