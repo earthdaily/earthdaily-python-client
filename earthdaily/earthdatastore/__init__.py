@@ -165,8 +165,48 @@ def enhance_assets(
     return items
 
 
+def _get_token(config=None, presign_urls=True):
+    """Get token for interacting with the Earth Data Store API.
+
+    By default, Earth Data Store will look for environment variables called
+    EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
+
+    Parameters
+    ----------
+    config : str | dict, optional
+        A JSON string or a dictionary with the credentials for the Earth Data Store.
+    presign_urls : bool, optional
+        Use presigned URLs, by default True
+
+    Returns
+    -------
+    token : str
+    eds_url : the earthdatastore url
+
+    """
+    if config is None:
+        config = os.getenv
+    auth_url = config("EDS_AUTH_URL")
+    secret = config("EDS_SECRET")
+    client_id = config("EDS_CLIENT_ID")
+    eds_url = config("EDS_API_URL", "https://api.eds.earthdaily.com/archive/v1/stac/v1")
+    if auth_url is None or secret is None or client_id is None:
+        raise AttributeError(
+            "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
+        )
+
+    token_response = requests.post(
+        auth_url,
+        data={"grant_type": "client_credentials"},
+        allow_redirects=False,
+        auth=(client_id, secret),
+    )
+    token_response.raise_for_status()
+    return json.loads(token_response.text)["access_token"], eds_url
+
+
 def _get_client(config=None, presign_urls=True):
-    """Get a client for interacting with the Earth Data Store API.
+    """Get client for interacting with the Earth Data Store API.
 
     By default, Earth Data Store will look for environment variables called
     EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
@@ -184,38 +224,21 @@ def _get_client(config=None, presign_urls=True):
         A PySTAC client for interacting with the Earth Data Store STAC API.
 
     """
-    if config is None:
-        config = os.getenv
-    else:
-        if isinstance(config, str):
-            config = json.load(open(config, "rb"))
-        config = config.get
-    auth_url = config("EDS_AUTH_URL")
-    secret = config("EDS_SECRET")
-    client_id = config("EDS_CLIENT_ID")
-    eds_url = config("EDS_API_URL", "https://api.eds.earthdaily.com/archive/v1/stac/v1")
-    if auth_url is None or secret is None or client_id is None:
-        raise AttributeError(
-            "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
-        )
 
-    token_response = requests.post(
-        auth_url,
-        data={"grant_type": "client_credentials"},
-        allow_redirects=False,
-        auth=(client_id, secret),
-    )
-    token_response.raise_for_status()
-    tokens = json.loads(token_response.text)
-    headers = {"Authorization": f"bearer {tokens['access_token']}"}
+    if isinstance(config, dict):
+        config = config.get
+    if isinstance(config, str) and config.endswith('.json'):
+        config = json.load(open(config, "rb")).get
+    token, eds_url = _get_token(config, presign_urls)
+
+    headers = {"Authorization": f"bearer {token}"}
     if presign_urls:
         headers["X-Signed-Asset-Urls"] = "True"
 
-    client = Client.open(
+    return Client.open(
         eds_url,
         headers=headers,
     )
-    return client
 
 
 class StacCollectionExplorer:
