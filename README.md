@@ -9,7 +9,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/GEOSYS">
+  <a href="https://github.com/earthdaily">
     <img src="https://earthdailyagro.com/wp-content/uploads/2022/01/Logo.svg" alt="Logo" width="400" height="200">
   </a>
 
@@ -21,11 +21,11 @@
     <a href="https://earthdailyagro.com/"><strong>Who we are</strong></a>
     <br />
     <br />
-    <a href="https://github.com/GEOSYS/earthdaily">Project description</a>
+    <a href="https://github.com/earthdaily/earthdaily">Project description</a>
     ·
-    <a href="https://github.com/GEOSYS/earthdaily-python-client/issues">Report Bug</a>
+    <a href="https://github.com/earthdaily/earthdaily-python-client/issues">Report Bug</a>
     ·
-    <a href="https://github.com/GEOSYS/earthdaily-python-client/issues">Request Feature</a>
+    <a href="https://github.com/earthdaily/earthdaily-python-client/issues">Request Feature</a>
   </p>
 </p>
 
@@ -85,7 +85,7 @@ Our package is built upon a foundation of best practices, meticulously crafted t
 
 ## Features
 
-See [documentation](https://geosys.github.io/earthdaily-python-client/) for more information
+See [documentation](https://earthdaily.github.io/earthdaily-python-client/) for more information
 
 ## Getting started
 
@@ -93,7 +93,7 @@ See [documentation](https://geosys.github.io/earthdaily-python-client/) for more
 
 Make sure you have valid EDS credentials. If you need to get trial access, please contact us.
 
-This package has been tested on Python 3.10.11.
+This package has been tested on Python 3.10, 3.11 and 3.12.
 
 
 ### Installing
@@ -123,15 +123,6 @@ See the documentation for more information.
 
 If you find this package useful, please consider supporting its development.
 
-
-<!-- RESOURCES -->
-## Resources 
-The following links will provide access to more information:
-- [EarthDaily agro developer portal  ](https://developer.geosys.com/)
-- [Pypi package](https://pypi.org/project/geosyspy/)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 <!-- CONTRIBUTING -->
 ## Support development
 
@@ -141,7 +132,7 @@ If this project has been useful, that it helped you or your business to save pre
 
 ## License
 
-Distributed under the [GPL 3.0 License](https://www.gnu.org/licenses/gpl-3.0.en.html). 
+Distributed under the MIT License. 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -153,34 +144,6 @@ For any additonal information, please [email us](mailto:sales@earthdailyagro.com
 
 ## Copyrights
 
-© 2022 Geosys Holdings ULC, an Antarctica Capital portfolio company | All Rights Reserved.
+© EarthDaily | All Rights Reserved.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-<!-- List of available shields https://shields.io/category/license -->
-<!-- List of available shields https://simpleicons.org/ -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo.svg?style=social
-[contributors-url]: https://github.com/github_username/repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo.svg?style=plastic&logo=appveyor
-[forks-url]: https://github.com/github_username/repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/qgis-plugin/repo.svg?style=plastic&logo=appveyor
-[stars-url]: https://github.com/github_username/repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/GEOSYS/GeosysPy/repo.svg?style=social
-[issues-url]: https://github.com/github_username/repo/issues
-[license-shield]: https://img.shields.io/github/license/GEOSYS/qgis-plugin
-[license-url]: https://www.gnu.org/licenses/gpl-3.0.en.html
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=social&logo=linkedin
-[linkedin-url]: https://www.linkedin.com/company/earthdailyagro/mycompany/
-[twitter-shield]: https://img.shields.io/twitter/follow/EarthDailyAgro?style=social
-[twitter-url]: https://img.shields.io/twitter/follow/EarthDailyAgro?style=social
-[youtube-shield]: https://img.shields.io/youtube/channel/views/UCy4X-hM2xRK3oyC_xYKSG_g?style=social
-[youtube-url]: https://img.shields.io/youtube/channel/views/UCy4X-hM2xRK3oyC_xYKSG_g?style=social
-[language-python-shiedl]: https://img.shields.io/badge/python-3.9-green?logo=python
-[language-python-url]: https://pypi.org/ 
-[GitStars-shield]: https://img.shields.io/github/stars/GEOSYS?style=social
-[GitStars-url]: https://img.shields.io/github/stars/GEOSYS?style=social
-[CITest-shield]: https://img.shields.io/github/workflow/status/GEOSYS/GeosysPy/Continous%20Integration
-[CITest-url]: https://img.shields.io/github/workflow/status/GEOSYS/GeosysPy/Continous%20Integration
