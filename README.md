@@ -56,7 +56,6 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#support-development">Support development</a></li>
-    <li><a href="#resources">Resources</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#copyrights">Copyrights</a></li>
@@ -84,7 +83,7 @@ Make sure you have valid EDS credentials. If you need to get trial access, pleas
 This package has been tested on Python 3.10, 3.11 and 3.12.
 
 
-### Installing
+### Installation
 
 #### Using pip 
 
