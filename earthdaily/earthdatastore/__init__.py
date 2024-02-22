@@ -235,18 +235,6 @@ def _get_client(config=None, presign_urls=True):
             config = json.load(open(config, "rb")).get
         token, eds_url = _get_token(config, presign_urls)
 
-
-    if isinstance(config, tuple): # token
-        token, eds_url = config
-        logging.log(level=logging.INFO, msg="Using token to reauth")
-    elif isinstance(config, dict):
-        config = config.get
-    elif isinstance(config, str) and config.endswith('.json'):
-        config = json.load(open(config, "rb")).get        
-        token, eds_url = _get_token(config, presign_urls)
-    elif config is None:
-        token, eds_url = _get_token(config, presign_urls)
-
     headers = {"Authorization": f"bearer {token}"}
     if presign_urls:
         headers["X-Signed-Asset-Urls"] = "True"
