@@ -16,8 +16,8 @@ class GeometryManager:
 
     def to_wkt(self, crs="EPSG:4326"):
         wkts = list(self._obj.to_crs(crs=crs).to_wkt()["geometry"])
-        return wkts[0] if len(wkts)==1 else wkts
-    
+        return wkts[0] if len(wkts) == 1 else wkts
+
     def to_json(self, crs="EPSG:4326"):
         return json.loads(self._obj.to_crs(crs=crs).to_json(drop_id=True))
 
