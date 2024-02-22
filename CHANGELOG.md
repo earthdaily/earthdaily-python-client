@@ -6,9 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.6] - 
 
-### Changed
+### Fixed
+
+- `to_wkt`for GeometryManager.
+
+### Added
 
 - Add docstring thanks to @piclem.
+- Token support thanks to @luisageo6.
 
 ## [0.0.5] - 2024-02-19
 
