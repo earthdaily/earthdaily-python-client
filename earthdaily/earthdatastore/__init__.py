@@ -21,6 +21,20 @@ logging.getLogger("earthdaily-earthdatastore")
 
 
 def post_query_items(items, query):
+    """Applies query to items fetched from the STAC catalog.
+
+    Parameters
+    ----------
+    items : list
+        List of items
+    query : dict
+        Query to post
+
+    Returns
+    -------
+    items : ItemCollection
+        filtered items
+    """
     items_ = []
     for idx, item in enumerate(items):
         queries_results = 0
@@ -49,6 +63,18 @@ def post_query_items(items, query):
 
 
 def _cloud_path_to_http(cloud_path):
+    """Convert a cloud path to HTTP URL.
+
+    Parameters
+    ----------
+    cloud_path : str
+        Cloud path
+
+    Returns
+    -------
+    url : str
+        HTTP URL
+    """
     endpoints = dict(s3="s3.amazonaws.com")
     cloud_provider = cloud_path.split("://")[0]
     container = cloud_path.split("/")[2]
@@ -67,6 +93,25 @@ def enhance_assets(
     use_http_url=False,
     add_default_scale_factor=False,
 ):
+    """Enhance assets with extra fields.
+
+    Parameters
+    ----------
+    items : ItemCollection
+        A PySTAC ItemCollection
+    alternate : str, optional
+        Alternate asset to use, by default "download"
+    use_http_url : bool, optional
+        Use HTTP URL instead of cloud path, by default False
+    add_default_scale_factor : bool, optional
+        Add default scale, offset, nodata factor to assets, by default False
+
+    Returns
+    -------
+    items : ItemCollection
+        Updated PySTAC ItemCollection
+    """
+
     if any((alternate, use_http_url, add_default_scale_factor)):
         for idx, item in enumerate(items):
             keys = list(item.assets.keys())
@@ -120,13 +165,27 @@ def enhance_assets(
     return items
 
 
-def _get_client(config=None, presign_urls=True):
+def _get_token(config=None, presign_urls=True):
+    """Get token for interacting with the Earth Data Store API.
+
+    By default, Earth Data Store will look for environment variables called
+    EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
+
+    Parameters
+    ----------
+    config : str | dict, optional
+        A JSON string or a dictionary with the credentials for the Earth Data Store.
+    presign_urls : bool, optional
+        Use presigned URLs, by default True
+
+    Returns
+    -------
+    token : str
+    eds_url : the earthdatastore url
+
+    """
     if config is None:
         config = os.getenv
-    else:
-        if isinstance(config, str):
-            config = json.load(open(config, "rb"))
-        config = config.get
     auth_url = config("EDS_AUTH_URL")
     secret = config("EDS_SECRET")
     client_id = config("EDS_CLIENT_ID")
@@ -143,19 +202,65 @@ def _get_client(config=None, presign_urls=True):
         auth=(client_id, secret),
     )
     token_response.raise_for_status()
-    tokens = json.loads(token_response.text)
-    headers = {"Authorization": f"bearer {tokens['access_token']}"}
+    return json.loads(token_response.text)["access_token"], eds_url
+
+
+def _get_client(config=None, presign_urls=True):
+    """Get client for interacting with the Earth Data Store API.
+
+    By default, Earth Data Store will look for environment variables called
+    EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
+
+    Parameters
+    ----------
+    config : str | dict, optional
+        A JSON string or a dictionary with the credentials for the Earth Data Store.
+    presign_urls : bool, optional
+        Use presigned URLs, by default True
+
+    Returns
+    -------
+    client : Client
+        A PySTAC client for interacting with the Earth Data Store STAC API.
+
+    """
+
+    if isinstance(config, tuple):  # token
+        token, eds_url = config
+        logging.log(level=logging.INFO, msg="Using token to reauth")
+    else:
+        if isinstance(config, dict):
+            config = config.get
+        elif isinstance(config, str) and config.endswith(".json"):
+            config = json.load(open(config, "rb")).get
+        token, eds_url = _get_token(config, presign_urls)
+
+    headers = {"Authorization": f"bearer {token}"}
     if presign_urls:
         headers["X-Signed-Asset-Urls"] = "True"
 
-    client = Client.open(
+    return Client.open(
         eds_url,
         headers=headers,
     )
-    return client
 
 
 class StacCollectionExplorer:
+    """
+    A class to explore a STAC collection.
+
+    Parameters
+    ----------
+    client : Client
+        A PySTAC client for interacting with the Earth Data Store STAC API.
+    collection : str
+        The name of the collection to explore.
+
+    Returns
+    -------
+    None
+    """
+
     def __init__(self, client, collection):
         self.client = client
         self.collection = collection
@@ -164,6 +269,13 @@ class StacCollectionExplorer:
         self.properties = self.client_collection.to_dict()
 
     def __first_item(self):
+        """Get the first item of the STAC collection as an overview of the items content.
+
+        Returns
+        -------
+        item : Item
+            The first item of the collection.
+        """
         for item in self.client.get_collection(self.collection).get_items():
             self.item = item
             break
@@ -375,6 +487,15 @@ class Auth:
         return sorted(c.id for c in self.client.get_all_collections())
 
     def _update_search_kwargs_for_ag_cloud_mask(self, search_kwargs, collections):
+        """Update the STAC search kwargs to only get items that have an available agricultural cloud mask.
+
+        Args:
+            search_kwargs (dict): The search kwargs to be updated.
+            collections (str | list): The collection(s) to search.
+
+        Returns:
+            dict: The updated search kwargs.
+        """
         search_kwargs = search_kwargs.copy()
         # to get only items that have a ag_cloud_mask
         ag_query = {"eda:ag_cloud_mask_available": {"eq": True}}
@@ -404,12 +525,12 @@ class Auth:
         collections: str | list,
         datetime=None,
         assets: None | list | dict = None,
-        intersects: (gpd.GeoDataFrame, str, dict) = None,
+        intersects: (gpd.GeoDataFrame | str | dict) = None,
         bbox=None,
-        mask_with: (None, str) = None,
+        mask_with: (None | str) = None,
         mask_statistics: bool | int = False,
-        clear_cover: (int, float) = None,
-        prefer_alternate: (str, False) = "download",
+        clear_cover: (int | float) = None,
+        prefer_alternate: (str | bool) = "download",
         search_kwargs: dict = {},
         add_default_scale_factor: bool = True,
         common_band_names=True,
@@ -656,27 +777,27 @@ class Auth:
         **kwargs,
     ):
         """
-        search using pystac client search. Add some features to enhance experience.
+        A wrapper around the pystac client search method. Add some features to enhance experience.
 
         Parameters
         ----------
         collections : str | list
-            DESCRIPTION.
+            Collection(s) to search. It is recommended to only search one collection at a time.
         intersects : gpd.GeoDataFrame, optional
-            DESCRIPTION. The default is None.
+            If provided, the results will contain only intersecting items. The default is None.
         bbox : TYPE, optional
-            DESCRIPTION. The default is None.
+            If provided, the results will contain only intersecting items. The default is None.
         post_query : TYPE, optional
-            DESCRIPTION. The default is None.
+            STAC-like filters applied on retrieved items. The default is None.
         prefer_alternate : TYPE, optional
-            DESCRIPTION. The default is None.
+            Prefer alternate links when available. The default is None.
         **kwargs : TYPE
-            DESCRIPTION.
+            Keyword arguments passed to the pystac client search method.
 
         Returns
         -------
-        items_collection : TYPE
-            DESCRIPTION.
+        items_collection : ItemCollection
+            The filtered STAC items.
 
         Example
         -------
@@ -787,6 +908,22 @@ class Auth:
         return items_collection
 
     def ag_cloud_mask_items(self, items_collection):
+        """
+        Search the catalog for the ag_cloud_mask items matching the given items_collection.
+        The ag_cloud_mask items are searched in the `ag_cloud_mask_collection_id` collection using the
+        `ag_cloud_mask_item_id` properties of the items.
+
+        Parameters
+        ----------
+        items_collection : pystac.ItemCollection
+            The items to find corresponding ag cloud mask items for.
+
+        Returns
+        -------
+        pystac.ItemCollection
+            The filtered item collection.
+        """
+
         def ag_cloud_mask_from_items(items):
             products = {}
             for item in items:
@@ -814,6 +951,25 @@ def item_property_to_df(
     property_name="raster:bands",
     sub_property_name="classification:classes",
 ):
+    """
+    Extract the property from the asset of the item.
+
+    Parameters
+    ----------
+    item : pystac.Item
+        The item to extract the property from.
+    asset : str, optional
+        The asset name.
+    property_name : str, optional
+        The property name.
+    sub_property_name : str, optional
+        The sub property name.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The dataframe containing the property.
+    """
     df = pd.DataFrame()
     properties = {}
 

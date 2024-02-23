@@ -5,6 +5,7 @@ dependencies:
   - python>=3.10
   - numpy
   - pandas
+  - libtiff
   - gdal>=3.7.0
   - geopandas>=0.11
   - shapely

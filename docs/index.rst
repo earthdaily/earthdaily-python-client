@@ -21,9 +21,11 @@ earthdaily documentation
 
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
+   :caption: Getting Started
 
    self
+   _auto_examples/first_steps_create_datacube
    
 .. toctree::
    :maxdepth: 3
@@ -35,7 +37,7 @@ earthdaily documentation
    :maxdepth: 3
    :caption: Documentation API
 
-   earthdaily
+   api
    CONTRIBUTING
    CHANGELOG
 
