@@ -20,6 +20,7 @@ setup(
         "numpy",
         "matplotlib",
         "joblib",
+        "scipy",
         "psutil",
         "pystac-client",
         "pystac",
