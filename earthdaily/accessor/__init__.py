@@ -28,22 +28,31 @@ def _typer(raise_mistype=False):
             idx = 1
             for key, val in func.__annotations__.items():
                 is_kwargs = key in kwargs.keys()
-                if val not in _SUPPORTED_DTYPE or kwargs.get(key, None) is None and is_kwargs or len(args)==1:
+                if (
+                    val not in _SUPPORTED_DTYPE
+                    or kwargs.get(key, None) is None
+                    and is_kwargs
+                    or len(args) == 1
+                ):
                     continue
-                if raise_mistype and (val != type(kwargs.get(key)) if is_kwargs else val != type(args[idx])):
+                if raise_mistype and (
+                    val != type(kwargs.get(key))
+                    if is_kwargs
+                    else val != type(args[idx])
+                ):
                     if is_kwargs:
                         expected = f"{type(kwargs[key]).__name__} ({kwargs[key]})"
                     else:
                         expected = f"{type(args[idx]).__name__} ({args[idx]})"
 
                         raise MisType(
-                        f"{key} expected a {val.__name__}, not a {expected}."
-                    )
+                            f"{key} expected a {val.__name__}, not a {expected}."
+                        )
                 if is_kwargs:
                     kwargs[key] = val(kwargs[key]) if val != list else [kwargs[key]]
                 else:
                     _args[idx] = val(args[idx]) if val != list else [args[idx]]
-                idx+=1
+                idx += 1
             args = tuple(_args)
             return func(*args, **kwargs)
 
@@ -116,24 +125,32 @@ def _lee_filter(img, window_size: int):
     img_output = xr.where(np.isnan(binary_nan), img_, img_output)
     return img_output
 
+
 @xr.register_dataarray_accessor("ed")
 class EarthDailyAccessorDataArray:
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
-        
+
     def _max_time_wrap(self, wish=5):
-        return np.min((wish,self._obj['time'].size))
+        return np.min((wish, self._obj["time"].size))
 
     @_typer()
     def plot_band(self, cmap="Greys", col="time", col_wrap=5, **kwargs):
-        return self._obj.plot.imshow(cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs)
+        return self._obj.plot.imshow(
+            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
+        )
 
     @_typer()
     def plot_index(
         self, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
     ):
         return self._obj.plot.imshow(
-            vmin=vmin, vmax=vmax, cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
+            vmin=vmin,
+            vmax=vmax,
+            cmap=cmap,
+            col=col,
+            col_wrap=self._max_time_wrap(col_wrap),
+            **kwargs,
         )
 
 
@@ -143,9 +160,8 @@ class EarthDailyAccessorDataset:
         self._obj = xarray_obj
 
     def _max_time_wrap(self, wish=5):
-        return np.min((wish,self._obj['time'].size))
-        
-    
+        return np.min((wish, self._obj["time"].size))
+
     @_typer()
     def plot_rgb(
         self,
@@ -173,7 +189,12 @@ class EarthDailyAccessorDataset:
         self, index, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
     ):
         return self._obj[index].plot.imshow(
-            vmin=vmin, vmax=vmax, cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
+            vmin=vmin,
+            vmax=vmax,
+            cmap=cmap,
+            col=col,
+            col_wrap=self._max_time_wrap(col_wrap),
+            **kwargs,
         )
 
     @_typer()
