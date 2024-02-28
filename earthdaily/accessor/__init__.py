@@ -24,14 +24,27 @@ _SUPPORTED_DTYPE = [int, float, list, bool, str]
 def _typer(raise_mistype=False):
     def decorator(func):
         def force(*args, **kwargs):
+            _args = list(args)
+            idx = 1
             for key, val in func.__annotations__.items():
-                if val not in _SUPPORTED_DTYPE or kwargs.get(key, None) is None:
+                is_kwargs = key in kwargs.keys()
+                if val not in _SUPPORTED_DTYPE or kwargs.get(key, None) is None and is_kwargs or len(args)==1:
                     continue
-                if raise_mistype and val != type(kwargs.get(key)):
-                    raise MisType(
-                        f"{key} expected a {val.__name__}, not a {type(kwargs[key]).__name__} ({kwargs[key]})"
+                if raise_mistype and (val != type(kwargs.get(key)) if is_kwargs else val != type(args[idx])):
+                    if is_kwargs:
+                        expected = f"{type(kwargs[key]).__name__} ({kwargs[key]})"
+                    else:
+                        expected = f"{type(args[idx]).__name__} ({args[idx]})"
+
+                        raise MisType(
+                        f"{key} expected a {val.__name__}, not a {expected}."
                     )
-                kwargs[key] = val(kwargs[key]) if val != list else [kwargs[key]]
+                if is_kwargs:
+                    kwargs[key] = val(kwargs[key]) if val != list else [kwargs[key]]
+                else:
+                    _args[idx] = val(args[idx]) if val != list else [args[idx]]
+                idx+=1
+            args = tuple(_args)
             return func(*args, **kwargs)
 
         return force
@@ -103,22 +116,24 @@ def _lee_filter(img, window_size: int):
     img_output = xr.where(np.isnan(binary_nan), img_, img_output)
     return img_output
 
-
 @xr.register_dataarray_accessor("ed")
 class EarthDailyAccessorDataArray:
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
+        
+    def _max_time_wrap(self, wish=5):
+        return np.min((wish,self._obj['time'].size))
 
     @_typer()
     def plot_band(self, cmap="Greys", col="time", col_wrap=5, **kwargs):
-        return self._obj.plot.imshow(cmap=cmap, col=col, col_wrap=col_wrap, **kwargs)
+        return self._obj.plot.imshow(cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs)
 
     @_typer()
     def plot_index(
         self, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
     ):
         return self._obj.plot.imshow(
-            vmin=vmin, vmax=vmax, cmap=cmap, col=col, col_wrap=col_wrap, **kwargs
+            vmin=vmin, vmax=vmax, cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
         )
 
 
@@ -127,6 +142,10 @@ class EarthDailyAccessorDataset:
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
 
+    def _max_time_wrap(self, wish=5):
+        return np.min((wish,self._obj['time'].size))
+        
+    
     @_typer()
     def plot_rgb(
         self,
@@ -140,13 +159,13 @@ class EarthDailyAccessorDataset:
         return (
             self._obj[[red, green, blue]]
             .to_array(dim="bands")
-            .plot.imshow(col=col, col_wrap=col_wrap, **kwargs)
+            .plot.imshow(col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs)
         )
 
     @_typer()
     def plot_band(self, band, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj[band].plot.imshow(
-            cmap=cmap, col=col, col_wrap=col_wrap, **kwargs
+            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
         )
 
     @_typer()
@@ -154,7 +173,7 @@ class EarthDailyAccessorDataset:
         self, index, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
     ):
         return self._obj[index].plot.imshow(
-            vmin=vmin, vmax=vmax, cmap=cmap, col=col, col_wrap=col_wrap, **kwargs
+            vmin=vmin, vmax=vmax, cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
         )
 
     @_typer()
@@ -216,7 +235,7 @@ class EarthDailyAccessorDataset:
                 params[_BAND_MAPPING[v]] = self._obj[v]
         return params
 
-    def list_available_index(self, details=False):
+    def available_index(self, details=False):
         mapper = list(self._auto_mapper().keys())
         indices = spyndex.indices
         available_indices = []
@@ -248,9 +267,7 @@ class EarthDailyAccessorDataset:
         """
 
         params = {}
-        bands_mapping = self._auto_mapper()
-        for k, v in bands_mapping.items():
-            params[k] = self._obj[v]
+        params = self._auto_mapper()
         params.update(**kwargs)
         idx = spyndex.computeIndex(index=index, params=params, **kwargs)
 
