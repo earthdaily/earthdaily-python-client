@@ -35,7 +35,8 @@ setup(
         "python-dotenv",
         "rich",
         "dask",
-        "spyndex"
+        "spyndex",
+        "dask-image"
     ],
     include_package_data=True,
     package_data={"":['*.geojson','*.json']},

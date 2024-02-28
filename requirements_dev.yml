@@ -48,3 +48,4 @@ dependencies:
   - rst2pdf
   - python-dotenv
   - scipy
+  - dask-image
