@@ -48,7 +48,7 @@ def _typer(raise_mistype=False):
                         )
                 if is_kwargs:
                     kwargs[key] = val(kwargs[key]) if val != list else [kwargs[key]]
-                elif (len(args)>=idx):
+                elif len(args) >= idx:
                     _args[idx] = val(args[idx]) if val != list else [args[idx]]
                 idx += 1
             args = tuple(_args)
