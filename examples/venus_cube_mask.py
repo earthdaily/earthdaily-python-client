@@ -72,4 +72,4 @@ venus_datacube = earthdatastore.datacube(
 )
 print(venus_datacube)
 
-venus_datacube.isel(time=slice(29, 31), x=slice(4000, 4500), y=slice(4000, 4500)).plot_rgb()
+venus_datacube.isel(time=slice(29, 31), x=slice(4000, 4500), y=slice(4000, 4500)).ed.plot_rgb()
