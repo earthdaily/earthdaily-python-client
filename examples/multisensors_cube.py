@@ -43,9 +43,7 @@ datacube = eds.datacube(
 )
 
 # Add the NDVI
-datacube["ndvi"] = (datacube["nir"] - datacube["red"]) / (
-    datacube["nir"] + datacube["red"]
-)
+datacube = datacube.ed.add_index('NDVI')
 
 # Load in memory
 datacube = datacube.load()
@@ -63,7 +61,7 @@ plt.show()
 # See the NDVI evolution
 # -------------------------------------------
 
-datacube["ndvi"].plot.imshow(
+datacube["NDVI"].plot.imshow(
     col="time", col_wrap=3, vmin=0, vmax=0.8, cmap="RdYlGn"
 )
 plt.show()
@@ -72,6 +70,6 @@ plt.show()
 # See the NDVI mean evolution
 # -------------------------------------------
 
-datacube["ndvi"].groupby("time").mean(...).plot.line(x="time")
+datacube["NDVI"].groupby("time").mean(...).plot.line(x="time")
 plt.title("NDVI evolution")
 plt.show()

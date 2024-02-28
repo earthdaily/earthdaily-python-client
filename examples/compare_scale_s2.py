@@ -50,7 +50,7 @@ pivot_cube = get_cube(rescale=False) * 0.0001
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
 
-pivot_cube.ed.plot_rgb(vmin=0, vmax=0.33, col="time", col_wrap=3)
+pivot_cube.ed.plot_rgb(col_wrap=3)
 plt.show()
 
 ##############################################################################
@@ -66,6 +66,6 @@ plt.show()
 # ----------------------------------------------------
 
 
-pivot_cube.ed.plot_rgb(vmin=0, vmax=0.33, col="time", col_wrap=3)
+pivot_cube.ed.plot_rgb(col_wrap=3)
 
 plt.show()

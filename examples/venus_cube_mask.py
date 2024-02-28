@@ -37,7 +37,7 @@ query = {
 # Search for items
 # -------------------------------------------
 
-items = eds.search(collection, query=query, prefer_alternate="download")
+items = eds.search(collection, query=query, prefer_alternate="download", limit=5)
 
 ##############################################################################
 # .. note::
@@ -72,4 +72,5 @@ venus_datacube = earthdatastore.datacube(
 )
 print(venus_datacube)
 
-venus_datacube.isel(time=slice(29, 31), x=slice(4000, 4500), y=slice(4000, 4500)).ed.plot_rgb()
+venus_datacube.isel(time=slice(29, 31), x=slice(4000, 4500), y=slice(4000, 4500)).ed.plot_rgb(vmax=0.2)
+
