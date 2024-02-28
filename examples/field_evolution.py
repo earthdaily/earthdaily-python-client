@@ -58,7 +58,8 @@ plt.show()
 # ----------------------------------------------------
 
 zonal_stats = earthdatastore.cube_utils.zonal_stats(
-    pivot_cube, pivot, operations=["mean", "max", "min"]
+    pivot_cube, pivot, operations=["mean", "max", "min"],
+    method="standard"
 )
 zonal_stats = zonal_stats.load()
 

@@ -44,9 +44,7 @@ s2_datacube.clear_percent.plot.scatter(x="time")
 plt.title("Percentage of clear pixels on the study site")
 plt.show()
 
-s2_datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
-    vmin=0, vmax=0.2, col="time", col_wrap=4
-)
+s2_datacube.ed.plot_rgb(vmin=0, vmax=0.2, col="time", col_wrap=4)
 
 ###########################################################
 # Create datacube in three steps
@@ -82,6 +80,6 @@ s2_datacube = earthdatastore.mask.filter_clear_cover(
     s2_datacube, 50
 )  # at least 50% of clear pixels
 #
-s2_datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
+s2_datacube.ed.plot_rgb(
     vmin=0, vmax=0.2, col="time", col_wrap=4
 )

@@ -3,21 +3,23 @@ channels:
  - conda-forge
  - defaults
 dependencies:
- - numpy
- - libtiff
- - python>=3.10
- - gdal>=3.7.0
- - pandas>=2
- - geopandas>=0.11
- - rasterio
- - pystac-client
- - requests
- - matplotlib
- - xarray
- - rioxarray
- - h5netcdf 
- - pystac
- - odc-stac>=0.3.7
- - tqdm
- - joblib
- - python-dotenv
+- numpy
+- matplotlib
+- joblib
+- scipy
+- psutil
+- pystac-client
+- pystac
+- odc-stac>=0.3.7
+- pandas>=2
+- geopandas
+- requests
+- xarray
+- rasterio
+- rioxarray
+- tqdm
+- python-dotenv
+- rich
+- dask
+- spyndex
+- dask-image

@@ -6,12 +6,12 @@ Created on Fri Oct 13 09:32:31 2023
 """
 
 from rasterio import features
-from scipy.sparse import csr_matrix
 import numpy as np
 import xarray as xr
 import tqdm
 from . import custom_operations
 from .preprocessing import rasterize
+from scipy.sparse import csr_matrix
 
 
 def _compute_M(data):
