@@ -13,6 +13,7 @@ from . import custom_operations
 from .preprocessing import rasterize
 from scipy.sparse import csr_matrix
 
+
 def _compute_M(data):
     cols = np.arange(data.size)
     return csr_matrix((cols, (data.ravel(), cols)), shape=(data.max() + 1, data.size))
