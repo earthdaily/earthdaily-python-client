@@ -46,14 +46,14 @@ def get_cube(rescale=True):
 
 pivot_cube = get_cube(rescale=False) * 0.0001
 
-#####################################################################da#########
+##############################################################################
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
 
-pivot_cube.to_array(dim="band").plot.imshow(vmin=0, vmax=0.33, col="time", col_wrap=3)
+pivot_cube.ed.plot_rgb(vmin=0, vmax=0.33, col="time", col_wrap=3)
 plt.show()
 
-#####################################################################da#########
+##############################################################################
 # Get cube with automatic rescale (default option)
 # ----------------------------------------------------
 
@@ -61,11 +61,11 @@ pivot_cube = get_cube()
 pivot_cube.clear_percent.plot.scatter(x="time")
 plt.show()
 
-#####################################################################da#########
+##############################################################################
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
 
 
-pivot_cube.to_array(dim="band").plot.imshow(vmin=0, vmax=0.33, col="time", col_wrap=3)
+pivot_cube.ed.plot_rgb(vmin=0, vmax=0.33, col="time", col_wrap=3)
 
 plt.show()

@@ -5,11 +5,12 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point
-from scipy import ndimage
-from dask_image import ndfilters
 from dask import array as da
 import spyndex
 
+import warnings
+from xarray.core.extensions import AccessorRegistrationWarning
+warnings.filterwarnings("ignore", category=AccessorRegistrationWarning)
 
 class MisType(Warning):
     pass
@@ -69,6 +70,11 @@ def xr_loop_func(
 
 @_typer()
 def _lee_filter(img, window_size: int):
+    try :
+        from dask_image import ndfilters
+    except ImportError as E:
+        raise ImportError("Please install dask-image to run lee_filter")
+
     img_ = img.copy()
     ndimage_type = ndfilters
     if hasattr(img, "data"):

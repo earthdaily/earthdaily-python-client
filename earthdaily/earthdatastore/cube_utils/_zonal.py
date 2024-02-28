@@ -6,7 +6,6 @@ Created on Fri Oct 13 09:32:31 2023
 """
 
 from rasterio import features
-from scipy.sparse import csr_matrix
 import numpy as np
 import xarray as xr
 import tqdm
@@ -54,6 +53,10 @@ def zonal_stats_numpy(
     all_touched=False,
     preload_datavar=False,
 ):
+    try:
+        from scipy.sparse import csr_matrix
+    except ImportError:
+        raise ImportError('Please install scipy to run zonal_stats')
     tqdm_bar = tqdm.tqdm(total=len(dataset.data_vars) * dataset.time.size)
     dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)
 
@@ -123,6 +126,11 @@ def zonal_stats(
     dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)
 
     if method == "optimized":
+        try:
+            from scipy.sparse import csr_matrix
+        except ImportError:
+            raise ImportError('Please install scipy to run zonal_stats')
+
         feats, yx_pos = _rasterize(gdf, dataset, all_touched=all_touched)
 
         for gdf_idx in tqdm.trange(gdf.shape[0], disable=not verbose):

@@ -4,7 +4,6 @@ channels:
  - defaults
 dependencies:
 - numpy
-- scipy
 - matplotlib
 - joblib
 - psutil
@@ -21,5 +20,4 @@ dependencies:
 - python-dotenv
 - rich
 - dask
-- dask-image
 - spyndex

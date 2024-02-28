@@ -60,7 +60,7 @@ datacube = earthdaily.earthdatastore.datacube(
 # Plot RGB image time series
 # -------------------------------------------
 
-datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
+datacube[["red", "green", "blue"]].ed.plot_rgb(
     col="time", col_wrap=4, vmax=0.2
 )
 

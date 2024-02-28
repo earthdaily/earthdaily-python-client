@@ -18,7 +18,6 @@ setup(
     long_description_content_type="text/markdown",
     install_requires=[
         "numpy",
-        "scipy",
         "matplotlib",
         "joblib",
         "psutil",
@@ -35,7 +34,6 @@ setup(
         "python-dotenv",
         "rich",
         "dask",
-        "dask-image",
         "spyndex"
     ],
     include_package_data=True,
