@@ -9,7 +9,6 @@ from dask import array as da
 import spyndex
 from daskimage import ndfilters as ndimage
 
-import warnings
 from xarray.core.extensions import AccessorRegistrationWarning
 warnings.filterwarnings("ignore", category=AccessorRegistrationWarning)
 
@@ -73,7 +72,7 @@ def xr_loop_func(
 def _lee_filter(img, window_size: int):
     try :
         from dask_image import ndfilters
-    except ImportError as E:
+    except ImportError:
         raise ImportError("Please install dask-image to run lee_filter")
 
     img_ = img.copy()
