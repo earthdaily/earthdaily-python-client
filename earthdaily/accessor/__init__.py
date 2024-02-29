@@ -28,22 +28,29 @@ def _typer(raise_mistype=False):
             idx = 1
             for key, val in func.__annotations__.items():
                 is_kwargs = key in kwargs.keys()
-                if val not in _SUPPORTED_DTYPE or kwargs.get(key, None) is None and is_kwargs or len(args)==1:
+                if not is_kwargs and idx >= len(args):
                     continue
-                if raise_mistype and (val != type(kwargs.get(key)) if is_kwargs else val != type(args[idx])):
+                input_value = kwargs.get(key, None) if is_kwargs else args[idx]
+                if type(input_value) == val:
+                    continue
+                if raise_mistype and (
+                    val != type(kwargs.get(key))
+                    if is_kwargs
+                    else val != type(args[idx])
+                ):
                     if is_kwargs:
                         expected = f"{type(kwargs[key]).__name__} ({kwargs[key]})"
                     else:
                         expected = f"{type(args[idx]).__name__} ({args[idx]})"
 
                         raise MisType(
-                        f"{key} expected a {val.__name__}, not a {expected}."
-                    )
+                            f"{key} expected a {val.__name__}, not a {expected}."
+                        )
                 if is_kwargs:
                     kwargs[key] = val(kwargs[key]) if val != list else [kwargs[key]]
-                else:
+                elif len(args) >= idx:
                     _args[idx] = val(args[idx]) if val != list else [args[idx]]
-                idx+=1
+                idx += 1
             args = tuple(_args)
             return func(*args, **kwargs)
 
@@ -116,24 +123,32 @@ def _lee_filter(img, window_size: int):
     img_output = xr.where(np.isnan(binary_nan), img_, img_output)
     return img_output
 
+
 @xr.register_dataarray_accessor("ed")
 class EarthDailyAccessorDataArray:
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
-        
+
     def _max_time_wrap(self, wish=5):
-        return np.min((wish,self._obj['time'].size))
+        return np.min((wish, self._obj["time"].size))
 
     @_typer()
     def plot_band(self, cmap="Greys", col="time", col_wrap=5, **kwargs):
-        return self._obj.plot.imshow(cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs)
+        return self._obj.plot.imshow(
+            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
+        )
 
     @_typer()
     def plot_index(
         self, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
     ):
         return self._obj.plot.imshow(
-            vmin=vmin, vmax=vmax, cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
+            vmin=vmin,
+            vmax=vmax,
+            cmap=cmap,
+            col=col,
+            col_wrap=self._max_time_wrap(col_wrap),
+            **kwargs,
         )
 
 
@@ -143,9 +158,8 @@ class EarthDailyAccessorDataset:
         self._obj = xarray_obj
 
     def _max_time_wrap(self, wish=5):
-        return np.min((wish,self._obj['time'].size))
-        
-    
+        return np.min((wish, self._obj["time"].size))
+
     @_typer()
     def plot_rgb(
         self,
@@ -173,7 +187,12 @@ class EarthDailyAccessorDataset:
         self, index, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
     ):
         return self._obj[index].plot.imshow(
-            vmin=vmin, vmax=vmax, cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
+            vmin=vmin,
+            vmax=vmax,
+            cmap=cmap,
+            col=col,
+            col_wrap=self._max_time_wrap(col_wrap),
+            **kwargs,
         )
 
     @_typer()
@@ -235,20 +254,23 @@ class EarthDailyAccessorDataset:
                 params[_BAND_MAPPING[v]] = self._obj[v]
         return params
 
-    def available_index(self, details=False):
+    def available_indices(self, details=False):
         mapper = list(self._auto_mapper().keys())
         indices = spyndex.indices
         available_indices = []
         for k, v in indices.items():
             needed_bands = v.bands
+            missing_bands = False
             for needed_band in needed_bands:
                 if needed_band not in mapper:
+                    missing_bands = True
                     break
+            if missing_bands is False:
                 available_indices.append(spyndex.indices[k] if details else k)
         return available_indices
 
     @_typer()
-    def add_index(self, index: list, **kwargs):
+    def add_indices(self, index: list, **kwargs):
         """
         Uses spyndex to compute and add index.
 
