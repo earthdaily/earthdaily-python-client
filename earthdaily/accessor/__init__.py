@@ -28,7 +28,7 @@ def _typer(raise_mistype=False):
             idx = 1
             for key, val in func.__annotations__.items():
                 is_kwargs = key in kwargs.keys()
-                if not is_kwargs and idx>= len(args):
+                if not is_kwargs and idx >= len(args):
                     continue
                 input_value = kwargs.get(key, None) if is_kwargs else args[idx]
                 if type(input_value) == val:
