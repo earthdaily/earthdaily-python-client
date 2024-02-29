@@ -43,7 +43,7 @@ datacube = eds.datacube(
 )
 
 # Add the NDVI
-datacube = datacube.ed.add_index('NDVI')
+datacube = datacube.ed.add_indices(['NDVI'])
 
 # Load in memory
 datacube = datacube.load()
@@ -52,18 +52,15 @@ datacube = datacube.load()
 # See the evolution in RGB
 # -------------------------------------------
 
-datacube[["red", "green", "blue"]].to_array(dim="band").plot.imshow(
-    col="time", col_wrap=3, vmax=0.2
-)
+datacube.ed.plot_rgb(col_wrap=3)
 plt.show()
+
 
 ##############################################################################
 # See the NDVI evolution
 # -------------------------------------------
 
-datacube["NDVI"].plot.imshow(
-    col="time", col_wrap=3, vmin=0, vmax=0.8, cmap="RdYlGn"
-)
+datacube["NDVI"].ed.plot_index(col_wrap=3, vmin=0, vmax=0.8, cmap="Greens")
 plt.show()
 
 ##############################################################################
