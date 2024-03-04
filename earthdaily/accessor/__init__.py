@@ -7,10 +7,10 @@ import geopandas as gpd
 from shapely.geometry import Point
 from dask import array as da
 import spyndex
-from dask_image import ndfilters as ndimage
-
+from dask_image import ndfilters as dask_ndimage
+from scipy import ndimage
 from xarray.core.extensions import AccessorRegistrationWarning
-
+from ..earthdatastore.cube_utils import GeometryManager
 warnings.filterwarnings("ignore", category=AccessorRegistrationWarning)
 
 
@@ -92,18 +92,11 @@ def xr_loop_func(
 
 @_typer()
 def _lee_filter(img, window_size: int):
-    try:
-        from dask_image import ndfilters
-    except ImportError:
-        raise ImportError("Please install dask-image to run lee_filter")
-
     img_ = img.copy()
-    ndimage_type = ndfilters
-    if hasattr(img, "data"):
-        if isinstance(img.data, (memoryview, np.ndarray)):
-            ndimage_type = ndimage
-        img = img.data
-    # print(ndimage_type)
+    if isinstance(img,np.ndarray):
+        ndimage_type = ndimage
+    else:
+        ndimage_type = dask_ndimage
     binary_nan = ndimage_type.minimum_filter(
         xr.where(np.isnan(img), 0, 1), size=window_size
     )
@@ -124,11 +117,19 @@ def _lee_filter(img, window_size: int):
     return img_output
 
 
+def _xr_rio_clip(datacube, geom):
+    geom = GeometryManager(geom).to_geopandas()
+    geom = geom.to_crs(datacube.rio.crs)
+    return datacube.rio.clip(geom.geometry)
+
 @xr.register_dataarray_accessor("ed")
 class EarthDailyAccessorDataArray:
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
 
+    def clip(self, geom):
+        return _xr_rio_clip(self._obj, geom)
+    
     def _max_time_wrap(self, wish=5):
         return np.min((wish, self._obj["time"].size))
 
@@ -140,11 +141,9 @@ class EarthDailyAccessorDataArray:
 
     @_typer()
     def plot_index(
-        self, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
+        self, cmap="RdYlGn", col="time", col_wrap=5, **kwargs
     ):
         return self._obj.plot.imshow(
-            vmin=vmin,
-            vmax=vmax,
             cmap=cmap,
             col=col,
             col_wrap=self._max_time_wrap(col_wrap),
@@ -157,6 +156,9 @@ class EarthDailyAccessorDataset:
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
 
+    def clip(self, geom):
+        return _xr_rio_clip(self._obj, geom)
+    
     def _max_time_wrap(self, wish=5):
         return np.min((wish, self._obj["time"].size))
 
@@ -184,11 +186,9 @@ class EarthDailyAccessorDataset:
 
     @_typer()
     def plot_index(
-        self, index, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
+        self, index, cmap="RdYlGn", col="time", col_wrap=5, **kwargs
     ):
         return self._obj[index].plot.imshow(
-            vmin=vmin,
-            vmax=vmax,
             cmap=cmap,
             col=col,
             col_wrap=self._max_time_wrap(col_wrap),
@@ -321,3 +321,18 @@ class EarthDailyAccessorDataset:
                 time=pos, method=method_convert[method]
             )
         return self._obj.sel(time=pos)
+
+    @_typer()
+    def whittaker(
+            self,
+            lmbd:float,
+            weights:np.ndarray=None,
+            a:float=0.5,
+            min_value:float = -np.inf, 
+            max_value:float = np.inf,
+            max_iter:int = 10
+            ):
+        from . import whittaker
+        return whittaker.xr_wt(self._obj, lmbd, time="time", weights = None, a = 0.5, min_value = min_value,
+          max_value = max_value, max_iter = max_iter)
+        
