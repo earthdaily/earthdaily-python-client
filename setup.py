@@ -37,7 +37,8 @@ setup(
         "dask",
         "spyndex",
         "dask-image",
-        "numba"
+        "numba",
+        "geocube"
     ],
     include_package_data=True,
     package_data={"":['*.geojson','*.json']},
