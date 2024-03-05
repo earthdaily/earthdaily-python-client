@@ -45,7 +45,7 @@ class GeometryManager:
         if isinstance(geometry, (dict, str)):
             self.input_type = "GeoJson"
             try:
-                return gpd.read_file(geometry, driver='GeoJson', crs="EPSG:4326")
+                return gpd.read_file(geometry, driver="GeoJson", crs="EPSG:4326")
             except:
                 try:
                     return gpd.GeoDataFrame.from_features(geometry, crs="EPSG:4326")

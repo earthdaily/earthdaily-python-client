@@ -11,6 +11,7 @@ from dask_image import ndfilters as dask_ndimage
 from scipy import ndimage
 from xarray.core.extensions import AccessorRegistrationWarning
 from ..earthdatastore.cube_utils import GeometryManager
+
 warnings.filterwarnings("ignore", category=AccessorRegistrationWarning)
 
 
@@ -93,7 +94,7 @@ def xr_loop_func(
 @_typer()
 def _lee_filter(img, window_size: int):
     img_ = img.copy()
-    if isinstance(img,np.ndarray):
+    if isinstance(img, np.ndarray):
         ndimage_type = ndimage
     else:
         ndimage_type = dask_ndimage
@@ -122,6 +123,7 @@ def _xr_rio_clip(datacube, geom):
     geom = geom.to_crs(datacube.rio.crs)
     return datacube.rio.clip(geom.geometry)
 
+
 @xr.register_dataarray_accessor("ed")
 class EarthDailyAccessorDataArray:
     def __init__(self, xarray_obj):
@@ -129,7 +131,7 @@ class EarthDailyAccessorDataArray:
 
     def clip(self, geom):
         return _xr_rio_clip(self._obj, geom)
-    
+
     def _max_time_wrap(self, wish=5):
         return np.min((wish, self._obj["time"].size))
 
@@ -140,9 +142,7 @@ class EarthDailyAccessorDataArray:
         )
 
     @_typer()
-    def plot_index(
-        self, cmap="RdYlGn", col="time", col_wrap=5, **kwargs
-    ):
+    def plot_index(self, cmap="RdYlGn", col="time", col_wrap=5, **kwargs):
         return self._obj.plot.imshow(
             cmap=cmap,
             col=col,
@@ -158,7 +158,7 @@ class EarthDailyAccessorDataset:
 
     def clip(self, geom):
         return _xr_rio_clip(self._obj, geom)
-    
+
     def _max_time_wrap(self, wish=5):
         return np.min((wish, self._obj["time"].size))
 
@@ -185,9 +185,7 @@ class EarthDailyAccessorDataset:
         )
 
     @_typer()
-    def plot_index(
-        self, index, cmap="RdYlGn", col="time", col_wrap=5, **kwargs
-    ):
+    def plot_index(self, index, cmap="RdYlGn", col="time", col_wrap=5, **kwargs):
         return self._obj[index].plot.imshow(
             cmap=cmap,
             col=col,
@@ -324,15 +322,23 @@ class EarthDailyAccessorDataset:
 
     @_typer()
     def whittaker(
-            self,
-            lmbd:float,
-            weights:np.ndarray=None,
-            a:float=0.5,
-            min_value:float = -np.inf, 
-            max_value:float = np.inf,
-            max_iter:int = 10
-            ):
+        self,
+        lmbd: float,
+        weights: np.ndarray = None,
+        a: float = 0.5,
+        min_value: float = -np.inf,
+        max_value: float = np.inf,
+        max_iter: int = 10,
+    ):
         from . import whittaker
-        return whittaker.xr_wt(self._obj, lmbd, time="time", weights = None, a = 0.5, min_value = min_value,
-          max_value = max_value, max_iter = max_iter)
-        
+
+        return whittaker.xr_wt(
+            self._obj,
+            lmbd,
+            time="time",
+            weights=None,
+            a=0.5,
+            min_value=min_value,
+            max_value=max_value,
+            max_iter=max_iter,
+        )
