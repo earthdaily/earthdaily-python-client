@@ -126,7 +126,7 @@ def zonal_stats(
         zonal_stats["stats"] = operations
         zonal_stats["index"] = gdf.index
         return zonal_stats.rename(dict(index="feature"))
-    
+
     tqdm_bar = tqdm.tqdm(total=gdf.shape[0])
 
     if dataset.rio.crs != gdf.crs:
