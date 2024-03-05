@@ -50,6 +50,8 @@ def _typer(raise_mistype=False):
                 if is_kwargs:
                     kwargs[key] = val(kwargs[key]) if val != list else [kwargs[key]]
                 elif len(args) >= idx:
+                    if isinstance(val,(list,tuple)) and len(val)>1:
+                        val = val[0]
                     _args[idx] = val(args[idx]) if val != list else [args[idx]]
                 idx += 1
             args = tuple(_args)
@@ -132,24 +134,14 @@ class EarthDailyAccessorDataArray:
     def clip(self, geom):
         return _xr_rio_clip(self._obj, geom)
 
-    def _max_time_wrap(self, wish=5):
-        return np.min((wish, self._obj["time"].size))
+    def _max_time_wrap(self, wish=5, col="time"):
+        return np.min((wish, self._obj[col].size))
 
     @_typer()
     def plot_band(self, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj.plot.imshow(
-            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
+            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs
         )
-
-    @_typer()
-    def plot_index(self, cmap="RdYlGn", col="time", col_wrap=5, **kwargs):
-        return self._obj.plot.imshow(
-            cmap=cmap,
-            col=col,
-            col_wrap=self._max_time_wrap(col_wrap),
-            **kwargs,
-        )
-
 
 @xr.register_dataset_accessor("ed")
 class EarthDailyAccessorDataset:
@@ -159,8 +151,8 @@ class EarthDailyAccessorDataset:
     def clip(self, geom):
         return _xr_rio_clip(self._obj, geom)
 
-    def _max_time_wrap(self, wish=5):
-        return np.min((wish, self._obj["time"].size))
+    def _max_time_wrap(self, wish=5, col="time"):
+        return np.min((wish, self._obj[col].size))
 
     @_typer()
     def plot_rgb(
@@ -175,26 +167,17 @@ class EarthDailyAccessorDataset:
         return (
             self._obj[[red, green, blue]]
             .to_array(dim="bands")
-            .plot.imshow(col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs)
+            .plot.imshow(col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs)
         )
 
     @_typer()
     def plot_band(self, band, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj[band].plot.imshow(
-            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
+            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs
         )
 
     @_typer()
-    def plot_index(self, index, cmap="RdYlGn", col="time", col_wrap=5, **kwargs):
-        return self._obj[index].plot.imshow(
-            cmap=cmap,
-            col=col,
-            col_wrap=self._max_time_wrap(col_wrap),
-            **kwargs,
-        )
-
-    @_typer()
-    def lee_filter(self, window_size: int = 7):
+    def lee_filter(self, window_size: int):
         return xr.apply_ufunc(
             _lee_filter,
             self._obj,
@@ -300,7 +283,7 @@ class EarthDailyAccessorDataset:
     @_typer()
     def sel_nearest_dates(
         self,
-        target,
+        target:(xr.Dataset,xr.DataArray),
         max_delta: int = 0,
         method: str = "nearest",
         return_target: bool = False,
