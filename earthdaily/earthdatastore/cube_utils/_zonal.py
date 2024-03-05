@@ -117,7 +117,7 @@ def zonal_stats(
         out_grid = make_geocube(
             gdf,
             measurements=["feature"],
-            like=dataset, # ensure the data are on the same grid
+            like=dataset,  # ensure the data are on the same grid
         )
         cube = dataset.groupby(out_grid.feature)
         zonal_stats = xr.concat(
