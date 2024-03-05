@@ -60,7 +60,7 @@ plt.show()
 # See the NDVI evolution
 # -------------------------------------------
 
-datacube["NDVI"].ed.plot_index(col_wrap=3, vmin=0, vmax=0.8, cmap="Greens")
+datacube["NDVI"].ed.plot_band(col_wrap=3, vmin=0, vmax=0.8, cmap="Greens")
 plt.show()
 
 ##############################################################################
