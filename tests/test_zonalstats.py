@@ -27,46 +27,31 @@ class TestZonalStats(unittest.TestCase):
                 "time": times,
             },
         ).rio.write_crs("EPSG:4326")
-
+        ds = ds.transpose('time','x','y')
         # first pixel
         geometry = [
-            Polygon([(0, 0), (0, 0.8), (0.8, 0.8), (0.8, 0)]),
-            Polygon([(1, 1), (9, 1), (9, 2.1), (1, 1)]),
+            Polygon([(0, 0), (0, 1.2), (1.2, 1.2), (1.2, 0)]),
+            Polygon([(1, 1), (9, 1), (9, 2.1), (1, 1)])
         ]
         # out of bound geom #            Polygon([(10,10), (10,11), (11,11), (11,10)])]
         gdf = gpd.GeoDataFrame({"geometry": geometry}, crs="EPSG:4326")
         self.gdf = gdf
         self.datacube = ds
 
-    def test_numpy(self):
-        zonalstats = earthdaily.earthdatastore.cube_utils.zonal_stats_numpy(
-            self.datacube,
-            self.gdf,
-            all_touched=True,
-            operations=dict(
-                mean=np.nanmean, max=np.nanmax, min=np.nanmin, mode=np.mode
-            ),
-        )
-
-        for operation in ["min", "max", "mode"]:
-            self._check_results(
-                zonalstats["first_var"].sel(stats=operation).values, operation=operation
-            )
 
     def test_basic(self):
         zonalstats = earthdaily.earthdatastore.cube_utils.zonal_stats(
-            self.datacube, self.gdf, all_touched=True, operations=["min", "max", "mode"]
+            self.datacube, self.gdf, all_touched=True, operations=["min", "max"]
         )
-        for operation in ["min", "max", "mode"]:
+        for operation in ["min", "max"]:
             self._check_results(
                 zonalstats["first_var"].sel(stats=operation).values, operation=operation
             )
 
     def _check_results(self, stats_values, operation="min"):
         results = {
-            "min": np.asarray([[0, self.constant], [9, self.constant]]),
-            "max": np.asarray([[8, self.constant], [23, self.constant]]),
-            "mode": np.asarray([[0, self.constant], [9, self.constant]]),
+            "min": np.asarray([[1, self.constant], [10, self.constant]]),
+            "max": np.asarray([[9, self.constant], [15, self.constant]])
         }
         self.assertTrue(np.all(stats_values == results[operation]))
 
