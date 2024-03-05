@@ -5,7 +5,7 @@ import logging as log
 
 def xr_dist_to_finite(y, dim = "time"):
 
-    if not dim in y.dims:
+    if dim not in y.dims:
         raise ValueError
 
     out = xr.apply_ufunc(
