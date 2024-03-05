@@ -7,9 +7,10 @@ import geopandas as gpd
 from shapely.geometry import Point
 from dask import array as da
 import spyndex
-from dask_image import ndfilters as ndimage
-
+from dask_image import ndfilters as dask_ndimage
+from scipy import ndimage
 from xarray.core.extensions import AccessorRegistrationWarning
+from ..earthdatastore.cube_utils import GeometryManager
 
 warnings.filterwarnings("ignore", category=AccessorRegistrationWarning)
 
@@ -49,6 +50,8 @@ def _typer(raise_mistype=False):
                 if is_kwargs:
                     kwargs[key] = val(kwargs[key]) if val != list else [kwargs[key]]
                 elif len(args) >= idx:
+                    if isinstance(val, (list, tuple)) and len(val) > 1:
+                        val = val[0]
                     _args[idx] = val(args[idx]) if val != list else [args[idx]]
                 idx += 1
             args = tuple(_args)
@@ -92,18 +95,11 @@ def xr_loop_func(
 
 @_typer()
 def _lee_filter(img, window_size: int):
-    try:
-        from dask_image import ndfilters
-    except ImportError:
-        raise ImportError("Please install dask-image to run lee_filter")
-
     img_ = img.copy()
-    ndimage_type = ndfilters
-    if hasattr(img, "data"):
-        if isinstance(img.data, (memoryview, np.ndarray)):
-            ndimage_type = ndimage
-        img = img.data
-    # print(ndimage_type)
+    if isinstance(img, np.ndarray):
+        ndimage_type = ndimage
+    else:
+        ndimage_type = dask_ndimage
     binary_nan = ndimage_type.minimum_filter(
         xr.where(np.isnan(img), 0, 1), size=window_size
     )
@@ -124,30 +120,29 @@ def _lee_filter(img, window_size: int):
     return img_output
 
 
+def _xr_rio_clip(datacube, geom):
+    geom = GeometryManager(geom).to_geopandas()
+    geom = geom.to_crs(datacube.rio.crs)
+    return datacube.rio.clip(geom.geometry)
+
+
 @xr.register_dataarray_accessor("ed")
 class EarthDailyAccessorDataArray:
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
 
-    def _max_time_wrap(self, wish=5):
-        return np.min((wish, self._obj["time"].size))
+    def clip(self, geom):
+        return _xr_rio_clip(self._obj, geom)
+
+    def _max_time_wrap(self, wish=5, col="time"):
+        return np.min((wish, self._obj[col].size))
 
     @_typer()
     def plot_band(self, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj.plot.imshow(
-            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
-        )
-
-    @_typer()
-    def plot_index(
-        self, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
-    ):
-        return self._obj.plot.imshow(
-            vmin=vmin,
-            vmax=vmax,
             cmap=cmap,
             col=col,
-            col_wrap=self._max_time_wrap(col_wrap),
+            col_wrap=self._max_time_wrap(col_wrap, col=col),
             **kwargs,
         )
 
@@ -157,8 +152,11 @@ class EarthDailyAccessorDataset:
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
 
-    def _max_time_wrap(self, wish=5):
-        return np.min((wish, self._obj["time"].size))
+    def clip(self, geom):
+        return _xr_rio_clip(self._obj, geom)
+
+    def _max_time_wrap(self, wish=5, col="time"):
+        return np.min((wish, self._obj[col].size))
 
     @_typer()
     def plot_rgb(
@@ -173,30 +171,22 @@ class EarthDailyAccessorDataset:
         return (
             self._obj[[red, green, blue]]
             .to_array(dim="bands")
-            .plot.imshow(col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs)
+            .plot.imshow(
+                col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs
+            )
         )
 
     @_typer()
     def plot_band(self, band, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj[band].plot.imshow(
-            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap), **kwargs
-        )
-
-    @_typer()
-    def plot_index(
-        self, index, cmap="RdYlGn", vmin=-1, vmax=1, col="time", col_wrap=5, **kwargs
-    ):
-        return self._obj[index].plot.imshow(
-            vmin=vmin,
-            vmax=vmax,
             cmap=cmap,
             col=col,
-            col_wrap=self._max_time_wrap(col_wrap),
+            col_wrap=self._max_time_wrap(col_wrap, col=col),
             **kwargs,
         )
 
     @_typer()
-    def lee_filter(self, window_size: int = 7):
+    def lee_filter(self, window_size: int):
         return xr.apply_ufunc(
             _lee_filter,
             self._obj,
@@ -302,7 +292,7 @@ class EarthDailyAccessorDataset:
     @_typer()
     def sel_nearest_dates(
         self,
-        target,
+        target: (xr.Dataset, xr.DataArray),
         max_delta: int = 0,
         method: str = "nearest",
         return_target: bool = False,
@@ -321,3 +311,26 @@ class EarthDailyAccessorDataset:
                 time=pos, method=method_convert[method]
             )
         return self._obj.sel(time=pos)
+
+    @_typer()
+    def whittaker(
+        self,
+        lmbd: float,
+        weights: np.ndarray = None,
+        a: float = 0.5,
+        min_value: float = -np.inf,
+        max_value: float = np.inf,
+        max_iter: int = 10,
+    ):
+        from . import whittaker
+
+        return whittaker.xr_wt(
+            self._obj,
+            lmbd,
+            time="time",
+            weights=None,
+            a=0.5,
+            min_value=min_value,
+            max_value=max_value,
+            max_iter=max_iter,
+        )
