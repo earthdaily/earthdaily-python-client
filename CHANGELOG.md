@@ -5,8 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [0.0.10] - Unreleased
+## [0.0.10] - 2024-03-05
 
+### Added
+
+-  `ed.whittaker` adapted from pywapor github.
+- `ed.zonal_stats` using new `geocube` zonal_stats engine.
+
+### Changed
+
+- `zonal_stats` now uses `geocube` as default processing method.
+
+### Removed
+
+- `ed.plot_index` deprecated, use `ed.plot_band` instead.
 
 ## [0.0.9] - 2024-02-29
 
@@ -19,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- better management of `col_wrap` in  `ed` xarray accessor.
+- better management of `col_wrap` in `ed` xarray accessor.
 
 ### Fixed
 

@@ -325,3 +325,11 @@ class EarthDailyAccessorDataset:
             max_value=max_value,
             max_iter=max_iter,
         )
+
+    def zonal_stats(
+            self,
+            geometry,
+            operations:list=['mean']):
+        from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
+        geometry  = GeometryManager(geometry).to_geopandas()
+        return zonal_stats(self._obj, geometry, operations=operations)
