@@ -5,11 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.0.11] - Unreleased
+
+### Fixed
+
+- `zonal_stats` manages index independently from row.
+
 ## [0.0.10] - 2024-03-05
 
 ### Added
 
--  `ed.whittaker` adapted from pywapor github.
+- `ed.whittaker` adapted from pywapor github.
 - `ed.zonal_stats` using new `geocube` zonal_stats engine.
 
 ### Changed
