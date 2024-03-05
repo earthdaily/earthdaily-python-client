@@ -47,13 +47,16 @@ class GeometryManager:
             try:
                 return gpd.read_file(geometry, driver='GeoJson', crs="EPSG:4326")
             except:
-                if "type" in geometry:
-                    geom = shapely.__dict__[geometry["type"]](
-                        [geometry["coordinates"][0]]
-                    )
-                    return gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")
-        elif isinstance(geometry, gpd.GeoSeries):
-            self.input_type = "GeoSeries"
-            return gpd.GeoDataFrame(geometry=geometry, crs="EPSG:4326")
+                try:
+                    return gpd.GeoDataFrame.from_features(geometry, crs="EPSG:4326")
+                except:
+                    if "type" in geometry:
+                        geom = shapely.__dict__[geometry["type"]](
+                            [geometry["coordinates"][0]]
+                        )
+                        return gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")
+                    elif isinstance(geometry, gpd.GeoSeries):
+                        self.input_type = "GeoSeries"
+                        return gpd.GeoDataFrame(geometry=geometry, crs="EPSG:4326")
         else:
             raise NotImplementedError("Couldn't guess your geometry type")
