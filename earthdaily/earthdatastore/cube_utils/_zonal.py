@@ -110,18 +110,20 @@ def zonal_stats(
     method="geocube",
     verbose=False,
 ):
-    if method == 'geocube':
+    if method == "geocube":
         from geocube.api.core import make_geocube
-        gdf['feature'] = list(gdf.index)
+
+        gdf["feature"] = list(gdf.index)
         out_grid = make_geocube(
             gdf,
             measurements=["feature"],
-            like=dataset  # ensure the data are on the same grid
+            like=dataset,  # ensure the data are on the same grid
         )
         cube = dataset.groupby(out_grid.feature)
-        zonal_stats = xr.concat([
-            getattr(cube, operation)() for operation in operations], dim='stats')
-        zonal_stats['stats'] = operations
+        zonal_stats = xr.concat(
+            [getattr(cube, operation)() for operation in operations], dim="stats"
+        )
+        zonal_stats["stats"] = operations
         return zonal_stats
     tqdm_bar = tqdm.tqdm(total=gdf.shape[0])
 
