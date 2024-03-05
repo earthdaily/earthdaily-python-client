@@ -50,7 +50,7 @@ def _typer(raise_mistype=False):
                 if is_kwargs:
                     kwargs[key] = val(kwargs[key]) if val != list else [kwargs[key]]
                 elif len(args) >= idx:
-                    if isinstance(val,(list,tuple)) and len(val)>1:
+                    if isinstance(val, (list, tuple)) and len(val) > 1:
                         val = val[0]
                     _args[idx] = val(args[idx]) if val != list else [args[idx]]
                 idx += 1
@@ -140,8 +140,12 @@ class EarthDailyAccessorDataArray:
     @_typer()
     def plot_band(self, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj.plot.imshow(
-            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs
+            cmap=cmap,
+            col=col,
+            col_wrap=self._max_time_wrap(col_wrap, col=col),
+            **kwargs,
         )
+
 
 @xr.register_dataset_accessor("ed")
 class EarthDailyAccessorDataset:
@@ -167,13 +171,18 @@ class EarthDailyAccessorDataset:
         return (
             self._obj[[red, green, blue]]
             .to_array(dim="bands")
-            .plot.imshow(col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs)
+            .plot.imshow(
+                col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs
+            )
         )
 
     @_typer()
     def plot_band(self, band, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj[band].plot.imshow(
-            cmap=cmap, col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs
+            cmap=cmap,
+            col=col,
+            col_wrap=self._max_time_wrap(col_wrap, col=col),
+            **kwargs,
         )
 
     @_typer()
@@ -283,7 +292,7 @@ class EarthDailyAccessorDataset:
     @_typer()
     def sel_nearest_dates(
         self,
-        target:(xr.Dataset,xr.DataArray),
+        target: (xr.Dataset, xr.DataArray),
         max_delta: int = 0,
         method: str = "nearest",
         return_target: bool = False,
