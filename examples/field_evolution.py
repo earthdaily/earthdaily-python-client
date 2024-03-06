@@ -45,9 +45,7 @@ pivot_cube.clear_percent.plot.scatter(x="time")
 # ----------------------------------------------------
 pivot_cube = pivot_cube.load()
 pivot_cube.ed.plot_rgb(col_wrap=3)
-
-plt.title("Clear cover percent with SCL")
-plt.title("Pivot evolution with SCL masks")
+plt.title("Pivot evolution masked with native cloudmasks")
 plt.show()
 
 
