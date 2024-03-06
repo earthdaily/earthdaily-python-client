@@ -105,14 +105,14 @@ def zonal_stats_numpy(
 def zonal_stats(
     dataset,
     gdf,
-    operations:list=["mean"],
+    operations: list = ["mean"],
     all_touched=False,
     method="geocube",
     verbose=False,
     raise_missing_geometry=False,
 ):
     """
-    
+
 
     Parameters
     ----------
@@ -147,16 +147,17 @@ def zonal_stats(
     if method == "geocube":
         from geocube.api.core import make_geocube
         from geocube.rasterize import rasterize_image
-        def custom_rasterize_image(all_touched = all_touched, **kwargs):
-            return rasterize_image(all_touched = all_touched, **kwargs)
-        
+
+        def custom_rasterize_image(all_touched=all_touched, **kwargs):
+            return rasterize_image(all_touched=all_touched, **kwargs)
+
         gdf["tmp_index"] = np.arange(gdf.shape[0])
         out_grid = make_geocube(
             gdf,
             measurements=["tmp_index"],
             like=dataset,  # ensure the data are on the same grid
-            rasterize_function=custom_rasterize_image
-            )
+            rasterize_function=custom_rasterize_image,
+        )
         cube = dataset.groupby(out_grid.tmp_index)
         zonal_stats = xr.concat(
             [getattr(cube, operation)() for operation in operations], dim="stats"
