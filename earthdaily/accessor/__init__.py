@@ -53,7 +53,7 @@ def _typer(raise_mistype=False, custom_types={}):
                 val = vals[0]
                 idx = func.__code__.co_varnames.index(key)
                 is_kwargs = key in kwargs.keys()
-                if not is_kwargs and idx > len(_args):
+                if not is_kwargs and idx >= len(_args):
                     break
                 value = kwargs.get(key, None) if is_kwargs else args[idx]
                 if type(value) in vals:
@@ -79,10 +79,10 @@ def _typer(raise_mistype=False, custom_types={}):
                             _args[idx] = res
                     elif is_kwargs:
                         kwargs[key] = (
-                            var(kwargs[key]) if var is not list else [kwargs[key]]
+                            val(kwargs[key]) if val is not list else [kwargs[key]]
                         )
                     else:
-                        _args[idx] = var(args[idx]) if var is not list else [args[idx]]
+                        _args[idx] = val(args[idx]) if val is not list else [args[idx]]
             args = tuple(_args)
             return func(*args, **kwargs)
 
