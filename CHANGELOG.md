@@ -4,11 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.12] - 2024-03-06
+
+### Added
+
+- `_typer` supports custom 
+
+### Changed
+
+- `zonal_stats` outputs only valid geometries. Set `True` 
+to `raise_missing_geometry` to have the old behavior.
+- `zonal_stats` with geocube now manages `all_touched`.
 
 ## [0.0.11] - 2024-03-06
 
 ### Fixed
 
+- some issues with `_typer` from accessor.
 - `zonal_stats` manages index independently from row.
 
 ## [0.0.10] - 2024-03-05
