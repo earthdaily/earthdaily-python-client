@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Field evolution and zonal stats &mdash; earthdaily 0.0.13 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Compare Sentinel-2 scale/offset evolution during time" href="compare_scale_s2.html" />
+    <link rel="prev" title="Venus datacube" href="venus_cube_mask.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> earthdaily
+          </a>
+              <div class="version">
+                0.0.13
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="common_band_names.html">EarthDaily unique common band names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="venus_cube_mask.html">Venus datacube</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Field evolution and zonal stats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-librairies">Import librairies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-plot">Load plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#init-earthdatastore-with-env-params">Init earthdatastore with env params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plots-cube-with-scl-with-at-least-50-of-clear-data">Plots cube with SCL with at least 50% of clear data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compute-zonal-stats-for-the-pivot">Compute zonal stats for the pivot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compare_scale_s2.html">Compare Sentinel-2 scale/offset evolution during time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary_stack.html">Explore collection metadata using earthdaily</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multisensors_cube.html">Create a multisensor cube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_steps_create_datacube.html">First steps to create a datacube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily_simulated_dataset.html">EarthDaily Simulated Dataset</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../earthdaily.html">earthdaily package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Gallery</a></li>
+      <li class="breadcrumb-item active">Field evolution and zonal stats</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_auto_examples/field_evolution.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-field-evolution-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="field-evolution-and-zonal-stats">
+<span id="sphx-glr-auto-examples-field-evolution-py"></span><h1>Field evolution and zonal stats<a class="headerlink" href="#field-evolution-and-zonal-stats" title="Permalink to this heading"></a></h1>
+<p>Using Agriculture cloud mask from EarthDaily, and data from L2A, zonal stats for evolution</p>
+<section id="import-librairies">
+<h2>Import librairies<a class="headerlink" href="#import-librairies" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">earthdaily</span> <span class="kn">import</span> <span class="n">earthdatastore</span><span class="p">,</span> <span class="n">datasets</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+</pre></div>
+</div>
+</section>
+<section id="load-plot">
+<h2>Load plot<a class="headerlink" href="#load-plot" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># load geojson</span>
+<span class="n">pivot</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_pivot</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="init-earthdatastore-with-env-params">
+<h2>Init earthdatastore with env params<a class="headerlink" href="#init-earthdatastore-with-env-params" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">eds</span> <span class="o">=</span> <span class="n">earthdatastore</span><span class="o">.</span><span class="n">Auth</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Search for collection items in august 2022 (1st to 9th)
+where at least 50% of the field is clear according to the native cloudmask.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pivot_cube</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
+    <span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span>
+    <span class="n">intersects</span><span class="o">=</span><span class="n">pivot</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2022-07-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-08-31&quot;</span><span class="p">],</span>
+    <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">],</span>
+    <span class="n">mask_with</span><span class="o">=</span><span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">,</span>
+    <span class="n">clear_cover</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">pivot_cube</span><span class="o">.</span><span class="n">clear_percent</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_field_evolution_001.png" srcset="../_images/sphx_glr_field_evolution_001.png" alt="spatial_ref = 0" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/earthdaily-python-client/earthdaily-python-client/earthdaily/earthdatastore/__init__.py:711: UserWarning: Converting non-nanosecond precision datetime values to nanosecond precision. This behavior can eventually be relaxed in xarray, as it is an artifact from pandas which is now beginning to support non-nanosecond precision values. This warning is caused by passing non-nanosecond np.datetime64 or np.timedelta64 values to the DataArray or Variable constructor; it can be silenced by converting the values to nanosecond precision ahead of time.
+  xr_datacube[&quot;time&quot;] = xr_datacube.time.astype(&quot;M8[s]&quot;)
+/home/runner/work/earthdaily-python-client/earthdaily-python-client/earthdaily/earthdatastore/__init__.py:712: UserWarning: Converting non-nanosecond precision datetime values to nanosecond precision. This behavior can eventually be relaxed in xarray, as it is an artifact from pandas which is now beginning to support non-nanosecond precision values. This warning is caused by passing non-nanosecond np.datetime64 or np.timedelta64 values to the DataArray or Variable constructor; it can be silenced by converting the values to nanosecond precision ahead of time.
+  acm_datacube[&quot;time&quot;] = acm_datacube.time.astype(&quot;M8[s]&quot;)
+
+&lt;matplotlib.collections.PathCollection object at 0x7fe824c80550&gt;
+</pre></div>
+</div>
+</section>
+<section id="plots-cube-with-scl-with-at-least-50-of-clear-data">
+<h2>Plots cube with SCL with at least 50% of clear data<a class="headerlink" href="#plots-cube-with-scl-with-at-least-50-of-clear-data" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pivot_cube</span> <span class="o">=</span> <span class="n">pivot_cube</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">pivot_cube</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">plot_rgb</span><span class="p">(</span><span class="n">col_wrap</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Pivot evolution masked with native cloudmasks&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_field_evolution_002.png" srcset="../_images/sphx_glr_field_evolution_002.png" alt="time = 2022-07-13, time = 2022-07-18, time = 2022-07-21, time = 2022-07-23, time = 2022-07-31, time = 2022-08-02, time = 2022-08-05, time = 2022-08-07, time = 2022-08-10, time = 2022-08-12, time = 2022-08-30, Pivot evolution masked with native cloudmasks" class = "sphx-glr-single-img"/></section>
+<section id="compute-zonal-stats-for-the-pivot">
+<h2>Compute zonal stats for the pivot<a class="headerlink" href="#compute-zonal-stats-for-the-pivot" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">zonal_stats</span> <span class="o">=</span> <span class="n">pivot_cube</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">zonal_stats</span><span class="p">(</span><span class="n">pivot</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="s1">&#39;max&#39;</span><span class="p">,</span><span class="s1">&#39;min&#39;</span><span class="p">])</span>
+
+<span class="n">zonal_stats</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">feature</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;band&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;band&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;stats&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_field_evolution_003.png" srcset="../_images/sphx_glr_field_evolution_003.png" alt="band = red, band = green, band = blue" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/micromamba/envs/earthdaily/lib/python3.11/site-packages/numpy/core/numeric.py:407: RuntimeWarning: invalid value encountered in cast
+  multiarray.copyto(res, fill_value, casting=&#39;unsafe&#39;)
+
+&lt;xarray.plot.facetgrid.FacetGrid object at 0x7fe824acbd10&gt;
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 28.320 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-field-evolution-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/6205558a0b5795c607c4f682401966b4/field_evolution.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">field_evolution.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/bebb3c552f930a594f5533718d3ee93f/field_evolution.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">field_evolution.py</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="venus_cube_mask.html" class="btn btn-neutral float-left" title="Venus datacube" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="compare_scale_s2.html" class="btn btn-neutral float-right" title="Compare Sentinel-2 scale/offset evolution during time" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
