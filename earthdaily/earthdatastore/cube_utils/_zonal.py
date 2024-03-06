@@ -109,7 +109,7 @@ def zonal_stats(
     all_touched=False,
     method="geocube",
     verbose=False,
-    raise_missing_geometry=False
+    raise_missing_geometry=False,
 ):
     """
     
@@ -162,12 +162,16 @@ def zonal_stats(
             [getattr(cube, operation)() for operation in operations], dim="stats"
         )
         zonal_stats["stats"] = operations
-        
+
         if zonal_stats["tmp_index"].size != gdf.shape[0]:
-            index_list = [gdf.index[i] for i in zonal_stats["tmp_index"].values.astype(np.int16)]
+            index_list = [
+                gdf.index[i] for i in zonal_stats["tmp_index"].values.astype(np.int16)
+            ]
             if raise_missing_geometry:
-                diff = gdf.shape[0]-len(index_list)
-                raise ValueError(f'{diff} geometr{"y is" if diff==1 else "ies are"} missing in the zonal stats. This can be due to too small geometries, duplicated...')
+                diff = gdf.shape[0] - len(index_list)
+                raise ValueError(
+                    f'{diff} geometr{"y is" if diff==1 else "ies are"} missing in the zonal stats. This can be due to too small geometries, duplicated...'
+                )
         else:
             index_list = list(gdf.index)
         zonal_stats["tmp_index"] = index_list
