@@ -19,28 +19,49 @@ class MisType(Warning):
     pass
 
 
-_SUPPORTED_DTYPE = [int, float, list, bool, str]
-
-
 def _typer(raise_mistype=False, custom_types={}):
+    """
+
+    Parameters
+    ----------
+    raise_mistype : TYPE, optional
+        DESCRIPTION. The default is False.
+    custom_types : TYPE, optional
+        DESCRIPTION. The default is {}.
+        Example : {
+            np.ndarray:{"func":np.asarray},
+            xr.Dataset:{"func":xr.DataArray.to_dataset,"kwargs":{"dim":"band"}}
+            }
+    Raises
+    ------
+    MisType
+        DESCRIPTION.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    """
+
     def decorator(func):
         def force(*args, **kwargs):
             _args = list(args)
-            func_arg = func.__code__.co_varnames
-            for key, val in func.__annotations__.items():
-                if not isinstance(val, (list, tuple)):
-                    val = [val]
-                idx = [i for i in range(len(func_arg)) if func_arg[i] == key][0]
+            for key, vals in func.__annotations__.items():
+                if not isinstance(vals, (list, tuple)):
+                    vals = [vals]
+                val = vals[0]
+                idx = func.__code__.co_varnames.index(key)
                 is_kwargs = key in kwargs.keys()
-                if not is_kwargs and idx >= len(args):
-                    continue
-                input_value = kwargs.get(key, None) if is_kwargs else args[idx]
-                if type(input_value) in val:
+                if not is_kwargs and idx > len(_args):
+                    break
+                value = kwargs.get(key, None) if is_kwargs else args[idx]
+                if type(value) in vals:
                     continue
                 if (
-                    type(kwargs.get(key)) not in val
+                    type(kwargs.get(key)) not in vals
                     if is_kwargs
-                    else type(args[idx]) not in val
+                    else type(args[idx]) not in vals
                 ):
                     if raise_mistype:
                         if is_kwargs:
@@ -48,10 +69,20 @@ def _typer(raise_mistype=False, custom_types={}):
                         else:
                             expected = f"{type(args[idx]).__name__} ({args[idx]})"
                         raise MisType(f"{key} expected {val.__name__}, not {expected}.")
-                    if is_kwargs:
-                        kwargs[key] = val[0](kwargs[key])
+                    if any(val == k for k in custom_types.keys()):
+                        exp = custom_types[val]
+                        var = args[idx]
+                        res = exp["func"](var, **exp.get("kwargs", {}))
+                        if is_kwargs:
+                            kwargs[key] = res
+                        else:
+                            _args[idx] = res
+                    elif is_kwargs:
+                        kwargs[key] = (
+                            var(kwargs[key]) if var is not list else [kwargs[key]]
+                        )
                     else:
-                        _args[idx] = val[0](args[idx])
+                        _args[idx] = var(args[idx]) if var is not list else [args[idx]]
             args = tuple(_args)
             return func(*args, **kwargs)
 
@@ -258,7 +289,7 @@ class EarthDailyAccessorDataset:
         return available_indices
 
     @_typer()
-    def add_indices(self, index: list, **kwargs):
+    def add_indices(self, indices: list, **kwargs):
         """
         Uses spyndex to compute and add index.
 
@@ -267,7 +298,7 @@ class EarthDailyAccessorDataset:
 
         Parameters
         ----------
-        index : list
+        indices : list
             ['NDVI'].
         Returns
         -------
@@ -279,11 +310,11 @@ class EarthDailyAccessorDataset:
         params = {}
         params = self._auto_mapper()
         params.update(**kwargs)
-        idx = spyndex.computeIndex(index=index, params=params, **kwargs)
+        idx = spyndex.computeIndex(index=indices, params=params, **kwargs)
 
-        if len(index) == 1:
-            idx = idx.expand_dims(index=index)
-        idx = idx.to_dataset(dim="index")
+        if len(indices) == 1:
+            idx = idx.expand_dims(indices=indices)
+        idx = idx.to_dataset(dim="indices")
 
         return xr.merge((self._obj, idx))
 
