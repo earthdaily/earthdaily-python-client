@@ -22,38 +22,36 @@ class MisType(Warning):
 _SUPPORTED_DTYPE = [int, float, list, bool, str]
 
 
-def _typer(raise_mistype=False):
+def _typer(raise_mistype=False, custom_types={}):
     def decorator(func):
         def force(*args, **kwargs):
             _args = list(args)
-            idx = 1
+            func_arg = func.__code__.co_varnames
             for key, val in func.__annotations__.items():
+                if not isinstance(val, (list, tuple)):
+                    val = [val]
+                idx = [i for i in range(len(func_arg)) if func_arg[i] == key][0]
                 is_kwargs = key in kwargs.keys()
                 if not is_kwargs and idx >= len(args):
                     continue
                 input_value = kwargs.get(key, None) if is_kwargs else args[idx]
-                if type(input_value) == val:
+                if type(input_value) in val:
                     continue
-                if raise_mistype and (
-                    val != type(kwargs.get(key))
+                if (
+                    type(kwargs.get(key)) not in val
                     if is_kwargs
-                    else val != type(args[idx])
+                    else type(args[idx]) not in val
                 ):
+                    if raise_mistype:
+                        if is_kwargs:
+                            expected = f"{type(kwargs[key]).__name__} ({kwargs[key]})"
+                        else:
+                            expected = f"{type(args[idx]).__name__} ({args[idx]})"
+                        raise MisType(f"{key} expected {val.__name__}, not {expected}.")
                     if is_kwargs:
-                        expected = f"{type(kwargs[key]).__name__} ({kwargs[key]})"
+                        kwargs[key] = val[0](kwargs[key])
                     else:
-                        expected = f"{type(args[idx]).__name__} ({args[idx]})"
-
-                        raise MisType(
-                            f"{key} expected a {val.__name__}, not a {expected}."
-                        )
-                if is_kwargs:
-                    kwargs[key] = val(kwargs[key]) if val != list else [kwargs[key]]
-                elif len(args) >= idx:
-                    if isinstance(val, (list, tuple)) and len(val) > 1:
-                        val = val[0]
-                    _args[idx] = val(args[idx]) if val != list else [args[idx]]
-                idx += 1
+                        _args[idx] = val[0](args[idx])
             args = tuple(_args)
             return func(*args, **kwargs)
 
@@ -335,8 +333,18 @@ class EarthDailyAccessorDataset:
             max_iter=max_iter,
         )
 
-    def zonal_stats(self, geometry, operations: list = ["mean"]):
+    def zonal_stats(
+        self,
+        geometry,
+        operations: list = ["mean"],
+        raise_missing_geometry: bool = False,
+    ):
         from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
 
         geometry = GeometryManager(geometry).to_geopandas()
-        return zonal_stats(self._obj, geometry, operations=operations)
+        return zonal_stats(
+            self._obj,
+            geometry,
+            operations=operations,
+            raise_missing_geometry=raise_missing_geometry,
+        )

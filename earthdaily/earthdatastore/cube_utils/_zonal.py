@@ -105,27 +105,77 @@ def zonal_stats_numpy(
 def zonal_stats(
     dataset,
     gdf,
-    operations=["mean"],
+    operations: list = ["mean"],
     all_touched=False,
     method="geocube",
     verbose=False,
+    raise_missing_geometry=False,
 ):
+    """
+
+
+    Parameters
+    ----------
+    dataset : xr.Dataset
+        DESCRIPTION.
+    gdf : gpd.GeoDataFrame
+        DESCRIPTION.
+    operations : TYPE, list.
+        DESCRIPTION. The default is ["mean"].
+    all_touched : TYPE, optional
+        DESCRIPTION. The default is False.
+    method : TYPE, optional
+        DESCRIPTION. The default is "geocube".
+    verbose : TYPE, optional
+        DESCRIPTION. The default is False.
+    raise_missing_geometry : TYPE, optional
+        DESCRIPTION. The default is False.
+
+    Raises
+    ------
+    ValueError
+        DESCRIPTION.
+    NotImplementedError
+        DESCRIPTION.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    """
     if method == "geocube":
         from geocube.api.core import make_geocube
+        from geocube.rasterize import rasterize_image
+
+        def custom_rasterize_image(all_touched=all_touched, **kwargs):
+            return rasterize_image(all_touched=all_touched, **kwargs)
 
         gdf["tmp_index"] = np.arange(gdf.shape[0])
         out_grid = make_geocube(
             gdf,
             measurements=["tmp_index"],
             like=dataset,  # ensure the data are on the same grid
+            rasterize_function=custom_rasterize_image,
         )
         cube = dataset.groupby(out_grid.tmp_index)
         zonal_stats = xr.concat(
             [getattr(cube, operation)() for operation in operations], dim="stats"
         )
         zonal_stats["stats"] = operations
-        zonal_stats["tmp_index"] = list(gdf.index)
 
+        if zonal_stats["tmp_index"].size != gdf.shape[0]:
+            index_list = [
+                gdf.index[i] for i in zonal_stats["tmp_index"].values.astype(np.int16)
+            ]
+            if raise_missing_geometry:
+                diff = gdf.shape[0] - len(index_list)
+                raise ValueError(
+                    f'{diff} geometr{"y is" if diff==1 else "ies are"} missing in the zonal stats. This can be due to too small geometries, duplicated...'
+                )
+        else:
+            index_list = list(gdf.index)
+        zonal_stats["tmp_index"] = index_list
         return zonal_stats.rename(dict(tmp_index="feature"))
 
     tqdm_bar = tqdm.tqdm(total=gdf.shape[0])
