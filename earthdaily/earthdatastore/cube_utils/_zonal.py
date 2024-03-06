@@ -112,7 +112,7 @@ def zonal_stats(
 ):
     if method == "geocube":
         from geocube.api.core import make_geocube
-        
+
         gdf["tmp_index"] = np.arange(gdf.shape[0])
         out_grid = make_geocube(
             gdf,
