@@ -112,20 +112,21 @@ def zonal_stats(
 ):
     if method == "geocube":
         from geocube.api.core import make_geocube
-
-        gdf["index"] = np.arange(gdf.shape[0])
+        
+        gdf["tmp_index"] = np.arange(gdf.shape[0])
         out_grid = make_geocube(
             gdf,
-            measurements=["index"],
+            measurements=["tmp_index"],
             like=dataset,  # ensure the data are on the same grid
         )
-        cube = dataset.groupby(out_grid.index)
+        cube = dataset.groupby(out_grid.tmp_index)
         zonal_stats = xr.concat(
             [getattr(cube, operation)() for operation in operations], dim="stats"
         )
         zonal_stats["stats"] = operations
-        zonal_stats["index"] = gdf.index
-        return zonal_stats.rename(dict(index="feature"))
+        zonal_stats["tmp_index"] = list(gdf.index)
+
+        return zonal_stats.rename(dict(tmp_index="feature"))
 
     tqdm_bar = tqdm.tqdm(total=gdf.shape[0])
 

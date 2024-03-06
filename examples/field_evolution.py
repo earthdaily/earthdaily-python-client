@@ -53,7 +53,6 @@ plt.show()
 # Compute zonal stats for the pivot
 # ----------------------------------------------------
 
-pivot.index = ['my_pivot']
 zonal_stats = pivot_cube.ed.zonal_stats(pivot, ['mean','max','min'])
 
 zonal_stats.isel(feature=0).to_array(dim="band").plot.line(
