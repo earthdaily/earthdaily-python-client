@@ -28,24 +28,26 @@ def _typer(raise_mistype=False, custom_types={}):
             _args = list(args)
             func_arg = func.__code__.co_varnames
             for key, val in func.__annotations__.items():
-                if not isinstance(val,(list,tuple)):
+                if not isinstance(val, (list, tuple)):
                     val = [val]
-                idx = [i for i in range(len(func_arg)) if func_arg[i]==key][0]
+                idx = [i for i in range(len(func_arg)) if func_arg[i] == key][0]
                 is_kwargs = key in kwargs.keys()
                 if not is_kwargs and idx >= len(args):
                     continue
                 input_value = kwargs.get(key, None) if is_kwargs else args[idx]
                 if type(input_value) in val:
                     continue
-                if type(kwargs.get(key)) not in val if is_kwargs else type(args[idx]) not in val:
+                if (
+                    type(kwargs.get(key)) not in val
+                    if is_kwargs
+                    else type(args[idx]) not in val
+                ):
                     if raise_mistype:
                         if is_kwargs:
                             expected = f"{type(kwargs[key]).__name__} ({kwargs[key]})"
                         else:
                             expected = f"{type(args[idx]).__name__} ({args[idx]})"
-                        raise MisType(
-                            f"{key} expected {val.__name__}, not {expected}."
-                        )
+                        raise MisType(f"{key} expected {val.__name__}, not {expected}.")
                     if is_kwargs:
                         kwargs[key] = val[0](kwargs[key])
                     else:
@@ -331,10 +333,18 @@ class EarthDailyAccessorDataset:
             max_iter=max_iter,
         )
 
-    def zonal_stats(self, geometry, operations: list = ["mean"], raise_missing_geometry:bool=False):
+    def zonal_stats(
+        self,
+        geometry,
+        operations: list = ["mean"],
+        raise_missing_geometry: bool = False,
+    ):
         from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
 
         geometry = GeometryManager(geometry).to_geopandas()
-        return zonal_stats(self._obj, geometry, 
-                           operations=operations,
-                           raise_missing_geometry=raise_missing_geometry)
+        return zonal_stats(
+            self._obj,
+            geometry,
+            operations=operations,
+            raise_missing_geometry=raise_missing_geometry,
+        )
