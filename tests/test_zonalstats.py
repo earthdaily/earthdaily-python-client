@@ -27,21 +27,23 @@ class TestZonalStats(unittest.TestCase):
                 "time": times,
             },
         ).rio.write_crs("EPSG:4326")
-        ds = ds.transpose('time','x','y')
         # first pixel
+
         geometry = [
+            Polygon([(0, 0), (0, 0.5), (0.5, 0.5), (0.5, 0)]),
             Polygon([(0, 0), (0, 1.2), (1.2, 1.2), (1.2, 0)]),
             Polygon([(1, 1), (9, 1), (9, 2.1), (1, 1)])
         ]
         # out of bound geom #            Polygon([(10,10), (10,11), (11,11), (11,10)])]
         gdf = gpd.GeoDataFrame({"geometry": geometry}, crs="EPSG:4326")
+        gdf.index = ['tosmall','ok','ok']
         self.gdf = gdf
         self.datacube = ds
 
 
     def test_basic(self):
         zonalstats = earthdaily.earthdatastore.cube_utils.zonal_stats(
-            self.datacube, self.gdf, all_touched=True, operations=["min", "max"]
+            self.datacube, self.gdf, operations=["min", "max"], raise_missing_geometry=False
         )
         for operation in ["min", "max"]:
             self._check_results(
@@ -55,6 +57,10 @@ class TestZonalStats(unittest.TestCase):
         }
         self.assertTrue(np.all(stats_values == results[operation]))
 
-
+    def test_error(self):
+        with self.assertRaises(ValueError):
+            earthdaily.earthdatastore.cube_utils.zonal_stats(
+                self.datacube, self.gdf, operations=["min", "max"], raise_missing_geometry=True)
+                          
 if __name__ == "__main__":
     unittest.main()
