@@ -110,4 +110,6 @@ def xr_wt(
         output_core_dims=ocd,
         dask="allowed",
     )
-    return xr.where(np.isnan(datacube_), datacube_, datacube)
+    return xr.where(np.isnan(datacube_).all(dim=time), datacube_, datacube)
+
+

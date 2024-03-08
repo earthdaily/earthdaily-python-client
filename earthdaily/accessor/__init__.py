@@ -18,6 +18,14 @@ warnings.filterwarnings("ignore", category=AccessorRegistrationWarning)
 class MisType(Warning):
     pass
 
+class WatchYourType:
+    def __init__(self, raise_mistype=False, custom_typing={}):
+        self.raise_mistype = raise_mistype
+        self.custom_typing = custom_typing
+        
+    @property
+    def typer(self):
+        return _typer(raise_mistype=self.raise_mistype, custom_types=self.custom_typing)
 
 def _typer(raise_mistype=False, custom_types={}):
     """
@@ -47,7 +55,11 @@ def _typer(raise_mistype=False, custom_types={}):
     def decorator(func):
         def force(*args, **kwargs):
             _args = list(args)
+            return_types = None
             for key, vals in func.__annotations__.items():
+                if key == "return":
+                    return_types = [vals]
+                    continue
                 if not isinstance(vals, (list, tuple)):
                     vals = [vals]
                 val = vals[0]
@@ -84,6 +96,13 @@ def _typer(raise_mistype=False, custom_types={}):
                     else:
                         _args[idx] = val(args[idx]) if val is not list else [args[idx]]
             args = tuple(_args)
+# =============================================================================
+#             res = [func(*args, **kwargs)]
+#             if return_types is not None:
+#                 if not all([type(res[i]) == return_types[i] for i in range(len(return_types))]):
+#                     raise TypeError('not good type')
+#             return func
+# =============================================================================
             return func(*args, **kwargs)
 
         return force
@@ -358,7 +377,7 @@ class EarthDailyAccessorDataset:
             lmbd,
             time="time",
             weights=None,
-            a=0.5,
+            a=a,
             min_value=min_value,
             max_value=max_value,
             max_iter=max_iter,
