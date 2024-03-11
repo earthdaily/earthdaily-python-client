@@ -60,8 +60,7 @@ class GeometryManager:
                         return gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")
         elif isinstance(geometry, gpd.GeoSeries):
             self.input_type = "GeoSeries"
-            if geometry.crs is not None:
-                crs = geometry.crs
+
             return gpd.GeoDataFrame(geometry=geometry, crs="EPSG:4326" if geometry.crs is None else geometry.crs)
         else:
             raise NotImplementedError("Couldn't guess your geometry type")    

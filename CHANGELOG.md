@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `GeoSeries`in GeometryManager.
+- Bugs when managing multiple indices with accessor `xr.ed`.
 
 ### Removed
 

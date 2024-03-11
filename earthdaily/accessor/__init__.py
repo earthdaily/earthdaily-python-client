@@ -340,7 +340,7 @@ class EarthDailyAccessorDataset:
         idx = spyndex.computeIndex(index=indices, params=params, **kwargs)
 
         if len(indices) == 1:
-            idx = idx.expand_dims(indices=indices)
+            idx = idx.expand_dims(index=indices)
         idx = idx.to_dataset(dim="index")
 
         return xr.merge((self._obj, idx))
