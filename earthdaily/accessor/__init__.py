@@ -19,15 +19,18 @@ class MisType(Warning):
     pass
 
 class WatchYourType:
-    def __init__(self, raise_mistype=False, custom_typing={}):
+    def __init__(self, raise_mistype=False, custom_typing={}, check_return=True):
         self.raise_mistype = raise_mistype
         self.custom_typing = custom_typing
+        self.check_return = check_return
         
     @property
     def typer(self):
-        return _typer(raise_mistype=self.raise_mistype, custom_types=self.custom_typing)
+        return _typer(raise_mistype=self.raise_mistype,
+                      custom_types=self.custom_typing,
+                      check_return=self.check_return)
 
-def _typer(raise_mistype=False, custom_types={}):
+def _typer(raise_mistype=False, custom_types={}, check_return=False):
     """
 
     Parameters
@@ -57,11 +60,12 @@ def _typer(raise_mistype=False, custom_types={}):
             _args = list(args)
             return_types = None
             for key, vals in func.__annotations__.items():
-                if key == "return":
-                    return_types = [vals]
-                    continue
+                
                 if not isinstance(vals, (list, tuple)):
                     vals = [vals]
+                if key == "return":
+                    return_types = vals
+                    continue
                 val = vals[0]
                 idx = func.__code__.co_varnames.index(key)
                 is_kwargs = key in kwargs.keys()
@@ -96,15 +100,13 @@ def _typer(raise_mistype=False, custom_types={}):
                     else:
                         _args[idx] = val(args[idx]) if val is not list else [args[idx]]
             args = tuple(_args)
-# =============================================================================
-#             res = [func(*args, **kwargs)]
-#             if return_types is not None:
-#                 if not all([type(res[i]) == return_types[i] for i in range(len(return_types))]):
-#                     raise TypeError('not good type')
-#             return func
-# =============================================================================
-            return func(*args, **kwargs)
-
+            res = func(*args, **kwargs)
+            if return_types is not None and check_return:
+                if not isinstance(res,(list,tuple)):
+                    res = [res]                        
+                if not all([type(res[i]) == return_types[i] for i in range(len(return_types))]):
+                    raise TypeError('not good type')
+            return res
         return force
 
     return decorator
