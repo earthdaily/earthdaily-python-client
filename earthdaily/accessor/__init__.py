@@ -19,7 +19,7 @@ class MisType(Warning):
     pass
 
 
-class WatchYourType:
+class Typer:
     def __init__(self, raise_mistype=False, custom_typing={}, check_return=True):
         self.raise_mistype = raise_mistype
         self.custom_typing = custom_typing
