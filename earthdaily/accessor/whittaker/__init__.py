@@ -111,5 +111,3 @@ def xr_wt(
         dask="allowed",
     )
     return xr.where(np.isnan(datacube_).all(dim=time), datacube_, datacube)
-
-
