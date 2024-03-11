@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.14] - Unreleased
 
+### Fixed
+
+- `GeoSeries`in GeometryManager.
+
 ### Removed
 
-- `mode` for zonal stats operations.reducers.
+- `mode` for zonal stats `operations.reducers`.
 
 ## [0.0.13] - 2024-03-06
 

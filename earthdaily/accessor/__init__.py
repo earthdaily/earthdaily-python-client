@@ -341,7 +341,7 @@ class EarthDailyAccessorDataset:
 
         if len(indices) == 1:
             idx = idx.expand_dims(indices=indices)
-        idx = idx.to_dataset(dim="indices")
+        idx = idx.to_dataset(dim="index")
 
         return xr.merge((self._obj, idx))
 

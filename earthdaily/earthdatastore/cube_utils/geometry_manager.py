@@ -8,7 +8,10 @@ class GeometryManager:
     def __init__(self, geometry):
         self.geometry = geometry
         self._obj = self.to_geopandas()
-
+            
+    def __call__(self):
+        return self._obj
+    
     def to_intersects(self, crs="EPSG:4326"):
         return json.loads(self._obj.to_crs(crs).dissolve().to_json(drop_id=True))[
             "features"
@@ -55,8 +58,10 @@ class GeometryManager:
                             [geometry["coordinates"][0]]
                         )
                         return gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")
-                    elif isinstance(geometry, gpd.GeoSeries):
-                        self.input_type = "GeoSeries"
-                        return gpd.GeoDataFrame(geometry=geometry, crs="EPSG:4326")
+        elif isinstance(geometry, gpd.GeoSeries):
+            self.input_type = "GeoSeries"
+            if geometry.crs is not None:
+                crs = geometry.crs
+            return gpd.GeoDataFrame(geometry=geometry, crs="EPSG:4326" if geometry.crs is None else geometry.crs)
         else:
-            raise NotImplementedError("Couldn't guess your geometry type")
+            raise NotImplementedError("Couldn't guess your geometry type")    
