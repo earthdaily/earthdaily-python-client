@@ -211,7 +211,7 @@ class EarthDailyAccessorDataArray:
         min_value: float = -np.inf,
         max_value: float = np.inf,
         max_iter: int = 10,
-        time="time"
+        time="time",
     ):
         from . import whittaker
 
@@ -401,7 +401,7 @@ class EarthDailyAccessorDataset:
         min_value: float = -np.inf,
         max_value: float = np.inf,
         max_iter: int = 10,
-        time="time"
+        time="time",
     ):
         from . import whittaker
 
