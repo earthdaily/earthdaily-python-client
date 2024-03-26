@@ -211,14 +211,15 @@ class EarthDailyAccessorDataArray:
         min_value: float = -np.inf,
         max_value: float = np.inf,
         max_iter: int = 10,
+        time="time"
     ):
         from . import whittaker
 
         return whittaker.xr_wt(
             self._obj.to_dataset(name='index'),
             lmbd,
-            time="time",
-            weights=None,
+            time=time,
+            weights=weights,
             a=a,
             min_value=min_value,
             max_value=max_value,
@@ -400,14 +401,15 @@ class EarthDailyAccessorDataset:
         min_value: float = -np.inf,
         max_value: float = np.inf,
         max_iter: int = 10,
+        time="time"
     ):
         from . import whittaker
 
         return whittaker.xr_wt(
             self._obj,
             lmbd,
-            time="time",
-            weights=None,
+            time=time,
+            weights=weights,
             a=a,
             min_value=min_value,
             max_value=max_value,
