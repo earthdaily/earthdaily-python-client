@@ -201,7 +201,7 @@ class EarthDailyAccessorDataArray:
             col_wrap=self._max_time_wrap(col_wrap, col=col),
             **kwargs,
         )
-    
+
     @_typer()
     def whittaker(
         self,
@@ -216,7 +216,7 @@ class EarthDailyAccessorDataArray:
         from . import whittaker
 
         return whittaker.xr_wt(
-            self._obj.to_dataset(name='index'),
+            self._obj.to_dataset(name="index"),
             lmbd,
             time=time,
             weights=weights,
@@ -224,7 +224,7 @@ class EarthDailyAccessorDataArray:
             min_value=min_value,
             max_value=max_value,
             max_iter=max_iter,
-        )['index']
+        )["index"]
 
 
 @xr.register_dataset_accessor("ed")
