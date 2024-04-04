@@ -11,7 +11,6 @@ from dask_image import ndfilters as dask_ndimage
 from scipy import ndimage
 from xarray.core.extensions import AccessorRegistrationWarning
 from ..earthdatastore.cube_utils import GeometryManager
-from tytyper import Typer
 
 
 def xr_loop_func(
