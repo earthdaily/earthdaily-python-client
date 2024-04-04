@@ -34,4 +34,5 @@ class CustomReducers:
         xr.core.groupby.DatasetGroupBy.mode = CustomReducers.mode
         np.mode = CustomReducers._np_mode
 
+
 CustomReducers.register_custom_reducers()

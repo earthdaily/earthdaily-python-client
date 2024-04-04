@@ -44,7 +44,6 @@ def xr_loop_func(
     )
 
 
-
 def _lee_filter(img, window_size: int):
     img_ = img.copy()
     if isinstance(img, np.ndarray):
@@ -88,7 +87,6 @@ class EarthDailyAccessorDataArray:
     def _max_time_wrap(self, wish=5, col="time"):
         return np.min((wish, self._obj[col].size))
 
-    
     def plot_band(self, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj.plot.imshow(
             cmap=cmap,
@@ -97,7 +95,6 @@ class EarthDailyAccessorDataArray:
             **kwargs,
         )
 
-    
     def whittaker(
         self,
         lmbd: float,
@@ -133,7 +130,6 @@ class EarthDailyAccessorDataset:
     def _max_time_wrap(self, wish=5, col="time"):
         return np.min((wish, self._obj[col].size))
 
-    
     def plot_rgb(
         self,
         red: str = "red",
@@ -151,7 +147,6 @@ class EarthDailyAccessorDataset:
             )
         )
 
-    
     def plot_band(self, band, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj[band].plot.imshow(
             cmap=cmap,
@@ -160,7 +155,6 @@ class EarthDailyAccessorDataset:
             **kwargs,
         )
 
-    
     def lee_filter(self, window_size: int):
         return xr.apply_ufunc(
             _lee_filter,
@@ -171,7 +165,6 @@ class EarthDailyAccessorDataset:
             kwargs=dict(window_size=window_size),
         )
 
-    
     def centroid(self, to_wkt: str = False, to_4326: bool = True):
         """Return the geographic center point in 4326/WKT of this dataset."""
         # we can use a cache on our accessor objects, because accessors
@@ -234,7 +227,6 @@ class EarthDailyAccessorDataset:
                 available_indices.append(spyndex.indices[k] if details else k)
         return available_indices
 
-    
     def add_indices(self, indices: list, **kwargs):
         """
         Uses spyndex to compute and add index.
@@ -264,7 +256,6 @@ class EarthDailyAccessorDataset:
 
         return xr.merge((self._obj, idx))
 
-    
     def sel_nearest_dates(
         self,
         target: (xr.Dataset, xr.DataArray),
@@ -287,7 +278,6 @@ class EarthDailyAccessorDataset:
             )
         return self._obj.sel(time=pos)
 
-    
     def whittaker(
         self,
         lmbd: float,
