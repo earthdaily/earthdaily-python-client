@@ -10,7 +10,7 @@ import numpy as np
 import xarray as xr
 import tqdm
 
-# from . import custom_operations
+from . import custom_reducers
 from .preprocessing import rasterize
 from scipy.sparse import csr_matrix
 

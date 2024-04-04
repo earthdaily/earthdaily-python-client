@@ -11,114 +11,9 @@ from dask_image import ndfilters as dask_ndimage
 from scipy import ndimage
 from xarray.core.extensions import AccessorRegistrationWarning
 from ..earthdatastore.cube_utils import GeometryManager
-
-warnings.filterwarnings("ignore", category=AccessorRegistrationWarning)
-
-
-class MisType(Warning):
-    pass
+from tytyper import Typer
 
 
-class Typer:
-    def __init__(self, raise_mistype=False, custom_typing={}, check_return=True):
-        self.raise_mistype = raise_mistype
-        self.custom_typing = custom_typing
-        self.check_return = check_return
-
-    @property
-    def typer(self):
-        return _typer(
-            raise_mistype=self.raise_mistype,
-            custom_types=self.custom_typing,
-            check_return=self.check_return,
-        )
-
-
-def _typer(raise_mistype=False, custom_types={}, check_return=False):
-    """
-
-    Parameters
-    ----------
-    raise_mistype : TYPE, optional
-        DESCRIPTION. The default is False.
-    custom_types : TYPE, optional
-        DESCRIPTION. The default is {}.
-        Example : {
-            np.ndarray:{"func":np.asarray},
-            xr.Dataset:{"func":xr.DataArray.to_dataset,"kwargs":{"dim":"band"}}
-            }
-    Raises
-    ------
-    MisType
-        DESCRIPTION.
-
-    Returns
-    -------
-    TYPE
-        DESCRIPTION.
-
-    """
-
-    def decorator(func):
-        def force(*args, **kwargs):
-            _args = list(args)
-            return_types = None
-            for key, vals in func.__annotations__.items():
-                if not isinstance(vals, (list, tuple)):
-                    vals = [vals]
-                if key == "return":
-                    return_types = vals
-                    continue
-                val = vals[0]
-                idx = func.__code__.co_varnames.index(key)
-                is_kwargs = key in kwargs.keys()
-                if not is_kwargs and idx >= len(_args):
-                    break
-                value = kwargs.get(key, None) if is_kwargs else args[idx]
-                if type(value) in vals:
-                    continue
-                if (
-                    type(kwargs.get(key)) not in vals
-                    if is_kwargs
-                    else type(args[idx]) not in vals
-                ):
-                    if raise_mistype:
-                        if is_kwargs:
-                            expected = f"{type(kwargs[key]).__name__} ({kwargs[key]})"
-                        else:
-                            expected = f"{type(args[idx]).__name__} ({args[idx]})"
-                        raise MisType(f"{key} expected {val.__name__}, not {expected}.")
-                    if any(val == k for k in custom_types.keys()):
-                        exp = custom_types[val]
-                        var = args[idx]
-                        res = exp["func"](var, **exp.get("kwargs", {}))
-                        if is_kwargs:
-                            kwargs[key] = res
-                        else:
-                            _args[idx] = res
-                    elif is_kwargs:
-                        kwargs[key] = (
-                            val(kwargs[key]) if val is not list else [kwargs[key]]
-                        )
-                    else:
-                        _args[idx] = val(args[idx]) if val is not list else [args[idx]]
-            args = tuple(_args)
-            res = func(*args, **kwargs)
-            if return_types is not None and check_return:
-                if not isinstance(res, (list, tuple)):
-                    res = [res]
-                if not all(
-                    [type(res[i]) == return_types[i] for i in range(len(return_types))]
-                ):
-                    raise TypeError("not good type")
-            return res
-
-        return force
-
-    return decorator
-
-
-@_typer()
 def xr_loop_func(
     dataset: xr.Dataset,
     func,
@@ -149,7 +44,7 @@ def xr_loop_func(
     )
 
 
-@_typer()
+
 def _lee_filter(img, window_size: int):
     img_ = img.copy()
     if isinstance(img, np.ndarray):
@@ -193,7 +88,7 @@ class EarthDailyAccessorDataArray:
     def _max_time_wrap(self, wish=5, col="time"):
         return np.min((wish, self._obj[col].size))
 
-    @_typer()
+    
     def plot_band(self, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj.plot.imshow(
             cmap=cmap,
@@ -202,7 +97,7 @@ class EarthDailyAccessorDataArray:
             **kwargs,
         )
 
-    @_typer()
+    
     def whittaker(
         self,
         lmbd: float,
@@ -238,7 +133,7 @@ class EarthDailyAccessorDataset:
     def _max_time_wrap(self, wish=5, col="time"):
         return np.min((wish, self._obj[col].size))
 
-    @_typer()
+    
     def plot_rgb(
         self,
         red: str = "red",
@@ -256,7 +151,7 @@ class EarthDailyAccessorDataset:
             )
         )
 
-    @_typer()
+    
     def plot_band(self, band, cmap="Greys", col="time", col_wrap=5, **kwargs):
         return self._obj[band].plot.imshow(
             cmap=cmap,
@@ -265,7 +160,7 @@ class EarthDailyAccessorDataset:
             **kwargs,
         )
 
-    @_typer()
+    
     def lee_filter(self, window_size: int):
         return xr.apply_ufunc(
             _lee_filter,
@@ -276,7 +171,7 @@ class EarthDailyAccessorDataset:
             kwargs=dict(window_size=window_size),
         )
 
-    @_typer()
+    
     def centroid(self, to_wkt: str = False, to_4326: bool = True):
         """Return the geographic center point in 4326/WKT of this dataset."""
         # we can use a cache on our accessor objects, because accessors
@@ -339,7 +234,7 @@ class EarthDailyAccessorDataset:
                 available_indices.append(spyndex.indices[k] if details else k)
         return available_indices
 
-    @_typer()
+    
     def add_indices(self, indices: list, **kwargs):
         """
         Uses spyndex to compute and add index.
@@ -369,7 +264,7 @@ class EarthDailyAccessorDataset:
 
         return xr.merge((self._obj, idx))
 
-    @_typer()
+    
     def sel_nearest_dates(
         self,
         target: (xr.Dataset, xr.DataArray),
@@ -392,7 +287,7 @@ class EarthDailyAccessorDataset:
             )
         return self._obj.sel(time=pos)
 
-    @_typer()
+    
     def whittaker(
         self,
         lmbd: float,
