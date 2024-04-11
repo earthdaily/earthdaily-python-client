@@ -13,7 +13,7 @@ asset_mapper_path = (
     earthdaily.earthdatastore.cube_utils.asset_mapper.__asset_mapper_config_path
 )
 asset_mapper_config = (
-    earthdaily.earthdatastore.cube_utils.asset_mapper.__asset_mapper_config
+    earthdaily.earthdatastore.cube_utils.asset_mapper._asset_mapper_config
 )
 
 for collection in eds.explore():
@@ -23,6 +23,7 @@ for collection in eds.explore():
         print(f"collection {collection} has no items")
         continue
     for asset_name in assets_name:
+        print(asset_name)
         if asset_mapper_config.get(collection) is None:
             asset_mapper_config[collection] = [{}]
         if asset_name not in asset_mapper_config[collection][0].values():

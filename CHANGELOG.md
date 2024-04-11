@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.14] - 2024-04-11
+
+### Fixed
+
+- `GeoSeries` supported in GeometryManager.
+- `ed.sel_nearest_dates` accessor avoid duplicated times.
+- Issue when managing multiple indices with accessor `xr.ed`.
+- Issue when same datetime when rescaling dataset.
+
+### Added
+
+- `mode` for zonal stats in `operations.reducers`.
+
+### Changed
+
+- `ag_cloud_mask_items` queries items per batch.
+
+### Removed
+
+- Typing decorator, expected new typing library.
+
 ## [0.0.13] - 2024-03-06
 
 ### Fixed

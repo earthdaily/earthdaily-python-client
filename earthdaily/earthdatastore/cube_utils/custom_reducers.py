@@ -3,7 +3,7 @@ from xarray.core import groupby
 import numpy as np
 
 
-class CustomOperations:
+class CustomReducers:
     @staticmethod
     def _np_mode(arr, **kwargs):
         if isinstance(arr, list):
@@ -22,17 +22,17 @@ class CustomOperations:
     def mode(data_array_grouped, optional_arg=None):
         # Apply _xrmode to DataArrayGroupBy object
         result = data_array_grouped.reduce(
-            CustomOperations._np_mode,
+            CustomReducers._np_mode,
             list(dim for dim in data_array_grouped.dims if dim != "time"),
         )
         return result
 
     @staticmethod
-    def register_custom_operations():
+    def register_custom_reducers():
         # register custom methods fo DataArrayGroupBy
-        xr.core.groupby.DataArrayGroupBy.mode = CustomOperations.mode
-        xr.core.groupby.DatasetGroupBy.mode = CustomOperations.mode
-        np.mode = CustomOperations._np_mode
+        xr.core.groupby.DataArrayGroupBy.mode = CustomReducers.mode
+        xr.core.groupby.DatasetGroupBy.mode = CustomReducers.mode
+        np.mode = CustomReducers._np_mode
 
 
-CustomOperations.register_custom_operations()
+CustomReducers.register_custom_reducers()
