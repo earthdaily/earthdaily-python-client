@@ -650,7 +650,7 @@ class Auth:
 
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
-            self.intersects = intersects 
+            self.intersects = intersects
         items = self.search(
             collections=collections,
             bbox=bbox,
@@ -945,8 +945,12 @@ class Auth:
         ids_ = [x for n in (items_id.values()) for x in n]
         items_list = []
         step = 100
-        for items_start_idx in range(0,len(ids_),step):
-            items = self.search(collections=collections, intersects=self.intersects, ids=ids_[items_start_idx:items_start_idx+step])
+        for items_start_idx in range(0, len(ids_), step):
+            items = self.search(
+                collections=collections,
+                intersects=self.intersects,
+                ids=ids_[items_start_idx : items_start_idx + step],
+            )
             items_list.extend(items)
         return ItemCollection(items)
 
