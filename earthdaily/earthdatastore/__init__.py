@@ -650,6 +650,7 @@ class Auth:
 
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
+            self.intersects = intersects
         items = self.search(
             collections=collections,
             bbox=bbox,
@@ -941,8 +942,17 @@ class Auth:
         if len(items_id) == 0:
             raise ValueError("Sorry, no ag_cloud_mask available.")
         collections = list(items_id.keys())
-        ids = [x for n in (items_id.values()) for x in n]
-        return self.search(collections=collections, ids=ids)
+        ids_ = [x for n in (items_id.values()) for x in n]
+        items_list = []
+        step = 100
+        for items_start_idx in range(0, len(ids_), step):
+            items = self.search(
+                collections=collections,
+                intersects=self.intersects,
+                ids=ids_[items_start_idx : items_start_idx + step],
+            )
+            items_list.extend(items)
+        return ItemCollection(items)
 
 
 def item_property_to_df(
