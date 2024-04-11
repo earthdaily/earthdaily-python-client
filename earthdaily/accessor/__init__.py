@@ -265,7 +265,6 @@ class EarthDailyAccessorDataset:
         src_time = self._obj.sel(time=target.time.dt.date, method=method).time.dt.date
         target_time = target.time.dt.date
         pos = np.abs(src_time.data - target_time.data)
-        pos_delta = [delta.days for delta in pos]
         pos = [
             src_time.isel(time=i).time.values
             for i, j in enumerate(pos)
