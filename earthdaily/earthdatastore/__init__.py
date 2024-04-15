@@ -950,7 +950,7 @@ class Auth:
                 collections=collections,
                 # intersects=self.intersects,
                 ids=ids_[items_start_idx : items_start_idx + step],
-                limit=step
+                limit=step,
             )
             items_list.extend(list(items))
         return ItemCollection(items_list)
