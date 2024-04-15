@@ -67,3 +67,6 @@ class GeometryManager:
             )
         else:
             raise NotImplementedError("Couldn't guess your geometry type")
+
+    def buffer_in_meter(self, distance:int, crs_meters:str="EPSG:3857", **kwargs):
+            return self._obj.to_crs(crs=crs_meters).buffer(distance=distance, **kwargs).to_crs(crs=self._obj.crs).geometry
