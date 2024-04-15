@@ -42,7 +42,7 @@ def _datacubes(method):
 
 
 def _match_xy_dims(src, dst, resampling=Resampling.nearest):
-    if src.sizes != dst.sizes:
+    if (src.sizes["x"], src.sizes["y"]) != (dst.sizes["x"], dst.sizes["y"]):
         src = src.rio.reproject_match(dst, resampling=resampling)
     return src
 
