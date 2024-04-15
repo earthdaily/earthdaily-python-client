@@ -948,11 +948,12 @@ class Auth:
         for items_start_idx in range(0, len(ids_), step):
             items = self.search(
                 collections=collections,
-                intersects=self.intersects,
+                # intersects=self.intersects,
                 ids=ids_[items_start_idx : items_start_idx + step],
+                limit=step
             )
-            items_list.extend(items)
-        return ItemCollection(items)
+            items_list.extend(list(items))
+        return ItemCollection(items_list)
 
 
 def item_property_to_df(
