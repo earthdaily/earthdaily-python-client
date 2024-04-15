@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Issue when having different time size between sensor and cloudmask.
 
-
 ## [0.0.16] - 2024-04-15
 
 ### Fixed
