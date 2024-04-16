@@ -358,7 +358,7 @@ def rescale_assets_with_items(
             ds_scaled[asset] = []
             for scale in scales[asset].keys():
                 for offset in scales[asset][scale].keys():
-                    times =  np.in1d(ds.time, list(set(scales[asset][scale][offset])))
+                    times = np.in1d(ds.time, list(set(scales[asset][scale][offset])))
                     asset_scaled = ds[[asset]].isel(time=times) * scale + offset
                     ds_scaled[asset].append(asset_scaled)
         ds_ = []
