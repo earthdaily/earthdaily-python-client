@@ -119,7 +119,7 @@ def _cube_odc(
         # assign metadata as coords
         ds = ds.assign_coords(**metadata)
     ds = ds.chunk(kwargs["chunks"])
-    
+
     return ds
 
 
