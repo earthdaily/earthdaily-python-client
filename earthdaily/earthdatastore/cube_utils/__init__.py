@@ -118,6 +118,8 @@ def _cube_odc(
         metadata = {k: ("time", v.tolist()) for k, v in df.items()}
         # assign metadata as coords
         ds = ds.assign_coords(**metadata)
+    ds = ds.chunk(kwargs["chunks"])
+    
     return ds
 
 

@@ -6,9 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - Unreleased
 
-### Fied
+### Fixed
 
 - Scaled/asset when duplicated datetimes.
+- Chunks asked in datacube are not the same as the output (due du smallest dims).
 
 ## [0.0.17] - 2024-04-15
 
