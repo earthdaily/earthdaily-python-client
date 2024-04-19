@@ -251,13 +251,13 @@ def datacube(
     if isinstance(assets, dict):
         ds = ds.rename(assets)
 
-    for coord in datacube.coords:
-        if datacube.coords[coord].values.shape == ():
+    for coord in ds.coords:
+        if ds.coords[coord].values.shape == ():
             continue
-        if isinstance(datacube.coords[coord].values[0], (list, dict)):
-            datacube.coords[coord].values = [
-                json.dumps(datacube.coords[coord].values[idx])
-                for idx in range(datacube.coords[coord].size)
+        if isinstance(ds.coords[coord].values[0], (list, dict)):
+            ds.coords[coord].values = [
+                json.dumps(ds.coords[coord].values[idx])
+                for idx in range(ds.coords[coord].size)
             ]
 
     return ds
