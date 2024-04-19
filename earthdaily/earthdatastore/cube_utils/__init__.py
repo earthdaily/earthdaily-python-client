@@ -250,12 +250,15 @@ def datacube(
 
     if isinstance(assets, dict):
         ds = ds.rename(assets)
-    
+
     for coord in datacube.coords:
         if datacube.coords[coord].values.shape == ():
             continue
-        if isinstance(datacube.coords[coord].values[0],(list,dict)):
-            datacube.coords[coord].values = [json.dumps(datacube.coords[coord].values[idx]) for idx in range(datacube.coords[coord].size)]
+        if isinstance(datacube.coords[coord].values[0], (list, dict)):
+            datacube.coords[coord].values = [
+                json.dumps(datacube.coords[coord].values[idx])
+                for idx in range(datacube.coords[coord].size)
+            ]
 
     return ds
 
