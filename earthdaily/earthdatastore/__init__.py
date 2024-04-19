@@ -746,7 +746,6 @@ class Auth:
 
             if clear_cover:
                 xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
-
         return xr_datacube
 
     def _update_search_for_assets(self, assets):
