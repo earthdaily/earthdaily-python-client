@@ -1,10 +1,7 @@
-import logging
-from datetime import datetime
 from collections import defaultdict
 import pandas as pd
 import geopandas as gpd
 import numpy as np
-import pytz
 import xarray as xr
 from rasterio.enums import Resampling
 from shapely.geometry import box
@@ -14,6 +11,7 @@ from .harmonizer import Harmonizer
 from .asset_mapper import AssetMapper
 import rioxarray
 from functools import wraps
+import json
 
 __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
 
@@ -251,6 +249,13 @@ def datacube(
 
     if isinstance(assets, dict):
         ds = ds.rename(assets)
+    
+    for coord in datacube.coords:
+        if datacube.coords[coord].values.shape == ():
+            continue
+        if isinstance(datacube.coords[coord].values[0],(list,dict)):
+            datacube.coords[coord].values = [json.dumps(datacube.coords[coord].values[idx]) for idx in range(datacube.coords[coord].size)]
+
     return ds
 
 
