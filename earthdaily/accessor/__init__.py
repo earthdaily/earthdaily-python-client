@@ -129,6 +129,12 @@ class EarthDailyAccessorDataset:
     def _max_time_wrap(self, wish=5, col="time"):
         return np.min((wish, self._obj[col].size))
 
+    def drop_unfrozen_coords(self, keep_spatial_ref=True):
+        unfrozen_coords = [coord for coord in self._obj.coords if coord not in list(self._obj.sizes.keys())]
+        if keep_spatial_ref and 'spatial_ref' in unfrozen_coords:
+            unfrozen_coords.pop(np.argwhere(np.in1d(unfrozen_coords,'spatial_ref'))[0][0])
+        return self._obj.drop(unfrozen_coords)
+    
     def plot_rgb(
         self,
         red: str = "red",
@@ -289,8 +295,9 @@ class EarthDailyAccessorDataset:
         time="time",
     ):
         from . import whittaker
+        data_crs = self._obj.rio.crs
 
-        return whittaker.xr_wt(
+        self._obj =  whittaker.xr_wt(
             self._obj,
             lmbd,
             time=time,
@@ -300,7 +307,10 @@ class EarthDailyAccessorDataset:
             max_value=max_value,
             max_iter=max_iter,
         )
-
+        
+        self._obj  = self._obj.rio.set_crs(data_crs).rio.write_crs(data_crs)
+        return self._obj 
+    
     def zonal_stats(
         self,
         geometry,

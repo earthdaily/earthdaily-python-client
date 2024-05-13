@@ -535,7 +535,7 @@ class Auth:
         add_default_scale_factor: bool = True,
         common_band_names=True,
         cross_calibration_collection: (None | str) = None,
-        properties: (bool | str | list) = None,
+        properties: (bool | str | list) = False,
         groupby_date: str = "mean",
         **kwargs,
     ) -> xr.Dataset:
@@ -607,7 +607,7 @@ class Auth:
         cross_calibration_collection : (None | str), optional
             DESCRIPTION. The default is None.
         properties : (bool | str | list), optional
-            Retrieve properties per item.
+            Retrieve properties per item. The default is False.
         **kwargs : TYPE
             DESCRIPTION.
          : TYPE
