@@ -34,7 +34,7 @@ setup(
         "tqdm",
         "python-dotenv",
         "rich",
-        "dask",
+        "dask>=2024.5",
         "spyndex",
         "dask-image",
         "numba",
