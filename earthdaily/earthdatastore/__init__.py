@@ -626,7 +626,7 @@ class Auth:
             DESCRIPTION.
 
         """
-        if properties is not None and groupby_date is not None:
+        if properties not in (None, False) and groupby_date is not None:
             raise NotImplementedError(
                 "You must set `groupby_date=None` to have properties per item."
             )
