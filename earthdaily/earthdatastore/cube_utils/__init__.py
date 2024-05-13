@@ -1,10 +1,8 @@
-import logging
-from datetime import datetime
 from collections import defaultdict
+import logging
 import pandas as pd
 import geopandas as gpd
 import numpy as np
-import pytz
 import xarray as xr
 from rasterio.enums import Resampling
 from shapely.geometry import box
@@ -14,6 +12,7 @@ from .harmonizer import Harmonizer
 from .asset_mapper import AssetMapper
 import rioxarray
 from functools import wraps
+import json
 
 __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
 
@@ -118,6 +117,8 @@ def _cube_odc(
         metadata = {k: ("time", v.tolist()) for k, v in df.items()}
         # assign metadata as coords
         ds = ds.assign_coords(**metadata)
+    ds = ds.chunk(kwargs["chunks"])
+
     return ds
 
 
@@ -249,6 +250,16 @@ def datacube(
 
     if isinstance(assets, dict):
         ds = ds.rename(assets)
+
+    for coord in ds.coords:
+        if ds.coords[coord].values.shape == ():
+            continue
+        if isinstance(ds.coords[coord].values[0], (list, dict)):
+            ds.coords[coord].values = [
+                json.dumps(ds.coords[coord].values[idx])
+                for idx in range(ds.coords[coord].size)
+            ]
+
     return ds
 
 
@@ -358,14 +369,9 @@ def rescale_assets_with_items(
             ds_scaled[asset] = []
             for scale in scales[asset].keys():
                 for offset in scales[asset][scale].keys():
-                    times = list(set(scales[asset][scale][offset]))
-                    if len(times) != len(scales[asset][scale][offset]):
-                        for time in times:
-                            d = ds[[asset]].loc[dict(time=time)] * scale + offset
-                            ds_scaled[asset].append(d)
-                    else:
-                        d = ds[[asset]].loc[dict(time=times)] * scale + offset
-                        ds_scaled[asset].append(d)
+                    times = np.in1d(ds.time, list(set(scales[asset][scale][offset])))
+                    asset_scaled = ds[[asset]].isel(time=times) * scale + offset
+                    ds_scaled[asset].append(asset_scaled)
         ds_ = []
         for k, v in ds_scaled.items():
             ds_k = []

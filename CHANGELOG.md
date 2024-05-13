@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2024-05-13
+
+### Fixed
+
+- `properties` of datacube is now a boolean or a list, not None by default.
+- Missing crs after whittaker.
+
+
+## [0.1.0] - 2024-04-19
+
+### Fixed
+
+- Scaled/asset when duplicated datetimes.
+- Chunks asked in datacube are not the same as the output (due du smallest dims).
+- Autoconverting list/dict coords to string for zarr compatibility
+
+## [0.0.17] - 2024-04-15
+
+### Fixed
+
+- Issue when having different time size between sensor and cloudmask.
+
 ## [0.0.16] - 2024-04-15
 
 ### Fixed

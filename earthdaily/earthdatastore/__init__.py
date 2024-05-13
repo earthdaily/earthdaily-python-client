@@ -535,7 +535,7 @@ class Auth:
         add_default_scale_factor: bool = True,
         common_band_names=True,
         cross_calibration_collection: (None | str) = None,
-        properties: (bool | str | list) = None,
+        properties: (bool | str | list) = False,
         groupby_date: str = "mean",
         **kwargs,
     ) -> xr.Dataset:
@@ -607,7 +607,7 @@ class Auth:
         cross_calibration_collection : (None | str), optional
             DESCRIPTION. The default is None.
         properties : (bool | str | list), optional
-            Retrieve properties per item.
+            Retrieve properties per item. The default is False.
         **kwargs : TYPE
             DESCRIPTION.
          : TYPE
@@ -746,7 +746,6 @@ class Auth:
 
             if clear_cover:
                 xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
-
         return xr_datacube
 
     def _update_search_for_assets(self, assets):
@@ -948,11 +947,12 @@ class Auth:
         for items_start_idx in range(0, len(ids_), step):
             items = self.search(
                 collections=collections,
-                intersects=self.intersects,
+                # intersects=self.intersects,
                 ids=ids_[items_start_idx : items_start_idx + step],
+                limit=step,
             )
-            items_list.extend(items)
-        return ItemCollection(items)
+            items_list.extend(list(items))
+        return ItemCollection(items_list)
 
 
 def item_property_to_df(
