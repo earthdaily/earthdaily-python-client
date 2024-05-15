@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.2] - Unreleased
 
+### Fixed
+
+- Wrong clear_percent/clear_pixels when having multiple geometries in datacube request
 
 ## [0.1.1] - 2024-05-13
 
