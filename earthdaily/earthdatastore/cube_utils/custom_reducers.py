@@ -30,8 +30,8 @@ class CustomReducers:
     @staticmethod
     def register_custom_reducers():
         # register custom methods fo DataArrayGroupBy
-        xr.core.groupby.DataArrayGroupBy.mode = CustomReducers.mode
-        xr.core.groupby.DatasetGroupBy.mode = CustomReducers.mode
+        groupby.DataArrayGroupBy.mode = CustomReducers.mode
+        groupby.DatasetGroupBy.mode = CustomReducers.mode
         np.mode = CustomReducers._np_mode
 
 

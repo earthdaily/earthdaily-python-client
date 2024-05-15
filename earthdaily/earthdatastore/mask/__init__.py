@@ -48,7 +48,7 @@ class Mask:
         if bbox and intersects is None:
             intersects = _bbox_to_intersects(bbox)
         if isinstance(intersects, gpd.GeoDataFrame):
-            intersects = intersects.to_crs(self._obj.rio.crs).head(1)
+            intersects = intersects.to_crs(self._obj.rio.crs)
         self.intersects = intersects
 
     def ag_cloud_mask(
