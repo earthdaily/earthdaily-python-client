@@ -388,7 +388,8 @@
     ],
     "goes": [
         {
-            "OR_ABI-L2-AODF-M6_G16_s20233490810206_e20233490819514_c20233490820523.nc": "OR_ABI-L2-AODF-M6_G16_s20233490810206_e20233490819514_c20233490820523.nc"
+            "OR_ABI-L2-AODF-M6_G16_s20233490810206_e20233490819514_c20233490820523.nc": "OR_ABI-L2-AODF-M6_G16_s20233490810206_e20233490819514_c20233490820523.nc",
+            "OR_ABI-L2-ACMF-M6_G18_s20241430900220_e20241430909528_c20241430910280.nc": "OR_ABI-L2-ACMF-M6_G18_s20241430900220_e20241430909528_c20241430910280.nc"
         }
     ],
     "himawari-l1b": [
@@ -408,7 +409,23 @@
             "HS_H09_20231215_0550_B13_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B13_FLDK_R20_S0110.DAT.bz2",
             "HS_H09_20231215_0550_B14_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B14_FLDK_R20_S0110.DAT.bz2",
             "HS_H09_20231215_0550_B15_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B15_FLDK_R20_S0110.DAT.bz2",
-            "HS_H09_20231215_0550_B16_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B16_FLDK_R20_S0110.DAT.bz2"
+            "HS_H09_20231215_0550_B16_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B16_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B01_FLDK_R10_S0110.DAT.bz2": "HS_H09_20240522_0550_B01_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B02_FLDK_R10_S0110.DAT.bz2": "HS_H09_20240522_0550_B02_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B03_FLDK_R05_S0110.DAT.bz2": "HS_H09_20240522_0550_B03_FLDK_R05_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B04_FLDK_R10_S0110.DAT.bz2": "HS_H09_20240522_0550_B04_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B05_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B05_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B06_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B06_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B07_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B07_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B08_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B08_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B09_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B09_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B10_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B10_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B11_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B11_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B12_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B12_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B13_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B13_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B14_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B14_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B15_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B15_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B16_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B16_FLDK_R20_S0110.DAT.bz2"
         }
     ],
     "himawari-l2-cloud": [
@@ -587,7 +604,8 @@
             "annotation/calibration/noise-iw-vh.xml": "annotation/calibration/noise-iw-vh.xml",
             "annotation/calibration/noise-iw-vv.xml": "annotation/calibration/noise-iw-vv.xml",
             "annotation/calibration/calibration-iw-vh.xml": "annotation/calibration/calibration-iw-vh.xml",
-            "annotation/calibration/calibration-iw-vv.xml": "annotation/calibration/calibration-iw-vv.xml"
+            "annotation/calibration/calibration-iw-vv.xml": "annotation/calibration/calibration-iw-vv.xml",
+            "report-20240521T170707.pdf": "report-20240521T170707.pdf"
         }
     ],
     "sentinel-1-rtc": [
@@ -692,7 +710,205 @@
     ],
     "sentinel-2-methane-product": [
         {
-            "colourized_geotiff": "colourized_geotiff"
+            "colourized_geotiff": "colourized_geotiff",
+            "thumbnail": "thumbnail"
+        }
+    ],
+    "ecostress-eco-l2t-lste-002": [
+        {
+            "browse": "browse",
+            "metadata": "metadata",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_QC": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_QC",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_LST": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_LST",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_cloud": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_cloud",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_water": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_water",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_EmisWB": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_EmisWB",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_height": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_height",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_LST_err": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_LST_err",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_view_zenith": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_view_zenith"
+        }
+    ],
+    "esa-worldcover-landcover-2020-v100": [
+        {
+            "ESA_WORLDCOVER_10M_MAP": "ESA_WORLDCOVER_10M_MAP"
+        }
+    ],
+    "esa-worldcover-landcover-2021-v200": [
+        {
+            "ESA_WORLDCOVER_10M_MAP": "ESA_WORLDCOVER_10M_MAP"
+        }
+    ],
+    "esa-worldcover-s1-vvvhratio-2020-v100": [
+        {
+            "s1_vvvhratio_2020": "s1_vvvhratio_2020"
+        }
+    ],
+    "esa-worldcover-s1-vvvhratio-2021-v200": [
+        {
+            "s1_vvvhratio_2021": "s1_vvvhratio_2021"
+        }
+    ],
+    "esa-worldcover-s2-nvdi-2020-v100": [
+        {
+            "s2_ndvi_2020": "s2_ndvi_2020"
+        }
+    ],
+    "esa-worldcover-s2-nvdi-2021-v200": [
+        {
+            "s2_ndvi_2021": "s2_ndvi_2021"
+        }
+    ],
+    "esa-worldcover-s2-rgbnir-2020-v100": [
+        {
+            "s2_rgbnir_2020": "s2_rgbnir_2020"
+        }
+    ],
+    "esa-worldcover-s2-rgbnir-2021-v200": [
+        {
+            "s2_rgbnir_2021": "s2_rgbnir_2021"
+        }
+    ],
+    "esa-worldcover-s2-swir-2020-v100": [
+        {
+            "s2_swir_2020": "s2_swir_2020"
+        }
+    ],
+    "esa-worldcover-s2-swir-2021-v200": [
+        {
+            "s2_swir_2021": "s2_swir_2021"
+        }
+    ],
+    "lulc-classification-map": [
+        {
+            "thumbnail": "thumbnail",
+            "lulc-classification-map": "lulc-classification-map"
+        }
+    ],
+    "modis-mod11-l2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod11a2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod21-l2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod21a2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd11-l2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd11a2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd21-l2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd21a2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "nst-observer-catalog": [
+        {
+            "browse": "browse",
+            "thumbnail": "thumbnail",
+            "cloud_mask": "cloud_mask"
+        }
+    ],
+    "viirs-vj121-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vj121a1d-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vj121a1n-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vj121a2-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vnp21-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vnp21a1d-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vnp21a1n-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vnp21a2-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
         }
     ]
 }
