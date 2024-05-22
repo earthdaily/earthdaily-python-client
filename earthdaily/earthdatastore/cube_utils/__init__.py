@@ -17,7 +17,7 @@ import json
 __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
 
 
-def _datacube_masks(method, *args,**kwargs):
+def _datacube_masks(method, *args, **kwargs):
     @wraps(method)
     def _impl(self, *args, **kwargs):
         mask_with = kwargs.get("mask_with", None)
@@ -35,7 +35,8 @@ def _datacube_masks(method, *args,**kwargs):
         return datacube
 
     return _impl
-    
+
+
 def _datacubes(method):
     @wraps(method)
     @_datacube_masks
