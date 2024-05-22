@@ -527,7 +527,7 @@ class Auth:
         assets: None | list | dict = None,
         intersects: (gpd.GeoDataFrame | str | dict) = None,
         bbox=None,
-        mask_with: (None | str) = None,
+        mask_with: (None | str | list) = None,
         mask_statistics: bool | int = False,
         clear_cover: (int | float) = None,
         prefer_alternate: (str | bool) = "download",
@@ -587,8 +587,9 @@ class Auth:
             DESCRIPTION. The default is None.
         bbox : TYPE, optional
             DESCRIPTION. The default is None.
-        mask_with : (None, str), optional
-            "native" mask, or "ag_cloud_mask".
+        mask_with : (None, str, list), optional
+            "native" mask, or "ag_cloud_mask", or ["ag_cloud_mask","native"],
+            and so if ag_cloud_mask is not available, will switch to native.
             The default is None.
         mask_statistics : bool | int, optional
             DESCRIPTION. The default is False.
@@ -634,11 +635,17 @@ class Auth:
         if isinstance(collections, str):
             collections = [collections]
 
+        if intersects is not None:
+            intersects = cube_utils.GeometryManager(intersects).to_geopandas()
+            self.intersects = intersects
+
         if mask_with:
             if mask_with not in mask._available_masks:
-                raise ValueError(
-                    f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}"
+                logging.log(
+                    level=logging.INFO,
+                    msg=f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}",
                 )
+
             if mask_with == "ag_cloud_mask":
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections[0]
@@ -648,9 +655,6 @@ class Auth:
                 if isinstance(assets, list):
                     assets.append(mask_with)
 
-        if intersects is not None:
-            intersects = cube_utils.GeometryManager(intersects).to_geopandas()
-            self.intersects = intersects
         items = self.search(
             collections=collections,
             bbox=bbox,
