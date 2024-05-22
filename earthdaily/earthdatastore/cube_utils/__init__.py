@@ -17,8 +17,28 @@ import json
 __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
 
 
+def _datacube_masks(method, *args,**kwargs):
+    @wraps(method)
+    def _impl(self, *args, **kwargs):
+        mask_with = kwargs.get("mask_with", None)
+        if isinstance(mask_with, list) and len(mask_with) > 1:
+            kwargs.pop("mask_with")
+            for mask in mask_with:
+                try:
+                    datacube = method(self, mask_with=mask, *args, **kwargs)
+                    break
+                except Warning:
+                    # if warning about no items for ag_cloud_mask for example
+                    continue
+        else:
+            datacube = method(self, *args, **kwargs)
+        return datacube
+
+    return _impl
+    
 def _datacubes(method):
     @wraps(method)
+    @_datacube_masks
     def _impl(self, *args, **kwargs):
         collections = kwargs.get("collections", args[0] if len(args) > 0 else None)
         if isinstance(collections, list) and len(collections) > 1:
