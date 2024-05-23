@@ -21,7 +21,7 @@ def _datacube_masks(method, *args, **kwargs):
     @wraps(method)
     def _impl(self, *args, **kwargs):
         mask_with = kwargs.get("mask_with", None)
-        if isinstance(mask_with, list) and len(mask_with) > 1:
+        if isinstance(mask_with, list):
             kwargs.pop("mask_with")
             for mask in mask_with:
                 try:
