@@ -110,6 +110,7 @@ def _cube_odc(
 
     if "geobox" in kwargs.keys() and "geopolygon" in kwargs.keys():
         kwargs.pop("geopolygon")
+
     ds = stac.load(
         items_collection,
         bands=assets,
