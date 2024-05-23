@@ -26,6 +26,7 @@ class TestEarthDataStore(unittest.TestCase):
             assets=["blue", "green", "red"],
             intersects=self.pivot,
             datetime="2023-07-01",
+            mask_with=['native']
         )
         self.assertEqual(
             list(datacube.data_vars.keys()), ["blue", "green", "red"]

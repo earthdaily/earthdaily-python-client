@@ -21,7 +21,7 @@ def _datacube_masks(method, *args, **kwargs):
     @wraps(method)
     def _impl(self, *args, **kwargs):
         mask_with = kwargs.get("mask_with", None)
-        if isinstance(mask_with, list) and len(mask_with) > 1:
+        if isinstance(mask_with, list):
             kwargs.pop("mask_with")
             for mask in mask_with:
                 try:
@@ -110,6 +110,7 @@ def _cube_odc(
 
     if "geobox" in kwargs.keys() and "geopolygon" in kwargs.keys():
         kwargs.pop("geopolygon")
+
     ds = stac.load(
         items_collection,
         bands=assets,
