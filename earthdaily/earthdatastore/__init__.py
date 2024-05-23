@@ -646,7 +646,7 @@ class Auth:
                     msg=f"Specified mask '{mask_with}' is not available. Currently available masks provider are : {mask._available_masks}",
                 )
 
-            if mask_with == "ag_cloud_mask":
+            elif mask_with == "ag_cloud_mask":
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections[0]
                 )
