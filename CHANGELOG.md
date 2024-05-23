@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- type str/list for `datacube` `mask_with`kwarg.
+- type str/list for `datacube` `mask_with` kwarg.
 
 ### Added
 
