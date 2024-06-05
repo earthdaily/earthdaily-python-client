@@ -684,11 +684,11 @@ class Auth:
                 raise Warning(
                     "No cross calibration coefficient available for the specified collections."
                 )
-        
+
         groupby_date_sensor_cube = groupby_date
         if mask_with and groupby_date:
             groupby_date_sensor_cube = None
-        
+
         xr_datacube = datacube(
             items,
             intersects=intersects,
@@ -756,15 +756,25 @@ class Auth:
             grouped_coords = []
             # for coords using only time dimensions like clear_pixels, keeping the max
             for coord in xr_datacube.coords:
-                if coord in ('x','y','time'):
+                if coord in ("x", "y", "time"):
                     continue
-                if len(xr_datacube[coord].dims)==1 and xr_datacube[coord].dims[0] == 'time':
-                    grouped_coords.append(xr_datacube[coord].groupby("time.date",squeeze=True).max().rename(dict(date="time")))
-                    
-            xr_datacube = xr_datacube.groupby("time.date",restore_coord_dims=True)
+                if (
+                    len(xr_datacube[coord].dims) == 1
+                    and xr_datacube[coord].dims[0] == "time"
+                ):
+                    grouped_coords.append(
+                        xr_datacube[coord]
+                        .groupby("time.date", squeeze=True)
+                        .max()
+                        .rename(dict(date="time"))
+                    )
+
+            xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
             xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
             for grouped_coord in grouped_coords:
-                xr_datacube = xr_datacube.assign_coords({grouped_coord.name:grouped_coord})
+                xr_datacube = xr_datacube.assign_coords(
+                    {grouped_coord.name: grouped_coord}
+                )
         return xr_datacube
 
     def _update_search_for_assets(self, assets):

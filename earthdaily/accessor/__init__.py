@@ -116,7 +116,7 @@ class EarthDailyAccessorDataArray:
             max_value=max_value,
             max_iter=max_iter,
         )["index"]
-    
+
     def sel_nearest_dates(
         self,
         target: (xr.Dataset, xr.DataArray),
@@ -139,7 +139,6 @@ class EarthDailyAccessorDataArray:
                 time=pos, method=method_convert[method]
             )
         return self._obj.sel(time=pos)
-
 
 
 @xr.register_dataset_accessor("ed")

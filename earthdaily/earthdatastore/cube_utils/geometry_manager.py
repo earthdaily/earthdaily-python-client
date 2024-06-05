@@ -48,13 +48,15 @@ class GeometryManager:
         if isinstance(geometry, (dict, str)):
             self.input_type = "GeoJson"
             try:
-                return gpd.read_file(geometry, driver="GeoJson", crs="EPSG:4326") 
+                return gpd.read_file(geometry, driver="GeoJson", crs="EPSG:4326")
             except:
                 try:
-                    return gpd.read_file(json.dumps(geometry), driver="GeoJson", crs="EPSG:4326")
+                    return gpd.read_file(
+                        json.dumps(geometry), driver="GeoJson", crs="EPSG:4326"
+                    )
                 except:
                     pass
-        
+
             try:
                 return gpd.GeoDataFrame.from_features(geometry, crs="EPSG:4326")
             except:
@@ -63,7 +65,7 @@ class GeometryManager:
                         [geometry["coordinates"][0]]
                     )
                     return gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")
-            
+
         elif isinstance(geometry, gpd.GeoSeries):
             self.input_type = "GeoSeries"
 
