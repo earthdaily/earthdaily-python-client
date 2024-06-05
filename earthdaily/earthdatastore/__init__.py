@@ -701,7 +701,6 @@ class Auth:
             **kwargs,
         )
         if mask_with:
-            groupby_date_mask = "max" if isinstance(groupby_date, str) else None
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
             mask_kwargs = dict(mask_statistics=mask_statistics)
