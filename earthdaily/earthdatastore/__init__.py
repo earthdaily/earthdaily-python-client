@@ -775,6 +775,8 @@ class Auth:
                 xr_datacube = xr_datacube.assign_coords(
                     {grouped_coord.name: grouped_coord}
                 )
+            xr_datacube["time"] = xr_datacube.time.astype("<M8[ns]")
+
         return xr_datacube
 
     def _update_search_for_assets(self, assets):
