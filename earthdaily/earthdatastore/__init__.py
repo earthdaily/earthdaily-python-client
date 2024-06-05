@@ -682,7 +682,11 @@ class Auth:
                 raise Warning(
                     "No cross calibration coefficient available for the specified collections."
                 )
-
+        
+        groupby_date_sensor_cube = groupby_date
+        if mask_with and groupby_date:
+            groupby_date_sensor_cube = None
+        
         xr_datacube = datacube(
             items,
             intersects=intersects,
@@ -691,7 +695,7 @@ class Auth:
             common_band_names=common_band_names,
             cross_calibration_items=xcal_items,
             properties=properties,
-            groupby_date=groupby_date,
+            groupby_date=groupby_date_sensor_cube,
             **kwargs,
         )
         if mask_with:
@@ -705,7 +709,7 @@ class Auth:
                     acm_items,
                     intersects=intersects,
                     bbox=bbox,
-                    groupby_date=groupby_date_mask,
+                    groupby_date=None,
                     geobox=xr_datacube.odc.geobox
                     if hasattr(xr_datacube, "odc")
                     else None,
@@ -725,7 +729,7 @@ class Auth:
 
                 clouds_datacube = datacube(
                     items,
-                    groupby_date=groupby_date_mask,
+                    groupby_date=None,
                     intersects=intersects,
                     bbox=bbox,
                     assets=[mask_assets],
@@ -747,6 +751,19 @@ class Auth:
 
             if clear_cover:
                 xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
+        if groupby_date and mask_with:
+            grouped_coords = []
+            # for coords using only time dimensions like clear_pixels, keeping the max
+            for coord in xr_datacube.coords:
+                if coord in ('x','y','time'):
+                    continue
+                if len(xr_datacube[coord].dims)==1 and xr_datacube[coord].dims[0] == 'time':
+                    grouped_coords.append(xr_datacube[coord].groupby("time.date",squeeze=True).max().rename(dict(date="time")))
+                    
+            xr_datacube = xr_datacube.groupby("time.date",restore_coord_dims=True)
+            xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
+            for grouped_coord in grouped_coords:
+                xr_datacube = xr_datacube.assign_coords({grouped_coord.name:grouped_coord})
         return xr_datacube
 
     def _update_search_for_assets(self, assets):

@@ -116,6 +116,30 @@ class EarthDailyAccessorDataArray:
             max_value=max_value,
             max_iter=max_iter,
         )["index"]
+    
+    def sel_nearest_dates(
+        self,
+        target: (xr.Dataset, xr.DataArray),
+        max_delta: int = 0,
+        method: str = "nearest",
+        return_target: bool = False,
+    ):
+        src_time = self._obj.sel(time=target.time.dt.date, method=method).time.dt.date
+        target_time = target.time.dt.date
+        pos = np.abs(src_time.data - target_time.data)
+        pos = [
+            src_time.isel(time=i).time.values
+            for i, j in enumerate(pos)
+            if j.days <= max_delta
+        ]
+        pos = np.unique(pos)
+        if return_target:
+            method_convert = {"bfill": "ffill", "ffill": "bfill", "nearest": "nearest"}
+            return self._obj.sel(time=pos), target.sel(
+                time=pos, method=method_convert[method]
+            )
+        return self._obj.sel(time=pos)
+
 
 
 @xr.register_dataset_accessor("ed")
@@ -199,6 +223,9 @@ class EarthDailyAccessorDataset:
             "rededge1": "RE1",
             "rededge2": "RE2",
             "rededge3": "RE3",
+            "rededge70": "RE1",
+            "rededge74": "RE2",
+            "rededge78": "RE3",
             "nir": "N",
             "nir08": "N2",
             "watervapor": "WV",
