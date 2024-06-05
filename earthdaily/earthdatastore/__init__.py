@@ -760,7 +760,6 @@ class Auth:
 
                     null_pixels = (first_var.isnull().sum(dim=("x", "y"))).values
                     n_pixels_as_labels = xy - null_pixels
-                    # n_pixels_as_labels = xr_datacube.attrs["usable_pixels"] - n_pixels_as_labels
 
                     xr_datacube = xr_datacube.assign_coords(
                         {"clear_pixels": ("time", n_pixels_as_labels)}
