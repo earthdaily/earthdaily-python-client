@@ -51,13 +51,21 @@ class GeometryManager:
                 return gpd.read_file(geometry, driver="GeoJson", crs="EPSG:4326")
             except:
                 try:
-                    return gpd.GeoDataFrame.from_features(geometry, crs="EPSG:4326")
+                    return gpd.read_file(
+                        json.dumps(geometry), driver="GeoJson", crs="EPSG:4326"
+                    )
                 except:
-                    if "type" in geometry:
-                        geom = shapely.__dict__[geometry["type"]](
-                            [geometry["coordinates"][0]]
-                        )
-                        return gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")
+                    pass
+
+            try:
+                return gpd.GeoDataFrame.from_features(geometry, crs="EPSG:4326")
+            except:
+                if "type" in geometry:
+                    geom = shapely.__dict__[geometry["type"]](
+                        [geometry["coordinates"][0]]
+                    )
+                    return gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")
+
         elif isinstance(geometry, gpd.GeoSeries):
             self.input_type = "GeoSeries"
 

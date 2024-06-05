@@ -32,9 +32,9 @@ eds = earthdatastore.Auth()
 pivot_cube = eds.datacube(
     "sentinel-2-l2a",
     intersects=pivot,
-    datetime=["2022-07-01", "2022-08-31"],
+    datetime=["2023-07-01","2023-07-10"],
     assets=["red", "green", "blue"],
-    mask_with="ag_cloud_mask",
+    mask_with="native",
     clear_cover=50,
 )
 

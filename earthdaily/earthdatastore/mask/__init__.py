@@ -162,7 +162,6 @@ class Mask:
                 )
             }
         )
-        # self._obj = self._obj.reset_coords(names=['clear_pixels','clear_percent'])
 
         return self._obj
 
