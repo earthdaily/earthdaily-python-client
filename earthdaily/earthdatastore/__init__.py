@@ -9,6 +9,7 @@ import pandas as pd
 import psutil
 import requests
 import xarray as xr
+import numpy as np
 from pystac.item_collection import ItemCollection
 from pystac_client import Client
 from odc import stac
@@ -638,7 +639,8 @@ class Auth:
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
             self.intersects = intersects
-
+            
+        mask_with_original = mask_with
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise NotImplementedError(
@@ -685,9 +687,6 @@ class Auth:
                     "No cross calibration coefficient available for the specified collections."
                 )
 
-        groupby_date_sensor_cube = groupby_date
-        if mask_with and groupby_date:
-            groupby_date_sensor_cube = None
 
         xr_datacube = datacube(
             items,
@@ -697,7 +696,7 @@ class Auth:
             common_band_names=common_band_names,
             cross_calibration_items=xcal_items,
             properties=properties,
-            groupby_date=groupby_date_sensor_cube,
+            groupby_date=None if mask_with == "ag_cloud_mask" else groupby_date,
             **kwargs,
         )
         if mask_with:
@@ -749,34 +748,42 @@ class Auth:
 
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
-
+                
+                
+            if groupby_date:
+                xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
+                xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
+                xr_datacube["time"] = xr_datacube.time.astype("<M8[ns]")
+                
+                if clear_cover or mask_statistics:
+                        
+                    first_var = xr_datacube[list(xr_datacube.data_vars)[0]]
+                    xy = first_var.isel(time=0).size
+                   
+                    null_pixels = (first_var.isnull().sum(dim=("x", "y"))).values
+                    n_pixels_as_labels = xy -null_pixels
+                    # n_pixels_as_labels = xr_datacube.attrs["usable_pixels"] - n_pixels_as_labels
+    
+                    xr_datacube = xr_datacube.assign_coords(
+                        {"clear_pixels": ("time", n_pixels_as_labels)}
+                    )
+    
+                    xr_datacube = xr_datacube.assign_coords(
+                        {
+                            "clear_percent": (
+                                "time",
+                                np.multiply(
+                                    n_pixels_as_labels / xr_datacube.attrs["usable_pixels"],
+                                    100,
+                                ).astype(np.int8),
+                            )
+                        }
+                    )
             if clear_cover:
                 xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
-        if groupby_date and mask_with:
-            grouped_coords = []
-            # for coords using only time dimensions like clear_pixels, keeping the max
-            for coord in xr_datacube.coords:
-                if coord in ("x", "y", "time"):
-                    continue
-                if (
-                    len(xr_datacube[coord].dims) == 1
-                    and xr_datacube[coord].dims[0] == "time"
-                ):
-                    grouped_coords.append(
-                        xr_datacube[coord]
-                        .groupby("time.date", squeeze=True)
-                        .max()
-                        .rename(dict(date="time"))
-                    )
 
-            xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
-            xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
-            for grouped_coord in grouped_coords:
-                xr_datacube = xr_datacube.assign_coords(
-                    {grouped_coord.name: grouped_coord}
-                )
-            xr_datacube["time"] = xr_datacube.time.astype("<M8[ns]")
 
+                
         return xr_datacube
 
     def _update_search_for_assets(self, assets):
