@@ -29,7 +29,7 @@ def _datacube_masks(method, *args, **kwargs):
                     break
                 except Warning as E:
                     # if warning about no items for ag_cloud_mask for example
-                    if idx+1 == len(mask_with):
+                    if idx + 1 == len(mask_with):
                         raise E
         else:
             datacube = method(self, *args, **kwargs)
