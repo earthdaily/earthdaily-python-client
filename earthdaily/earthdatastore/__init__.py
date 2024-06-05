@@ -640,7 +640,6 @@ class Auth:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
             self.intersects = intersects
             
-        mask_with_original = mask_with
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise NotImplementedError(
