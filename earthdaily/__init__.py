@@ -5,4 +5,4 @@ import warnings
 # to hide warnings from rioxarray or nano seconds conversion
 warnings.filterwarnings("ignore")
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
