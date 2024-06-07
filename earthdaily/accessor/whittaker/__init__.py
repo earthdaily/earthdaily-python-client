@@ -1,113 +1,123 @@
+"""
+Created on Fri Jun  7 16:19:54 2024
+
+@author: nkk
+"""
+
 import xarray as xr
 import numpy as np
-from ._pywapor_core import _wt1, _wt2, cve1, second_order_diff_matrix, dist_to_finite
-import logging as log
+from scipy.linalg import solve_banded
+
+def whittaker(dataset, beta=10000.0, weights=None, time="time"):
+    """
+    
+
+    Parameters
+    ----------
+    dataset : TYPE
+        DESCRIPTION.
+    beta : TYPE, optional
+        DESCRIPTION. The default is 10000.0.
+    weights : TYPE, optional
+        DESCRIPTION. The default is None.
+    time : TYPE, optional
+        DESCRIPTION. The default is "time".
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    """
+    resampled = dataset.resample(time='1D').interpolate('linear')
+    weights = np.in1d(resampled.time.dt.date,dataset.time.dt.date)
+    _core_dims = [dim for dim in dataset.dims if dim != "time"]
+    _core_dims.extend([time])
+    dataset_w = xr.apply_ufunc(_whitw,
+        resampled,
+        input_core_dims=[_core_dims],
+        output_core_dims=[_core_dims],
+        dask="forbidden",
+        vectorize=True,
+        kwargs=dict(beta=beta, weights=weights.copy()))
+    
+    return dataset_w.isel(time=weights)
 
 
-def xr_dist_to_finite(y, dim="time"):
-    if dim not in y.dims:
-        raise ValueError
+def _whitw(signal, beta, weights=None):
+    """
+    Implement weighted whittaker, only for alpha=3 for efficiency.
 
-    out = xr.apply_ufunc(
-        dist_to_finite,
-        y,
-        y[dim],
-        input_core_dims=[[dim], [dim]],
-        output_core_dims=[[dim]],
-        vectorize=False,
-        dask="parallelized",
-    )
+    :param signal: 1D signal to smooth
+    :type signal: numpy array or list
+    :param weights: weights of each sample (one by default)
+    :type weights: numpy array or list
+    :param alpha: derivation order
+    :type alpha: int
+    :param beta: penalization parameter
+    :type beta: float
+    :return: a smooth signal
+    :rtype: numpy array
+    """
+    alpha = 3
+    m = signal.shape[-1]
+    
+    ab_mat = np.zeros((2 * alpha + 1, m))
 
-    return out
+    ab_mat[0, 3:] = -1.0
 
+    ab_mat[1, [2, -1]] = 3.0
+    ab_mat[1, 3:-1] = 6.0
 
-def xr_choose_func(y, lmbd, dim):
-    funcs = [_wt1, _wt2]
-    y_dims = getattr(y, "ndim", 0)
-    lmbd_dims = getattr(lmbd, "ndim", 0)
-    if y_dims in [2, 3] and lmbd_dims in [1]:
-        wt_func = funcs[1]
-        icd = [[dim], [], ["lmbda"], [], [], [], [], []]
-        ocd = [["lmbda", dim]]
-    elif y_dims in [2] and lmbd_dims in [2]:
-        raise ValueError
-    else:
-        wt_func = funcs[0]
-        icd = [[dim], [], [], [], [], [], [], []]
-        ocd = [[dim]]
+    ab_mat[2, [1, -1]] = -3.0
+    ab_mat[2, [2, -2]] = -12.0
+    ab_mat[2, 3:-2] = -15.0
 
-    return wt_func, icd, ocd
+    ab_mat[3, [0, -1]] = 1.0
+    ab_mat[3, [1, -2]] = 10.0
+    ab_mat[3, [2, -3]] = 19.0
+    ab_mat[3, 3:-3] = 20.0
 
+    ab_mat[4, 0:-1] = ab_mat[2, 1:]
+    ab_mat[5, 0:-2] = ab_mat[1, 2:]
+    ab_mat[6, 0:-3] = ab_mat[0, 3:]
 
-def assert_lmbd(lmbd):
-    # Check lmbdas.
-    if isinstance(lmbd, float) or isinstance(lmbd, int) or isinstance(lmbd, list):
-        lmbd = np.array(lmbd)
-    assert lmbd.ndim <= 2
-    if isinstance(lmbd, np.ndarray) or np.isscalar(lmbd):
-        if not np.isscalar(lmbd):
-            assert lmbd.ndim <= 1
-            if lmbd.ndim == 0:
-                lmbd = float(lmbd)
-            else:
-                lmbd = xr.DataArray(lmbd, dims=["lmbda"], coords={"lmbda": lmbd})
-        # else:
-        lmbd = xr.DataArray(lmbd)
+    ab_mat *= beta
 
-    return lmbd
+    if weights is None:
+        weights = np.ones((m,))
+    ab_mat[3, :] += weights
 
+    # pxx = []
+    signal_w = np.empty_like(signal)
+    for pixel in np.ndindex(signal.shape[:-1]):
 
-def xr_wt(
-    datacube,
-    lmbd,
-    time="time",
-    weights=None,
-    a=0.5,
-    min_value=-np.inf,
-    max_value=np.inf,
-    max_iter=10,
-):
-    datacube = datacube.chunk(time=-1)
-    datacube_ = datacube.copy()
-    lmbd = assert_lmbd(lmbd)
+        signal_w[*pixel,:] = _whitw_pixel(signal[*pixel,...], weights, alpha, ab_mat)
+    return signal_w
 
-    # Normalize x-coordinates
-    x = datacube[time]
-    x = (x - x.min()) / (x.max() - x.min()) * x.size
+def _whitw_pixel(signal, weights,alpha, ab_mat):
+    """
+    Implement weighted whittaker, only for alpha=3 for efficiency.
 
-    # Create x-aware delta matrix.
-    A = second_order_diff_matrix(x)
+    :param signal: 1D signal to smooth
+    :type signal: numpy array or list
+    :param weights: weights of each sample (one by default)
+    :type weights: numpy array or list
+    :param alpha: derivation order
+    :type alpha: int
+    :param beta: penalization parameter
+    :type beta: float
+    :return: a smooth signal
+    :rtype: numpy array
+    """
+    # print(signal)
+    
+    is_nan = np.isnan(signal)
 
-    # Make default u weights if necessary.
-    if isinstance(weights, type(None)):
-        weights = np.ones(x.shape)
-
-    # Choose which vectorized function to use.
-    _wt, icd, ocd = xr_choose_func(datacube, lmbd, time)
-
-    # Make sure lmbd is chunked similar to y.
-    if not isinstance(datacube.chunk, type(None)):
-        lmbd = lmbd.chunk(
-            {
-                k: v
-                for k, v in datacube.unify_chunks().chunksizes.items()
-                if k in lmbd.dims
-            }
-        )
-
-    # Apply whittaker smoothing along axis.
-    datacube = xr.apply_ufunc(
-        _wt,
-        datacube,
-        A,
-        lmbd,
-        weights,
-        a,
-        min_value,
-        max_value,
-        max_iter,
-        input_core_dims=icd,
-        output_core_dims=ocd,
-        dask="allowed",
-    )
-    return xr.where(np.isnan(datacube_).all(dim=time), datacube_, datacube)
+    if np.all(is_nan):
+        return signal
+    
+    # manage local nans
+    weights[is_nan] = 0
+    signal = np.where(is_nan, 0, signal)
+    return solve_banded((alpha, alpha), ab_mat, weights * signal).astype(np.float64)
