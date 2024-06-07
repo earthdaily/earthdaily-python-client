@@ -101,6 +101,7 @@ class EarthDailyAccessorDataArray:
         time="time",
     ):
         from . import whittaker
+
         return whittaker.whittaker(self._obj, beta=lmbd, weights=weights, time=time)
 
     def sel_nearest_dates(
