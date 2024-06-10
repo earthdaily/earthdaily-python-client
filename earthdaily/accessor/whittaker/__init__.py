@@ -50,7 +50,7 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
         vectorize=True,
         kwargs=dict(beta=beta, weights=weights.copy()))
     
-    return dataset_w.isel(time=weights)
+    return dataset_w.isel(time=weights_binary)
 
 
 def _whitw(signal, beta, weights=None):
