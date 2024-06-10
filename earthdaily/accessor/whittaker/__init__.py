@@ -7,6 +7,7 @@ Created on Fri Jun  7 16:19:54 2024
 import xarray as xr
 import numpy as np
 from scipy.linalg import solve_banded
+import warnings
 
 def whittaker(dataset, beta=10000.0, weights=None, time="time"):
     """
@@ -30,7 +31,11 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
 
     """
     resampled = dataset.resample(time='1D').interpolate('linear')
-    weights = np.in1d(resampled.time.dt.date,dataset.time.dt.date)
+    weights_binary = np.in1d(resampled.time.dt.date,dataset.time.dt.date)
+    if weights is not None:
+        weights = np.where(weights_binary==1,weights,weights_binary)
+    else:
+        weights = weights_binary
     _core_dims = [dim for dim in dataset.dims if dim != "time"]
     _core_dims.extend([time])
     dataset_w = xr.apply_ufunc(_whitw,
@@ -41,7 +46,7 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
         vectorize=True,
         kwargs=dict(beta=beta, weights=weights.copy()))
     
-    return dataset_w.isel(time=weights)
+    return dataset_w.isel(time=weights_binary)
 
 
 def _whitw(signal, beta, weights=None):

@@ -32,19 +32,20 @@ eds = earthdatastore.Auth()
 pivot_cube = eds.datacube(
     "sentinel-2-l2a",
     intersects=pivot,
-    datetime=["2023-07-01","2023-07-10"],
+    datetime=["2023-07-01","2023-07-31"],
     assets=["red", "green", "blue"],
     mask_with="native",
     clear_cover=50,
 )
 
+pivot_cube.ed.clip(pivot)
 pivot_cube.clear_percent.plot.scatter(x="time")
 
 ##############################################################################
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
 pivot_cube = pivot_cube.load()
-pivot_cube.ed.plot_rgb(col_wrap=3)
+pivot_cube.ed.whittaker().ed.plot_rgb(col_wrap=3)
 plt.title("Pivot evolution masked with native cloudmasks")
 plt.show()
 

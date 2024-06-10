@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ###☻ Changed
 
-- New whittaker function that is ~20 times faster.
+- accessors are now more compatible for dataarray and dataset.
+- `ed.clip`accessor now manages first bounding box then clip geometry to be faster.
+- New whittaker function that is ~20 times -faster.
 /!\ Beware, lambda from previous whittaker must be multiplied by 10 000 to have same results.
 
 ## [0.1.6] - 2024-06-05
