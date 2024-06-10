@@ -9,9 +9,10 @@ import numpy as np
 from scipy.linalg import solve_banded
 import warnings
 
+
 def whittaker(dataset, beta=10000.0, weights=None, time="time"):
     """
-    
+
 
     Parameters
     ----------
@@ -30,15 +31,18 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
         DESCRIPTION.
 
     """
+
     resampled = dataset.resample(time='1D').interpolate('linear')
     weights_binary = np.in1d(resampled.time.dt.date,dataset.time.dt.date)
     if weights is not None:
         weights = np.where(weights_binary==1,weights,weights_binary)
     else:
         weights = weights_binary
+
     _core_dims = [dim for dim in dataset.dims if dim != "time"]
     _core_dims.extend([time])
-    dataset_w = xr.apply_ufunc(_whitw,
+    dataset_w = xr.apply_ufunc(
+        _whitw,
         resampled,
         input_core_dims=[_core_dims],
         output_core_dims=[_core_dims],
@@ -46,7 +50,7 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
         vectorize=True,
         kwargs=dict(beta=beta, weights=weights.copy()))
     
-    return dataset_w.isel(time=weights_binary)
+    return dataset_w.isel(time=weights)
 
 
 def _whitw(signal, beta, weights=None):
@@ -66,7 +70,7 @@ def _whitw(signal, beta, weights=None):
     """
     alpha = 3
     m = signal.shape[-1]
-    
+
     ab_mat = np.zeros((2 * alpha + 1, m))
 
     ab_mat[0, 3:] = -1.0
@@ -96,11 +100,11 @@ def _whitw(signal, beta, weights=None):
     # pxx = []
     signal_w = np.empty_like(signal)
     for pixel in np.ndindex(signal.shape[:-1]):
-
-        signal_w[*pixel,:] = _whitw_pixel(signal[*pixel,...], weights, alpha, ab_mat)
+        signal_w[*pixel, :] = _whitw_pixel(signal[*pixel, ...], weights, alpha, ab_mat)
     return signal_w
 
-def _whitw_pixel(signal, weights,alpha, ab_mat):
+
+def _whitw_pixel(signal, weights, alpha, ab_mat):
     """
     Implement weighted whittaker, only for alpha=3 for efficiency.
 
@@ -116,12 +120,12 @@ def _whitw_pixel(signal, weights,alpha, ab_mat):
     :rtype: numpy array
     """
     # print(signal)
-    
+
     is_nan = np.isnan(signal)
 
     if np.all(is_nan):
         return signal
-    
+
     # manage local nans
     weights[is_nan] = 0
     signal = np.where(is_nan, 0, signal)
