@@ -32,10 +32,10 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
 
     """
 
-    resampled = dataset.resample(time='1D').interpolate('linear')
-    weights_binary = np.in1d(resampled.time.dt.date,dataset.time.dt.date)
+    resampled = dataset.resample(time="1D").interpolate("linear")
+    weights_binary = np.in1d(resampled.time.dt.date, dataset.time.dt.date)
     if weights is not None:
-        weights = np.where(weights_binary==1,weights,weights_binary)
+        weights = np.where(weights_binary == 1, weights, weights_binary)
     else:
         weights = weights_binary
 
@@ -48,8 +48,9 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
         output_core_dims=[_core_dims],
         dask="forbidden",
         vectorize=True,
-        kwargs=dict(beta=beta, weights=weights.copy()))
-    
+        kwargs=dict(beta=beta, weights=weights.copy()),
+    )
+
     return dataset_w.isel(time=weights)
 
 

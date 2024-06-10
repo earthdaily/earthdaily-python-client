@@ -76,6 +76,7 @@ def _xr_rio_clip(datacube, geom):
     datacube = datacube.rio.clip(geom.geometry)
     return datacube
 
+
 @xr.register_dataarray_accessor("ed")
 class EarthDailyAccessorDataArray:
     def __init__(self, xarray_obj):
@@ -98,10 +99,11 @@ class EarthDailyAccessorDataArray:
     def whittaker(
         self,
         beta: float = 10000.0,
-        weights: (np.ndarray,list) = None,
+        weights: (np.ndarray, list) = None,
         time="time",
     ):
         from . import whittaker
+
         return whittaker.whittaker(self._obj, beta=beta, weights=weights, time=time)
 
     def sel_nearest_dates(
@@ -127,8 +129,6 @@ class EarthDailyAccessorDataArray:
             )
         return self._obj.sel(time=pos)
 
-
-
     def zonal_stats(
         self,
         geometry,
@@ -144,8 +144,7 @@ class EarthDailyAccessorDataArray:
             operations=operations,
             raise_missing_geometry=raise_missing_geometry,
         )
-    
-    
+
     def lee_filter(self, window_size: int):
         return xr.apply_ufunc(
             _lee_filter,
@@ -169,7 +168,6 @@ class EarthDailyAccessorDataArray:
             point = point.map(lambda x: x.wkt).iloc[0]
         return point
 
-
     def drop_unfrozen_coords(self, keep_spatial_ref=True):
         unfrozen_coords = [
             coord
@@ -182,11 +180,11 @@ class EarthDailyAccessorDataArray:
             )
         return self._obj.drop(unfrozen_coords)
 
+
 @xr.register_dataset_accessor("ed")
 class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
-        
 
     def plot_rgb(
         self,
@@ -293,4 +291,3 @@ class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
         idx = idx.to_dataset(dim="index")
 
         return xr.merge((self._obj, idx))
-
