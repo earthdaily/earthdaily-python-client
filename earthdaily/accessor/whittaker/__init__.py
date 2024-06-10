@@ -36,7 +36,7 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
     weights_binary = np.in1d(resampled.time.dt.date, dataset.time.dt.date)
     if weights is not None:
         weights_advanced = np.copy(weights_binary.astype(float))
-        weights_advanced[weights_advanced==1.0] = weights
+        weights_advanced[weights_advanced == 1.0] = weights
     else:
         weights_advanced = weights_binary
 
@@ -50,7 +50,7 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
         output_dtypes=[float],
         dask="parallelized",
         vectorize=True,
-        kwargs=dict(beta=beta, weights=weights_advanced)
+        kwargs=dict(beta=beta, weights=weights_advanced),
     )
 
     return dataset_w.isel(time=weights_binary)
