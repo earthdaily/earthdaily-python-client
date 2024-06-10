@@ -48,8 +48,9 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
         output_core_dims=[_core_dims],
         dask="forbidden",
         vectorize=True,
-        kwargs=dict(beta=beta, weights=weights.copy()))
-    
+        kwargs=dict(beta=beta, weights=weights.copy()),
+    )
+
     return dataset_w.isel(time=weights_binary)
 
 
