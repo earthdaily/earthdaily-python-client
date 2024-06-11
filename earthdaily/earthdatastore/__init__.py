@@ -749,11 +749,9 @@ class Auth:
 
         if groupby_date:
             xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
-            xr_datacube = getattr(xr_datacube, groupby_date)().rename(
-                dict(date="time")
-            )
+            xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
             xr_datacube["time"] = xr_datacube.time.astype("<M8[ns]")
-        
+
         if clear_cover or mask_statistics:
             first_var = xr_datacube[list(xr_datacube.data_vars)[0]]
             xy = first_var.isel(time=0).size
