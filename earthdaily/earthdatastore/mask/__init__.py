@@ -50,6 +50,7 @@ class Mask:
         if isinstance(intersects, gpd.GeoDataFrame):
             intersects = intersects.to_crs(self._obj.rio.crs)
         self.intersects = intersects
+        self.compute_available_pixels()
 
     def ag_cloud_mask(
         self,

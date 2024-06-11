@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.0] - Unreleased
 
-###☻ Changed
+### Fixed
+
+- datacube with native cloudmask with groupby parameter.
+
+### Changed
 
 - accessors are now more compatible for dataarray and dataset.
 - `ed.clip`accessor now manages first bounding box then clip geometry to be faster.
