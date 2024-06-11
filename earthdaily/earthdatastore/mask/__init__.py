@@ -91,11 +91,11 @@ class Mask:
 
         if fill_value:
             if labels_are_clouds:
-                self._obj = self._obj[_assets].where(
+                self._obj = self._obj.where(
                     ~self._obj[cloud_asset].isin(labels), fill_value
                 )
             else:
-                self._obj = self._obj[_assets].where(
+                self._obj = self._obj.where(
                     self._obj[cloud_asset].isin(labels), fill_value
                 )
         if add_mask_var:

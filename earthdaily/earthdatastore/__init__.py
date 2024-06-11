@@ -753,10 +753,9 @@ class Auth:
             xr_datacube["time"] = xr_datacube.time.astype("<M8[ns]")
 
         if clear_cover or mask_statistics:
-            first_var = xr_datacube[list(xr_datacube.data_vars)[0]]
-            xy = first_var.isel(time=0).size
+            xy = xr_datacube[mask_with].isel(time=0).size
 
-            null_pixels = first_var.isnull().sum(dim=("x", "y"))
+            null_pixels = xr_datacube[mask_with].isnull().sum(dim=("x", "y"))
             n_pixels_as_labels = xy - null_pixels
 
             xr_datacube = xr_datacube.assign_coords(
@@ -773,8 +772,8 @@ class Auth:
                             100,
                         ).astype(np.int8),
                     )
-                }
-            )
+                })
+            xr_datacube = xr_datacube.drop(mask_with)
         if clear_cover:
             xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
 
