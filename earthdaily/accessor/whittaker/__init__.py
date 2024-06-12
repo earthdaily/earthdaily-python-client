@@ -51,6 +51,7 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
         dask="parallelized",
         vectorize=True,
         kwargs=dict(beta=beta, weights=weights_advanced),
+        dask_gufunc_kwargs=dict(allow_rechunk=True)
     )
 
     return dataset_w.isel(time=weights_binary)
