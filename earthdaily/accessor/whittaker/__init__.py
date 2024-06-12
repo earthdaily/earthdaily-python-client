@@ -40,23 +40,65 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
     else:
         weights_advanced = weights_binary
 
-    _core_dims = [dim for dim in dataset.dims if dim != "time"]
-    _core_dims.extend([time])
+    # _core_dims = [dim for dim in dataset.dims if dim != "time"]
+    # _core_dims.extend([time])
+    m = resampled.time.size
+    ab_mat = _ab_mat(m, beta)
+    
     dataset_w = xr.apply_ufunc(
-        _whitw,
+        _whitw_pixel,
         resampled,
-        input_core_dims=[_core_dims],
-        output_core_dims=[_core_dims],
+        input_core_dims=[["time"]],
+        output_core_dims=[["time"]],
         output_dtypes=[float],
         dask="parallelized",
         vectorize=True,
-        kwargs=dict(beta=beta, weights=weights_advanced),
-        dask_gufunc_kwargs=dict(allow_rechunk=True),
+        kwargs=dict(weights=weights_advanced, ab_mat=ab_mat),
     )
 
     return dataset_w.isel(time=weights_binary)
 
 
+def _ab_mat(m, beta):
+    """
+    Implement weighted whittaker, only for alpha=3 for efficiency.
+
+    :param signal: 1D signal to smooth
+    :type signal: numpy array or list
+    :param weights: weights of each sample (one by default)
+    :type weights: numpy array or list
+    :param alpha: derivation order
+    :type alpha: int
+    :param beta: penalization parameter
+    :type beta: float
+    :return: a smooth signal
+    :rtype: numpy array
+    """
+    alpha = 3
+
+    ab_mat = np.zeros((2 * alpha + 1, m))
+
+    ab_mat[0, 3:] = -1.0
+
+    ab_mat[1, [2, -1]] = 3.0
+    ab_mat[1, 3:-1] = 6.0
+
+    ab_mat[2, [1, -1]] = -3.0
+    ab_mat[2, [2, -2]] = -12.0
+    ab_mat[2, 3:-2] = -15.0
+
+    ab_mat[3, [0, -1]] = 1.0
+    ab_mat[3, [1, -2]] = 10.0
+    ab_mat[3, [2, -3]] = 19.0
+    ab_mat[3, 3:-3] = 20.0
+
+    ab_mat[4, 0:-1] = ab_mat[2, 1:]
+    ab_mat[5, 0:-2] = ab_mat[1, 2:]
+    ab_mat[6, 0:-3] = ab_mat[0, 3:]
+
+    ab_mat *= beta
+    return ab_mat
+    
 def _whitw(signal, beta, weights=None):
     """
     Implement weighted whittaker, only for alpha=3 for efficiency.
@@ -104,12 +146,12 @@ def _whitw(signal, beta, weights=None):
     signal_w = np.empty_like(signal)
     for pixel in np.ndindex(signal.shape[:-1]):
         signal_w[*pixel, :] = _whitw_pixel(
-            signal[*pixel, ...], weights, alpha, ab_mat.copy()
+            signal[*pixel, ...], weights, ab_mat.copy()
         )
     return signal_w
 
 
-def _whitw_pixel(signal, weights, alpha, ab_mat):
+def _whitw_pixel(signal, weights, ab_mat):
     """
     Implement weighted whittaker, only for alpha=3 for efficiency.
 
@@ -124,13 +166,14 @@ def _whitw_pixel(signal, weights, alpha, ab_mat):
     :return: a smooth signal
     :rtype: numpy array
     """
+    ab_mat_ = ab_mat.copy()
     is_nan = np.isnan(signal)
 
     if np.all(is_nan):
         return signal
     # manage local nans
-    weights[is_nan] = 0
-    ab_mat[3, :] += weights
+    weights = np.where(is_nan, 0, weights)
+    ab_mat_[3, :] += weights
 
     signal = np.where(is_nan, 0, signal)
-    return solve_banded((alpha, alpha), ab_mat, weights * signal).astype(np.float64)
+    return solve_banded((3, 3), ab_mat_, weights * signal).astype(np.float64)
