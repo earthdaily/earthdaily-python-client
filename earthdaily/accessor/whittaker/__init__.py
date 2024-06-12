@@ -103,7 +103,9 @@ def _whitw(signal, beta, weights=None):
     # pxx = []
     signal_w = np.empty_like(signal)
     for pixel in np.ndindex(signal.shape[:-1]):
-        signal_w[*pixel, :] = _whitw_pixel(signal[*pixel, ...], weights, alpha, ab_mat.copy())
+        signal_w[*pixel, :] = _whitw_pixel(
+            signal[*pixel, ...], weights, alpha, ab_mat.copy()
+        )
     return signal_w
 
 
