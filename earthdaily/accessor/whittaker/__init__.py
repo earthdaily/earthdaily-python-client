@@ -99,12 +99,11 @@ def _whitw(signal, beta, weights=None):
 
     if weights is None:
         weights = np.ones((m,))
-    ab_mat[3, :] += weights
 
     # pxx = []
     signal_w = np.empty_like(signal)
     for pixel in np.ndindex(signal.shape[:-1]):
-        signal_w[*pixel, :] = _whitw_pixel(signal[*pixel, ...], weights, alpha, ab_mat)
+        signal_w[*pixel, :] = _whitw_pixel(signal[*pixel, ...], weights, alpha, ab_mat.copy())
     return signal_w
 
 
@@ -123,14 +122,13 @@ def _whitw_pixel(signal, weights, alpha, ab_mat):
     :return: a smooth signal
     :rtype: numpy array
     """
-    # print(signal)
-
     is_nan = np.isnan(signal)
 
     if np.all(is_nan):
         return signal
-
     # manage local nans
     weights[is_nan] = 0
+    ab_mat[3, :] += weights
+
     signal = np.where(is_nan, 0, signal)
     return solve_banded((alpha, alpha), ab_mat, weights * signal).astype(np.float64)
