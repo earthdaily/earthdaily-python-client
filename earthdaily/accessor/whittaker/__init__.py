@@ -44,7 +44,7 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
     # _core_dims.extend([time])
     m = resampled.time.size
     ab_mat = _ab_mat(m, beta)
-    
+
     dataset_w = xr.apply_ufunc(
         _whitw_pixel,
         resampled,
@@ -98,7 +98,8 @@ def _ab_mat(m, beta):
 
     ab_mat *= beta
     return ab_mat
-    
+
+
 def _whitw(signal, beta, weights=None):
     """
     Implement weighted whittaker, only for alpha=3 for efficiency.
@@ -145,9 +146,7 @@ def _whitw(signal, beta, weights=None):
     # pxx = []
     signal_w = np.empty_like(signal)
     for pixel in np.ndindex(signal.shape[:-1]):
-        signal_w[*pixel, :] = _whitw_pixel(
-            signal[*pixel, ...], weights, ab_mat.copy()
-        )
+        signal_w[*pixel, :] = _whitw_pixel(signal[*pixel, ...], weights, ab_mat.copy())
     return signal_w
 
 
