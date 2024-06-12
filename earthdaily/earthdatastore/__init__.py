@@ -774,6 +774,7 @@ class Auth:
                     )
                 }
             )
+        if mask_with:
             xr_datacube = xr_datacube.drop(mask_with)
         if clear_cover:
             xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
