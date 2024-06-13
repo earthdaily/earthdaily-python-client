@@ -127,4 +127,3 @@ def _whitw_pixel(signal, weights, ab_mat):
 
     signal = np.where(is_nan, 0, signal)
     return solve_banded((3, 3), ab_mat_, weights * signal).astype(np.float64)
-
