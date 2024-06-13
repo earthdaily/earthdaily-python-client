@@ -61,12 +61,12 @@ class Mask:
         acm_datacube["time"] = acm_datacube.time.dt.round("s")  # rm nano second
         self._obj["time"] = self._obj.time.dt.round("s")  # rm nano second
         #
-        self._obj = self._obj.where(acm_datacube["agriculture-cloud-mask"] == 1)
+        self._obj = self._obj.where(acm_datacube["ag_cloud_mask"] == 1)
         if add_mask_var:
-            self._obj["agriculture-cloud-mask"] = acm_datacube["agriculture-cloud-mask"]
+            self._obj["ag_cloud_mask"] = acm_datacube["ag_cloud_mask"]
         if mask_statistics:
             self.compute_clear_coverage(
-                acm_datacube["agriculture-cloud-mask"],
+                acm_datacube["ag_cloud_mask"],
                 "ag_cloud_mask",
                 1,
                 labels_are_clouds=False,

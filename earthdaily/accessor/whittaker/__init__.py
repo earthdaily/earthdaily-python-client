@@ -8,6 +8,7 @@ import xarray as xr
 import numpy as np
 from scipy.linalg import solve_banded
 import warnings
+from dask import array as da
 
 
 def whittaker(dataset, beta=10000.0, weights=None, time="time"):
@@ -100,56 +101,6 @@ def _ab_mat(m, beta):
     return ab_mat
 
 
-def _whitw(signal, beta, weights=None):
-    """
-    Implement weighted whittaker, only for alpha=3 for efficiency.
-
-    :param signal: 1D signal to smooth
-    :type signal: numpy array or list
-    :param weights: weights of each sample (one by default)
-    :type weights: numpy array or list
-    :param alpha: derivation order
-    :type alpha: int
-    :param beta: penalization parameter
-    :type beta: float
-    :return: a smooth signal
-    :rtype: numpy array
-    """
-    alpha = 3
-    m = signal.shape[-1]
-
-    ab_mat = np.zeros((2 * alpha + 1, m))
-
-    ab_mat[0, 3:] = -1.0
-
-    ab_mat[1, [2, -1]] = 3.0
-    ab_mat[1, 3:-1] = 6.0
-
-    ab_mat[2, [1, -1]] = -3.0
-    ab_mat[2, [2, -2]] = -12.0
-    ab_mat[2, 3:-2] = -15.0
-
-    ab_mat[3, [0, -1]] = 1.0
-    ab_mat[3, [1, -2]] = 10.0
-    ab_mat[3, [2, -3]] = 19.0
-    ab_mat[3, 3:-3] = 20.0
-
-    ab_mat[4, 0:-1] = ab_mat[2, 1:]
-    ab_mat[5, 0:-2] = ab_mat[1, 2:]
-    ab_mat[6, 0:-3] = ab_mat[0, 3:]
-
-    ab_mat *= beta
-
-    if weights is None:
-        weights = np.ones((m,))
-
-    # pxx = []
-    signal_w = np.empty_like(signal)
-    for pixel in np.ndindex(signal.shape[:-1]):
-        signal_w[*pixel, :] = _whitw_pixel(signal[*pixel, ...], weights, ab_mat.copy())
-    return signal_w
-
-
 def _whitw_pixel(signal, weights, ab_mat):
     """
     Implement weighted whittaker, only for alpha=3 for efficiency.
@@ -176,3 +127,4 @@ def _whitw_pixel(signal, weights, ab_mat):
 
     signal = np.where(is_nan, 0, signal)
     return solve_banded((3, 3), ab_mat_, weights * signal).astype(np.float64)
+

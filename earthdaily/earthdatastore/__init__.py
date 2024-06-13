@@ -646,10 +646,11 @@ class Auth:
                     f"Specified mask '{mask_with}' is not available. Available masks providers are : {mask._available_masks}"
                 )
 
-            elif mask_with == "ag_cloud_mask":
+            elif mask_with in  ["ag_cloud_mask", "agriculture-cloud-mask"]:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections[0]
                 )
+                mask_with = "ag_cloud_mask"
             else:
                 mask_with = mask._native_mask_def_mapping.get(collections[0], None)
                 if isinstance(assets, list):
@@ -700,7 +701,7 @@ class Auth:
         if mask_with:
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
-            mask_kwargs = dict(mask_statistics=False)
+            mask_kwargs = dict(mask_statistics=False, add_mask_var=True)
             if mask_with == "ag_cloud_mask":
                 acm_items = self.ag_cloud_mask_items(items)
                 acm_datacube = datacube(
@@ -708,6 +709,7 @@ class Auth:
                     intersects=intersects,
                     bbox=bbox,
                     groupby_date=None,
+                    assets={"agriculture-cloud-mask":"ag_cloud_mask"},
                     geobox=xr_datacube.odc.geobox
                     if hasattr(xr_datacube, "odc")
                     else None,
