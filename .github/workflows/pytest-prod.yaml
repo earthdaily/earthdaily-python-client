@@ -10,12 +10,13 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
+          - windows-latest
         python-version:
           - "3.11"
           - "3.12"
     runs-on:  ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Make conda environment
