@@ -30,6 +30,11 @@ jobs:
           post-cleanup: all
           init-shell:  >-
             bash
+      - name : Install sqlite3
+        if: ${{ matrix.os }} == 'ubuntu*'
+        shell: bash -l {0}
+        run: |
+            apt install libsqlite3-dev -y
       - name: Installing the library
         shell: bash -l {0}
         run: |
