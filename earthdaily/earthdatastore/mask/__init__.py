@@ -54,19 +54,14 @@ class Mask:
 
     def ag_cloud_mask(
         self,
-        acm_datacube,
-        add_mask_var=False,
         mask_statistics=False,
     ):
-        acm_datacube["time"] = acm_datacube.time.dt.round("s")  # rm nano second
         self._obj["time"] = self._obj.time.dt.round("s")  # rm nano second
         #
-        self._obj = self._obj.where(acm_datacube["ag_cloud_mask"] == 1)
-        if add_mask_var:
-            self._obj["ag_cloud_mask"] = acm_datacube["ag_cloud_mask"]
+        self._obj = self._obj.where(self._obj["ag_cloud_mask"] == 1)
         if mask_statistics:
             self.compute_clear_coverage(
-                acm_datacube["ag_cloud_mask"],
+                self._obj["ag_cloud_mask"],
                 "ag_cloud_mask",
                 1,
                 labels_are_clouds=False,
@@ -79,7 +74,6 @@ class Mask:
         cloud_asset,
         labels,
         labels_are_clouds,
-        add_mask_var=False,
         mask_statistics=False,
         fill_value=np.nan,
     ):
@@ -98,8 +92,6 @@ class Mask:
                 self._obj = self._obj.where(
                     self._obj[cloud_asset].isin(labels), fill_value
                 )
-        if add_mask_var:
-            self._obj[cloud_asset] = cloud_layer
         if mask_statistics:
             self.compute_clear_coverage(
                 cloud_layer,
@@ -113,23 +105,20 @@ class Mask:
     def scl(
         self,
         clouds_labels=[1, 3, 8, 9, 10, 11],
-        add_mask_var=False,
         mask_statistics=False,
     ):
         return self.cloudmask_from_asset(
             cloud_asset="scl",
             labels=clouds_labels,
             labels_are_clouds=True,
-            add_mask_var=add_mask_var,
             mask_statistics=mask_statistics,
         )
 
-    def venus_detailed_cloud_mask(self, add_mask_var=False, mask_statistics=False):
+    def venus_detailed_cloud_mask(self, mask_statistics=False):
         return self.cloudmask_from_asset(
             "detailed_cloud_mask",
             0,
             labels_are_clouds=False,
-            add_mask_var=add_mask_var,
             mask_statistics=mask_statistics,
         )
 
@@ -183,13 +172,12 @@ class Mask:
         self._obj.attrs["usable_pixels"] = usable_pixels
         return self._obj
 
-    def landsat_qa_pixel(self, add_mask_var=False, mask_statistics=False):
+    def landsat_qa_pixel(self, mask_statistics=False):
         self._landsat_qa_pixel_convert()
         return self.cloudmask_from_asset(
             "qa_pixel",
             1,
             labels_are_clouds=False,
-            add_mask_var=add_mask_var,
             mask_statistics=mask_statistics,
         )
 
