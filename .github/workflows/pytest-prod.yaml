@@ -9,7 +9,7 @@ jobs:
     strategy: 
       matrix:
         os:
-          - ubuntu-latest
+          - macos-latest
           - windows-latest
         python-version:
           - "3.11"
@@ -30,11 +30,6 @@ jobs:
           post-cleanup: all
           init-shell:  >-
             bash
-      - name : Install sqlite3
-        if: ${{ matrix.os }} == 'ubuntu*'
-        shell: bash -l {0}
-        run: |
-            sudo apt update && sudo apt upgrade -y
       - name: Installing the library
         shell: bash -l {0}
         run: |
