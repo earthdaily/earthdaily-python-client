@@ -35,6 +35,7 @@ dependencies:
   - autopep8
   - recommonmark
   - ipykernel
+  - pandoc
   - numpydoc
   - nbsphinx
   - sphinx-gallery
