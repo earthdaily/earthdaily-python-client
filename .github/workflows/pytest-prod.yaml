@@ -34,7 +34,7 @@ jobs:
         if: ${{ matrix.os }} == 'ubuntu*'
         shell: bash -l {0}
         run: |
-            sudo apt install libsqlite3-dev -y
+            sudo apt install libsqlite3 -y --upgrade
       - name: Installing the library
         shell: bash -l {0}
         run: |
