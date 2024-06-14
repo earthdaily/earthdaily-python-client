@@ -701,7 +701,7 @@ class Auth:
         if mask_with:
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
-            mask_kwargs = dict(mask_statistics=False, add_mask_var=True)
+            mask_kwargs = dict(mask_statistics=False)
             if mask_with == "ag_cloud_mask":
                 acm_items = self.ag_cloud_mask_items(items)
                 acm_datacube = datacube(
@@ -717,7 +717,9 @@ class Auth:
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
                 acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
-                mask_kwargs.update(acm_datacube=acm_datacube)
+                xr_datacube = xr.merge((xr_datacube, acm_datacube), compat="override")
+
+                # mask_kwargs.update(acm_datacube=acm_datacube)
             else:
                 mask_assets = mask._native_mask_asset_mapping[collections[0]]
                 if "resolution" in kwargs:
