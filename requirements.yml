@@ -20,6 +20,6 @@ dependencies:
 - tqdm
 - python-dotenv
 - rich
-- dask>=2024.5
+- dask>=2024.4
 - spyndex
 - dask-image
