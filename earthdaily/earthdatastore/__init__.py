@@ -717,9 +717,7 @@ class Auth:
                 xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
                 acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
                 acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
-                xr_datacube = xr.merge(
-                    (xr_datacube, acm_datacube), compat="override"
-                )
+                xr_datacube = xr.merge((xr_datacube, acm_datacube), compat="override")
 
                 # mask_kwargs.update(acm_datacube=acm_datacube)
             else:
