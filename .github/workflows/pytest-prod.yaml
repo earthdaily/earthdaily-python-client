@@ -34,7 +34,7 @@ jobs:
         if: ${{ matrix.os }} == 'ubuntu*'
         shell: bash -l {0}
         run: |
-            sudo apt install --upgrade
+            sudo apt update && sudo apt upgrade -y
       - name: Installing the library
         shell: bash -l {0}
         run: |
