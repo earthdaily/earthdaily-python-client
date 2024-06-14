@@ -43,7 +43,7 @@ dependencies:
   - sphinx-copybutton
   - pytest
   - pytest-cov
-  - sphinx_rtd_theme
+  - sphinx_rtd_theme>=2.0.0
   - myst-parser
   - rich 
   - docutils
