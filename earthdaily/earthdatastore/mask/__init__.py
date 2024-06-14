@@ -50,6 +50,7 @@ class Mask:
         if isinstance(intersects, gpd.GeoDataFrame):
             intersects = intersects.to_crs(self._obj.rio.crs)
         self.intersects = intersects
+        self.compute_available_pixels()
 
     def ag_cloud_mask(
         self,
@@ -60,12 +61,12 @@ class Mask:
         acm_datacube["time"] = acm_datacube.time.dt.round("s")  # rm nano second
         self._obj["time"] = self._obj.time.dt.round("s")  # rm nano second
         #
-        self._obj = self._obj.where(acm_datacube["agriculture-cloud-mask"] == 1)
+        self._obj = self._obj.where(acm_datacube["ag_cloud_mask"] == 1)
         if add_mask_var:
-            self._obj["agriculture-cloud-mask"] = acm_datacube["agriculture-cloud-mask"]
+            self._obj["ag_cloud_mask"] = acm_datacube["ag_cloud_mask"]
         if mask_statistics:
             self.compute_clear_coverage(
-                acm_datacube["agriculture-cloud-mask"],
+                acm_datacube["ag_cloud_mask"],
                 "ag_cloud_mask",
                 1,
                 labels_are_clouds=False,
@@ -90,11 +91,11 @@ class Mask:
 
         if fill_value:
             if labels_are_clouds:
-                self._obj = self._obj[_assets].where(
+                self._obj = self._obj.where(
                     ~self._obj[cloud_asset].isin(labels), fill_value
                 )
             else:
-                self._obj = self._obj[_assets].where(
+                self._obj = self._obj.where(
                     self._obj[cloud_asset].isin(labels), fill_value
                 )
         if add_mask_var:

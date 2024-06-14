@@ -646,10 +646,11 @@ class Auth:
                     f"Specified mask '{mask_with}' is not available. Available masks providers are : {mask._available_masks}"
                 )
 
-            elif mask_with == "ag_cloud_mask":
+            elif mask_with in ["ag_cloud_mask", "agriculture-cloud-mask"]:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs, collections[0]
                 )
+                mask_with = "ag_cloud_mask"
             else:
                 mask_with = mask._native_mask_def_mapping.get(collections[0], None)
                 if isinstance(assets, list):
@@ -694,13 +695,13 @@ class Auth:
             common_band_names=common_band_names,
             cross_calibration_items=xcal_items,
             properties=properties,
-            groupby_date=None if mask_with == "ag_cloud_mask" else groupby_date,
+            groupby_date=None,
             **kwargs,
         )
         if mask_with:
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
-            mask_kwargs = dict(mask_statistics=mask_statistics)
+            mask_kwargs = dict(mask_statistics=False, add_mask_var=True)
             if mask_with == "ag_cloud_mask":
                 acm_items = self.ag_cloud_mask_items(items)
                 acm_datacube = datacube(
@@ -708,6 +709,7 @@ class Auth:
                     intersects=intersects,
                     bbox=bbox,
                     groupby_date=None,
+                    assets={"agriculture-cloud-mask": "ag_cloud_mask"},
                     geobox=xr_datacube.odc.geobox
                     if hasattr(xr_datacube, "odc")
                     else None,
@@ -747,39 +749,37 @@ class Auth:
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
 
-            if groupby_date:
-                xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
-                xr_datacube = getattr(xr_datacube, groupby_date)().rename(
-                    dict(date="time")
-                )
-                xr_datacube["time"] = xr_datacube.time.astype("<M8[ns]")
+        if groupby_date:
+            xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
+            xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
+            xr_datacube["time"] = xr_datacube.time.astype("<M8[ns]")
 
-                if clear_cover or mask_statistics:
-                    first_var = xr_datacube[list(xr_datacube.data_vars)[0]]
-                    xy = first_var.isel(time=0).size
+        if clear_cover or mask_statistics:
+            xy = xr_datacube[mask_with].isel(time=0).size
 
-                    null_pixels = (first_var.isnull().sum(dim=("x", "y"))).values
-                    n_pixels_as_labels = xy - null_pixels
-                    # n_pixels_as_labels = xr_datacube.attrs["usable_pixels"] - n_pixels_as_labels
+            null_pixels = xr_datacube[mask_with].isnull().sum(dim=("x", "y"))
+            n_pixels_as_labels = xy - null_pixels
 
-                    xr_datacube = xr_datacube.assign_coords(
-                        {"clear_pixels": ("time", n_pixels_as_labels)}
+            xr_datacube = xr_datacube.assign_coords(
+                {"clear_pixels": ("time", n_pixels_as_labels.load().values)}
+            )
+
+            xr_datacube = xr_datacube.assign_coords(
+                {
+                    "clear_percent": (
+                        "time",
+                        np.multiply(
+                            xr_datacube["clear_pixels"].values
+                            / xr_datacube.attrs["usable_pixels"],
+                            100,
+                        ).astype(np.int8),
                     )
-
-                    xr_datacube = xr_datacube.assign_coords(
-                        {
-                            "clear_percent": (
-                                "time",
-                                np.multiply(
-                                    n_pixels_as_labels
-                                    / xr_datacube.attrs["usable_pixels"],
-                                    100,
-                                ).astype(np.int8),
-                            )
-                        }
-                    )
-            if clear_cover:
-                xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
+                }
+            )
+        if mask_with:
+            xr_datacube = xr_datacube.drop(mask_with)
+        if clear_cover:
+            xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
 
         return xr_datacube
 

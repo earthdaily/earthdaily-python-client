@@ -70,9 +70,11 @@ def _lee_filter(img, window_size: int):
 
 
 def _xr_rio_clip(datacube, geom):
-    geom = GeometryManager(geom).to_geopandas()
-    geom = geom.to_crs(datacube.rio.crs)
-    return datacube.rio.clip(geom.geometry)
+    geom_ = GeometryManager(geom)
+    geom = geom_.to_geopandas().to_crs(datacube.rio.crs)
+    datacube = datacube.rio.clip_box(*geom.total_bounds)
+    datacube = datacube.rio.clip(geom.geometry)
+    return datacube
 
 
 @xr.register_dataarray_accessor("ed")
@@ -96,26 +98,13 @@ class EarthDailyAccessorDataArray:
 
     def whittaker(
         self,
-        lmbd: float,
-        weights: np.ndarray = None,
-        a: float = 0.5,
-        min_value: float = -np.inf,
-        max_value: float = np.inf,
-        max_iter: int = 10,
+        beta: float = 10000.0,
+        weights: (np.ndarray, list) = None,
         time="time",
     ):
         from . import whittaker
 
-        return whittaker.xr_wt(
-            self._obj.to_dataset(name="index"),
-            lmbd,
-            time=time,
-            weights=weights,
-            a=a,
-            min_value=min_value,
-            max_value=max_value,
-            max_iter=max_iter,
-        )["index"]
+        return whittaker.whittaker(self._obj, beta=beta, weights=weights, time=time)
 
     def sel_nearest_dates(
         self,
@@ -140,17 +129,44 @@ class EarthDailyAccessorDataArray:
             )
         return self._obj.sel(time=pos)
 
+    def zonal_stats(
+        self,
+        geometry,
+        operations: list = ["mean"],
+        raise_missing_geometry: bool = False,
+    ):
+        from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
 
-@xr.register_dataset_accessor("ed")
-class EarthDailyAccessorDataset:
-    def __init__(self, xarray_obj):
-        self._obj = xarray_obj
+        geometry = GeometryManager(geometry).to_geopandas()
+        return zonal_stats(
+            self._obj,
+            geometry,
+            operations=operations,
+            raise_missing_geometry=raise_missing_geometry,
+        )
 
-    def clip(self, geom):
-        return _xr_rio_clip(self._obj, geom)
+    def lee_filter(self, window_size: int):
+        return xr.apply_ufunc(
+            _lee_filter,
+            self._obj,
+            input_core_dims=[["time"]],
+            dask="allowed",
+            output_core_dims=[["time"]],
+            kwargs=dict(window_size=window_size),
+        )
 
-    def _max_time_wrap(self, wish=5, col="time"):
-        return np.min((wish, self._obj[col].size))
+    def centroid(self, to_wkt: str = False, to_4326: bool = True):
+        """Return the geographic center point in 4326/WKT of this dataset."""
+        # we can use a cache on our accessor objects, because accessors
+        # themselves are cached on instances that access them.
+        lon = float(self._obj.x[int(self._obj.x.size / 2)])
+        lat = float(self._obj.y[int(self._obj.y.size / 2)])
+        point = gpd.GeoSeries([Point(lon, lat)], crs=self._obj.rio.crs)
+        if to_4326:
+            point = point.to_crs(epsg="4326")
+        if to_wkt:
+            point = point.map(lambda x: x.wkt).iloc[0]
+        return point
 
     def drop_unfrozen_coords(self, keep_spatial_ref=True):
         unfrozen_coords = [
@@ -163,6 +179,12 @@ class EarthDailyAccessorDataset:
                 np.argwhere(np.in1d(unfrozen_coords, "spatial_ref"))[0][0]
             )
         return self._obj.drop(unfrozen_coords)
+
+
+@xr.register_dataset_accessor("ed")
+class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
+    def __init__(self, xarray_obj):
+        self._obj = xarray_obj
 
     def plot_rgb(
         self,
@@ -188,29 +210,6 @@ class EarthDailyAccessorDataset:
             col_wrap=self._max_time_wrap(col_wrap, col=col),
             **kwargs,
         )
-
-    def lee_filter(self, window_size: int):
-        return xr.apply_ufunc(
-            _lee_filter,
-            self._obj,
-            input_core_dims=[["time"]],
-            dask="allowed",
-            output_core_dims=[["time"]],
-            kwargs=dict(window_size=window_size),
-        )
-
-    def centroid(self, to_wkt: str = False, to_4326: bool = True):
-        """Return the geographic center point in 4326/WKT of this dataset."""
-        # we can use a cache on our accessor objects, because accessors
-        # themselves are cached on instances that access them.
-        lon = float(self._obj.x[int(self._obj.x.size / 2)])
-        lat = float(self._obj.y[int(self._obj.y.size / 2)])
-        point = gpd.GeoSeries([Point(lon, lat)], crs=self._obj.rio.crs)
-        if to_4326:
-            point = point.to_crs(epsg="4326")
-        if to_wkt:
-            point = point.map(lambda x: x.wkt).iloc[0]
-        return point
 
     def _auto_mapper(self):
         _BAND_MAPPING = {
@@ -292,70 +291,3 @@ class EarthDailyAccessorDataset:
         idx = idx.to_dataset(dim="index")
 
         return xr.merge((self._obj, idx))
-
-    def sel_nearest_dates(
-        self,
-        target: (xr.Dataset, xr.DataArray),
-        max_delta: int = 0,
-        method: str = "nearest",
-        return_target: bool = False,
-    ):
-        src_time = self._obj.sel(time=target.time.dt.date, method=method).time.dt.date
-        target_time = target.time.dt.date
-        pos = np.abs(src_time.data - target_time.data)
-        pos = [
-            src_time.isel(time=i).time.values
-            for i, j in enumerate(pos)
-            if j.days <= max_delta
-        ]
-        pos = np.unique(pos)
-        if return_target:
-            method_convert = {"bfill": "ffill", "ffill": "bfill", "nearest": "nearest"}
-            return self._obj.sel(time=pos), target.sel(
-                time=pos, method=method_convert[method]
-            )
-        return self._obj.sel(time=pos)
-
-    def whittaker(
-        self,
-        lmbd: float,
-        weights: np.ndarray = None,
-        a: float = 0.5,
-        min_value: float = -np.inf,
-        max_value: float = np.inf,
-        max_iter: int = 10,
-        time="time",
-    ):
-        from . import whittaker
-
-        data_crs = self._obj.rio.crs
-
-        self._obj = whittaker.xr_wt(
-            self._obj,
-            lmbd,
-            time=time,
-            weights=weights,
-            a=a,
-            min_value=min_value,
-            max_value=max_value,
-            max_iter=max_iter,
-        )
-
-        self._obj = self._obj.rio.set_crs(data_crs).rio.write_crs(data_crs)
-        return self._obj
-
-    def zonal_stats(
-        self,
-        geometry,
-        operations: list = ["mean"],
-        raise_missing_geometry: bool = False,
-    ):
-        from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
-
-        geometry = GeometryManager(geometry).to_geopandas()
-        return zonal_stats(
-            self._obj,
-            geometry,
-            operations=operations,
-            raise_missing_geometry=raise_missing_geometry,
-        )
