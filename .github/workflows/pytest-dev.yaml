@@ -29,6 +29,10 @@ jobs:
           post-cleanup: all
           init-shell:  >-
             bash
+      - name: install sqlite3
+      - shell: bash -l {0}
+        run: |
+          apt install libsqlite3 -y
       - name: Installing the library
         shell: bash -l {0}
         run: |
