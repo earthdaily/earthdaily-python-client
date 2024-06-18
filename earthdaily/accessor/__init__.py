@@ -193,14 +193,15 @@ class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
         blue: str = "blue",
         col="time",
         col_wrap=5,
-        white_background = True, # or white
+        white_background=True,  # or white
         **kwargs,
-    ):  
+    ):
         nan_rgb_val = 1 if white_background else 0
-        
-        
+
         return (
-            xr.where(np.isnan(self._obj.blue),nan_rgb_val,self._obj)[[red, green, blue]]
+            xr.where(np.isnan(self._obj.blue), nan_rgb_val, self._obj)[
+                [red, green, blue]
+            ]
             .to_array(dim="bands")
             .plot.imshow(
                 col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs
