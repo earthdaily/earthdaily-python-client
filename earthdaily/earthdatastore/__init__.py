@@ -14,7 +14,7 @@ from pystac.item_collection import ItemCollection
 from pystac_client import Client
 from odc import stac
 from . import _scales_collections, cube_utils, mask
-from .cube_utils import datacube, metacube, _datacubes
+from .cube_utils import datacube, metacube, _datacubes, asset_mapper
 
 __all__ = ["datacube", "metacube", "xr", "stac"]
 
@@ -487,7 +487,7 @@ class Auth:
             return self._staccollectionexplorer.get(collection)
         return sorted(c.id for c in self.client.get_all_collections())
 
-    def _update_search_kwargs_for_ag_cloud_mask(self, search_kwargs, collections):
+    def _update_search_kwargs_for_ag_cloud_mask(self, search_kwargs, collections, key="eda:ag_cloud_mask_available", target_param="query"):
         """Update the STAC search kwargs to only get items that have an available agricultural cloud mask.
 
         Args:
@@ -499,8 +499,7 @@ class Auth:
         """
         search_kwargs = search_kwargs.copy()
         # to get only items that have a ag_cloud_mask
-        ag_query = {"eda:ag_cloud_mask_available": {"eq": True}}
-        target_param = "query"
+        ag_query = {key: {"eq": True}}
 
         # to check if field is queryable
         # =============================================================================
@@ -648,9 +647,15 @@ class Auth:
 
             elif mask_with in ["ag_cloud_mask", "agriculture-cloud-mask"]:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
-                    search_kwargs, collections[0]
+                    search_kwargs, collections[0], key="eda:ag_cloud_mask_available"
                 )
                 mask_with = "ag_cloud_mask"
+            elif mask_with in ["cloud_mask", "cloudmask"]:
+                search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
+                    search_kwargs, collections[0], key="eda:cloud_mask_available",
+                    target_param='post_query'
+                )
+                mask_with = "cloud_mask"
             else:
                 mask_with = mask._native_mask_def_mapping.get(collections[0], None)
                 if isinstance(assets, list):
@@ -661,6 +666,7 @@ class Auth:
             bbox=bbox,
             intersects=intersects,
             datetime=datetime,
+            assets=assets,
             prefer_alternate=prefer_alternate,
             add_default_scale_factor=add_default_scale_factor,
             **search_kwargs,
@@ -702,20 +708,23 @@ class Auth:
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
             mask_kwargs = dict(mask_statistics=False)
-            if mask_with == "ag_cloud_mask":
-                acm_items = self.ag_cloud_mask_items(items)
+            if mask_with == "ag_cloud_mask" or mask_with == "cloud_mask":
+                mask_asset_mapping = {"ag_cloud_mask":{"agriculture-cloud-mask":"ag_cloud_mask"},
+                                      "cloud_mask":{"cloud-mask":"cloud_mask"}}
+                
+                acm_items = self.find_cloud_mask_items(items, cloudmask=mask_with)
                 acm_datacube = datacube(
                     acm_items,
                     intersects=intersects,
                     bbox=bbox,
                     groupby_date=None,
-                    assets={"agriculture-cloud-mask": "ag_cloud_mask"},
+                    assets=mask_asset_mapping[mask_with],
                     geobox=xr_datacube.odc.geobox
                     if hasattr(xr_datacube, "odc")
                     else None,
                 )
-                xr_datacube["time"] = xr_datacube.time.astype("M8[s]")
-                acm_datacube["time"] = acm_datacube.time.astype("M8[s]")
+                xr_datacube["time"] = xr_datacube.time.astype("M8[ns]")
+                acm_datacube["time"] = xr_datacube["time"].time
                 acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
                 xr_datacube = xr.merge((xr_datacube, acm_datacube), compat="override")
 
@@ -754,7 +763,7 @@ class Auth:
         if groupby_date:
             xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
             xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
-            xr_datacube["time"] = xr_datacube.time.astype("<M8[ns]")
+            xr_datacube["time"] = xr_datacube.time.astype("M8[ns]")
 
         if clear_cover or mask_statistics:
             xy = xr_datacube[mask_with].isel(time=0).size
@@ -915,6 +924,7 @@ class Auth:
 
         """
         if assets is not None:
+            assets = list(asset_mapper.AssetMapper().map_collection_assets(collections[0], assets).keys())
             kwargs["fields"] = self._update_search_for_assets(assets)
         if isinstance(collections, str):
             collections = [collections]
@@ -944,7 +954,7 @@ class Auth:
             raise Warning("No item has been found.")
         return items_collection
 
-    def ag_cloud_mask_items(self, items_collection):
+    def find_cloud_mask_items(self, items_collection, cloudmask="ag_cloud_mask"):
         """
         Search the catalog for the ag_cloud_mask items matching the given items_collection.
         The ag_cloud_mask items are searched in the `ag_cloud_mask_collection_id` collection using the
@@ -964,13 +974,13 @@ class Auth:
         def ag_cloud_mask_from_items(items):
             products = {}
             for item in items:
-                if not item.properties.get("eda:ag_cloud_mask_available"):
+                if not item.properties.get(f"eda:{cloudmask}_available"):
                     continue
-                collection = item.properties["eda:ag_cloud_mask_collection_id"]
+                collection = item.properties[f"eda:{cloudmask}_collection_id"]
                 if products.get(collection, None) is None:
                     products[collection] = []
                 products[collection].append(
-                    item.properties.get("eda:ag_cloud_mask_item_id")
+                    item.properties.get(f"eda:{cloudmask}_item_id")
                 )
             return products
 

@@ -189,10 +189,11 @@ def datacube(
 ):
     logging.info(f"Building datacube with {len(items_collection)} items")
     times = [
-        np.datetime64(d.datetime).astype("datetime64[ns]")
+        np.datetime64(d.datetime.strftime('%Y-%m-%d %X.%f')).astype("datetime64[ns]")
         for d in items_collection
         if "datetime" in d.__dict__
     ]
+
     if len(times) == 0:
         times = None
     engines = {"odc": _cube_odc, "stackstac": _cube_stackstac}

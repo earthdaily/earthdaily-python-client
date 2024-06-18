@@ -15,6 +15,9 @@ _available_masks = [
     "native",
     "venus_detailed_cloud_mask",
     "ag_cloud_mask",
+    "cloud_mask",
+    "ag-cloud-mask",
+    "cloudmask"
     "scl",
 ]
 _native_mask_def_mapping = {
@@ -51,6 +54,23 @@ class Mask:
             intersects = intersects.to_crs(self._obj.rio.crs)
         self.intersects = intersects
         self.compute_available_pixels()
+
+    def cloud_mask(
+        self,
+        mask_statistics=False,
+    ):
+        self._obj["time"] = self._obj.time.dt.round("s")  # rm nano second
+        #
+        self._obj = self._obj.where(self._obj["cloud_mask"] == 1)
+        if mask_statistics:
+            self.compute_clear_coverage(
+                self._obj["ag_cloud_mask"],
+                "ag_cloud_mask",
+                1,
+                labels_are_clouds=False,
+                n_jobs=_bool_or_int_to_njobs(mask_statistics),
+            )
+        return self._obj
 
     def ag_cloud_mask(
         self,
