@@ -668,12 +668,12 @@ class Auth:
                 mask_with = mask._native_mask_def_mapping.get(collections[0], None)
                 sensor_mask = mask._native_mask_asset_mapping.get(collections[0], None)
 
-                if isinstance(assets,list):
+                if isinstance(assets, list):
                     assets.append(sensor_mask)
                     assets = list(set(assets))
-                elif isinstance(assets,dict):
+                elif isinstance(assets, dict):
                     assets[sensor_mask] = sensor_mask
-                 
+
         items = self.search(
             collections=collections,
             bbox=bbox,
@@ -745,8 +745,12 @@ class Auth:
 
                 # mask_kwargs.update(acm_datacube=acm_datacube)
             else:
-                mask_assets = {mask._native_mask_asset_mapping[collections[0]]:mask._native_mask_def_mapping[collections[0]]}
-                
+                mask_assets = {
+                    mask._native_mask_asset_mapping[
+                        collections[0]
+                    ]: mask._native_mask_def_mapping[collections[0]]
+                }
+
                 if "resolution" in kwargs:
                     kwargs.pop("resolution")
                 if "epsg" in kwargs:
@@ -954,7 +958,7 @@ class Auth:
             )
         if bbox is not None and intersects is not None:
             bbox = None
-        
+
         items_collection = self.client.search(
             collections=collections,
             bbox=bbox,
@@ -963,7 +967,7 @@ class Auth:
             **kwargs,
         )
         items_collection = items_collection.item_collection()
-            
+
         if any((prefer_alternate, add_default_scale_factor)):
             items_collection = enhance_assets(
                 items_collection.clone(),
