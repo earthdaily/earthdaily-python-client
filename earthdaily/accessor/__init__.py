@@ -193,10 +193,14 @@ class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
         blue: str = "blue",
         col="time",
         col_wrap=5,
+        background: None | int | float = None,
         **kwargs,
     ):
+        ds = self._obj
+        if isinstance(background, int | float):
+            ds = xr.where(np.isnan(ds[blue]), background, ds)
         return (
-            self._obj[[red, green, blue]]
+            ds[[red, green, blue]]
             .to_array(dim="bands")
             .plot.imshow(
                 col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs

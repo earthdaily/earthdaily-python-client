@@ -5,4 +5,4 @@ from .accessor import EarthDailyAccessorDataArray, EarthDailyAccessorDataset
 # to hide warnings from rioxarray or nano seconds conversion
 # warnings.filterwarnings("ignore")
 
-__version__ = "0.1.7"
+__version__ = "0.2.0"
