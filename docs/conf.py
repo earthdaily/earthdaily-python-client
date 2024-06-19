@@ -34,6 +34,7 @@ extensions = [
     "sphinx_automodapi.automodapi",  # for a page per function
     "myst_parser",
     "rst2pdf.pdfbuilder",
+    "sphinxawesome.deprecated"
 ]
 #
 automodapi_toctreedirnm = "_API"
@@ -99,7 +100,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # a list of builtin themes.
 #
 # html_theme = 'alabaster'
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinxawesome_theme"
 
 source_suffix = [".rst", ".md"]
 

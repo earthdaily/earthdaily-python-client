@@ -51,3 +51,6 @@ dependencies:
   - python-dotenv
   - scipy
   - dask-image
+  - pip
+  - pip:
+      - sphinxawesome-theme
