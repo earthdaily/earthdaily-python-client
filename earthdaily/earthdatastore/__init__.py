@@ -668,9 +668,8 @@ class Auth:
                 mask_with = mask._native_mask_def_mapping.get(collections[0], None)
                 sensor_mask = mask._native_mask_asset_mapping.get(collections[0], None)
 
-                if isinstance(assets, list):
+                if isinstance(assets, list) and sensor_mask not in assets:
                     assets.append(sensor_mask)
-                    assets = list(set(assets))
                 elif isinstance(assets, dict):
                     assets[sensor_mask] = sensor_mask
 
