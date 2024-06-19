@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - Unreleased
+## [0.2.0] - 2024-06-19
 
 ### Added
 
@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed 
 
 - items `Datetime` are automatically converted in nanoseconds.
-- AssetMapper done also in search for only requestins the assets
+- AssetMapper is now also in the search part for only requesting the needed assets.
 
 ## [0.1.7] - 2024-06-14
 
