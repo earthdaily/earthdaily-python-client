@@ -17,8 +17,7 @@ _available_masks = [
     "ag_cloud_mask",
     "cloud_mask",
     "ag-cloud-mask",
-    "cloudmask"
-    "scl",
+    "cloudmask" "scl",
 ]
 _native_mask_def_mapping = {
     "sentinel-2-l2a": "scl",

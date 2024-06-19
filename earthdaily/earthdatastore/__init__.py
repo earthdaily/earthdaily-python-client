@@ -487,7 +487,13 @@ class Auth:
             return self._staccollectionexplorer.get(collection)
         return sorted(c.id for c in self.client.get_all_collections())
 
-    def _update_search_kwargs_for_ag_cloud_mask(self, search_kwargs, collections, key="eda:ag_cloud_mask_available", target_param="query"):
+    def _update_search_kwargs_for_ag_cloud_mask(
+        self,
+        search_kwargs,
+        collections,
+        key="eda:ag_cloud_mask_available",
+        target_param="query",
+    ):
         """Update the STAC search kwargs to only get items that have an available agricultural cloud mask.
 
         Args:
@@ -652,8 +658,10 @@ class Auth:
                 mask_with = "ag_cloud_mask"
             elif mask_with in ["cloud_mask", "cloudmask"]:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
-                    search_kwargs, collections[0], key="eda:cloud_mask_available",
-                    target_param='post_query'
+                    search_kwargs,
+                    collections[0],
+                    key="eda:cloud_mask_available",
+                    target_param="post_query",
                 )
                 mask_with = "cloud_mask"
             else:
@@ -714,9 +722,11 @@ class Auth:
                 mask_statistics = True
             mask_kwargs = dict(mask_statistics=False)
             if mask_with == "ag_cloud_mask" or mask_with == "cloud_mask":
-                mask_asset_mapping = {"ag_cloud_mask":{"agriculture-cloud-mask":"ag_cloud_mask"},
-                                      "cloud_mask":{"cloud-mask":"cloud_mask"}}
-                
+                mask_asset_mapping = {
+                    "ag_cloud_mask": {"agriculture-cloud-mask": "ag_cloud_mask"},
+                    "cloud_mask": {"cloud-mask": "cloud_mask"},
+                }
+
                 acm_items = self.find_cloud_mask_items(items, cloudmask=mask_with)
                 acm_datacube = datacube(
                     acm_items,
@@ -930,7 +940,11 @@ class Auth:
 
         """
         if assets is not None:
-            assets = list(asset_mapper.AssetMapper().map_collection_assets(collections[0], assets).keys())
+            assets = list(
+                asset_mapper.AssetMapper()
+                .map_collection_assets(collections[0], assets)
+                .keys()
+            )
             kwargs["fields"] = self._update_search_for_assets(assets)
         if isinstance(collections, str):
             collections = [collections]
