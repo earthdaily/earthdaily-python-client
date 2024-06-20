@@ -22,8 +22,8 @@ jobs:
           fetch-depth: 0
       - name: Make conda environment
         uses: mamba-org/setup-micromamba@v1
-          micromamba-version: 1.5.8-0
         with:
+          micromamba-version: 1.5.8-0
           environment-file: requirements_dev.yml
           environment-name: earthdaily
           create-args: python=${{ matrix.python-version }}
