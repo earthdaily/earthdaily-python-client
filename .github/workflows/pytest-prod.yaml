@@ -13,7 +13,6 @@ jobs:
           - windows-latest
           - ubuntu-latest
         python-version:
-          - "3.11"
           - "3.12"
     runs-on:  ${{ matrix.os }}
     steps:
@@ -22,8 +21,8 @@ jobs:
           fetch-depth: 0
       - name: Make conda environment
         uses: mamba-org/setup-micromamba@v1
-        with:
           micromamba-version: 1.5.8-0
+        with:
           environment-file: requirements_dev.yml
           environment-name: earthdaily
           create-args: python=${{ matrix.python-version }}
