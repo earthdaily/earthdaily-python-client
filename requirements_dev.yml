@@ -51,4 +51,4 @@ dependencies:
   - dask-image
   - geocube
   - spyndex
-  - pydata-sphinx-theme
+  - sphinx-rtd-theme
