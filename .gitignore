@@ -66,3 +66,11 @@ target/
 # Auth
 .env
 .vscode/
+
+docs/html/.doctrees/
+
+docs/sg_execution_times.rst
+
+docs/html/
+
+*.0

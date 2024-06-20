@@ -15,15 +15,15 @@ jobs:
         python-version:
           - "3.11"
           - "3.12"
-    runs-on:  ${{ matrix.os }}
     steps:
+    runs-on:  ${{ matrix.os }}
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Make conda environment
         uses: mamba-org/setup-micromamba@v1
+          micromamba-version: 1.5.8-0
         with:
-          micromamba-version: 1.5.1-0
           environment-file: requirements_dev.yml
           environment-name: earthdaily
           create-args: python=${{ matrix.python-version }}

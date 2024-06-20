@@ -13,9 +13,10 @@ import sys
 import re
 
 from sphinx_gallery.sorting import ExampleTitleSortKey
-
+import os
+os.environ['PYDEVD_DISABLE_FILE_VALIDATION'] = "1"
 project = "earthdaily"
-copyright = "2023, EarthDailyAgro"
+copyright = "2024, EarthDailyAgro"
 author = "Geosys/EarthDailyAgro"
 
 # -- General configuration ---------------------------------------------------
@@ -23,17 +24,16 @@ author = "Geosys/EarthDailyAgro"
 
 
 extensions = [
-    "sphinx.ext.doctest",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
+    #"nbsphinx",
     "sphinx_gallery.gen_gallery",
-    "nbsphinx",
     "sphinx_copybutton",
     "sphinx_automodapi.automodapi",  # for a page per function
     "myst_parser",
-    "rst2pdf.pdfbuilder",
+    # "sphinxawesome.deprecated"
 ]
 #
 automodapi_toctreedirnm = "_API"
