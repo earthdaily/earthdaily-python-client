@@ -15,8 +15,8 @@ jobs:
         python-version:
           - "3.11"
           - "3.12"
-    steps:
     runs-on:  ${{ matrix.os }}
+    steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
