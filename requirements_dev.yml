@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.10
-  - numpy>=2
+  - numpy
   - pandas
   - libtiff
   - gdal=3.8.1
