@@ -11,12 +11,12 @@ jobs:
         os:
           - macos-latest
           - windows-latest
-          - ubuntu-24.04
+          - ubuntu-latest
         python-version:
           - "3.11"
           - "3.12"
-    runs-on:  ${{ matrix.os }}
     steps:
+    runs-on:  ${{ matrix.os }}
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
