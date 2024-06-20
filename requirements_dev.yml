@@ -6,7 +6,7 @@ dependencies:
   - numpy
   - pandas
   - libtiff
-  - gdal==3.8.4
+  - gdal>3.7
   - geopandas>=0.11
   - dask>=2024.3
   - shapely
@@ -31,19 +31,17 @@ dependencies:
   - stackstac
   - odc-stac
   - pillow
-  - sphinx
+  - sphinx==7.2.6
   - autopep8
   - recommonmark
   - ipykernel
   - pandoc
   - numpydoc
-  - nbsphinx
   - sphinx-gallery
   - sphinx-automodapi
   - sphinx-copybutton
   - pytest
   - pytest-cov
-  - sphinx_rtd_theme>=2.0.0
   - myst-parser
   - rich 
   - docutils
@@ -51,6 +49,6 @@ dependencies:
   - python-dotenv
   - scipy
   - dask-image
-  - pip
-  - pip:
-      - sphinxawesome-theme
+  - geocube
+  - spyndex
+  - pydata-sphinx-theme
