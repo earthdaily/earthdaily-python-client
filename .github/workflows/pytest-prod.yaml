@@ -11,8 +11,9 @@ jobs:
         os:
           - macos-latest
           - windows-latest
-          - ubuntu-latest
+          - ubuntu-24.04
         python-version:
+          - "3.11"
           - "3.12"
     runs-on:  ${{ matrix.os }}
     steps:
