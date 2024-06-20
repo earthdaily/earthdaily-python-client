@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python>=3.10
-  - numpy
+  - numpy>=2.0
   - pandas
   - libtiff
   - gdal=3.8.1
@@ -51,4 +51,4 @@ dependencies:
   - dask-image
   - geocube
   - spyndex
-  - pydata-sphinx-theme
+  - sphinx-rtd-theme
