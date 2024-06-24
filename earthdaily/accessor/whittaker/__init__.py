@@ -33,8 +33,8 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
 
     """
 
-    resampled = dataset.resample(time="1D").interpolate("linear")
-    weights_binary = np.in1d(resampled.time.dt.date, dataset.time.dt.date)
+    resampled = dataset.resample({time:"1D"}).interpolate("linear")
+    weights_binary = np.in1d(resampled[time].dt.date, dataset[time].dt.date)
     if weights is not None:
         weights_advanced = np.copy(weights_binary.astype(float))
         weights_advanced[weights_advanced == 1.0] = weights
@@ -43,21 +43,21 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
 
     # _core_dims = [dim for dim in dataset.dims if dim != "time"]
     # _core_dims.extend([time])
-    m = resampled.time.size
+    m = resampled[time].size
     ab_mat = _ab_mat(m, beta)
 
     dataset_w = xr.apply_ufunc(
         _whitw_pixel,
         resampled,
-        input_core_dims=[["time"]],
-        output_core_dims=[["time"]],
+        input_core_dims=[[time]],
+        output_core_dims=[[time]],
         output_dtypes=[float],
         dask="parallelized",
         vectorize=True,
         kwargs=dict(weights=weights_advanced, ab_mat=ab_mat),
     )
 
-    return dataset_w.isel(time=weights_binary)
+    return dataset_w.isel({time:weights_binary})
 
 
 def _ab_mat(m, beta):

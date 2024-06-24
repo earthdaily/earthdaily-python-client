@@ -32,18 +32,24 @@ eds = earthdatastore.Auth()
 pivot_cube = eds.datacube(
     "sentinel-2-l2a",
     intersects=pivot,
-    datetime=["2023-07-01","2023-07-31"],
-    assets=["red", "green", "blue"],
+    datetime=["2022-01","2022-03"],
+    assets=["red", "green", "blue", "nir"],
     mask_with=["native"],
     clear_cover=50,
 )
 pivot_cube.clear_percent.plot.scatter(x="time")
 
 ##############################################################################
+# Add spectral indices using spyndex from earthdaily accessor
+# ------------------------------------------------------------
+
+pivot_cube = pivot_cube.ed.add_indices(['NDVI'])
+
+##############################################################################
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
 pivot_cube = pivot_cube.load()
-pivot_cube.ed.plot_rgb(col_wrap=3)
+pivot_cube.ed.plot_rgb(col_wrap=3, vmin=0, vmax=.2)
 plt.title("Pivot evolution masked with native cloudmasks")
 plt.show()
 
@@ -55,6 +61,6 @@ plt.show()
 zonal_stats = pivot_cube.ed.zonal_stats(pivot, ['mean','max','min'])
 
 zonal_stats.isel(feature=0).to_array(dim="band").plot.line(
-    x="time", col="band", hue="stats"
+    x="time", col="band", hue="stats", col_wrap=3
 )
 plt.show()

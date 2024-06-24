@@ -41,7 +41,7 @@ items = eds.search(collection, query=query, prefer_alternate="download", limit=5
 
 ##############################################################################
 # .. note::
-#   We specify prefer_http=True because we didn't set any s3 credentials.
+#   We specify prefer_http="download" because we didn't set any s3 credentials.
 
 
 print(f"{theia_location} venus location has {len(items)} items.")

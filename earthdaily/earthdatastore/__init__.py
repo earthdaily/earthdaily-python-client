@@ -4,14 +4,16 @@ import operator
 import os
 import warnings
 import time
-import geopandas as gpd
 import pandas as pd
+import geopandas as gpd
 import psutil
 import requests
 import xarray as xr
 import numpy as np
 from pystac.item_collection import ItemCollection
+from pystac_client.item_search import ItemSearch
 from pystac_client import Client
+from itertools import chain
 from odc import stac
 from . import _scales_collections, cube_utils, mask
 from .cube_utils import datacube, metacube, _datacubes, asset_mapper
@@ -20,6 +22,49 @@ __all__ = ["datacube", "metacube", "xr", "stac"]
 
 logging.getLogger("earthdaily-earthdatastore")
 
+class NoItems(Warning):
+    pass
+
+_no_item_msg = NoItems("No item has been found for your query.")
+
+def _datetime_split(datetime):
+    datetime_ = ItemSearch(url=None)._format_datetime(datetime).split('/')
+    datetime = [pd.Timestamp(datetime_[0]),pd.Timestamp(datetime_[1])]
+    
+    s = pd.Timestamp(datetime[0])
+    e = pd.Timestamp(datetime[1])
+    days = (e-s).days
+    days_per_query = days//10
+    if days_per_query==0:
+        return None
+    datetimes = []
+    for d in range(0,days,days_per_query):
+        start = s+pd.Timedelta(days=d)
+        end = start+pd.Timedelta(days=days_per_query) 
+        end = end if e > end else e
+        datetimes.append([start,end])
+        
+    return datetimes
+
+def _parallel_search(func):
+    def _search(*args, **kwargs):
+        from joblib import Parallel, delayed
+        datetime = kwargs.get("datetime",None)
+        need_parallel=False
+        if datetime:
+            datetimes = _datetime_split(datetime)
+            need_parallel = True if datetimes else False
+            if need_parallel:                    
+                kwargs.pop("datetime")
+                kwargs['raise_no_items'] = False
+                items = Parallel(n_jobs=10, backend="threading")(delayed(func)(*args, datetime=datetime, **kwargs) for datetime in datetimes)
+                items = ItemCollection(chain(*items))
+                if len(items) == 0:
+                    raise _no_item_msg
+        if not need_parallel:
+            items = func(*args,**kwargs)
+        return items
+    return _search
 
 def post_query_items(items, query):
     """Applies query to items fetched from the STAC catalog.
@@ -644,7 +689,6 @@ class Auth:
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
             self.intersects = intersects
-
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise NotImplementedError(
@@ -656,14 +700,15 @@ class Auth:
                     search_kwargs, collections[0], key="eda:ag_cloud_mask_available"
                 )
                 mask_with = "ag_cloud_mask"
-            elif mask_with in ["cloud_mask", "cloudmask"]:
+            elif mask_with in ["cloud_mask", "cloudmask", "cloud_mask_ag_version", "cloudmask_ag_version"]:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs,
                     collections[0],
                     key="eda:cloud_mask_available",
-                    target_param="post_query",
                 )
+
                 mask_with = "cloud_mask"
+                        
             else:
                 mask_with = mask._native_mask_def_mapping.get(collections[0], None)
                 sensor_mask = mask._native_mask_asset_mapping.get(collections[0], None)
@@ -778,7 +823,7 @@ class Auth:
 
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
-
+            
         if groupby_date:
             xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
             xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
@@ -830,6 +875,7 @@ class Auth:
         fields["include"].extend([f"assets.{asset}" for asset in assets])
         return fields
 
+    @_parallel_search
     def search(
         self,
         collections: str | list,
@@ -839,6 +885,7 @@ class Auth:
         prefer_alternate=None,
         add_default_scale_factor=False,
         assets=None,
+        raise_no_items=True,
         **kwargs,
     ):
         """
@@ -957,7 +1004,8 @@ class Auth:
             )
         if bbox is not None and intersects is not None:
             bbox = None
-
+        
+        
         items_collection = self.client.search(
             collections=collections,
             bbox=bbox,
@@ -975,8 +1023,8 @@ class Auth:
             )
         if post_query:
             items_collection = post_query_items(items_collection, post_query)
-        if len(items_collection) == 0:
-            raise Warning("No item has been found.")
+        if len(items_collection) == 0 and raise_no_items:
+            raise _no_item_msg
         return items_collection
 
     def find_cloud_mask_items(self, items_collection, cloudmask="ag_cloud_mask"):
