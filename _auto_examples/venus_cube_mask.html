@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Venus datacube &mdash; earthdaily 0.2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=37f418d5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Compare Sentinel-2 scale/offset evolution during time" href="compare_scale_s2.html" />
+    <link rel="prev" title="EarthDaily unique common band names" href="common_band_names.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+              <div class="version">
+                0.2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="common_band_names.html">EarthDaily unique common band names</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Venus datacube</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-librairies">Import librairies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-credentials-and-init-earthdatastore">Load credentials and init earthdatastore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-parameters">Set parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#search-for-items">Search for items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Search for items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-datacube-and-bandname-mapping">Create the datacube and bandname mapping</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compare_scale_s2.html">Compare Sentinel-2 scale/offset evolution during time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="field_evolution.html">Field evolution and zonal stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary_stack.html">Explore collection metadata using earthdaily</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multisensors_cube.html">Create a multisensor cube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_steps_create_datacube.html">First steps to create a datacube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily_simulated_dataset.html">EarthDaily Simulated Dataset</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../earthdaily.html">earthdaily package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Gallery</a></li>
+      <li class="breadcrumb-item active">Venus datacube</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_auto_examples/venus_cube_mask.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-venus-cube-mask-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="venus-datacube">
+<span id="sphx-glr-auto-examples-venus-cube-mask-py"></span><h1>Venus datacube<a class="headerlink" href="#venus-datacube" title="Link to this heading"></a></h1>
+<p>According to a theia location and max cloud cover, using earthdatastore.</p>
+<section id="import-librairies">
+<h2>Import librairies<a class="headerlink" href="#import-librairies" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">earthdaily</span> <span class="kn">import</span> <span class="n">earthdatastore</span>
+</pre></div>
+</div>
+</section>
+<section id="load-credentials-and-init-earthdatastore">
+<h2>Load credentials and init earthdatastore<a class="headerlink" href="#load-credentials-and-init-earthdatastore" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">eds</span> <span class="o">=</span> <span class="n">earthdatastore</span><span class="o">.</span><span class="n">Auth</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="set-parameters">
+<h2>Set parameters<a class="headerlink" href="#set-parameters" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span> <span class="o">=</span> <span class="s2">&quot;venus-l2a&quot;</span>
+<span class="n">theia_location</span> <span class="o">=</span> <span class="s2">&quot;MEAD&quot;</span>
+<span class="n">max_cloud_cover</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;theia:location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;eq&quot;</span><span class="p">:</span> <span class="n">theia_location</span><span class="p">},</span>
+    <span class="s2">&quot;eo:cloud_cover&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lt&quot;</span><span class="p">:</span> <span class="n">max_cloud_cover</span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="search-for-items">
+<h2>Search for items<a class="headerlink" href="#search-for-items" title="Link to this heading"></a></h2>
+</section>
+<section id="id1">
+<h2>Search for items<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">items</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">prefer_alternate</span><span class="o">=</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We specify prefer_http=”download” because we didn’t set any s3 credentials.</p>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">theia_location</span><span class="si">}</span><span class="s2"> venus location has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>MEAD venus location has 132 items.
+</pre></div>
+</div>
+</section>
+<section id="create-the-datacube-and-bandname-mapping">
+<h2>Create the datacube and bandname mapping<a class="headerlink" href="#create-the-datacube-and-bandname-mapping" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As transform and other metadata are missing in assets,
+compute them for first asset</p>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">epsg</span><span class="p">,</span> <span class="n">resolution</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;proj:epsg&quot;</span><span class="p">],</span>
+    <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;gsd&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Instead of giving list of assets, you can provide a dict, with
+key as the asset you want, and the value as the name you want.</p>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">venus_datacube</span> <span class="o">=</span> <span class="n">earthdatastore</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
+    <span class="n">items</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">],</span> <span class="n">epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">venus_datacube</span><span class="p">)</span>
+
+<span class="n">venus_datacube</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">x</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">4000</span><span class="p">,</span> <span class="mi">4500</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mi">4000</span><span class="p">,</span> <span class="mi">4500</span><span class="p">))</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">plot_rgb</span><span class="p">(</span><span class="n">vmax</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_venus_cube_mask_001.png" srcset="../_images/sphx_glr_venus_cube_mask_001.png" alt="time = 2018-10-16T17:38:28, time = 2018-10-18T17:38:31" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;xarray.Dataset&gt;
+Dimensions:      (y: 10161, x: 9374, time: 132)
+Coordinates:
+  * y            (y) float64 4.587e+06 4.587e+06 ... 4.536e+06 4.536e+06
+  * x            (x) float64 6.915e+05 6.915e+05 ... 7.384e+05 7.384e+05
+    spatial_ref  int32 32614
+  * time         (time) datetime64[ns] 2017-11-30T17:34:06 ... 2020-10-29T17:...
+Data variables:
+    blue         (time, y, x) float32 dask.array&lt;chunksize=(1, 5792, 5792), meta=np.ndarray&gt;
+    green        (time, y, x) float32 dask.array&lt;chunksize=(1, 5792, 5792), meta=np.ndarray&gt;
+    red          (time, y, x) float32 dask.array&lt;chunksize=(1, 5792, 5792), meta=np.ndarray&gt;
+
+&lt;xarray.plot.facetgrid.FacetGrid object at 0x7f8e49017350&gt;
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 18.277 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-venus-cube-mask-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/57a64a9374c81915b11c971ae9775aed/venus_cube_mask.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">venus_cube_mask.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/5deba1b28e130d68b521b93fc516aa44/venus_cube_mask.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">venus_cube_mask.py</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="common_band_names.html" class="btn btn-neutral float-left" title="EarthDaily unique common band names" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="compare_scale_s2.html" class="btn btn-neutral float-right" title="Compare Sentinel-2 scale/offset evolution during time" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

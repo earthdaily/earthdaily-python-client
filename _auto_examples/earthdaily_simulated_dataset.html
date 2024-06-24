@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EarthDaily Simulated Dataset &mdash; earthdaily 0.2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=37f418d5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="earthdaily package" href="../earthdaily.html" />
+    <link rel="prev" title="First steps to create a datacube" href="first_steps_create_datacube.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+              <div class="version">
+                0.2.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="common_band_names.html">EarthDaily unique common band names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="venus_cube_mask.html">Venus datacube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compare_scale_s2.html">Compare Sentinel-2 scale/offset evolution during time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="field_evolution.html">Field evolution and zonal stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary_stack.html">Explore collection metadata using earthdaily</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multisensors_cube.html">Create a multisensor cube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_steps_create_datacube.html">First steps to create a datacube</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">EarthDaily Simulated Dataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-librairies">Import librairies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#loading-pivot">Loading pivot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#auth-to-earthdatastore">Auth to earthdatastore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-timerange">Define timerange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#request-items-for-vnir-dataset">Request items for vnir dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-datacube-for-rgb-and-nir">Generate datacube for RGB and NIR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-rgb-image-time-series">Plot RGB image time series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-mean-rgb-time-series">Plot mean RGB time series</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-ndvi-evolution">Plot NDVI evolution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../earthdaily.html">earthdaily package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Gallery</a></li>
+      <li class="breadcrumb-item active">EarthDaily Simulated Dataset</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_auto_examples/earthdaily_simulated_dataset.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-earthdaily-simulated-dataset-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="earthdaily-simulated-dataset">
+<span id="sphx-glr-auto-examples-earthdaily-simulated-dataset-py"></span><h1>EarthDaily Simulated Dataset<a class="headerlink" href="#earthdaily-simulated-dataset" title="Link to this heading"></a></h1>
+<p>Following a pivot field</p>
+<section id="import-librairies">
+<h2>Import librairies<a class="headerlink" href="#import-librairies" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">earthdaily</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">dask.diagnostics</span> <span class="kn">import</span> <span class="n">ProgressBar</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">ProgressBar</span><span class="p">()</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>  <span class="c1"># to have chunks progress bar</span>
+</pre></div>
+</div>
+</section>
+<section id="loading-pivot">
+<h2>Loading pivot<a class="headerlink" href="#loading-pivot" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pivot</span> <span class="o">=</span> <span class="n">earthdaily</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">load_pivot_corumba</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="auth-to-earthdatastore">
+<h2>Auth to earthdatastore<a class="headerlink" href="#auth-to-earthdatastore" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">eds</span> <span class="o">=</span> <span class="n">earthdaily</span><span class="o">.</span><span class="n">earthdatastore</span><span class="o">.</span><span class="n">Auth</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="define-timerange">
+<h2>Define timerange<a class="headerlink" href="#define-timerange" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">delta_days</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">datetime_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;2018-10-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2019-04-15&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="request-items-for-vnir-dataset">
+<h2>Request items for vnir dataset<a class="headerlink" href="#request-items-for-vnir-dataset" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">items</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="s2">&quot;earthdaily-simulated-cloudless-l2a-cog-edagro&quot;</span><span class="p">,</span>
+    <span class="n">intersects</span><span class="o">=</span><span class="n">pivot</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="n">datetime_list</span><span class="p">,</span>
+    <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;instruments&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;contains&quot;</span><span class="p">:</span> <span class="s2">&quot;vnir&quot;</span><span class="p">}},</span>
+    <span class="n">prefer_alternate</span><span class="o">=</span><span class="s2">&quot;download&quot;</span><span class="p">,</span>
+<span class="p">)[::</span><span class="n">delta_days</span><span class="p">]</span>  <span class="c1"># an keep on item every n delta_days</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-datacube-for-rgb-and-nir">
+<h2>Generate datacube for RGB and NIR<a class="headerlink" href="#generate-datacube-for-rgb-and-nir" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">datacube</span> <span class="o">=</span> <span class="n">earthdaily</span><span class="o">.</span><span class="n">earthdatastore</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
+    <span class="n">items</span><span class="p">,</span> <span class="n">intersects</span><span class="o">=</span><span class="n">pivot</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;nir&quot;</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[                                        ] | 0% Completed | 161.20 us
+[                                        ] | 0% Completed | 100.40 ms
+[                                        ] | 0% Completed | 200.63 ms
+[                                        ] | 0% Completed | 300.83 ms
+[                                        ] | 0% Completed | 401.01 ms
+[                                        ] | 0% Completed | 501.21 ms
+[                                        ] | 0% Completed | 601.39 ms
+[                                        ] | 0% Completed | 701.55 ms
+[                                        ] | 0% Completed | 801.76 ms
+[                                        ] | 0% Completed | 901.97 ms
+[                                        ] | 0% Completed | 1.00 s
+[                                        ] | 0% Completed | 1.10 s
+[                                        ] | 0% Completed | 1.20 s
+[##                                      ] | 5% Completed | 1.30 s
+[##                                      ] | 5% Completed | 1.40 s
+[##                                      ] | 5% Completed | 1.50 s
+[##                                      ] | 5% Completed | 1.60 s
+[##                                      ] | 5% Completed | 1.70 s
+[##                                      ] | 5% Completed | 1.80 s
+[##                                      ] | 5% Completed | 1.90 s
+[##                                      ] | 5% Completed | 2.00 s
+[##                                      ] | 5% Completed | 2.10 s
+[##                                      ] | 5% Completed | 2.20 s
+[###                                     ] | 8% Completed | 2.30 s
+[####                                    ] | 10% Completed | 2.40 s
+[####                                    ] | 10% Completed | 2.50 s
+[####                                    ] | 10% Completed | 2.61 s
+[####                                    ] | 10% Completed | 2.71 s
+[####                                    ] | 10% Completed | 2.81 s
+[####                                    ] | 10% Completed | 2.91 s
+[####                                    ] | 10% Completed | 3.01 s
+[####                                    ] | 10% Completed | 3.11 s
+[####                                    ] | 10% Completed | 3.21 s
+[#####                                   ] | 13% Completed | 3.31 s
+[######                                  ] | 15% Completed | 3.41 s
+[######                                  ] | 15% Completed | 3.51 s
+[######                                  ] | 15% Completed | 3.61 s
+[######                                  ] | 15% Completed | 3.71 s
+[######                                  ] | 15% Completed | 3.81 s
+[######                                  ] | 15% Completed | 3.91 s
+[######                                  ] | 15% Completed | 4.01 s
+[######                                  ] | 15% Completed | 4.11 s
+[######                                  ] | 15% Completed | 4.21 s
+[######                                  ] | 16% Completed | 4.31 s
+[#######                                 ] | 18% Completed | 4.41 s
+[########                                ] | 20% Completed | 4.51 s
+[########                                ] | 20% Completed | 4.61 s
+[########                                ] | 20% Completed | 4.71 s
+[########                                ] | 20% Completed | 4.81 s
+[########                                ] | 20% Completed | 4.91 s
+[########                                ] | 20% Completed | 5.01 s
+[########                                ] | 20% Completed | 5.11 s
+[########                                ] | 20% Completed | 5.21 s
+[########                                ] | 20% Completed | 5.31 s
+[########                                ] | 21% Completed | 5.41 s
+[#########                               ] | 23% Completed | 5.51 s
+[##########                              ] | 25% Completed | 5.61 s
+[##########                              ] | 25% Completed | 5.71 s
+[##########                              ] | 25% Completed | 5.81 s
+[##########                              ] | 25% Completed | 5.91 s
+[##########                              ] | 25% Completed | 6.01 s
+[##########                              ] | 25% Completed | 6.11 s
+[##########                              ] | 25% Completed | 6.21 s
+[##########                              ] | 25% Completed | 6.31 s
+[##########                              ] | 25% Completed | 6.41 s
+[##########                              ] | 26% Completed | 6.51 s
+[###########                             ] | 27% Completed | 6.61 s
+[############                            ] | 30% Completed | 6.71 s
+[############                            ] | 30% Completed | 6.81 s
+[############                            ] | 30% Completed | 6.91 s
+[############                            ] | 30% Completed | 7.01 s
+[############                            ] | 30% Completed | 7.11 s
+[############                            ] | 30% Completed | 7.21 s
+[############                            ] | 30% Completed | 7.31 s
+[############                            ] | 30% Completed | 7.41 s
+[############                            ] | 30% Completed | 7.51 s
+[############                            ] | 31% Completed | 7.61 s
+[############                            ] | 31% Completed | 7.71 s
+[##############                          ] | 35% Completed | 7.81 s
+[##############                          ] | 35% Completed | 7.91 s
+[##############                          ] | 35% Completed | 8.02 s
+[##############                          ] | 35% Completed | 8.12 s
+[##############                          ] | 35% Completed | 8.22 s
+[##############                          ] | 35% Completed | 8.32 s
+[##############                          ] | 35% Completed | 8.42 s
+[##############                          ] | 35% Completed | 8.52 s
+[##############                          ] | 36% Completed | 8.62 s
+[##############                          ] | 36% Completed | 8.72 s
+[###############                         ] | 38% Completed | 8.82 s
+[###############                         ] | 38% Completed | 8.92 s
+[################                        ] | 40% Completed | 9.02 s
+[################                        ] | 40% Completed | 9.12 s
+[################                        ] | 40% Completed | 9.22 s
+[################                        ] | 40% Completed | 9.32 s
+[################                        ] | 40% Completed | 9.42 s
+[################                        ] | 40% Completed | 9.52 s
+[################                        ] | 41% Completed | 9.62 s
+[################                        ] | 41% Completed | 9.72 s
+[################                        ] | 41% Completed | 9.82 s
+[#################                       ] | 42% Completed | 9.92 s
+[##################                      ] | 45% Completed | 10.02 s
+[##################                      ] | 45% Completed | 10.12 s
+[##################                      ] | 45% Completed | 10.22 s
+[##################                      ] | 45% Completed | 10.32 s
+[##################                      ] | 45% Completed | 10.42 s
+[##################                      ] | 45% Completed | 10.52 s
+[##################                      ] | 45% Completed | 10.62 s
+[##################                      ] | 46% Completed | 10.72 s
+[##################                      ] | 46% Completed | 10.82 s
+[###################                     ] | 47% Completed | 10.92 s
+[###################                     ] | 48% Completed | 11.02 s
+[####################                    ] | 50% Completed | 11.12 s
+[####################                    ] | 50% Completed | 11.22 s
+[####################                    ] | 50% Completed | 11.32 s
+[####################                    ] | 50% Completed | 11.42 s
+[####################                    ] | 50% Completed | 11.52 s
+[####################                    ] | 50% Completed | 11.62 s
+[####################                    ] | 50% Completed | 11.72 s
+[####################                    ] | 50% Completed | 11.82 s
+[####################                    ] | 51% Completed | 11.92 s
+[#####################                   ] | 53% Completed | 12.02 s
+[######################                  ] | 55% Completed | 12.12 s
+[######################                  ] | 55% Completed | 12.22 s
+[######################                  ] | 55% Completed | 12.32 s
+[######################                  ] | 55% Completed | 12.42 s
+[######################                  ] | 55% Completed | 12.52 s
+[######################                  ] | 55% Completed | 12.62 s
+[######################                  ] | 55% Completed | 12.72 s
+[######################                  ] | 55% Completed | 12.82 s
+[######################                  ] | 56% Completed | 12.92 s
+[######################                  ] | 56% Completed | 13.02 s
+[#######################                 ] | 58% Completed | 13.12 s
+[#######################                 ] | 58% Completed | 13.22 s
+[########################                ] | 60% Completed | 13.32 s
+[########################                ] | 60% Completed | 13.42 s
+[########################                ] | 60% Completed | 13.52 s
+[########################                ] | 60% Completed | 13.62 s
+[########################                ] | 60% Completed | 13.72 s
+[########################                ] | 60% Completed | 13.83 s
+[########################                ] | 60% Completed | 13.93 s
+[########################                ] | 61% Completed | 14.03 s
+[#########################               ] | 62% Completed | 14.13 s
+[#########################               ] | 63% Completed | 14.23 s
+[##########################              ] | 65% Completed | 14.33 s
+[##########################              ] | 65% Completed | 14.43 s
+[##########################              ] | 65% Completed | 14.53 s
+[##########################              ] | 65% Completed | 14.63 s
+[##########################              ] | 65% Completed | 14.73 s
+[##########################              ] | 65% Completed | 14.83 s
+[##########################              ] | 65% Completed | 14.93 s
+[##########################              ] | 66% Completed | 15.03 s
+[###########################             ] | 67% Completed | 15.13 s
+[###########################             ] | 67% Completed | 15.23 s
+[###########################             ] | 68% Completed | 15.33 s
+[############################            ] | 70% Completed | 15.43 s
+[############################            ] | 70% Completed | 15.53 s
+[############################            ] | 70% Completed | 15.63 s
+[############################            ] | 70% Completed | 15.73 s
+[############################            ] | 70% Completed | 15.83 s
+[############################            ] | 70% Completed | 15.93 s
+[############################            ] | 71% Completed | 16.03 s
+[############################            ] | 71% Completed | 16.13 s
+[############################            ] | 71% Completed | 16.23 s
+[#############################           ] | 73% Completed | 16.33 s
+[##############################          ] | 75% Completed | 16.43 s
+[##############################          ] | 75% Completed | 16.53 s
+[##############################          ] | 75% Completed | 16.63 s
+[##############################          ] | 75% Completed | 16.73 s
+[##############################          ] | 75% Completed | 16.83 s
+[##############################          ] | 75% Completed | 16.93 s
+[##############################          ] | 75% Completed | 17.03 s
+[##############################          ] | 75% Completed | 17.13 s
+[##############################          ] | 75% Completed | 17.23 s
+[###############################         ] | 78% Completed | 17.33 s
+[###############################         ] | 78% Completed | 17.43 s
+[###############################         ] | 78% Completed | 17.53 s
+[################################        ] | 80% Completed | 17.63 s
+[################################        ] | 80% Completed | 17.73 s
+[################################        ] | 80% Completed | 17.83 s
+[################################        ] | 80% Completed | 17.93 s
+[################################        ] | 80% Completed | 18.03 s
+[################################        ] | 80% Completed | 18.13 s
+[################################        ] | 80% Completed | 18.23 s
+[################################        ] | 80% Completed | 18.33 s
+[#################################       ] | 83% Completed | 18.43 s
+[#################################       ] | 83% Completed | 18.54 s
+[#################################       ] | 83% Completed | 18.64 s
+[##################################      ] | 85% Completed | 18.74 s
+[##################################      ] | 85% Completed | 18.84 s
+[##################################      ] | 85% Completed | 18.94 s
+[##################################      ] | 85% Completed | 19.04 s
+[##################################      ] | 85% Completed | 19.14 s
+[##################################      ] | 85% Completed | 19.24 s
+[##################################      ] | 85% Completed | 19.34 s
+[###################################     ] | 87% Completed | 19.44 s
+[###################################     ] | 87% Completed | 19.54 s
+[###################################     ] | 88% Completed | 19.64 s
+[###################################     ] | 88% Completed | 19.74 s
+[####################################    ] | 90% Completed | 19.84 s
+[####################################    ] | 90% Completed | 19.94 s
+[####################################    ] | 90% Completed | 20.04 s
+[####################################    ] | 90% Completed | 20.14 s
+[####################################    ] | 90% Completed | 20.24 s
+[####################################    ] | 90% Completed | 20.34 s
+[####################################    ] | 90% Completed | 20.44 s
+[####################################    ] | 91% Completed | 20.54 s
+[#####################################   ] | 92% Completed | 20.64 s
+[#####################################   ] | 93% Completed | 20.74 s
+[######################################  ] | 95% Completed | 20.84 s
+[######################################  ] | 95% Completed | 20.94 s
+[######################################  ] | 95% Completed | 21.04 s
+[######################################  ] | 95% Completed | 21.14 s
+[######################################  ] | 95% Completed | 21.24 s
+[######################################  ] | 95% Completed | 21.34 s
+[######################################  ] | 95% Completed | 21.44 s
+[######################################  ] | 95% Completed | 21.54 s
+[######################################  ] | 96% Completed | 21.64 s
+[####################################### ] | 97% Completed | 21.74 s
+[####################################### ] | 98% Completed | 21.84 s
+[####################################### ] | 98% Completed | 21.94 s
+[####################################### ] | 98% Completed | 22.04 s
+[####################################### ] | 98% Completed | 22.14 s
+[####################################### ] | 98% Completed | 22.24 s
+[####################################### ] | 98% Completed | 22.34 s
+[####################################### ] | 98% Completed | 22.44 s
+[####################################### ] | 98% Completed | 22.54 s
+[####################################### ] | 98% Completed | 22.64 s
+[####################################### ] | 98% Completed | 22.74 s
+[####################################### ] | 98% Completed | 22.84 s
+[########################################] | 100% Completed | 22.94 s
+</pre></div>
+</div>
+</section>
+<section id="plot-rgb-image-time-series">
+<h2>Plot RGB image time series<a class="headerlink" href="#plot-rgb-image-time-series" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">datacube</span><span class="p">[[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">plot_rgb</span><span class="p">(</span>
+    <span class="n">col</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">col_wrap</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">0.2</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_earthdaily_simulated_dataset_001.png" srcset="../_images/sphx_glr_earthdaily_simulated_dataset_001.png" alt="time = 2018-10-01T10:42:14, time = 2018-10-11T10:42:14, time = 2018-10-21T10:42:14, time = 2018-10-31T10:42:14, time = 2018-11-10T10:42:14, time = 2018-11-20T10:42:14, time = 2018-11-30T10:42:14, time = 2018-12-10T10:42:14, time = 2018-12-20T10:42:14, time = 2018-12-30T10:42:14, time = 2019-01-09T10:42:14, time = 2019-01-19T10:42:14, time = 2019-01-29T10:42:14, time = 2019-02-08T10:42:14, time = 2019-02-18T10:42:14, time = 2019-02-28T10:42:14, time = 2019-03-10T10:42:14, time = 2019-03-20T10:42:14, time = 2019-03-30T10:42:14, time = 2019-04-09T10:42:14" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;xarray.plot.facetgrid.FacetGrid object at 0x7f8e497a4190&gt;
+</pre></div>
+</div>
+</section>
+<section id="plot-mean-rgb-time-series">
+<h2>Plot mean RGB time series<a class="headerlink" href="#plot-mean-rgb-time-series" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">datacube</span><span class="p">[[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;nir&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">(</span>
+    <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;band&quot;</span>
+<span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="s2">&quot;band&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_earthdaily_simulated_dataset_002.png" srcset="../_images/sphx_glr_earthdaily_simulated_dataset_002.png" alt="band = blue, band = green, band = red, band = nir" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;xarray.plot.facetgrid.FacetGrid object at 0x7f8e498d5010&gt;
+</pre></div>
+</div>
+</section>
+<section id="plot-ndvi-evolution">
+<h2>Plot NDVI evolution<a class="headerlink" href="#plot-ndvi-evolution" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">datacube</span><span class="p">[</span><span class="s2">&quot;ndvi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">datacube</span><span class="p">[</span><span class="s2">&quot;nir&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">datacube</span><span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span>
+    <span class="n">datacube</span><span class="p">[</span><span class="s2">&quot;nir&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">datacube</span><span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">mean_ndvi</span> <span class="o">=</span> <span class="n">datacube</span><span class="p">[[</span><span class="s2">&quot;ndvi&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;band&quot;</span><span class="p">)</span>
+<span class="n">std_ndvi</span> <span class="o">=</span> <span class="n">datacube</span><span class="p">[[</span><span class="s2">&quot;ndvi&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">to_array</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;band&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+    <span class="n">mean_ndvi</span><span class="o">.</span><span class="n">time</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">mean_ndvi</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="n">std_ndvi</span><span class="o">.</span><span class="n">values</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="p">(</span><span class="n">mean_ndvi</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">std_ndvi</span><span class="o">.</span><span class="n">values</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C1&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">mean_ndvi</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;C1&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;NDVI evolution every 10 days&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_earthdaily_simulated_dataset_003.png" srcset="../_images/sphx_glr_earthdaily_simulated_dataset_003.png" alt="NDVI evolution every 10 days" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;NDVI evolution every 10 days&#39;)
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 28.472 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-earthdaily-simulated-dataset-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/9811cbf5dff0f45f282b5618911fbe33/earthdaily_simulated_dataset.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">earthdaily_simulated_dataset.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/7ddad6384d270ce3abf1612a42dbca08/earthdaily_simulated_dataset.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">earthdaily_simulated_dataset.py</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="first_steps_create_datacube.html" class="btn btn-neutral float-left" title="First steps to create a datacube" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../earthdaily.html" class="btn btn-neutral float-right" title="earthdaily package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
