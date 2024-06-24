@@ -17,7 +17,10 @@ _available_masks = [
     "ag_cloud_mask",
     "cloud_mask",
     "ag-cloud-mask",
-    "cloudmask" "scl",
+    "cloud_mask_ag_version",
+    "cloudmask_ag_version",
+    "cloudmask",
+    "scl",
 ]
 _native_mask_def_mapping = {
     "sentinel-2-l2a": "scl",
@@ -31,17 +34,6 @@ _native_mask_asset_mapping = {
     "landsat-c2l2-sr": "qa_pixel",
     "landsat-c2l2-st": "qa_pixel",
 }
-
-
-def _bool_or_int_to_njobs(var):
-    if isinstance(var, bool):
-        if var:
-            arg = 1
-        else:
-            arg = False
-    else:
-        arg = var
-    return arg
 
 
 class Mask:
@@ -67,7 +59,6 @@ class Mask:
                 "ag_cloud_mask",
                 1,
                 labels_are_clouds=False,
-                n_jobs=_bool_or_int_to_njobs(mask_statistics),
             )
         return self._obj
 
@@ -80,11 +71,7 @@ class Mask:
         self._obj = self._obj.where(self._obj["ag_cloud_mask"] == 1)
         if mask_statistics:
             self.compute_clear_coverage(
-                self._obj["ag_cloud_mask"],
-                "ag_cloud_mask",
-                1,
-                labels_are_clouds=False,
-                n_jobs=_bool_or_int_to_njobs(mask_statistics),
+                self._obj["ag_cloud_mask"], "ag_cloud_mask", 1, labels_are_clouds=False
             )
         return self._obj
 
@@ -113,11 +100,7 @@ class Mask:
                 )
         if mask_statistics:
             self.compute_clear_coverage(
-                cloud_layer,
-                cloud_asset,
-                labels,
-                labels_are_clouds=labels_are_clouds,
-                n_jobs=_bool_or_int_to_njobs(mask_statistics),
+                cloud_layer, cloud_asset, labels, labels_are_clouds=labels_are_clouds
             )
         return self._obj
 
@@ -142,12 +125,7 @@ class Mask:
         )
 
     def compute_clear_coverage(
-        self,
-        cloudmask_array,
-        cloudmask_name,
-        labels,
-        labels_are_clouds=True,
-        n_jobs=1,
+        self, cloudmask_array, cloudmask_name, labels, labels_are_clouds=True
     ):
         if self._obj.attrs.get("usable_pixels", None) is None:
             self.compute_available_pixels()
