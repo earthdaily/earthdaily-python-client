@@ -22,49 +22,59 @@ __all__ = ["datacube", "metacube", "xr", "stac"]
 
 logging.getLogger("earthdaily-earthdatastore")
 
+
 class NoItems(Warning):
     pass
 
+
 _no_item_msg = NoItems("No item has been found for your query.")
 
+
 def _datetime_split(datetime):
-    datetime_ = ItemSearch(url=None)._format_datetime(datetime).split('/')
-    datetime = [pd.Timestamp(datetime_[0]),pd.Timestamp(datetime_[1])]
-    
+    datetime_ = ItemSearch(url=None)._format_datetime(datetime).split("/")
+    datetime = [pd.Timestamp(datetime_[0]), pd.Timestamp(datetime_[1])]
+
     s = pd.Timestamp(datetime[0])
     e = pd.Timestamp(datetime[1])
-    days = (e-s).days
-    days_per_query = days//10
-    if days_per_query==0:
+    days = (e - s).days
+    days_per_query = days // 10
+    if days_per_query == 0:
         return None
     datetimes = []
-    for d in range(0,days,days_per_query):
-        start = s+pd.Timedelta(days=d)
-        end = start+pd.Timedelta(days=days_per_query) 
+    for d in range(0, days, days_per_query):
+        start = s + pd.Timedelta(days=d)
+        end = start + pd.Timedelta(days=days_per_query)
         end = end if e > end else e
-        datetimes.append([start,end])
-        
+        datetimes.append([start, end])
+
     return datetimes
+
 
 def _parallel_search(func):
     def _search(*args, **kwargs):
         from joblib import Parallel, delayed
-        datetime = kwargs.get("datetime",None)
-        need_parallel=False
+
+        datetime = kwargs.get("datetime", None)
+        need_parallel = False
         if datetime:
             datetimes = _datetime_split(datetime)
             need_parallel = True if datetimes else False
-            if need_parallel:                    
+            if need_parallel:
                 kwargs.pop("datetime")
-                kwargs['raise_no_items'] = False
-                items = Parallel(n_jobs=10, backend="threading")(delayed(func)(*args, datetime=datetime, **kwargs) for datetime in datetimes)
+                kwargs["raise_no_items"] = False
+                items = Parallel(n_jobs=10, backend="threading")(
+                    delayed(func)(*args, datetime=datetime, **kwargs)
+                    for datetime in datetimes
+                )
                 items = ItemCollection(chain(*items))
                 if len(items) == 0:
                     raise _no_item_msg
         if not need_parallel:
-            items = func(*args,**kwargs)
+            items = func(*args, **kwargs)
         return items
+
     return _search
+
 
 def post_query_items(items, query):
     """Applies query to items fetched from the STAC catalog.
@@ -700,7 +710,12 @@ class Auth:
                     search_kwargs, collections[0], key="eda:ag_cloud_mask_available"
                 )
                 mask_with = "ag_cloud_mask"
-            elif mask_with in ["cloud_mask", "cloudmask", "cloud_mask_ag_version", "cloudmask_ag_version"]:
+            elif mask_with in [
+                "cloud_mask",
+                "cloudmask",
+                "cloud_mask_ag_version",
+                "cloudmask_ag_version",
+            ]:
                 search_kwargs = self._update_search_kwargs_for_ag_cloud_mask(
                     search_kwargs,
                     collections[0],
@@ -708,7 +723,7 @@ class Auth:
                 )
 
                 mask_with = "cloud_mask"
-                        
+
             else:
                 mask_with = mask._native_mask_def_mapping.get(collections[0], None)
                 sensor_mask = mask._native_mask_asset_mapping.get(collections[0], None)
@@ -823,7 +838,7 @@ class Auth:
 
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
-            
+
         if groupby_date:
             xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
             xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
@@ -1004,8 +1019,7 @@ class Auth:
             )
         if bbox is not None and intersects is not None:
             bbox = None
-        
-        
+
         items_collection = self.client.search(
             collections=collections,
             bbox=bbox,

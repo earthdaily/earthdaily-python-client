@@ -20,7 +20,7 @@ _available_masks = [
     "cloud_mask_ag_version",
     "cloudmask_ag_version",
     "cloudmask",
-    "scl"
+    "scl",
 ]
 _native_mask_def_mapping = {
     "sentinel-2-l2a": "scl",
@@ -71,10 +71,7 @@ class Mask:
         self._obj = self._obj.where(self._obj["ag_cloud_mask"] == 1)
         if mask_statistics:
             self.compute_clear_coverage(
-                self._obj["ag_cloud_mask"],
-                "ag_cloud_mask",
-                1,
-                labels_are_clouds=False
+                self._obj["ag_cloud_mask"], "ag_cloud_mask", 1, labels_are_clouds=False
             )
         return self._obj
 
@@ -103,10 +100,7 @@ class Mask:
                 )
         if mask_statistics:
             self.compute_clear_coverage(
-                cloud_layer,
-                cloud_asset,
-                labels,
-                labels_are_clouds=labels_are_clouds
+                cloud_layer, cloud_asset, labels, labels_are_clouds=labels_are_clouds
             )
         return self._obj
 
@@ -131,11 +125,7 @@ class Mask:
         )
 
     def compute_clear_coverage(
-        self,
-        cloudmask_array,
-        cloudmask_name,
-        labels,
-        labels_are_clouds=True
+        self, cloudmask_array, cloudmask_name, labels, labels_are_clouds=True
     ):
         if self._obj.attrs.get("usable_pixels", None) is None:
             self.compute_available_pixels()

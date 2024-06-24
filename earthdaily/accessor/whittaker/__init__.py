@@ -33,7 +33,7 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
 
     """
 
-    resampled = dataset.resample({time:"1D"}).interpolate("linear")
+    resampled = dataset.resample({time: "1D"}).interpolate("linear")
     weights_binary = np.in1d(resampled[time].dt.date, dataset[time].dt.date)
     if weights is not None:
         weights_advanced = np.copy(weights_binary.astype(float))
@@ -57,7 +57,7 @@ def whittaker(dataset, beta=10000.0, weights=None, time="time"):
         kwargs=dict(weights=weights_advanced, ab_mat=ab_mat),
     )
 
-    return dataset_w.isel({time:weights_binary})
+    return dataset_w.isel({time: weights_binary})
 
 
 def _ab_mat(m, beta):
