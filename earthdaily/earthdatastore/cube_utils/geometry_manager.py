@@ -30,9 +30,6 @@ class GeometryManager:
     def to_bbox(self, crs="EPSG:4326"):
         return self._obj.to_crs(crs=crs).total_bounds
 
-    def __call__(self):
-        return self.to_geopandas()
-    
     def _unknow_geometry_to_geodataframe(self, geometry):
         # if isinstance(geometry, pd.DataFrame):
         #     if geometry.size==1:
