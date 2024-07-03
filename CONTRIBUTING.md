@@ -10,10 +10,12 @@
 * Add description of your changes
 * Add and ensure tests are passing
 * Ensure branch is mergeable
+* If possible, ruff check your code :)
 
 ## Testing
 
 * Please make sure tests pass with `./tests`
 
 ## Doc building
-inside docs/ : "sphinx-build -b html . html"
+
+ * inside docs/ : "sphinx-build -b html . html"

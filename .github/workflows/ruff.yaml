@@ -9,11 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: nkarasiak/ruff-action@v2
+    - uses: nkarasiak/ruff-action@v2.1
       with:
         src: "./earthdaily"
         args: --ignore F401,E722
-    - uses: nkarasiak/ruff-action@v2
+    - uses: nkarasiak/ruff-action@v2.1
       with:
         src: "./earthdaily"
         args: format
