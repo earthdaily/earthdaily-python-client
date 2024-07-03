@@ -107,7 +107,7 @@ def _cube_odc(
     if "resampling" in kwargs:
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
-            
+
     kwargs["chunks"] = kwargs.get("chunks", dict(x="auto", y="auto", time=1))
 
     if "geobox" in kwargs.keys() and "geopolygon" in kwargs.keys():
