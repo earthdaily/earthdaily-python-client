@@ -29,7 +29,7 @@ dependencies:
   - graypy
   - pystac-client
   - stackstac
-  - odc-stac
+  - odc-stac<=0.3.9
   - pillow
   - sphinx=7.2.6
   - autopep8
