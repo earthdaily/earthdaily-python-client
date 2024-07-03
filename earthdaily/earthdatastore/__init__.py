@@ -10,12 +10,16 @@ import psutil
 import requests
 import xarray as xr
 import numpy as np
+import toml
+from typing import Optional
+from pathlib import Path
 from pystac.item_collection import ItemCollection
 from pystac_client.item_search import ItemSearch
 from pystac_client import Client
 from itertools import chain
 from odc import stac
 from . import _scales_collections, cube_utils, mask
+
 from .cube_utils import datacube, metacube, _datacubes, asset_mapper
 
 __all__ = ["datacube", "metacube", "xr", "stac"]
@@ -394,16 +398,173 @@ class Auth:
         self.__time_eds_log = time.time()
         self._client = self.client
 
-    @property
-    def client(self):
+    @classmethod
+    def from_credentials(
+        cls, 
+        json_path: Optional[Path] = None,
+        toml_path: Optional[Path] = None,
+        profile: Optional[str] = None,
+        presign_urls: bool = True,
+    ) -> "Auth":
         """
-                Create an instance of pystac client from EarthDataSTore
+        Secondary Constructor.
+        Try to read Earth Data Store credentials from multiple sources, in the following order:
+            - from input credentials stored in a JOSN file
+            - from environement variables
+            - from a given credentials TOML file and a given profile
+            - from a given credentials TOML file and the "default" profile
+            - from the $HOME/.earthdaily/credentials TOML file and a given profile
+            - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
 
-                Returns
-                -------
-                catalog : A :class:`Client` instance for this Catalog.
-        .
+        Parameters
+        ----------
+        path : Path, optional
+            The path to the TOML file containing the Earth Data Store credentials.
+            Uses "$HOME/.earthdaily/credentials" by default.
+        profile : profile, optional
+            Name of the profile to use in the TOML file.
+            Uses "default" by default.
 
+        Returns
+        -------
+        Auth
+            A :class:`Auth` instance
+        """
+        config = cls.read_credentials(
+            json_path = json_path,
+            toml_path = toml_path,
+            profile = profile,
+        )
+
+        for item, value in config.items():
+            if not value:
+                raise valueerror(f"Missing value for {item}")
+
+        return cls(config = config, presign_urls = presign_urls)
+
+
+    @classmethod
+    def read_credentials(
+        cls,
+        json_path: Optional[Path] = None,
+        toml_path: Optional[Path] = None,
+        profile: Optional[str] = None
+    ) -> "Auth":
+        """
+        Try to read Earth Data Store credentials from multiple sources, in the following order:
+            - from input credentials stored in a JOSN file
+            - from environement variables
+            - from a given credentials TOML file and a given profile
+            - from a given credentials TOML file and the "default" profile
+            - from the $HOME/.earthdaily/credentials TOML file and a given profile
+            - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
+
+        Parameters
+        ----------
+        path : Path, optional
+            The path to the TOML file containing the Earth Data Store credentials.
+            Uses "$HOME/.earthdaily/credentials" by default.
+        profile : profile, optional
+            Name of the profile to use in the TOML file.
+            Uses "default" by default.
+
+        Returns
+        -------
+        dict
+            Dictionary containing credentials
+        """
+        if json_path is not None:
+            config = cls.read_credentials_from_json(json_path = json_path)
+        
+        elif os.getenv("EDS_AUTH_URL") and os.getenv("EDS_SECRET") and os.getenv("EDS_CLIENT_ID"):
+            config = cls.read_credentials_from_environment()
+
+        else:
+
+            if toml_path is None:
+                toml_path = Path.home() / ".earthdaily/credentials"
+
+            if profile is None:
+                profile = "default"
+
+            config = cls.read_credentials_from_toml(toml_path = toml_path, profile = profile)
+
+        return config
+
+    @classmethod
+    def read_credentials_from_json(cls, json_path: Path) -> dict:
+        """
+        Read Earth Data Store credentials from a JSON file.
+
+        Parameters
+        ----------
+        json_path : Path
+            The path to the JSON file containing the Earth Data Store credentials.
+        Returns
+        -------
+        dict
+           Dictionary containing credentials
+        """
+        with json_path.open() as file_object:
+            config = json.load(file_object)
+        return config
+
+    @classmethod
+    def read_credentials_from_environment(cls) -> dict:
+        """
+        Read Earth Data Store credentials from environment variables.
+    
+        Returns
+        -------
+        dict
+            Dictionary containing credentials
+        """
+        config = {
+            "EDS_AUTH_URL": os.getenv("EDS_AUTH_URL"),
+            "EDS_SECRET": os.getenv("EDS_SECRET"),
+            "EDS_CLIENT_ID": os.getenv("EDS_CLIENT_ID"),
+            "EDS_API_URL": os.getenv("EDS_API_URL")
+        }
+        
+        return config
+
+    @classmethod
+    def read_credentials_from_toml(cls, toml_path: Path = None, profile: str = None) -> dict:
+        """
+        Read Earth Data Store credentials from a TOML file
+
+        Parameters
+        ----------
+        toml_path : Path, optional
+            The path to the TOML file containing the Earth Data Store credentials.
+        profile : profile, optional
+            Name of the profile to use in the TOML file 
+
+        Returns
+        -------
+        dict
+            Dictionary containing credentials
+        """
+        if not toml_path.exists():
+            raise FileNotFoundError(f"Credentials file {toml_path} not found. Make sure the path is valid")
+
+        config = toml.load(toml_path.open())
+
+        if profile not in config:
+            raise ValueError(f"Credentials profile {profile} not found in {toml_path}")
+
+        config = config[profile]
+
+        return config
+
+    @property
+    def client(self) -> Client:
+        """
+        Create an instance of pystac client from EarthDataSTore
+
+        Returns
+        -------
+            A :class:`Client` instance for this Catalog.
         """
         if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
             if t:
