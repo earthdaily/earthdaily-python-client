@@ -9,12 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: nkarasiak/ruff-action@v2.1
+    - uses: nkarasiak/ruff-action@v1
       with:
+        version: 0.2.2
         src: "./earthdaily"
         args: --ignore F401,E722
-    - uses: nkarasiak/ruff-action@v2.1
+    - uses: chartboost/ruff-action@v1
       with:
+        version: 0.2.2
         src: "./earthdaily"
         args: format
     - uses: stefanzweifel/git-auto-commit-action@v5
