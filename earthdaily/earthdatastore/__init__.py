@@ -782,6 +782,9 @@ class Auth:
         )
         if mask_with:
             kwargs["dtype"] = "int8"
+            if "geobox" not in kwargs:
+                kwargs["geobox"] = xr_datacube.odc.geobox
+
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
             mask_kwargs = dict(mask_statistics=False)
@@ -797,9 +800,6 @@ class Auth:
                     bbox=bbox,
                     groupby_date=None,
                     assets=mask_asset_mapping[mask_with],
-                    geobox=xr_datacube.odc.geobox
-                    if hasattr(xr_datacube, "odc")
-                    else None,
                     **kwargs,
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[ns]")
@@ -819,8 +819,6 @@ class Auth:
                     kwargs.pop("resolution")
                 if "epsg" in kwargs:
                     kwargs.pop("epsg")
-                if "geobox" in kwargs:
-                    kwargs.pop("geobox")
 
                 clouds_datacube = datacube(
                     items,
@@ -829,9 +827,6 @@ class Auth:
                     bbox=bbox,
                     assets=mask_assets,
                     resampling=0,
-                    geobox=xr_datacube.odc.geobox
-                    if hasattr(xr_datacube, "odc")
-                    else None,
                     **kwargs,
                 )
                 clouds_datacube = cube_utils._match_xy_dims(
