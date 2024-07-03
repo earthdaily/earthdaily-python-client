@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: nkarasiak/ruff-action@v1
+    - uses: chartboost/ruff-action@v1
       with:
         version: 0.2.2
         src: "./earthdaily"
