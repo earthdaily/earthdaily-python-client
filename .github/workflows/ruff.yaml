@@ -3,7 +3,8 @@ name: ruff
 on:
   push:
     branches:
-        - dev
+      - '**'        # matches every branch
+      - '!main'   # excludes master
 jobs:
   ruff:
     runs-on: ubuntu-latest
