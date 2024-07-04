@@ -34,35 +34,39 @@ class NoItems(Warning):
 _no_item_msg = NoItems("No item has been found for your query.")
 
 
-def _datetime_split(datetime):
-    datetime_ = ItemSearch(url=None)._format_datetime(datetime).split("/")
-    datetime = [pd.Timestamp(datetime_[0]), pd.Timestamp(datetime_[1])]
+def _datetime_to_str(datetime):
+    start, end = ItemSearch(url=None)._format_datetime(datetime).split("/")
+    return start, end
 
-    s = pd.Timestamp(datetime[0])
-    e = pd.Timestamp(datetime[1])
-    days = (e - s).days
-    days_per_query = days // 10
-    if days_per_query == 0:
-        return None
-    datetimes = []
-    for d in range(0, days, days_per_query):
-        start = s + pd.Timedelta(days=d)
-        end = start + pd.Timedelta(days=days_per_query)
-        end = end if e > end else e
-        datetimes.append([start, end])
 
-    return datetimes
+def _datetime_split(datetime, freq="auto"):
+    start, end = [pd.Timestamp(date) for date in _datetime_to_str(datetime)]
+    diff = end - start
+    if freq == "auto":
+        # freq increases of 5 days every 6 months
+        freq = diff // (5 + 5 * (diff.days // 183))
+    else:
+        freq = pd.Timedelta(days=freq)
+    if diff.days < freq.days:
+        return datetime
+    logging.info(f"Parallel search with datetime split every {freq.days} days.")
+    return [
+        (chunk, min(chunk + freq, end))
+        for chunk in pd.date_range(start, end, freq=freq)[:-1]
+    ]
 
 
 def _parallel_search(func):
     def _search(*args, **kwargs):
         from joblib import Parallel, delayed
 
+        kwargs.setdefault("batch_days", "auto")
+        batch_days = kwargs.get("batch_days", None)
         datetime = kwargs.get("datetime", None)
         need_parallel = False
-        if datetime:
-            datetimes = _datetime_split(datetime)
-            need_parallel = True if datetimes else False
+        if datetime and batch_days is not None:
+            datetimes = _datetime_split(datetime, batch_days)
+            need_parallel = True if len(datetimes) > 1 else False
             if need_parallel:
                 kwargs.pop("datetime")
                 kwargs["raise_no_items"] = False
@@ -925,7 +929,7 @@ class Auth:
                 raise Warning(
                     "No cross calibration coefficient available for the specified collections."
                 )
-
+        kwargs.setdefault("dtype", "float32")
         xr_datacube = datacube(
             items,
             intersects=intersects,
@@ -938,6 +942,10 @@ class Auth:
             **kwargs,
         )
         if mask_with:
+            kwargs["dtype"] = "int8"
+            if "geobox" not in kwargs:
+                kwargs["geobox"] = xr_datacube.odc.geobox
+
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
             mask_kwargs = dict(mask_statistics=False)
@@ -946,7 +954,6 @@ class Auth:
                     "ag_cloud_mask": {"agriculture-cloud-mask": "ag_cloud_mask"},
                     "cloud_mask": {"cloud-mask": "cloud_mask"},
                 }
-
                 acm_items = self.find_cloud_mask_items(items, cloudmask=mask_with)
                 acm_datacube = datacube(
                     acm_items,
@@ -954,9 +961,7 @@ class Auth:
                     bbox=bbox,
                     groupby_date=None,
                     assets=mask_asset_mapping[mask_with],
-                    geobox=xr_datacube.odc.geobox
-                    if hasattr(xr_datacube, "odc")
-                    else None,
+                    **kwargs,
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[ns]")
                 acm_datacube["time"] = xr_datacube["time"].time
@@ -975,8 +980,6 @@ class Auth:
                     kwargs.pop("resolution")
                 if "epsg" in kwargs:
                     kwargs.pop("epsg")
-                if "geobox" in kwargs:
-                    kwargs.pop("geobox")
 
                 clouds_datacube = datacube(
                     items,
@@ -985,9 +988,6 @@ class Auth:
                     bbox=bbox,
                     assets=mask_assets,
                     resampling=0,
-                    geobox=xr_datacube.odc.geobox
-                    if hasattr(xr_datacube, "odc")
-                    else None,
                     **kwargs,
                 )
                 clouds_datacube = cube_utils._match_xy_dims(
@@ -1062,6 +1062,7 @@ class Auth:
         add_default_scale_factor=False,
         assets=None,
         raise_no_items=True,
+        batch_days="auto",
         **kwargs,
     ):
         """
