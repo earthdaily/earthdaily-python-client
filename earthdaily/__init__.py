@@ -9,6 +9,7 @@ from .accessor import EarthDailyAccessorDataArray, EarthDailyAccessorDataset
 
 __version__ = "0.2.2"
 
+
 def EarthDataStore(
     json_path: Optional[Path] = None,
     toml_path: Optional[Path] = None,
@@ -40,8 +41,8 @@ def EarthDataStore(
         A :class:`earthdatastore.Auth` instance
     """
     return earthdatastore.Auth.from_credentials(
-        json_path = json_path,
-        toml_path = toml_path,
-        profile = profile,
-        presign_urls = presign_urls
+        json_path=json_path,
+        toml_path=toml_path,
+        profile=profile,
+        presign_urls=presign_urls,
     )

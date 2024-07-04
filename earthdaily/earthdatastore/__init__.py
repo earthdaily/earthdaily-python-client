@@ -404,7 +404,7 @@ class Auth:
 
     @classmethod
     def from_credentials(
-        cls, 
+        cls,
         json_path: Optional[Path] = None,
         toml_path: Optional[Path] = None,
         profile: Optional[str] = None,
@@ -435,24 +435,23 @@ class Auth:
             A :class:`Auth` instance
         """
         config = cls.read_credentials(
-            json_path = json_path,
-            toml_path = toml_path,
-            profile = profile,
+            json_path=json_path,
+            toml_path=toml_path,
+            profile=profile,
         )
 
         for item, value in config.items():
             if not value:
                 raise ValueError(f"Missing value for {item}")
 
-        return cls(config = config, presign_urls = presign_urls)
-
+        return cls(config=config, presign_urls=presign_urls)
 
     @classmethod
     def read_credentials(
         cls,
         json_path: Optional[Path] = None,
         toml_path: Optional[Path] = None,
-        profile: Optional[str] = None
+        profile: Optional[str] = None,
     ) -> "Auth":
         """
         Try to read Earth Data Store credentials from multiple sources, in the following order:
@@ -478,20 +477,25 @@ class Auth:
             Dictionary containing credentials
         """
         if json_path is not None:
-            config = cls.read_credentials_from_json(json_path = json_path)
-        
-        elif os.getenv("EDS_AUTH_URL") and os.getenv("EDS_SECRET") and os.getenv("EDS_CLIENT_ID"):
+            config = cls.read_credentials_from_json(json_path=json_path)
+
+        elif (
+            os.getenv("EDS_AUTH_URL")
+            and os.getenv("EDS_SECRET")
+            and os.getenv("EDS_CLIENT_ID")
+        ):
             config = cls.read_credentials_from_environment()
 
         else:
-
             if toml_path is None:
                 toml_path = Path.home() / ".earthdaily/credentials"
 
             if profile is None:
                 profile = "default"
 
-            config = cls.read_credentials_from_toml(toml_path = toml_path, profile = profile)
+            config = cls.read_credentials_from_toml(
+                toml_path=toml_path, profile=profile
+            )
 
         return config
 
@@ -517,7 +521,7 @@ class Auth:
     def read_credentials_from_environment(cls) -> dict:
         """
         Read Earth Data Store credentials from environment variables.
-    
+
         Returns
         -------
         dict
@@ -532,11 +536,13 @@ class Auth:
         # Optional
         if "EDS_API_URL" in os.environ:
             config["EDS_API_URL"] = os.getenv("EDS_API_URL")
-        
+
         return config
 
     @classmethod
-    def read_credentials_from_toml(cls, toml_path: Path = None, profile: str = None) -> dict:
+    def read_credentials_from_toml(
+        cls, toml_path: Path = None, profile: str = None
+    ) -> dict:
         """
         Read Earth Data Store credentials from a TOML file
 
@@ -545,7 +551,7 @@ class Auth:
         toml_path : Path, optional
             The path to the TOML file containing the Earth Data Store credentials.
         profile : profile, optional
-            Name of the profile to use in the TOML file 
+            Name of the profile to use in the TOML file
 
         Returns
         -------
@@ -553,7 +559,9 @@ class Auth:
             Dictionary containing credentials
         """
         if not toml_path.exists():
-            raise FileNotFoundError(f"Credentials file {toml_path} not found. Make sure the path is valid")
+            raise FileNotFoundError(
+                f"Credentials file {toml_path} not found. Make sure the path is valid"
+            )
 
         with toml_path.open() as f:
             config = toml.load(f)
