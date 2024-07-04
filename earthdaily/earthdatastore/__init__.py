@@ -394,6 +394,13 @@ class Auth:
         >>> print(len(items))
         132
         """
+        if not isinstance(config, dict):
+            warnings.warn(
+                "Using directly the Auth class to load credentials is deprecated. "
+                "Please use earthdaily.EarthDataStore() instead",
+                FutureWarning
+            )
+
         self._client = None
         self.__auth_config = config
         self.__presign_urls = presign_urls
