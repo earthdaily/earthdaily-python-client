@@ -8,9 +8,9 @@ Using SCL data from L2A"""
 # Import librairies
 # -------------------------------------------
 
-from earthdaily import earthdatastore, datasets
 import geopandas as gpd
 from matplotlib import pyplot as plt
+from earthdaily import EarthDataStore, datasets
 
 ##############################################################################
 # Load plot
@@ -20,10 +20,10 @@ from matplotlib import pyplot as plt
 pivot = datasets.load_pivot()
 
 ##############################################################################
-# Init earthdatastore with env params
-# -------------------------------------------
+# Init earthdatastore with environment variables or default credentials
+# ----------------------------------------------------------------------------
 
-eds = earthdatastore.Auth()
+eds = EarthDataStore()
 
 ##############################################################################
 # Search for collection items
@@ -38,7 +38,6 @@ def get_cube(rescale=True):
         clear_cover=50,  # at least 50% of the polygon must be clear
         rescale=rescale)
     return pivot_cube
-
 
 ##############################################################################
 # Get cube with rescale (*0.0001)
@@ -64,7 +63,6 @@ plt.show()
 ##############################################################################
 # Plots cube with SCL with at least 50% of clear data
 # ----------------------------------------------------
-
 
 pivot_cube.ed.plot_rgb(col_wrap=3)
 

@@ -8,9 +8,10 @@ Using Agriculture cloud mask from EarthDaily, and data from L2A, zonal stats for
 # Import librairies
 # -------------------------------------------
 
-from earthdaily import earthdatastore, datasets
+
 import geopandas as gpd
 from matplotlib import pyplot as plt
+from earthdaily import datasets, EarthDataStore
 
 ##############################################################################
 # Load plot
@@ -20,10 +21,10 @@ from matplotlib import pyplot as plt
 pivot = datasets.load_pivot()
 
 ##############################################################################
-# Init earthdatastore with env params
-# -------------------------------------------
+# Init earthdatastore with environment variables or default credentials
+# ----------------------------------------------------------------------------
 
-eds = earthdatastore.Auth()
+eds = EarthDataStore()
 
 ##############################################################################
 # Search for collection items in august 2022 (1st to 9th)
