@@ -478,7 +478,7 @@ class Auth:
             config = cls.read_credentials_from_json(json_path=json_path)
 
         elif toml_path is not None:
-           config = cls.read_credentials_from_toml(
+            config = cls.read_credentials_from_toml(
                 toml_path=toml_path, profile=profile
             )
 
@@ -490,7 +490,6 @@ class Auth:
             config = cls.read_credentials_from_environment()
 
         else:
-
             toml_path = Path.home() / ".earthdaily/credentials"
 
             if profile is None:
