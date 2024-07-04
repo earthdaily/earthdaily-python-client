@@ -398,7 +398,7 @@ class Auth:
             warnings.warn(
                 "Using directly the Auth class to load credentials is deprecated. "
                 "Please use earthdaily.EarthDataStore() instead",
-                FutureWarning
+                FutureWarning,
             )
 
         self._client = None
