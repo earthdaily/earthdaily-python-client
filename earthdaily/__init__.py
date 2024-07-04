@@ -16,7 +16,28 @@ def EarthDataStore(
     presign_urls: bool = True,
 ) -> earthdatastore.Auth:
     """
-    TODO
+    Open earth data store connection to allow for datacube requests.
+    Try to read Earth Data Store credentials from multiple sources, in the following order:
+        - from input credentials stored in a JOSN file
+        - from environement variables
+        - from a given credentials TOML file and a given profile
+        - from a given credentials TOML file and the "default" profile
+        - from the $HOME/.earthdaily/credentials TOML file and a given profile
+        - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
+
+    Parameters
+    ----------
+    path : Path, optional
+        The path to the TOML file containing the Earth Data Store credentials.
+        Uses "$HOME/.earthdaily/credentials" by default.
+    profile : profile, optional
+        Name of the profile to use in the TOML file.
+        Uses "default" by default.
+
+    Returns
+    -------
+    Auth
+        A :class:`earthdatastore.Auth` instance
     """
     return earthdatastore.Auth.from_credentials(
         json_path = json_path,

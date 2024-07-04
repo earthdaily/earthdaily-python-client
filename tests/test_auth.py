@@ -23,7 +23,7 @@ class TestAuth(unittest.TestCase):
         # Create JSON credentials
         self.json_path = self.temporary_directory / "credentials.json"
         with self.json_path.open('w') as f:
-            json.dump(data, self.credentials)
+            json.dump(self.credentials, f)
 
         # Create TOML credentials
         self.toml_path = self.temporary_directory / "credentials.toml"
@@ -34,10 +34,15 @@ class TestAuth(unittest.TestCase):
             }
             toml.dump(toml_credentials, f)
 
-    def test_from_json() -> None:
+    def tearDown(self) -> None:
+        self.json_path.unlink()
+        self.toml_path.unlink()
+        self.temporary_directory.rmdir()
+
+    def test_from_json(self) -> None:
         eds = EarthDataStore(json_path = self.json_path)
 
-    def test_from_environment() -> None:
+    def test_from_environment(self) -> None:
         # Ensure environment variables are set
         os.environ["EDS_AUTH_URL"] = self.credentials["EDS_AUTH_URL"]
         os.environ["EDS_SECRET"] = self.credentials["EDS_SECRET"]
@@ -45,7 +50,7 @@ class TestAuth(unittest.TestCase):
 
         eds = EarthDataStore()
 
-    def test_from_default_profile() -> None:
+    def test_from_default_profile(self) -> None:
         # Ensure environment variables are unset
         if "EDS_AUTH_URL" in os.environ:
             del os.environ["EDS_AUTH_URL"]
@@ -56,7 +61,7 @@ class TestAuth(unittest.TestCase):
 
         eds = EarthDataStore()
 
-    def test_from_input_profile() -> None:
+    def test_from_input_profile(self) -> None:
         # Ensure environment variables are unset
         if "EDS_AUTH_URL" in os.environ:
             del os.environ["EDS_AUTH_URL"]
@@ -64,7 +69,7 @@ class TestAuth(unittest.TestCase):
             del os.environ["EDS_SECRET"]
         if "EDS_CLIENT_ID" in os.environ:
             del os.environ["EDS_CLIENT_ID"]
-        eds = EarthDataStore(profile = "test_profile")
+        eds = EarthDataStore(toml_path = self.toml_path, profile = "test_profile")
         
 
 if __name__ == "__main__":

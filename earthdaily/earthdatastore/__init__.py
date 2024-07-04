@@ -442,7 +442,7 @@ class Auth:
 
         for item, value in config.items():
             if not value:
-                raise valueerror(f"Missing value for {item}")
+                raise ValueError(f"Missing value for {item}")
 
         return cls(config = config, presign_urls = presign_urls)
 
@@ -527,8 +527,11 @@ class Auth:
             "EDS_AUTH_URL": os.getenv("EDS_AUTH_URL"),
             "EDS_SECRET": os.getenv("EDS_SECRET"),
             "EDS_CLIENT_ID": os.getenv("EDS_CLIENT_ID"),
-            "EDS_API_URL": os.getenv("EDS_API_URL")
         }
+
+        # Optional
+        if "EDS_API_URL" in os.environ:
+            config["EDS_API_URL"] = os.getenv("EDS_API_URL")
         
         return config
 
@@ -552,7 +555,8 @@ class Auth:
         if not toml_path.exists():
             raise FileNotFoundError(f"Credentials file {toml_path} not found. Make sure the path is valid")
 
-        config = toml.load(toml_path.open())
+        with toml_path.open() as f:
+            config = toml.load(f)
 
         if profile not in config:
             raise ValueError(f"Credentials profile {profile} not found in {toml_path}")
