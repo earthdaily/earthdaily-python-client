@@ -2,7 +2,8 @@ name: pytest-dev
 on:
   push:
     branches:
-      - dev
+      - '**'        # matches every branch
+      - '!master'   # excludes master
 jobs:
   pytest-dev:
     name: pytest-dev
