@@ -413,10 +413,9 @@ class Auth:
         """
         Secondary Constructor.
         Try to read Earth Data Store credentials from multiple sources, in the following order:
-            - from input credentials stored in a JOSN file
+            - from input credentials stored in a given JSON file
+            - from input credentials stored in a given TOML file
             - from environement variables
-            - from a given credentials TOML file and a given profile
-            - from a given credentials TOML file and the "default" profile
             - from the $HOME/.earthdaily/credentials TOML file and a given profile
             - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
 
@@ -455,10 +454,9 @@ class Auth:
     ) -> "Auth":
         """
         Try to read Earth Data Store credentials from multiple sources, in the following order:
-            - from input credentials stored in a JOSN file
+            - from input credentials stored in a given JSON file
+            - from input credentials stored in a given TOML file
             - from environement variables
-            - from a given credentials TOML file and a given profile
-            - from a given credentials TOML file and the "default" profile
             - from the $HOME/.earthdaily/credentials TOML file and a given profile
             - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
 
@@ -479,6 +477,11 @@ class Auth:
         if json_path is not None:
             config = cls.read_credentials_from_json(json_path=json_path)
 
+        elif toml_path is not None:
+           config = cls.read_credentials_from_toml(
+                toml_path=toml_path, profile=profile
+            )
+
         elif (
             os.getenv("EDS_AUTH_URL")
             and os.getenv("EDS_SECRET")
@@ -487,8 +490,8 @@ class Auth:
             config = cls.read_credentials_from_environment()
 
         else:
-            if toml_path is None:
-                toml_path = Path.home() / ".earthdaily/credentials"
+
+            toml_path = Path.home() / ".earthdaily/credentials"
 
             if profile is None:
                 profile = "default"

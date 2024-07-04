@@ -42,34 +42,15 @@ class TestAuth(unittest.TestCase):
     def test_from_json(self) -> None:
         eds = EarthDataStore(json_path = self.json_path)
 
+    def test_from_input_profile(self) -> None:
+        eds = EarthDataStore(toml_path = self.toml_path, profile = "test_profile")
+
     def test_from_environment(self) -> None:
         # Ensure environment variables are set
         os.environ["EDS_AUTH_URL"] = self.credentials["EDS_AUTH_URL"]
         os.environ["EDS_SECRET"] = self.credentials["EDS_SECRET"]
         os.environ["EDS_CLIENT_ID"] = self.credentials["EDS_CLIENT_ID"]
-
         eds = EarthDataStore()
-
-    def test_from_default_profile(self) -> None:
-        # Ensure environment variables are unset
-        if "EDS_AUTH_URL" in os.environ:
-            del os.environ["EDS_AUTH_URL"]
-        if "EDS_SECRET" in os.environ:
-            del os.environ["EDS_SECRET"]
-        if "EDS_CLIENT_ID" in os.environ:
-            del os.environ["EDS_CLIENT_ID"]
-
-        eds = EarthDataStore()
-
-    def test_from_input_profile(self) -> None:
-        # Ensure environment variables are unset
-        if "EDS_AUTH_URL" in os.environ:
-            del os.environ["EDS_AUTH_URL"]
-        if "EDS_SECRET" in os.environ:
-            del os.environ["EDS_SECRET"]
-        if "EDS_CLIENT_ID" in os.environ:
-            del os.environ["EDS_CLIENT_ID"]
-        eds = EarthDataStore(toml_path = self.toml_path, profile = "test_profile")
         
 
 if __name__ == "__main__":

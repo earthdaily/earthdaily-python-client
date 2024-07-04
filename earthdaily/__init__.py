@@ -19,10 +19,9 @@ def EarthDataStore(
     """
     Open earth data store connection to allow for datacube requests.
     Try to read Earth Data Store credentials from multiple sources, in the following order:
-        - from input credentials stored in a JOSN file
+        - from input credentials stored in a given JSON file
+        - from input credentials stored in a given TOML file
         - from environement variables
-        - from a given credentials TOML file and a given profile
-        - from a given credentials TOML file and the "default" profile
         - from the $HOME/.earthdaily/credentials TOML file and a given profile
         - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
 
