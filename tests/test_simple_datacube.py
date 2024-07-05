@@ -1,11 +1,9 @@
 import unittest
-
 import earthdaily
-
 
 class TestEarthDataStore(unittest.TestCase):
     def setUp(self):
-        self.eds = earthdaily.earthdatastore.Auth()
+        self.eds = earthdaily.EarthDataStore()
         self.pivot = earthdaily.datasets.load_pivot()
         self.pivot_corumba = earthdaily.datasets.load_pivot_corumba()
 
