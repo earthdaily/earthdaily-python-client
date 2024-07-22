@@ -874,13 +874,13 @@ class Auth:
             DESCRIPTION.
 
         """
-        
+
         # Properties (per items) are not compatible with groupby_date.
         if properties not in (None, False) and groupby_date is not None:
             raise NotImplementedError(
                 "You must set `groupby_date=None` to have properties per item."
             )
-        
+
         # convert collections to list
         collections = [collections] if isinstance(collections, str) else collections
 
@@ -888,7 +888,7 @@ class Auth:
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
             self.intersects = intersects
-            
+
         # if mask_with, need to add assets or to get mask item id
         if mask_with:
             if mask_with not in mask._available_masks:
@@ -956,7 +956,7 @@ class Auth:
                 raise Warning(
                     "No cross calibration coefficient available for the specified collections."
                 )
-        
+
         # Create datacube from items
         xr_datacube = datacube(
             items,
@@ -969,7 +969,7 @@ class Auth:
             groupby_date=None,
             **kwargs,
         )
-        
+
         # Create mask datacube and apply it to xr_datacube
         if mask_with:
             kwargs["dtype"] = "int8"
