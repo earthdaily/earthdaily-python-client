@@ -8,25 +8,26 @@ Following a pivot field"""
 # Import librairies
 # -------------------------------------------
 
-import earthdaily
+
 import datetime
+import earthdaily
 from dask.diagnostics import ProgressBar
 from matplotlib import pyplot as plt
+from earthdaily import datasets, EarthDataStore
 
 ProgressBar().register()  # to have chunks progress bar
-
 
 ##############################################################################
 # Loading pivot
 # -------------------------------------------
 
-pivot = earthdaily.datasets.load_pivot_corumba()
+pivot = datasets.load_pivot_corumba()
 
 ##############################################################################
-# Auth to earthdatastore
-# -------------------------------------------
+# Init earthdatastore with environment variables or default credentials
+# ----------------------------------------------------------------------------
 
-eds = earthdaily.earthdatastore.Auth()
+eds = EarthDataStore()
 
 ##############################################################################
 # Define timerange

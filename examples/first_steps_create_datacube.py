@@ -13,19 +13,22 @@ The second one is the most turnkey one, the one we recommend, it allows to do al
 # Import librairies
 # -------------------------------------------
 
-from earthdaily import earthdatastore, datasets
+
 import geopandas as gpd
+import earthdaily
 from matplotlib import pyplot as plt
+from earthdaily import datasets, EarthDataStore
 
 ##########################
 # Loading geometry
 
 geometry = datasets.load_pivot()
 
-##########################
-# Init earthdaily and check available assets
+##############################################################################
+# Init earthdatastore with environment variables or default credentials
+# ----------------------------------------------------------------------------
 
-eds = earthdatastore.Auth()  # using config from ENV
+eds = EarthDataStore()
 
 ###########################################################
 # Create datacube (in one step)
@@ -63,7 +66,7 @@ items = eds.search(
 # Creata datacube (independent from being log into earthdatastore)
 # We request the "scl" assets which is the native cloudmask
 
-s2_datacube = earthdatastore.datacube(
+s2_datacube = earthdaily.earthdatastore.datacube(
     items, assets=["blue", "green", "red", "nir", "scl"], intersects=geometry
 )
 
@@ -72,11 +75,11 @@ s2_datacube = earthdatastore.datacube(
 
 # intersects or bbox are asked in order to compute accurate mask statistics
 
-s2_datacube = earthdatastore.mask.Mask(s2_datacube, intersects=geometry).scl(
+s2_datacube = earthdaily.earthdatastore.mask.Mask(s2_datacube, intersects=geometry).scl(
     mask_statistics=True
 )
 
-s2_datacube = earthdatastore.mask.filter_clear_cover(
+s2_datacube = earthdaily.earthdatastore.mask.filter_clear_cover(
     s2_datacube, 50
 )  # at least 50% of clear pixels
 #
