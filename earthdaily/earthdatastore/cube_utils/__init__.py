@@ -213,7 +213,7 @@ def datacube(
         kwargs["bounds_latlon"] = list(
             GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds
         )
-        
+
     # create datacube using the defined engine (default is odc stac)
     ds = engines[engine](
         items_collection,
@@ -222,7 +222,7 @@ def datacube(
         properties=properties,
         **kwargs,
     )
-    
+
     # check nodata per var
     nodatas = {}
     for ds_asset in ds.data_vars:
