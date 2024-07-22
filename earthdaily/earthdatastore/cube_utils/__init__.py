@@ -223,7 +223,10 @@ def datacube(
         **kwargs,
     )
     
-    # check nodata per var
+    # check nodata per asset (data_vars)
+    # TODO : replace the original no_data with a defined value
+    # (like min float) because of rescale
+    
     nodatas = {}
     for ds_asset in ds.data_vars:
         for item in items_collection:
