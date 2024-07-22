@@ -228,8 +228,10 @@ def datacube(
             band_idx = 1
             asset = ds_asset
             if len(parts := ds_asset.split(".")) == 2:
-                index = parts[1][-1] 
-                is_band = isinstance(index, int) or (isinstance(index, str) and index.isdigit())
+                index = parts[1][-1]
+                is_band = isinstance(index, int) or (
+                    isinstance(index, str) and index.isdigit()
+                )
                 if is_band:
                     asset, band_idx = asset.split(".")
                     band_idx = int(band_idx)
@@ -343,8 +345,10 @@ def rescale_assets_with_items(
             band_idx = 1
             asset = ds_asset
             if len(parts := ds_asset.split(".")) == 2:
-                index = parts[1][-1] 
-                is_band = isinstance(index, int) or (isinstance(index, str) and index.isdigit())
+                index = parts[1][-1]
+                is_band = isinstance(index, int) or (
+                    isinstance(index, str) and index.isdigit()
+                )
                 if is_band:
                     asset, band_idx = asset.split(".")
                     band_idx = int(band_idx)
