@@ -227,9 +227,12 @@ def datacube(
             empty_dict_list = []
             band_idx = 1
             asset = ds_asset
-            if len(ds_asset.split(".")) == 2:
-                asset, band_idx = asset.split(".")
-                band_idx = int(band_idx)
+            if len(parts := ds_asset.split(".")) == 2:
+                index = parts[1][-1] 
+                is_band = isinstance(index, int) or (isinstance(index, str) and index.isdigit())
+                if is_band:
+                    asset, band_idx = asset.split(".")
+                    band_idx = int(band_idx)
             for i in range(band_idx + 1):
                 empty_dict_list.append({})
             if asset not in item.assets.keys():
@@ -339,9 +342,12 @@ def rescale_assets_with_items(
             empty_dict_list = []
             band_idx = 1
             asset = ds_asset
-            if len(ds_asset.split(".")) == 2:
-                asset, band_idx = asset.split(".")
-                band_idx = int(band_idx)
+            if len(parts := ds_asset.split(".")) == 2:
+                index = parts[1][-1] 
+                is_band = isinstance(index, int) or (isinstance(index, str) and index.isdigit())
+                if is_band:
+                    asset, band_idx = asset.split(".")
+                    band_idx = int(band_idx)
             for i in range(band_idx + 1):
                 empty_dict_list.append(False)
             if asset not in current_item.assets.keys():
