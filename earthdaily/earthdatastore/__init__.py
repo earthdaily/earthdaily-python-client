@@ -874,17 +874,22 @@ class Auth:
             DESCRIPTION.
 
         """
+        
+        # Properties (per items) are not compatible with groupby_date.
         if properties not in (None, False) and groupby_date is not None:
             raise NotImplementedError(
                 "You must set `groupby_date=None` to have properties per item."
             )
+        
+        # convert collections to list
+        collections = [collections] if isinstance(collections, str) else collections
 
-        if isinstance(collections, str):
-            collections = [collections]
-
+        # if intersects a geometry, create a GeoDataFRame
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
             self.intersects = intersects
+            
+        # if mask_with, need to add assets or to get mask item id
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise NotImplementedError(
@@ -919,6 +924,7 @@ class Auth:
                 elif isinstance(assets, dict):
                     assets[sensor_mask] = sensor_mask
 
+        # query the items
         items = self.search(
             collections=collections,
             bbox=bbox,
@@ -950,7 +956,8 @@ class Auth:
                 raise Warning(
                     "No cross calibration coefficient available for the specified collections."
                 )
-        kwargs.setdefault("dtype", "float32")
+        
+        # Create datacube from items
         xr_datacube = datacube(
             items,
             intersects=intersects,
@@ -962,6 +969,8 @@ class Auth:
             groupby_date=None,
             **kwargs,
         )
+        
+        # Create mask datacube and apply it to xr_datacube
         if mask_with:
             kwargs["dtype"] = "int8"
             if "geobox" not in kwargs:
@@ -1021,11 +1030,13 @@ class Auth:
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
 
+        # keep only one value per pixel per day
         if groupby_date:
             xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
             xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
             xr_datacube["time"] = xr_datacube.time.astype("M8[ns]")
 
+        # To filter by cloud_cover / clear_cover, we need to compute clear pixels as field level
         if clear_cover or mask_statistics:
             xy = xr_datacube[mask_with].isel(time=0).size
 
