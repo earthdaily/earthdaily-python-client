@@ -1198,7 +1198,7 @@ class Auth:
         }
 
         """
-        
+
         # Find available assets for a collection
         # And query only these assets to avoid requesting unused data
         if isinstance(collections, str):
@@ -1210,7 +1210,7 @@ class Auth:
                 .keys()
             )
             kwargs["fields"] = self._update_search_for_assets(assets)
-            
+
         if bbox is None and intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_intersects(
                 crs="4326"
@@ -1218,7 +1218,6 @@ class Auth:
         if bbox is not None and intersects is not None:
             bbox = None
 
-        
         items_collection = self.client.search(
             collections=collections,
             bbox=bbox,
@@ -1226,10 +1225,10 @@ class Auth:
             sortby="properties.datetime",
             **kwargs,
         )
-        
+
         # Downloading the items
         items_collection = items_collection.item_collection()
-        
+
         # prefer_alternate means to prefer alternate url (to replace default href)
         if any((prefer_alternate, add_default_scale_factor)):
             items_collection = enhance_assets(
