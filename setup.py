@@ -49,7 +49,7 @@ setup(
     keywords=["Earth Data Store", "earthdaily", "earthdailyagro", "stac"],
     entry_points = {
         'console_scripts': [
-            'copy-credentials-template=earthdaily.utils.copy_credentials_template:cli'
+            'copy-earthdaily-credentials-template=earthdaily.utils.copy_credentials_template:cli'
         ],
     },
 )

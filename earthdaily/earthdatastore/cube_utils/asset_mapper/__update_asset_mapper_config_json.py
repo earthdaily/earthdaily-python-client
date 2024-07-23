@@ -23,10 +23,9 @@ for collection in eds.explore():
         print(f"collection {collection} has no items")
         continue
     for asset_name in assets_name:
-        print(asset_name)
         if asset_mapper_config.get(collection) is None:
             asset_mapper_config[collection] = [{}]
-        if asset_name not in asset_mapper_config[collection][0].values():
+        if asset_name not in asset_mapper_config[collection][0].keys():
             asset_mapper_config[collection][0][asset_name] = asset_name
 
 with open(asset_mapper_path, "w", encoding="utf-8") as f:

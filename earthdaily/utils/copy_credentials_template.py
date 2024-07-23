@@ -115,6 +115,7 @@ def write_env(env_path: Path) -> None:
     default=False,
     help=f"Copy the TOML template to {default_path}, with credential keys (and no values)",
 )
+
 def cli(json_path: Path, toml_path: Path, env_path: Path, default: bool) -> None:
     if json_path is not None:
         write_json(json_path=json_path)

@@ -106,7 +106,7 @@ pip install -e .
 
 ### Authentication
 
-In order to generate a credentials file with the right variables and layout, you can use the `copy-credentials-template` script that is installed along the earthdaily package. It can generate credentials file as JSON, TOML or .env.
+In order to generate a credentials file with the right variables and layout, you can use the `copy-earthdaily-credentials-template` script that is installed along the earthdaily package. It can generate credentials file as JSON, TOML or .env.
 Generate the credentials file of your liking and edit it to insert your credentials.
 
 
@@ -117,7 +117,7 @@ Create a TOML credentials file in the default location:
 * "$USERPROFILE/.earthdaily/credentials" on Windows
 
 ```console
-copy-credentials-template --default
+copy-earthdaily-credentials-template --default
 ```
 
 Edit it to insert your credentials.
@@ -134,7 +134,7 @@ Authentication credentials can be given as an input JSON file.
 You can generate a JSON credentials file with the following command:
 
 ```console
-copy-credentials-template --json "/path/to/the/credentials_file.json"
+copy-earthdaily-credentials-template --json "/path/to/the/credentials_file.json"
 ```
 
 Edit it to insert your credentials.
@@ -152,7 +152,7 @@ Authentication credentials can be given as input with a TOML file.
 You can generate a TOML credentials file with the following command:
 
 ```console
-copy-credentials-template --toml "/path/to/the/credentials_file"
+copy-earthdaily-credentials-template --toml "/path/to/the/credentials_file"
 ```
 
 Edit it to insert your credentials.
@@ -172,7 +172,7 @@ As a convenience python-dotenv is supported.
 You can generate a .env credentials file with the following command:
 
 ```console
-copy-credentials-template --env "/path/to/the/.env"
+copy-earthdaily-credentials-template --env "/path/to/the/.env"
 ```
 
 Or you can copy the `.env.sample` file from the repository and rename it to `.env`.

@@ -1198,6 +1198,11 @@ class Auth:
         }
 
         """
+        
+        # Find available assets for a collection
+        # And query only these assets to avoid requesting unused data
+        if isinstance(collections, str):
+            collections = [collections]
         if assets is not None:
             assets = list(
                 asset_mapper.AssetMapper()
@@ -1205,8 +1210,7 @@ class Auth:
                 .keys()
             )
             kwargs["fields"] = self._update_search_for_assets(assets)
-        if isinstance(collections, str):
-            collections = [collections]
+            
         if bbox is None and intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_intersects(
                 crs="4326"
@@ -1214,6 +1218,7 @@ class Auth:
         if bbox is not None and intersects is not None:
             bbox = None
 
+        
         items_collection = self.client.search(
             collections=collections,
             bbox=bbox,
@@ -1221,8 +1226,11 @@ class Auth:
             sortby="properties.datetime",
             **kwargs,
         )
+        
+        # Downloading the items
         items_collection = items_collection.item_collection()
-
+        
+        # prefer_alternate means to prefer alternate url (to replace default href)
         if any((prefer_alternate, add_default_scale_factor)):
             items_collection = enhance_assets(
                 items_collection.clone(),
@@ -1281,57 +1289,3 @@ class Auth:
             )
             items_list.extend(list(items))
         return ItemCollection(items_list)
-
-
-def item_property_to_df(
-    item,
-    asset="data",
-    property_name="raster:bands",
-    sub_property_name="classification:classes",
-):
-    """
-    Extract the property from the asset of the item.
-
-    Parameters
-    ----------
-    item : pystac.Item
-        The item to extract the property from.
-    asset : str, optional
-        The asset name.
-    property_name : str, optional
-        The property name.
-    sub_property_name : str, optional
-        The sub property name.
-
-    Returns
-    -------
-    pandas.DataFrame
-        The dataframe containing the property.
-    """
-    df = pd.DataFrame()
-    properties = {}
-
-    if item is not None and item.assets is not None:
-        asset = item.assets.get(asset)
-        if asset is not None and asset.to_dict() is not None:
-            try:
-                properties = asset.to_dict()[property_name]
-            except NameError:
-                print(
-                    f'No property "{property_name}" has been found in the asset "{asset}".'
-                )
-                return None
-
-    property_as_list = {}
-
-    # find the corresponding property in bands
-    for property in properties:
-        if sub_property_name in property:
-            property_as_list = property[sub_property_name]
-            break
-
-    # build the dataframe from property list
-    for data_dict in property_as_list:
-        df = df.append(data_dict, ignore_index=True)
-
-    return df
