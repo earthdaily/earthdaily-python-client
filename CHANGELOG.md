@@ -11,10 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New method to connect to earthdatastore via `earthdaily.EarthDataStore()`
 - `earthdaily.EarthDataStore()` method also supports toml/json.
 - command line `copy-earthdaily-credentials-template`
+- `request_payer` boolean in `EarthDataStore`method.
 
 ### Fixed
 
-- `sentinel-1-grd` wasn't working due to a dot in the asset name.
+- `sentinel-1-grd` datacube wasn't generated due to a dot in the asset name.
 
 ## [0.2.2] - 2024-07-03
 

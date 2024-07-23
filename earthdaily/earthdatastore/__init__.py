@@ -229,7 +229,7 @@ def enhance_assets(
     return items
 
 
-def _get_token(config=None, presign_urls=True):
+def _get_token(config=None):
     """Get token for interacting with the Earth Data Store API.
 
     By default, Earth Data Store will look for environment variables called
@@ -269,7 +269,7 @@ def _get_token(config=None, presign_urls=True):
     return json.loads(token_response.text)["access_token"], eds_url
 
 
-def _get_client(config=None, presign_urls=True):
+def _get_client(config=None, presign_urls=True, request_payer=False):
     """Get client for interacting with the Earth Data Store API.
 
     By default, Earth Data Store will look for environment variables called
@@ -297,12 +297,15 @@ def _get_client(config=None, presign_urls=True):
             config = config.get
         elif isinstance(config, str) and config.endswith(".json"):
             config = json.load(open(config, "rb")).get
-        token, eds_url = _get_token(config, presign_urls)
+        token, eds_url = _get_token(config)
 
     headers = {"Authorization": f"bearer {token}"}
     if presign_urls:
         headers["X-Signed-Asset-Urls"] = "True"
-
+    
+    if request_payer:
+        headers["x-amz-request-payer"] = "requester"
+        
     return Client.open(
         eds_url,
         headers=headers,
@@ -367,7 +370,7 @@ class StacCollectionExplorer:
 
 
 class Auth:
-    def __init__(self, config: str | dict = None, presign_urls=True):
+    def __init__(self, config: str | dict = None, presign_urls=True, request_payer=False):
         """
         A client for interacting with the Earth Data Store API.
         By default, Earth Data Store will look for environment variables called
@@ -404,6 +407,7 @@ class Auth:
         self._client = None
         self.__auth_config = config
         self.__presign_urls = presign_urls
+        self.__request_payer = request_payer
         self._first_items_ = {}
         self._staccollectionexplorer = {}
         self.__time_eds_log = time.time()
@@ -416,6 +420,7 @@ class Auth:
         toml_path: Optional[Path] = None,
         profile: Optional[str] = None,
         presign_urls: bool = True,
+        request_payer:bool = False
     ) -> "Auth":
         """
         Secondary Constructor.
@@ -450,7 +455,7 @@ class Auth:
             if not value:
                 raise ValueError(f"Missing value for {item}")
 
-        return cls(config=config, presign_urls=presign_urls)
+        return cls(config=config, presign_urls=presign_urls, request_payer=request_payer)
 
     @classmethod
     def read_credentials(
@@ -594,7 +599,7 @@ class Auth:
         if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
             if t:
                 logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
-            self._client = _get_client(self.__auth_config, self.__presign_urls)
+            self._client = _get_client(self.__auth_config, self.__presign_urls, self.__request_payer)
             self.__time_eds_log = time.time()
 
         return self._client

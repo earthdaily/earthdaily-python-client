@@ -15,6 +15,7 @@ def EarthDataStore(
     toml_path: Optional[Path] = None,
     profile: Optional[str] = None,
     presign_urls: bool = True,
+    request_payer: bool = False
 ) -> earthdatastore.Auth:
     """
     Open earth data store connection to allow for datacube requests.
@@ -44,4 +45,5 @@ def EarthDataStore(
         toml_path=toml_path,
         profile=profile,
         presign_urls=presign_urls,
+        request_payer=request_payer
     )
