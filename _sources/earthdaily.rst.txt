@@ -1,0 +1,21 @@
+earthdaily package
+==================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   earthdaily.accessor
+   earthdaily.datasets
+   earthdaily.earthdatastore
+   earthdaily.utils
+
+Module contents
+---------------
+
+.. automodule:: earthdaily
+   :members:
+   :undoc-members:
+   :show-inheritance:
