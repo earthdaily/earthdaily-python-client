@@ -38,11 +38,18 @@ setup(
         "spyndex",
         "dask-image",
         "numba",
-        "geocube"
+        "geocube",
+        "click",
+        "toml",
     ],
     include_package_data=True,
     package_data={"":['*.geojson','*.json']},
     license="MIT",
     zip_safe=False,
     keywords=["Earth Data Store", "earthdaily", "earthdailyagro", "stac"],
+    entry_points = {
+        'console_scripts': [
+            'copy-earthdaily-credentials-template=earthdaily.utils.copy_credentials_template:cli'
+        ],
+    },
 )

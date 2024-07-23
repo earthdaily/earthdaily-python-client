@@ -11,14 +11,18 @@ With Sentinel-2 and Landsat, using Sentinel-2 spatial resolution."""
 
 import geopandas as gpd
 from matplotlib import pyplot as plt
-
-from earthdaily import earthdatastore, datasets
+from earthdaily import datasets, EarthDataStore
 
 ##############################################################################
 # Set parameters
 # -------------------------------------------
 
-eds = earthdatastore.Auth()
+##############################################################################
+# Init earthdatastore with environment variables or default credentials
+# ----------------------------------------------------------------------------
+
+eds = EarthDataStore()
+
 collections = ["sentinel-2-l2a", "landsat-c2l2-sr"]
 datetime = ["2022-07-01", "2022-09-01"]
 intersects = datasets.load_pivot_corumba()
@@ -54,7 +58,6 @@ datacube = datacube.load()
 
 datacube.ed.plot_rgb(col_wrap=3)
 plt.show()
-
 
 ##############################################################################
 # See the NDVI evolution

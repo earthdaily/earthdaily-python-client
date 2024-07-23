@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2024-23-07
+
+### Added
+
+- New method to connect to earthdatastore via `earthdaily.EarthDataStore()`
+- `earthdaily.EarthDataStore()` method also supports toml/json.
+- command line `copy-earthdaily-credentials-template`
+- `request_payer` boolean in `EarthDataStore`method.
+
+### Fixed
+
+- `sentinel-1-grd` datacube wasn't generated due to a dot in the asset name.
+
 ## [0.2.2] - 2024-07-03
 
 ### Changed

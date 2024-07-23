@@ -7,22 +7,17 @@ Explore collection metadata using earthdaily
 # Import librairies
 # -------------------------------------------
 
-from earthdaily import earthdatastore
 from rich.table import Table
 from rich.console import Console
-
-from dotenv import load_dotenv
-
-load_dotenv()  # take environment variables from .env.
+from earthdaily import EarthDataStore
 
 console = Console()
 
-
 ##############################################################################
-# Init earthdaily with earthdatastore
-# -------------------------------------------------
+# Init earthdatastore with environment variables or default credentials
+# ----------------------------------------------------------------------------
 
-eds = earthdatastore.Auth()
+eds = EarthDataStore()
 
 ##############################################################################
 # Explore available collections
@@ -32,7 +27,6 @@ table = Table("Available collections")
 for t in eds.explore():
     table.add_row(t)
 console.print(table)
-
 
 ##############################################################################
 # Explore a specific collection

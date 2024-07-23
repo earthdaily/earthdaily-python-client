@@ -122,8 +122,14 @@ class TestGeometryManager(unittest.TestCase):
         }
         
         gM = geometry_manager.GeometryManager(geom)
-        import earthdaily
-        eds = earthdaily.earthdatastore.Auth()
-        cube = eds.datacube("sentinel-2-l2a", assets=['blue','green','red'], datetime="2022-08",intersects = gM.to_geopandas())
+        from earthdaily import EarthDataStore
+        eds = EarthDataStore()
+        cube = eds.datacube(
+          "sentinel-2-l2a",
+          assets=['blue','green','red'],
+          datetime="2022-08",
+          intersects = gM.to_geopandas()
+        )
+
 if __name__ == "__main__":
     unittest.main()

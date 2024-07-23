@@ -214,6 +214,7 @@ def datacube(
             GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds
         )
 
+    # create datacube using the defined engine (default is odc stac)
     ds = engines[engine](
         items_collection,
         assets=assets_keys if isinstance(assets, dict) else assets,
@@ -221,15 +222,25 @@ def datacube(
         properties=properties,
         **kwargs,
     )
+
+    # check nodata per asset (data_vars)
+    # TODO : replace the original no_data with a defined value
+    # (like min float) because of rescale
+
     nodatas = {}
     for ds_asset in ds.data_vars:
         for item in items_collection:
             empty_dict_list = []
             band_idx = 1
             asset = ds_asset
-            if len(ds_asset.split(".")) == 2:
-                asset, band_idx = asset.split(".")
-                band_idx = int(band_idx)
+            if len(parts := ds_asset.split(".")) == 2:
+                index = parts[1][-1]
+                is_band = isinstance(index, int) or (
+                    isinstance(index, str) and index.isdigit()
+                )
+                if is_band:
+                    asset, band_idx = asset.split(".")
+                    band_idx = int(band_idx)
             for i in range(band_idx + 1):
                 empty_dict_list.append({})
             if asset not in item.assets.keys():
@@ -241,6 +252,7 @@ def datacube(
             )
             if nodata == 0 or nodata:
                 nodatas.update({ds_asset: nodata})
+            break
 
     # drop na dates
     ds = ds.isel(dict(time=np.where(~np.isnan(ds.time))[0]))
@@ -339,9 +351,14 @@ def rescale_assets_with_items(
             empty_dict_list = []
             band_idx = 1
             asset = ds_asset
-            if len(ds_asset.split(".")) == 2:
-                asset, band_idx = asset.split(".")
-                band_idx = int(band_idx)
+            if len(parts := ds_asset.split(".")) == 2:
+                index = parts[1][-1]
+                is_band = isinstance(index, int) or (
+                    isinstance(index, str) and index.isdigit()
+                )
+                if is_band:
+                    asset, band_idx = asset.split(".")
+                    band_idx = int(band_idx)
             for i in range(band_idx + 1):
                 empty_dict_list.append(False)
             if asset not in current_item.assets.keys():

@@ -10,12 +10,16 @@ import psutil
 import requests
 import xarray as xr
 import numpy as np
+import toml
+from typing import Optional
+from pathlib import Path
 from pystac.item_collection import ItemCollection
 from pystac_client.item_search import ItemSearch
 from pystac_client import Client
 from itertools import chain
 from odc import stac
 from . import _scales_collections, cube_utils, mask
+
 from .cube_utils import datacube, metacube, _datacubes, asset_mapper
 
 __all__ = ["datacube", "metacube", "xr", "stac"]
@@ -225,7 +229,7 @@ def enhance_assets(
     return items
 
 
-def _get_token(config=None, presign_urls=True):
+def _get_token(config=None):
     """Get token for interacting with the Earth Data Store API.
 
     By default, Earth Data Store will look for environment variables called
@@ -265,7 +269,7 @@ def _get_token(config=None, presign_urls=True):
     return json.loads(token_response.text)["access_token"], eds_url
 
 
-def _get_client(config=None, presign_urls=True):
+def _get_client(config=None, presign_urls=True, request_payer=False):
     """Get client for interacting with the Earth Data Store API.
 
     By default, Earth Data Store will look for environment variables called
@@ -293,11 +297,14 @@ def _get_client(config=None, presign_urls=True):
             config = config.get
         elif isinstance(config, str) and config.endswith(".json"):
             config = json.load(open(config, "rb")).get
-        token, eds_url = _get_token(config, presign_urls)
+        token, eds_url = _get_token(config)
 
     headers = {"Authorization": f"bearer {token}"}
     if presign_urls:
         headers["X-Signed-Asset-Urls"] = "True"
+
+    if request_payer:
+        headers["x-amz-request-payer"] = "requester"
 
     return Client.open(
         eds_url,
@@ -363,7 +370,9 @@ class StacCollectionExplorer:
 
 
 class Auth:
-    def __init__(self, config: str | dict = None, presign_urls=True):
+    def __init__(
+        self, config: str | dict = None, presign_urls=True, request_payer=False
+    ):
         """
         A client for interacting with the Earth Data Store API.
         By default, Earth Data Store will look for environment variables called
@@ -390,29 +399,213 @@ class Auth:
         >>> print(len(items))
         132
         """
+        if not isinstance(config, dict):
+            warnings.warn(
+                "Using directly the Auth class to load credentials is deprecated. "
+                "Please use earthdaily.EarthDataStore() instead",
+                FutureWarning,
+            )
+
         self._client = None
         self.__auth_config = config
         self.__presign_urls = presign_urls
+        self.__request_payer = request_payer
         self._first_items_ = {}
         self._staccollectionexplorer = {}
         self.__time_eds_log = time.time()
         self._client = self.client
 
-    @property
-    def client(self):
+    @classmethod
+    def from_credentials(
+        cls,
+        json_path: Optional[Path] = None,
+        toml_path: Optional[Path] = None,
+        profile: Optional[str] = None,
+        presign_urls: bool = True,
+        request_payer: bool = False,
+    ) -> "Auth":
         """
-                Create an instance of pystac client from EarthDataSTore
+        Secondary Constructor.
+        Try to read Earth Data Store credentials from multiple sources, in the following order:
+            - from input credentials stored in a given JSON file
+            - from input credentials stored in a given TOML file
+            - from environement variables
+            - from the $HOME/.earthdaily/credentials TOML file and a given profile
+            - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
 
-                Returns
-                -------
-                catalog : A :class:`Client` instance for this Catalog.
-        .
+        Parameters
+        ----------
+        path : Path, optional
+            The path to the TOML file containing the Earth Data Store credentials.
+            Uses "$HOME/.earthdaily/credentials" by default.
+        profile : profile, optional
+            Name of the profile to use in the TOML file.
+            Uses "default" by default.
 
+        Returns
+        -------
+        Auth
+            A :class:`Auth` instance
+        """
+        config = cls.read_credentials(
+            json_path=json_path,
+            toml_path=toml_path,
+            profile=profile,
+        )
+
+        for item, value in config.items():
+            if not value:
+                raise ValueError(f"Missing value for {item}")
+
+        return cls(
+            config=config, presign_urls=presign_urls, request_payer=request_payer
+        )
+
+    @classmethod
+    def read_credentials(
+        cls,
+        json_path: Optional[Path] = None,
+        toml_path: Optional[Path] = None,
+        profile: Optional[str] = None,
+    ) -> "Auth":
+        """
+        Try to read Earth Data Store credentials from multiple sources, in the following order:
+            - from input credentials stored in a given JSON file
+            - from input credentials stored in a given TOML file
+            - from environement variables
+            - from the $HOME/.earthdaily/credentials TOML file and a given profile
+            - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
+
+        Parameters
+        ----------
+        path : Path, optional
+            The path to the TOML file containing the Earth Data Store credentials.
+            Uses "$HOME/.earthdaily/credentials" by default.
+        profile : profile, optional
+            Name of the profile to use in the TOML file.
+            Uses "default" by default.
+
+        Returns
+        -------
+        dict
+            Dictionary containing credentials
+        """
+        if json_path is not None:
+            config = cls.read_credentials_from_json(json_path=json_path)
+
+        elif toml_path is not None:
+            config = cls.read_credentials_from_toml(
+                toml_path=toml_path, profile=profile
+            )
+
+        elif (
+            os.getenv("EDS_AUTH_URL")
+            and os.getenv("EDS_SECRET")
+            and os.getenv("EDS_CLIENT_ID")
+        ):
+            config = cls.read_credentials_from_environment()
+
+        else:
+            toml_path = Path.home() / ".earthdaily/credentials"
+
+            if profile is None:
+                profile = "default"
+
+            config = cls.read_credentials_from_toml(
+                toml_path=toml_path, profile=profile
+            )
+
+        return config
+
+    @classmethod
+    def read_credentials_from_json(cls, json_path: Path) -> dict:
+        """
+        Read Earth Data Store credentials from a JSON file.
+
+        Parameters
+        ----------
+        json_path : Path
+            The path to the JSON file containing the Earth Data Store credentials.
+        Returns
+        -------
+        dict
+           Dictionary containing credentials
+        """
+        with json_path.open() as file_object:
+            config = json.load(file_object)
+        return config
+
+    @classmethod
+    def read_credentials_from_environment(cls) -> dict:
+        """
+        Read Earth Data Store credentials from environment variables.
+
+        Returns
+        -------
+        dict
+            Dictionary containing credentials
+        """
+        config = {
+            "EDS_AUTH_URL": os.getenv("EDS_AUTH_URL"),
+            "EDS_SECRET": os.getenv("EDS_SECRET"),
+            "EDS_CLIENT_ID": os.getenv("EDS_CLIENT_ID"),
+        }
+
+        # Optional
+        if "EDS_API_URL" in os.environ:
+            config["EDS_API_URL"] = os.getenv("EDS_API_URL")
+
+        return config
+
+    @classmethod
+    def read_credentials_from_toml(
+        cls, toml_path: Path = None, profile: str = None
+    ) -> dict:
+        """
+        Read Earth Data Store credentials from a TOML file
+
+        Parameters
+        ----------
+        toml_path : Path, optional
+            The path to the TOML file containing the Earth Data Store credentials.
+        profile : profile, optional
+            Name of the profile to use in the TOML file
+
+        Returns
+        -------
+        dict
+            Dictionary containing credentials
+        """
+        if not toml_path.exists():
+            raise FileNotFoundError(
+                f"Credentials file {toml_path} not found. Make sure the path is valid"
+            )
+
+        with toml_path.open() as f:
+            config = toml.load(f)
+
+        if profile not in config:
+            raise ValueError(f"Credentials profile {profile} not found in {toml_path}")
+
+        config = config[profile]
+
+        return config
+
+    @property
+    def client(self) -> Client:
+        """
+        Create an instance of pystac client from EarthDataSTore
+
+        Returns
+        -------
+            A :class:`Client` instance for this Catalog.
         """
         if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
             if t:
                 logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
-            self._client = _get_client(self.__auth_config, self.__presign_urls)
+            self._client = _get_client(
+                self.__auth_config, self.__presign_urls, self.__request_payer
+            )
             self.__time_eds_log = time.time()
 
         return self._client
@@ -692,17 +885,22 @@ class Auth:
             DESCRIPTION.
 
         """
+
+        # Properties (per items) are not compatible with groupby_date.
         if properties not in (None, False) and groupby_date is not None:
             raise NotImplementedError(
                 "You must set `groupby_date=None` to have properties per item."
             )
 
-        if isinstance(collections, str):
-            collections = [collections]
+        # convert collections to list
+        collections = [collections] if isinstance(collections, str) else collections
 
+        # if intersects a geometry, create a GeoDataFRame
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
             self.intersects = intersects
+
+        # if mask_with, need to add assets or to get mask item id
         if mask_with:
             if mask_with not in mask._available_masks:
                 raise NotImplementedError(
@@ -737,6 +935,7 @@ class Auth:
                 elif isinstance(assets, dict):
                     assets[sensor_mask] = sensor_mask
 
+        # query the items
         items = self.search(
             collections=collections,
             bbox=bbox,
@@ -768,7 +967,8 @@ class Auth:
                 raise Warning(
                     "No cross calibration coefficient available for the specified collections."
                 )
-        kwargs.setdefault("dtype", "float32")
+
+        # Create datacube from items
         xr_datacube = datacube(
             items,
             intersects=intersects,
@@ -780,6 +980,8 @@ class Auth:
             groupby_date=None,
             **kwargs,
         )
+
+        # Create mask datacube and apply it to xr_datacube
         if mask_with:
             kwargs["dtype"] = "int8"
             if "geobox" not in kwargs:
@@ -839,11 +1041,13 @@ class Auth:
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
 
+        # keep only one value per pixel per day
         if groupby_date:
             xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
             xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
             xr_datacube["time"] = xr_datacube.time.astype("M8[ns]")
 
+        # To filter by cloud_cover / clear_cover, we need to compute clear pixels as field level
         if clear_cover or mask_statistics:
             xy = xr_datacube[mask_with].isel(time=0).size
 
@@ -1005,6 +1209,11 @@ class Auth:
         }
 
         """
+
+        # Find available assets for a collection
+        # And query only these assets to avoid requesting unused data
+        if isinstance(collections, str):
+            collections = [collections]
         if assets is not None:
             assets = list(
                 asset_mapper.AssetMapper()
@@ -1012,8 +1221,7 @@ class Auth:
                 .keys()
             )
             kwargs["fields"] = self._update_search_for_assets(assets)
-        if isinstance(collections, str):
-            collections = [collections]
+
         if bbox is None and intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_intersects(
                 crs="4326"
@@ -1028,8 +1236,11 @@ class Auth:
             sortby="properties.datetime",
             **kwargs,
         )
+
+        # Downloading the items
         items_collection = items_collection.item_collection()
 
+        # prefer_alternate means to prefer alternate url (to replace default href)
         if any((prefer_alternate, add_default_scale_factor)):
             items_collection = enhance_assets(
                 items_collection.clone(),
@@ -1088,57 +1299,3 @@ class Auth:
             )
             items_list.extend(list(items))
         return ItemCollection(items_list)
-
-
-def item_property_to_df(
-    item,
-    asset="data",
-    property_name="raster:bands",
-    sub_property_name="classification:classes",
-):
-    """
-    Extract the property from the asset of the item.
-
-    Parameters
-    ----------
-    item : pystac.Item
-        The item to extract the property from.
-    asset : str, optional
-        The asset name.
-    property_name : str, optional
-        The property name.
-    sub_property_name : str, optional
-        The sub property name.
-
-    Returns
-    -------
-    pandas.DataFrame
-        The dataframe containing the property.
-    """
-    df = pd.DataFrame()
-    properties = {}
-
-    if item is not None and item.assets is not None:
-        asset = item.assets.get(asset)
-        if asset is not None and asset.to_dict() is not None:
-            try:
-                properties = asset.to_dict()[property_name]
-            except NameError:
-                print(
-                    f'No property "{property_name}" has been found in the asset "{asset}".'
-                )
-                return None
-
-    property_as_list = {}
-
-    # find the corresponding property in bands
-    for property in properties:
-        if sub_property_name in property:
-            property_as_list = property[sub_property_name]
-            break
-
-    # build the dataframe from property list
-    for data_dict in property_as_list:
-        df = df.append(data_dict, ignore_index=True)
-
-    return df

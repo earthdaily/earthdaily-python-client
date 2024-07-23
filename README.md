@@ -85,18 +85,101 @@ This package has been tested on Python 3.10, 3.11 and 3.12.
 
 ### Installation
 
-#### Using pip 
+#### From pypi, using pip
 
 `pip install earthdaily`
 
-#### Planned : Using conda/mamba
+#### From repository, using mamba, conda and pip
+
+```console
+# Clone the repository and go inside
+git clone git@github.com:earthdaily/earthdaily-python-client.git
+cd earthdaily-python-client
+
+# Create a virtual environment named earthdaily and install package dependencies
+mamba env create -n earthdaily -f requirements.yml
+conda activate earthdaily
+
+# Install package in editable mode
+pip install -e .
+```
 
 ### Authentication
-Authentication credentials are accessed from environment variables. As a convenience python-dotenv is supported. 
-Copy the `.env.sample` file and rename to simply `.env` and update with your credentials. This file is gitignored. 
+
+In order to generate a credentials file with the right variables and layout, you can use the `copy-earthdaily-credentials-template` script that is installed along the earthdaily package. It can generate credentials file as JSON, TOML or .env.
+Generate the credentials file of your liking and edit it to insert your credentials.
+
+
+#### From the default credentials file
+
+Create a TOML credentials file in the default location:
+* "$HOME/.earthdaily/credentials" on linux
+* "$USERPROFILE/.earthdaily/credentials" on Windows
+
+```console
+copy-earthdaily-credentials-template --default
+```
+
+Edit it to insert your credentials.
+The following code will automatically find and use the credentials for authentification.
+
+```python
+from earthdaily import EarthDataStore
+eds = EarthDataStore()
+```
+
+#### From a JSON file
+
+Authentication credentials can be given as an input JSON file.
+You can generate a JSON credentials file with the following command:
+
+```console
+copy-earthdaily-credentials-template --json "/path/to/the/credentials_file.json"
+```
+
+Edit it to insert your credentials.
+Then use it as input for authentification:
+
+```python
+from pathlib import Path
+from earthdaily import EarthDataStore
+eds = EarthDataStore(json_path = Path("/path/to/the/credentials_file.json"))
+```
+
+#### From a TOML file
+
+Authentication credentials can be given as input with a TOML file.
+You can generate a TOML credentials file with the following command:
+
+```console
+copy-earthdaily-credentials-template --toml "/path/to/the/credentials_file"
+```
+
+Edit it to insert your credentials.
+Then use it as input for authentification:
+
+```python
+from pathlib import Path
+from earthdaily import EarthDataStore
+eds = EarthDataStore(toml_path = Path("/path/to/the/credentials_file"))
+```
+
+#### From environment variables
+
+Authentication credentials can be automatically parsed from environment variables.
+As a convenience python-dotenv is supported. 
+
+You can generate a .env credentials file with the following command:
+
+```console
+copy-earthdaily-credentials-template --env "/path/to/the/.env"
+```
+
+Or you can copy the `.env.sample` file from the repository and rename it to `.env`.
+Edit it to insert your credentials.
 Then add to your script/notebook:
 
-```python3
+```python
 from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
