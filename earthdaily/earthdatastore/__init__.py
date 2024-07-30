@@ -1055,21 +1055,21 @@ class Auth:
             n_pixels_as_labels = xy - null_pixels
 
             xr_datacube = xr_datacube.assign_coords(
-                {"clear_pixels": ("time", n_pixels_as_labels.load().values)}
+                {"clear_pixels": ("time", n_pixels_as_labels.data)}
             )
 
             xr_datacube = xr_datacube.assign_coords(
                 {
                     "clear_percent": (
                         "time",
-                        np.multiply(
-                            xr_datacube["clear_pixels"].values
-                            / xr_datacube.attrs["usable_pixels"],
-                            100,
+                        np.multiply(np.divide(xr_datacube["clear_pixels"].data,xr_datacube.attrs["usable_pixels"]),                            100
                         ).astype(np.int8),
                     )
                 }
             )
+            
+            xr_datacube['clear_pixels'] = xr_datacube['clear_pixels'].load()
+            xr_datacube['clear_percent'] = xr_datacube['clear_percent'].load()
         if mask_with:
             xr_datacube = xr_datacube.drop(mask_with)
         if clear_cover:
