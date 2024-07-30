@@ -145,6 +145,8 @@ def zonal_stats(
         DESCRIPTION.
 
     """
+    raise DeprecationWarning("Please use directly datacube.ed.zonal_stats()")
+    
     if method == "geocube":
         from geocube.api.core import make_geocube
         from geocube.rasterize import rasterize_image
