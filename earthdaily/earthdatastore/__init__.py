@@ -1062,14 +1062,19 @@ class Auth:
                 {
                     "clear_percent": (
                         "time",
-                        np.multiply(np.divide(xr_datacube["clear_pixels"].data,xr_datacube.attrs["usable_pixels"]),                            100
+                        np.multiply(
+                            np.divide(
+                                xr_datacube["clear_pixels"].data,
+                                xr_datacube.attrs["usable_pixels"],
+                            ),
+                            100,
                         ).astype(np.int8),
                     )
                 }
             )
-            
-            xr_datacube['clear_pixels'] = xr_datacube['clear_pixels'].load()
-            xr_datacube['clear_percent'] = xr_datacube['clear_percent'].load()
+
+            xr_datacube["clear_pixels"] = xr_datacube["clear_pixels"].load()
+            xr_datacube["clear_percent"] = xr_datacube["clear_percent"].load()
         if mask_with:
             xr_datacube = xr_datacube.drop(mask_with)
         if clear_cover:

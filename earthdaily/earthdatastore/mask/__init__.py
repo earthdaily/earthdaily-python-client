@@ -143,14 +143,15 @@ class Mask:
                 "clear_percent": (
                     "time",
                     np.multiply(
-                        self._obj['n_pixels_as_labels'] / self._obj.attrs["usable_pixels"],
+                        self._obj["n_pixels_as_labels"]
+                        / self._obj.attrs["usable_pixels"],
                         100,
                     ).astype(np.int8),
                 )
             }
         )
-        self._obj['clear_pixels'] = self._obj['clear_pixels'].load()
-        self._obj['clear_percent'] = self._obj['clear_percent'].load()
+        self._obj["clear_pixels"] = self._obj["clear_pixels"].load()
+        self._obj["clear_percent"] = self._obj["clear_percent"].load()
 
         return self._obj
 
