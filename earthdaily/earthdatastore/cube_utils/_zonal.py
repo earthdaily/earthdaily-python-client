@@ -54,62 +54,25 @@ def zonal_stats_numpy(
     operations=dict(mean=np.nanmean),
     all_touched=False,
     preload_time=False,
-    batch_time=1,
 ):
-    tqdm_bar = tqdm.tqdm(
-        total=len(dataset.data_vars) * int(np.ceil(dataset.time.size / batch_time))
-    )
     dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)  # .load()
 
     feats, yx_pos = _rasterize(gdf, dataset, all_touched=all_touched)
-    vals = []
+    vals = {}
 
     positions = [np.asarray(yx_pos[i + 1]) for i in np.arange(gdf.shape[0])]
-    for t_ in range(0, dataset.time.size, batch_time):
-        ts = np.arange(t_, np.min((t_ + batch_time, dataset.time.size)))
-        dataset_time = dataset.isel(time=ts)
-        if batch_time > 1:
-            dataset_time = dataset_time.load()
-        for t in ts:
-            vals.append({})
-            tqdm_bar.set_description(
-                dataset.isel(time=t).time.dt.strftime("%Y-%m-%d").values
-            )
-            for data_var in dataset.data_vars:
-                vals[t][data_var] = []
-                tqdm_bar.update(1 * batch_time)
-                mem_asset = dataset_time[data_var].to_numpy()
-                for i in range(gdf.shape[0]):
-                    pos = positions[i]
-                    if len(pos) == 2:
-                        try:
-                            data = mem_asset[..., pos[0], pos[1]]
-                        except:
-                            print(i)
-                    elif len(pos) == 1:
-                        data = mem_asset[..., pos[0]]
-                    if data.size > 0:
-                        res = [operation(data) for operation in operations.values()]
-                    else:
-                        res = [np.nan for operation in operations]
-                    vals[t][data_var].append(res)
 
-    arr = np.asarray([np.asarray([v[v_] for v_ in v]) for v in vals])
-    da = xr.DataArray(
-        arr,
-        dims=["time", "band", "feature", "stats"],
-        coords=dict(
-            time=dataset.time.values,
-            band=dataset.data_vars,
-            feature=gdf.index[np.nonzero(np.unique(feats))[0] - 1],
-            stats=list(operations.keys()),
-        ),
-    )
-    del arr, mem_asset, vals, dataset_time
-    # ds.append(da.to_dataset(name=data_var))
-    da = da.to_dataset("band")
-    tqdm_bar.close()
-    return da.transpose("feature", "time", "stats")
+    for i in tqdm.trange(gdf.shape[0]):
+        pos = positions[i]
+        pos_xr = dict(x=xr.DataArray(pos[1], dims='z'),y=xr.DataArray(pos[0],dims='z'))
+        dc_field = dataset.isel(**pos_xr)
+        m = xr.concat([getattr(dc_field,reducer)("z").expand_dims(feature=[i],zonal_stats=[reducer]) for reducer in operations.keys()], dim='zonal_stats')
+        if i == 0:
+            xr_stats = m
+        else:
+            xr_stats = xr.concat(((xr_stats,m)),dim='feature')
+        
+    return xr_stats.transpose("feature", "time", "zonal_stats")
 
 
 def zonal_stats(
