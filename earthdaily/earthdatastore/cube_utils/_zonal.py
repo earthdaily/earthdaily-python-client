@@ -63,14 +63,24 @@ def zonal_stats_numpy(
 
     for i in tqdm.trange(gdf.shape[0]):
         pos = positions[i]
-        pos_xr = dict(x=xr.DataArray(pos[1], dims='z'),y=xr.DataArray(pos[0],dims='z'))
+        pos_xr = dict(
+            x=xr.DataArray(pos[1], dims="z"), y=xr.DataArray(pos[0], dims="z")
+        )
         dc_field = dataset.isel(**pos_xr)
-        m = xr.concat([getattr(dc_field,reducer)("z").expand_dims(feature=[i],zonal_stats=[reducer]) for reducer in operations.keys()], dim='zonal_stats')
+        m = xr.concat(
+            [
+                getattr(dc_field, reducer)("z").expand_dims(
+                    feature=[i], zonal_stats=[reducer]
+                )
+                for reducer in operations.keys()
+            ],
+            dim="zonal_stats",
+        )
         if i == 0:
             xr_stats = m
         else:
-            xr_stats = xr.concat(((xr_stats,m)),dim='feature')
-        
+            xr_stats = xr.concat(((xr_stats, m)), dim="feature")
+
     return xr_stats.transpose("feature", "time", "zonal_stats")
 
 
