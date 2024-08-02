@@ -58,7 +58,6 @@ def zonal_stats_numpy(
     dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)  # .load()
 
     feats, yx_pos = _rasterize(gdf, dataset, all_touched=all_touched)
-    vals = {}
 
     positions = [np.asarray(yx_pos[i + 1]) for i in np.arange(gdf.shape[0])]
 
