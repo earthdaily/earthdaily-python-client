@@ -48,60 +48,66 @@ def _rasterize(gdf, dataset, all_touched=False):
     return feats, yx_pos
 
 
+
 def zonal_stats_numpy(
     dataset,
     gdf,
     operations=dict(mean=np.nanmean),
     all_touched=False,
-    preload_datavar=False,
+    preload_time=False,
+    batch_time=1
 ):
     tqdm_bar = tqdm.tqdm(total=len(dataset.data_vars) * dataset.time.size)
-    dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)
+    dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)#.load()
 
     feats, yx_pos = _rasterize(gdf, dataset, all_touched=all_touched)
-    ds = []
-    features_idx = []
-    for data_var in dataset.data_vars:
-        tqdm_bar.set_description(data_var)
-        dataset_var = dataset[data_var]
-        if preload_datavar:
-            dataset_var = dataset_var.load()
-        vals = {}
-        for t in range(dataset_var.time.size):
-            tqdm_bar.update(1)
-            vals[t] = []
-            mem_asset = dataset_var.isel(time=t).to_numpy()
-            for i in range(gdf.shape[0]):
-                features_idx.append(i)
-                if len(yx_pos) <= i + 1:
-                    break
-                pos = np.asarray(yx_pos[i + 1])
-                # mem_asset[*pos] only for python>=3.11
-                if len(pos) == 2:
-                    data = mem_asset[pos[0], pos[1]]
-                elif len(pos) == 1:
-                    data = mem_asset[pos[0]]
-                if data.size > 0:
-                    res = [operation(data) for operation in operations.values()]
-                else:
-                    res = [np.nan for operation in operations]
-                vals[t].append(res)
-        arr = np.asarray([vals[v] for v in vals])
+    vals = []
+    
+    
+    positions = [np.asarray(yx_pos[i + 1]) for i in np.arange(gdf.shape[0])]
 
-        da = xr.DataArray(
-            arr,
-            dims=["time", "feature", "stats"],
-            coords=dict(
-                time=dataset_var.time.values,
-                feature=gdf.index[np.nonzero(np.unique(feats))[0] - 1],
-                stats=list(operations.keys()),
-            ),
-        )
-        del arr, mem_asset, vals, dataset_var
-        ds.append(da.to_dataset(name=data_var))
+    for t_ in range(0,dataset.time.size,batch_time):
+        ts = np.arange(t_,np.min((t_+batch_time,dataset.time.size)))
+        vals.append({})
+        dataset_time = dataset.isel(time=ts)
+        if batch_time>1:
+            dataset_time = dataset_time.load()
+        for t in ts:
+            tqdm_bar.set_description(dataset.isel(time=t).time.dt.strftime('%Y-%m-%d').values)
+            for data_var in dataset.data_vars:
+                vals[t][data_var] = []
+                tqdm_bar.update(1)
+                mem_asset = dataset_time[data_var].to_numpy()
+                for i in range(gdf.shape[0]):
+                    # features_idx.append(i)
+                    pos = positions[i]
+                    # mem_asset[*pos] only for python>=3.11
+                    if len(pos) == 2:
+                        data = mem_asset[pos[0], pos[1]]
+                    elif len(pos) == 1:
+                        data = mem_asset[pos[0]]
+                    if data.size > 0:
+                        res = [operation(data) for operation in operations.values()]
+                    else:
+                        res = [np.nan for operation in operations]
+                    vals[t][data_var].append(res)
+
+    arr = np.asarray([np.asarray([v[v_] for v_ in v]) for v in vals])
+    da = xr.DataArray(
+        arr,
+        dims=["time", "band", "feature", "stats"],
+        coords=dict(
+            time=dataset.time.values,
+            band=dataset.data_vars,
+            feature=gdf.index[np.nonzero(np.unique(feats))[0] - 1],
+            stats=list(operations.keys()),
+        ),
+    )
+    del arr, mem_asset, vals, dataset_time
+    # ds.append(da.to_dataset(name=data_var))
+    da = da.to_dataset("band")
     tqdm_bar.close()
-    return xr.merge(ds).transpose("feature", "time", "stats")
-
+    return da.transpose("feature", "time", "stats")
 
 def zonal_stats(
     dataset,
@@ -145,6 +151,7 @@ def zonal_stats(
         DESCRIPTION.
 
     """
+    
     if method == "geocube":
         from geocube.api.core import make_geocube
         from geocube.rasterize import rasterize_image
