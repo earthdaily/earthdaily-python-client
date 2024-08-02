@@ -996,7 +996,9 @@ class Auth:
                     "ag_cloud_mask": {"agriculture-cloud-mask": "ag_cloud_mask"},
                     "cloud_mask": {"cloud-mask": "cloud_mask"},
                 }
-                acm_items = self.find_cloud_mask_items(items, cloudmask=mask_with, **cloud_search_kwargs)
+                acm_items = self.find_cloud_mask_items(
+                    items, cloudmask=mask_with, **cloud_search_kwargs
+                )
                 acm_datacube = datacube(
                     acm_items,
                     intersects=intersects,
@@ -1259,7 +1261,9 @@ class Auth:
             raise _no_item_msg
         return items_collection
 
-    def find_cloud_mask_items(self, items_collection, cloudmask="ag_cloud_mask", **kwargs):
+    def find_cloud_mask_items(
+        self, items_collection, cloudmask="ag_cloud_mask", **kwargs
+    ):
         """
         Search the catalog for the ag_cloud_mask items matching the given items_collection.
         The ag_cloud_mask items are searched in the `ag_cloud_mask_collection_id` collection using the
@@ -1301,7 +1305,7 @@ class Auth:
                 collections=collections,
                 ids=ids_[items_start_idx : items_start_idx + step],
                 limit=step,
-                **kwargs
+                **kwargs,
             )
             items_list.extend(list(items))
         return ItemCollection(items_list)
