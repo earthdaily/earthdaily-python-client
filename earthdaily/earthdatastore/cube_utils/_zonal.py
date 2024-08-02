@@ -48,27 +48,25 @@ def _rasterize(gdf, dataset, all_touched=False):
     return feats, yx_pos
 
 
-
 def zonal_stats_numpy(
     dataset,
     gdf,
     operations=dict(mean=np.nanmean),
     all_touched=False,
     preload_time=False,
-    batch_time=1
+    batch_time=1,
 ):
     tqdm_bar = tqdm.tqdm(total=len(dataset.data_vars) * int(np.ceil(dataset.time.size/batch_time)))
     dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)#.load()
 
     feats, yx_pos = _rasterize(gdf, dataset, all_touched=all_touched)
     vals = []
-    
-    
+
     positions = [np.asarray(yx_pos[i + 1]) for i in np.arange(gdf.shape[0])]
     for t_ in range(0,dataset.time.size,batch_time):
         ts = np.arange(t_,np.min((t_+batch_time,dataset.time.size)))
         dataset_time = dataset.isel(time=ts)
-        if batch_time>1:
+        if batch_time > 1:
             dataset_time = dataset_time.load()
         for t in ts:
             vals.append({})
@@ -108,6 +106,7 @@ def zonal_stats_numpy(
     da = da.to_dataset("band")
     tqdm_bar.close()
     return da.transpose("feature", "time", "stats")
+
 
 def zonal_stats(
     dataset,
@@ -151,7 +150,7 @@ def zonal_stats(
         DESCRIPTION.
 
     """
-    
+
     if method == "geocube":
         from geocube.api.core import make_geocube
         from geocube.rasterize import rasterize_image
