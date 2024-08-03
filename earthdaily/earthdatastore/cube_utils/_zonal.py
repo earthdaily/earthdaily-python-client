@@ -50,38 +50,64 @@ def _rasterize(gdf, dataset, all_touched=False):
 
 def zonal_stats_numpy(
     dataset,
+    positions,
     gdf,
     operations=dict(mean=np.nanmean),
     all_touched=False,
-    preload_time=False,
-):
-    dataset = dataset.rio.clip_box(*gdf.to_crs(dataset.rio.crs).total_bounds)  # .load()
+):    
 
-    feats, yx_pos = _rasterize(gdf, dataset, all_touched=all_touched)
-
-    positions = [np.asarray(yx_pos[i + 1]) for i in np.arange(gdf.shape[0])]
-
-    for i in tqdm.trange(gdf.shape[0]):
-        pos = positions[i]
-        pos_xr = dict(
-            x=xr.DataArray(pos[1], dims="z"), y=xr.DataArray(pos[0], dims="z")
-        )
-        dc_field = dataset.isel(**pos_xr)
-        m = xr.concat(
-            [
-                getattr(dc_field, reducer)("z").expand_dims(
-                    feature=[i], zonal_stats=[reducer]
+    def _get_field_dataset(positions, dataset):
+        for idx, pos in enumerate(positions):
+            if pos.size == 0:
+                continue
+            pos_xr = dict(
+                x=xr.DataArray(pos[1], dims="z"), y=xr.DataArray(pos[0], dims="z")
                 )
-                for reducer in operations.keys()
-            ],
-            dim="zonal_stats",
-        )
-        if i == 0:
-            xr_stats = m
-        else:
-            xr_stats = xr.concat(((xr_stats, m)), dim="feature")
-
-    return xr_stats.transpose("feature", "time", "zonal_stats")
+            yield idx, dataset.isel(**pos_xr)
+            
+    def _zonal_stats_from_field(dc_field, operations, idx):
+        return xr.concat(
+                    [
+                        getattr(dc_field, reducer)("z").expand_dims(
+                            feature=[idx], zonal_stats=[reducer]
+                        )
+                        for reducer in operations.keys()
+                    ],
+                    dim="zonal_stats",
+                )
+    
+    def compute_zonal_stats_apply_ufunc(dataset, positions, reducers):
+        zs = []
+        for idx in range(len(positions)):
+            field_stats = []
+            for reducer in reducers:
+                field_arr = dataset[...,*positions[idx]]
+                field_arr = reducer(field_arr,axis=-1)
+                field_stats.append(field_arr)
+            field_stats = np.asarray(field_stats)
+            zs.append(field_stats)
+        zs = np.asarray(zs)
+        zs = zs.swapaxes(-2,0)
+        return zs
+    
+    result = xr.apply_ufunc(
+        compute_zonal_stats_apply_ufunc,
+        dataset.to_dataarray(dim='band'),
+        vectorize=False,
+        dask="forbidden",
+        input_core_dims=[['band','y','x']],
+        output_core_dims=[['zonal_stats','feature', 'band']],
+        exclude_dims=set(['x','y']),
+        output_dtypes=[float],
+        output_sizes=dict(feature=len(positions),zonal_stats=len(operations.values())),
+        kwargs=dict(reducers=operations.values(),positions=positions)    )
+    del dataset
+    return result.to_dataset(dim='band')
+    # zs = []
+    # for idx, dc_field in tqdm.tqdm(_get_field_dataset(positions, dataset),total=gdf.shape[0], mininterval=1, desc="Zonal stats"):
+    #     zs.append(_zonal_stats_from_field(dc_field, operations, idx))
+    # zs = xr.concat(zs, dim='feature')
+    # return zs.transpose("feature", "time", "zonal_stats")
 
 
 def zonal_stats(
