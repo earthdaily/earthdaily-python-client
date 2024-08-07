@@ -59,7 +59,7 @@ def _datetime_split(datetime, freq="auto"):
 def _parallel_search(func):
     def _search(*args, **kwargs):
         from joblib import Parallel, delayed
-
+        t0 = time.time()
         kwargs.setdefault("batch_days", "auto")
         batch_days = kwargs.get("batch_days", None)
         datetime = kwargs.get("datetime", None)
@@ -79,6 +79,7 @@ def _parallel_search(func):
                     raise _no_item_msg
         if not need_parallel:
             items = func(*args, **kwargs)
+        logging.info(f'Search/load items : {np.round(time.time()-t0,3)}s.')
         return items
 
     return _search
