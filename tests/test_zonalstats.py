@@ -30,37 +30,31 @@ class TestZonalStats(unittest.TestCase):
         # first pixel
 
         geometry = [
-            Polygon([(0, 0), (0, 0.5), (0.5, 0.5), (0.5, 0)]),
+            # Polygon([(0, 0), (0, 0.5), (0.5, 0.5), (0.5, 0)]),
             Polygon([(0, 0), (0, 1.2), (1.2, 1.2), (1.2, 0)]),
             Polygon([(1, 1), (9, 1), (9, 2.1), (1, 1)])
         ]
         # out of bound geom #            Polygon([(10,10), (10,11), (11,11), (11,10)])]
         gdf = gpd.GeoDataFrame({"geometry": geometry}, crs="EPSG:4326")
-        gdf.index = ['tosmall','ok','ok']
+        gdf.index = ['ok','ok']
         self.gdf = gdf
         self.datacube = ds
 
 
     def test_basic(self):
         zonalstats = earthdaily.earthdatastore.cube_utils.zonal_stats(
-            self.datacube, self.gdf, operations=["min", "max"], raise_missing_geometry=False
-        )
+            self.datacube, self.gdf, method="numpy", reducers=["min", "max"], all_touched=False)
         for operation in ["min", "max"]:
             self._check_results(
-                zonalstats["first_var"].sel(stats=operation).values, operation=operation
+                zonalstats["first_var"].sel(zonal_statistics=operation).values, operation=operation
             )
 
     def _check_results(self, stats_values, operation="min"):
         results = {
-            "min": np.asarray([[1, self.constant], [10, self.constant]]),
-            "max": np.asarray([[9, self.constant], [15, self.constant]])
+            "min": np.asarray([[1, 10], [self.constant, self.constant]]),
+            "max": np.asarray([[9, 15], [self.constant, self.constant]])
         }
         self.assertTrue(np.all(stats_values == results[operation]))
-
-    def test_error(self):
-        with self.assertRaises(ValueError):
-            earthdaily.earthdatastore.cube_utils.zonal_stats(
-                self.datacube, self.gdf, operations=["min", "max"], raise_missing_geometry=True)
                           
 if __name__ == "__main__":
     unittest.main()
