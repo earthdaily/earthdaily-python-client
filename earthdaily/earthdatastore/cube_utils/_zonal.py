@@ -48,67 +48,77 @@ def _rasterize(gdf, dataset, all_touched=False):
     yx_pos = _indices_sparse(feats)
     return feats, yx_pos
 
+
 def _memory_time_chunks(dataset, memory=None):
     import psutil
-    if memory is None:    
-        memory = psutil.virtual_memory().available/1e6
+
+    if memory is None:
+        memory = psutil.virtual_memory().available / 1e6
         logging.debug(f"Hoping to use a maximum memory {memory}Mo.")
-    nbytes_per_date = int(dataset.nbytes/1e6)/dataset.time.size*3
-    max_time_chunks = int(np.arange(0,memory,nbytes_per_date+0.1).size)
-    time_chunks = int(dataset.time.size/np.arange(0,dataset.time.size,max_time_chunks).size)
-    logging.debug(f"Mo per date : {nbytes_per_date:0.2f}, total : {(nbytes_per_date*dataset.time.size):0.2f}.")
+    nbytes_per_date = int(dataset.nbytes / 1e6) / dataset.time.size * 3
+    max_time_chunks = int(np.arange(0, memory, nbytes_per_date + 0.1).size)
+    time_chunks = int(
+        dataset.time.size / np.arange(0, dataset.time.size, max_time_chunks).size
+    )
+    logging.debug(
+        f"Mo per date : {nbytes_per_date:0.2f}, total : {(nbytes_per_date*dataset.time.size):0.2f}."
+    )
     logging.debug(f"Time chunks : {time_chunks} (on {dataset.time.size} time).")
     return time_chunks
 
-def _zonal_stats_numpy(
-    dataset:xr.Dataset,
-    positions,
-    reducers:list=['mean'],
-    all_touched=False):
 
+def _zonal_stats_numpy(
+    dataset: xr.Dataset, positions, reducers: list = ["mean"], all_touched=False
+):
     def _zonal_stats_ufunc(dataset, positions, reducers):
         zs = []
         for idx in range(len(positions)):
             field_stats = []
             for reducer in reducers:
                 field_arr = dataset[..., *positions[idx]]
-                func = f'nan{reducer}' if hasattr(np,f"nan{reducer}") else reducer
+                func = f"nan{reducer}" if hasattr(np, f"nan{reducer}") else reducer
                 field_arr = getattr(np, func)(field_arr, axis=-1)
                 field_stats.append(field_arr)
             field_stats = np.asarray(field_stats)
             zs.append(field_stats)
         zs = np.asarray(zs)
-        zs = zs.swapaxes(-1, 0).swapaxes(-1,-2)
+        zs = zs.swapaxes(-1, 0).swapaxes(-1, -2)
         return zs
-    
-    
-    dask_ufunc  = "parallelized"
-        
+
+    dask_ufunc = "parallelized"
+
     zs = xr.apply_ufunc(
         _zonal_stats_ufunc,
         dataset,
         vectorize=False,
         dask=dask_ufunc,
-        input_core_dims=[["y","x"]],
+        input_core_dims=[["y", "x"]],
         output_core_dims=[["feature", "zonal_statistics"]],
         exclude_dims=set(["x", "y"]),
         output_dtypes=[float],
         kwargs=dict(reducers=reducers, positions=positions),
-        dask_gufunc_kwargs={"allow_rechunk":True,
-                            "output_sizes":dict(geometry=len(positions), zonal_statistics=len(reducers))}
+        dask_gufunc_kwargs={
+            "allow_rechunk": True,
+            "output_sizes": dict(
+                geometry=len(positions), zonal_statistics=len(reducers)
+            ),
+        },
     )
 
     del dataset
-    
+
     return zs
 
-def zonal_stats(dataset:xr.Dataset,
-                geoms, 
-                method:str="numpy", 
-                smart_load:bool=False, 
-                memory:int = None,
-                reducers:list=['mean'],
-                all_touched = True):
+
+def zonal_stats(
+    dataset: xr.Dataset,
+    geoms,
+    method: str = "numpy",
+    smart_load: bool = False,
+    memory: int = None,
+    reducers: list = ["mean"],
+    all_touched=True,
+):
     """
     Xr Zonal stats using np.nan functions.
 
@@ -121,7 +131,7 @@ def zonal_stats(dataset:xr.Dataset,
     method : str
         "xvec" or "numpy". The default is "numpy".
     smart_load : bool
-        Will load in memory the maximum of time and loop on it for "numpy" 
+        Will load in memory the maximum of time and loop on it for "numpy"
         method. The default is False.
     memory : int, optional
         Only for the "numpy" method, by default it will take the maximum memory
@@ -136,46 +146,63 @@ def zonal_stats(dataset:xr.Dataset,
         DESCRIPTION.
 
     """
-    
+
     def _loop_time_chunks(dataset, method, smart_load, time_chunks):
-        logging.debug(f"Batching every {time_chunks} dates ({np.ceil(dataset.time.size/time_chunks).astype(int)} loops).")
-        for time_idx in tqdm.trange(0,dataset.time.size,time_chunks):   
-            isel_time = np.arange(time_idx,np.min((time_idx+time_chunks,dataset.time.size)))
+        logging.debug(
+            f"Batching every {time_chunks} dates ({np.ceil(dataset.time.size/time_chunks).astype(int)} loops)."
+        )
+        for time_idx in tqdm.trange(0, dataset.time.size, time_chunks):
+            isel_time = np.arange(
+                time_idx, np.min((time_idx + time_chunks, dataset.time.size))
+            )
             ds = dataset.copy().isel(time=isel_time)
             if smart_load:
                 t0 = time.time()
                 ds = ds.load()
-                logging.debug(f'Subdataset of {ds.time.size} dates loaded in memory in {(time.time()-t0):0.2f}s.')
+                logging.debug(
+                    f"Subdataset of {ds.time.size} dates loaded in memory in {(time.time()-t0):0.2f}s."
+                )
             t0 = time.time()
             # for method in tqdm.tqdm(["np"]):
-            zs = _zonal_stats_numpy(ds,
-                                   positions,
-                                   reducers)
+            zs = _zonal_stats_numpy(ds, positions, reducers)
             zs = zs.load()
             del ds
-            logging.debug(f'Zonal stats computed in {(time.time()-t0):0.2f}s.')
+            logging.debug(f"Zonal stats computed in {(time.time()-t0):0.2f}s.")
             yield zs
 
     t_start = time.time()
     dataset = dataset.rio.clip_box(*geoms.to_crs(dataset.rio.crs).total_bounds)
-    if method == 'numpy':
+    if method == "numpy":
         feats, yx_pos = _rasterize(geoms, dataset, all_touched=all_touched)
         positions = [np.asarray(yx_pos[i + 1]) for i in np.arange(geoms.shape[0])]
-        positions = [position for position in positions if position.size>0]
-        del feats,yx_pos
+        positions = [position for position in positions if position.size > 0]
+        del feats, yx_pos
         time_chunks = _memory_time_chunks(dataset, memory)
         if smart_load:
-            zs = xr.concat([z for z in _loop_time_chunks(dataset, method, smart_load, time_chunks)], dim="time")
+            zs = xr.concat(
+                [
+                    z
+                    for z in _loop_time_chunks(dataset, method, smart_load, time_chunks)
+                ],
+                dim="time",
+            )
         else:
-            zs = _zonal_stats_numpy(dataset,
-                                   positions,
-                                   reducers)
-        zs = zs.assign_coords(zonal_statistics=reducers)#,feature=geoms.to_crs('EPSG:4326').geometry)
-        
+            zs = _zonal_stats_numpy(dataset, positions, reducers)
+        zs = zs.assign_coords(
+            zonal_statistics=reducers
+        )  # ,feature=geoms.to_crs('EPSG:4326').geometry)
+
     if method == "xvec":
         import xvec
-        zs = dataset.xvec.zonal_stats(geoms.to_crs(dataset.rio.crs).geometry, y_coords='y',x_coords='x', stats=reducers,
-                                      method="rasterize", all_touched=all_touched)
+
+        zs = dataset.xvec.zonal_stats(
+            geoms.to_crs(dataset.rio.crs).geometry,
+            y_coords="y",
+            x_coords="x",
+            stats=reducers,
+            method="rasterize",
+            all_touched=all_touched,
+        )
     logging.info(f"Zonal stats method {method} tooks {time.time()-t_start}s.")
     del dataset
     return zs
