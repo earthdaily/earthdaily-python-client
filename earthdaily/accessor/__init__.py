@@ -132,8 +132,9 @@ class EarthDailyAccessorDataArray:
     def zonal_stats(
         self,
         geometry,
-        operations: list = ["mean"],
-        raise_missing_geometry: bool = False,
+        reducers: list = ["mean"],
+        label:str = None,
+        **kwargs
     ):
         from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
 
@@ -141,8 +142,8 @@ class EarthDailyAccessorDataArray:
         return zonal_stats(
             self._obj,
             geometry,
-            operations=operations,
-            raise_missing_geometry=raise_missing_geometry,
+            reducers=reducers,
+            **kwargs
         )
 
     def lee_filter(self, window_size: int):

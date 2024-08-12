@@ -100,7 +100,7 @@ def _zonal_stats_numpy(
         dask_gufunc_kwargs={
             "allow_rechunk": True,
             "output_sizes": dict(
-                geometry=len(positions), zonal_statistics=len(reducers)
+                feature=len(positions), zonal_statistics=len(reducers)
             ),
         },
     )
@@ -118,6 +118,8 @@ def zonal_stats(
     memory: int = None,
     reducers: list = ["mean"],
     all_touched=True,
+    label=None,
+    **kwargs
 ):
     """
     Xr Zonal stats using np.nan functions.
@@ -176,7 +178,7 @@ def zonal_stats(
         feats, yx_pos = _rasterize(geoms, dataset, all_touched=all_touched)
         positions = [np.asarray(yx_pos[i + 1]) for i in np.arange(geoms.shape[0])]
         positions = [position for position in positions if position.size > 0]
-        del feats, yx_pos
+        del yx_pos
         time_chunks = _memory_time_chunks(dataset, memory)
         if smart_load:
             zs = xr.concat(
@@ -187,11 +189,33 @@ def zonal_stats(
                 dim="time",
             )
         else:
-            zs = _zonal_stats_numpy(dataset, positions, reducers)
+            zs = _zonal_stats_numpy(dataset, positions, reducers, **kwargs)
         zs = zs.assign_coords(
             zonal_statistics=reducers
-        )  # ,feature=geoms.to_crs('EPSG:4326').geometry)
+        ) 
+        zs = zs.rio.write_crs("EPSG:4326")
 
+        # keep only geom that have been found in the raster
+        f = np.unique(feats)
+        f = f[f>0]
+        index = geoms.index[f-1]
+        
+        index = xr.DataArray(index,dims=['feature'], coords={"feature":zs.feature.values})
+        
+        # create the WKT geom 
+        
+        geometry = xr.DataArray(list(geoms.iloc[f-1].to_crs("EPSG:4326").geometry.to_wkt()),dims=['feature'], coords={"feature":zs.feature.values})
+        new_coords_kwargs = {"index":index, "geometry":geometry}
+        
+        # add the label if a column is specified
+        if label:
+            label = xr.DataArray(list(geoms[label].iloc[f-1]), dims=['feature'], coords={'feature': zs.feature.values})
+            new_coords_kwargs["label"] = label
+        
+        zs = zs.assign_coords(**new_coords_kwargs)
+        zs = zs.set_index(feature=list(new_coords_kwargs.keys()))
+        
+        
     if method == "xvec":
         import xvec
 
@@ -202,6 +226,7 @@ def zonal_stats(
             stats=reducers,
             method="rasterize",
             all_touched=all_touched,
+            **kwargs
         )
     logging.info(f"Zonal stats method {method} tooks {time.time()-t_start}s.")
     del dataset
