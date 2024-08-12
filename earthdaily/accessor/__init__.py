@@ -130,21 +130,12 @@ class EarthDailyAccessorDataArray:
         return self._obj.sel(time=pos)
 
     def zonal_stats(
-        self,
-        geometry,
-        reducers: list = ["mean"],
-        label:str = None,
-        **kwargs
+        self, geometry, reducers: list = ["mean"], label: str = None, **kwargs
     ):
         from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
 
         geometry = GeometryManager(geometry).to_geopandas()
-        return zonal_stats(
-            self._obj,
-            geometry,
-            reducers=reducers,
-            **kwargs
-        )
+        return zonal_stats(self._obj, geometry, reducers=reducers, **kwargs)
 
     def lee_filter(self, window_size: int):
         return xr.apply_ufunc(
