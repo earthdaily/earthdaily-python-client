@@ -134,6 +134,7 @@ class EarthDailyAccessorDataArray:
         geometry,
         reducers: list = ["mean"],
         label:str = None,
+        smart_load = True,
         **kwargs
     ):
         from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
@@ -142,7 +143,8 @@ class EarthDailyAccessorDataArray:
         return zonal_stats(
             self._obj,
             geometry,
-            reducers=reducers,
+            reducers = reducers,
+            smart_load = smart_load,
             **kwargs
         )
 

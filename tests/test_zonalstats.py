@@ -30,20 +30,21 @@ class TestZonalStats(unittest.TestCase):
         # first pixel
 
         geometry = [
-            # Polygon([(0, 0), (0, 0.5), (0.5, 0.5), (0.5, 0)]),
             Polygon([(0, 0), (0, 1.2), (1.2, 1.2), (1.2, 0)]),
+            Polygon([(0, 0), (0, 0.5), (0.5, 0.5), (0.5, 0)]),
             Polygon([(1, 1), (9, 1), (9, 2.1), (1, 1)])
         ]
         # out of bound geom #            Polygon([(10,10), (10,11), (11,11), (11,10)])]
         gdf = gpd.GeoDataFrame({"geometry": geometry}, crs="EPSG:4326")
-        gdf.index = ['ok','ok']
+        gdf.index = ['ok1', 'nok', 'ok2']
+        gdf['label'] = [1, 1, 5]
         self.gdf = gdf
         self.datacube = ds
 
 
     def test_basic(self):
         zonalstats = earthdaily.earthdatastore.cube_utils.zonal_stats(
-            self.datacube, self.gdf, method="numpy", reducers=["min", "max"], all_touched=False)
+            self.datacube, self.gdf, method="numpy", reducers=["min", "max"], all_touched=False, label="label")
         for operation in ["min", "max"]:
             self._check_results(
                 zonalstats["first_var"].sel(zonal_statistics=operation).values, operation=operation
