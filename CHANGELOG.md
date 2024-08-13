@@ -8,7 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `zonal_stats` now uses `xvec` instead of geocube.
+- `zonal_stats` now uses homemade `numpy` method. `smart_load` is set to 
+default when using accessor. It loads the maximum of time (time dimension)
+in memory in order to speed up the process. Statistics method (min, max...)
+must by specified in the `reducers` argument.
 - default `EDS_API_URL` from [https://api.eds.earthdaily.com/archive/v1/stac/v1](https://api.eds.earthdaily.com/archive/v1/stac/v1) to 
 [https://api.earthdaily.com/platform/v1/stac](https://api.earthdaily.com/platform/v1/stac)
 
