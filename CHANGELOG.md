@@ -5,11 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [0.2.4] - 2024-07-30
+## [0.2.4] - 2024-08-13
 
 ### Changed
 
-- `zonal_stats` now uses `xvec` instead of geocube.
+- `zonal_stats` now uses homemade `numpy` method. Using the accessor 
+`smart_load` is set by default to `True`. stats methods are given to 
+the  `reducers` argument.
 
 
 ## [0.2.3] - 2024-07-23
