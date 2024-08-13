@@ -132,17 +132,36 @@ class EarthDailyAccessorDataArray:
     def zonal_stats(
         self,
         geometry,
-        operations: list = ["mean"],
-        raise_missing_geometry: bool = False,
+        reducers: list = ["mean"],
+        label: str = None,
+        smart_load=True,
+        **kwargs,
     ):
+        """
+        Zonal stats from dtacube
+
+        Parameters
+        ----------
+        geometry : str,gpd.GeoDataFrame
+            A geometry (wkt, geopandas...)
+        stats : list, optional
+            The default is ["mean"].
+        raise_missing_geometry : bool, optional
+            DESCRIPTION. The default is False.
+        **kwargs : dict
+            Any kwargs for xvec.zonal_stats.
+
+        Returns
+        -------
+        xr.dataset
+            With new dimension "zonal_statistics" and "geometry".
+
+        """
         from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
 
         geometry = GeometryManager(geometry).to_geopandas()
         return zonal_stats(
-            self._obj,
-            geometry,
-            operations=operations,
-            raise_missing_geometry=raise_missing_geometry,
+            self._obj, geometry, reducers=reducers, smart_load=smart_load, **kwargs
         )
 
     def lee_filter(self, window_size: int):

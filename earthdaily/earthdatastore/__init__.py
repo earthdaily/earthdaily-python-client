@@ -60,6 +60,7 @@ def _parallel_search(func):
     def _search(*args, **kwargs):
         from joblib import Parallel, delayed
 
+        t0 = time.time()
         kwargs.setdefault("batch_days", "auto")
         batch_days = kwargs.get("batch_days", None)
         datetime = kwargs.get("datetime", None)
@@ -79,6 +80,7 @@ def _parallel_search(func):
                     raise _no_item_msg
         if not need_parallel:
             items = func(*args, **kwargs)
+        logging.info(f"Search/load items : {np.round(time.time()-t0,3)}s.")
         return items
 
     return _search
@@ -795,6 +797,7 @@ class Auth:
         cross_calibration_collection: (None | str) = None,
         properties: (bool | str | list) = False,
         groupby_date: str = "mean",
+        cloud_search_kwargs={},
         **kwargs,
     ) -> xr.Dataset:
         """
@@ -995,7 +998,9 @@ class Auth:
                     "ag_cloud_mask": {"agriculture-cloud-mask": "ag_cloud_mask"},
                     "cloud_mask": {"cloud-mask": "cloud_mask"},
                 }
-                acm_items = self.find_cloud_mask_items(items, cloudmask=mask_with)
+                acm_items = self.find_cloud_mask_items(
+                    items, cloudmask=mask_with, **cloud_search_kwargs
+                )
                 acm_datacube = datacube(
                     acm_items,
                     intersects=intersects,
@@ -1055,7 +1060,7 @@ class Auth:
             n_pixels_as_labels = xy - null_pixels
 
             xr_datacube = xr_datacube.assign_coords(
-                {"clear_pixels": ("time", n_pixels_as_labels.load().values)}
+                {"clear_pixels": ("time", n_pixels_as_labels.data)}
             )
 
             xr_datacube = xr_datacube.assign_coords(
@@ -1063,13 +1068,18 @@ class Auth:
                     "clear_percent": (
                         "time",
                         np.multiply(
-                            xr_datacube["clear_pixels"].values
-                            / xr_datacube.attrs["usable_pixels"],
+                            np.divide(
+                                xr_datacube["clear_pixels"].data,
+                                xr_datacube.attrs["usable_pixels"],
+                            ),
                             100,
                         ).astype(np.int8),
                     )
                 }
             )
+
+            xr_datacube["clear_pixels"] = xr_datacube["clear_pixels"].load()
+            xr_datacube["clear_percent"] = xr_datacube["clear_percent"].load()
         if mask_with:
             xr_datacube = xr_datacube.drop(mask_with)
         if clear_cover:
@@ -1253,7 +1263,9 @@ class Auth:
             raise _no_item_msg
         return items_collection
 
-    def find_cloud_mask_items(self, items_collection, cloudmask="ag_cloud_mask"):
+    def find_cloud_mask_items(
+        self, items_collection, cloudmask="ag_cloud_mask", **kwargs
+    ):
         """
         Search the catalog for the ag_cloud_mask items matching the given items_collection.
         The ag_cloud_mask items are searched in the `ag_cloud_mask_collection_id` collection using the
@@ -1293,9 +1305,9 @@ class Auth:
         for items_start_idx in range(0, len(ids_), step):
             items = self.search(
                 collections=collections,
-                # intersects=self.intersects,
                 ids=ids_[items_start_idx : items_start_idx + step],
                 limit=step,
+                **kwargs,
             )
             items_list.extend(list(items))
         return ItemCollection(items_list)
