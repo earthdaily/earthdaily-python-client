@@ -7,7 +7,7 @@ import xarray as xr
 from rasterio.enums import Resampling
 from shapely.geometry import box
 from .geometry_manager import GeometryManager
-from ._zonal import zonal_stats, zonal_stats_numpy
+from ._zonal import zonal_stats
 from .harmonizer import Harmonizer
 from .asset_mapper import AssetMapper
 import rioxarray

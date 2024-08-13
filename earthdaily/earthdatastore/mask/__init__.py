@@ -130,12 +130,12 @@ class Mask:
         if self._obj.attrs.get("usable_pixels", None) is None:
             self.compute_available_pixels()
 
-        n_pixels_as_labels = cloudmask_array.isin(labels).sum(dim=("x", "y")).values
+        n_pixels_as_labels = cloudmask_array.isin(labels).sum(dim=("x", "y"))
         if labels_are_clouds:
             n_pixels_as_labels = self._obj.attrs["usable_pixels"] - n_pixels_as_labels
 
         self._obj = self._obj.assign_coords(
-            {"clear_pixels": ("time", n_pixels_as_labels)}
+            {"clear_pixels": ("time", n_pixels_as_labels.data)}
         )
 
         self._obj = self._obj.assign_coords(
@@ -143,12 +143,15 @@ class Mask:
                 "clear_percent": (
                     "time",
                     np.multiply(
-                        n_pixels_as_labels / self._obj.attrs["usable_pixels"],
+                        self._obj["n_pixels_as_labels"]
+                        / self._obj.attrs["usable_pixels"],
                         100,
                     ).astype(np.int8),
                 )
             }
         )
+        self._obj["clear_pixels"] = self._obj["clear_pixels"].load()
+        self._obj["clear_percent"] = self._obj["clear_percent"].load()
 
         return self._obj
 
