@@ -4,13 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.4] - 2024-08-13
-
 ## [0.2.4] - 2024-07-30
 
 ### Changed
 
 - `zonal_stats` now uses `xvec` instead of geocube.
+- default `EDS_API_URL` from [https://api.eds.earthdaily.com/archive/v1/stac/v1](https://api.eds.earthdaily.com/archive/v1/stac/v1) to 
+[https://api.earthdaily.com/platform/v1/stac](https://api.earthdaily.com/platform/v1/stac)
 
 
 ## [0.2.3] - 2024-07-23
