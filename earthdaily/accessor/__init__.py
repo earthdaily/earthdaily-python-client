@@ -163,7 +163,6 @@ class EarthDailyAccessorDataArray:
         return zonal_stats(
             self._obj, geometry, reducers=reducers, smart_load=smart_load, **kwargs
         )
-        return zs
 
     def lee_filter(self, window_size: int):
         return xr.apply_ufunc(
