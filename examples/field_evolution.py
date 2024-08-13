@@ -62,6 +62,6 @@ plt.show()
 zonal_stats = pivot_cube.ed.zonal_stats(pivot, ['mean','max','min'])
 
 zonal_stats.isel(feature=0).to_array(dim="band").plot.line(
-    x="time", col="band", hue="stats", col_wrap=3
+    x="time", col="band", hue="zonal_statistics", col_wrap=3
 )
 plt.show()
