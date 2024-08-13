@@ -137,8 +137,7 @@ class Mask:
         self._obj = self._obj.assign_coords(
             {"clear_pixels": ("time", n_pixels_as_labels.data)}
         )
-        
-        
+
         self._obj = self._obj.assign_coords(
             {
                 "clear_percent": (
