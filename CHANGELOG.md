@@ -6,10 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.4] - 2024-08-13
 
+## [0.2.4] - 2024-07-30
+
 ### Changed
 
-- `zonal_stats` now uses homemade `numpy` method. Per default `smart_load` is
-set to `True` in the accessor to load in memory the maximum of dates.
+- `zonal_stats` now uses `xvec` instead of geocube.
 
 
 ## [0.2.3] - 2024-07-23
