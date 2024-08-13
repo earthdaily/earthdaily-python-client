@@ -148,6 +148,7 @@ def zonal_stats(
         DESCRIPTION.
 
     """
+
     def _loop_time_chunks(dataset, method, smart_load, time_chunks):
         logging.debug(
             f"Batching every {time_chunks} dates ({np.ceil(dataset.time.size/time_chunks).astype(int)} loops)."
