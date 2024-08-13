@@ -133,19 +133,15 @@ class EarthDailyAccessorDataArray:
         self,
         geometry,
         reducers: list = ["mean"],
-        label:str = None,
-        smart_load = True,
-        **kwargs
+        label: str = None,
+        smart_load=True,
+        **kwargs,
     ):
         from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
 
         geometry = GeometryManager(geometry).to_geopandas()
         return zonal_stats(
-            self._obj,
-            geometry,
-            reducers = reducers,
-            smart_load = smart_load,
-            **kwargs
+            self._obj, geometry, reducers=reducers, smart_load=smart_load, **kwargs
         )
 
     def lee_filter(self, window_size: int):
