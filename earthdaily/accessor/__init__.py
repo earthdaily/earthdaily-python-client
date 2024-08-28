@@ -134,7 +134,7 @@ class EarthDailyAccessorDataArray:
         geometry,
         reducers: list = ["mean"],
         label: str = None,
-        lazy_load = True,
+        lazy_load=True,
         **kwargs,
     ):
         """
@@ -161,7 +161,12 @@ class EarthDailyAccessorDataArray:
 
         geometry = GeometryManager(geometry).to_geopandas()
         return zonal_stats(
-            self._obj, geometry, reducers=reducers, smart_load=not lazy_load, label=label, **kwargs
+            self._obj,
+            geometry,
+            reducers=reducers,
+            smart_load=not lazy_load,
+            label=label,
+            **kwargs,
         )
 
     def lee_filter(self, window_size: int):

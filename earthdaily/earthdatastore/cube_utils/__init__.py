@@ -15,7 +15,8 @@ from functools import wraps
 import json
 
 __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
-_auto_mask_order = ['cloudmask', 'ag_cloud_mask', 'native']
+_auto_mask_order = ["cloudmask", "ag_cloud_mask", "native"]
+
 
 def _datacube_masks(method, *args, **kwargs):
     @wraps(method)
