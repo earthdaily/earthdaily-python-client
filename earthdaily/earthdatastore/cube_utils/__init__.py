@@ -15,12 +15,14 @@ from functools import wraps
 import json
 
 __all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
-
+_auto_mask_order = ['cloudmask', 'ag_cloud_mask', 'native']
 
 def _datacube_masks(method, *args, **kwargs):
     @wraps(method)
     def _impl(self, *args, **kwargs):
         mask_with = kwargs.get("mask_with", None)
+        if isinstance(mask_with, str) and mask_with == "auto":
+            mask_with = _auto_mask_order
         if isinstance(mask_with, list):
             kwargs.pop("mask_with")
             for idx, mask in enumerate(mask_with):

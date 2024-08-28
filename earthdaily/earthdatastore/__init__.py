@@ -533,6 +533,8 @@ class Auth:
         dict
            Dictionary containing credentials
         """
+        if isinstance(json_path, dict):
+            return json_path
         with json_path.open() as file_object:
             config = json.load(file_object)
         return config

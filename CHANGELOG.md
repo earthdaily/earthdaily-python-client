@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.5] - 2024-08-13
+
+### Changed
+
+- `zonal_stats` `smart_load` is replaced with `lazy_load` to be more consistant
+with other libraries.
+- `mask_with` from datacube supports now `auto` parameters. It will ask first the
+cloudmask ML, then is not available the ag_cloudmask, and at last the native one.
+
 ## [0.2.4] - 2024-08-13
 
 ### Changed
