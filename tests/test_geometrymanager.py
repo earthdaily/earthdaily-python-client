@@ -46,6 +46,7 @@ class TestGeometryManager(unittest.TestCase):
           ]
         }
         gM = geometry_manager.GeometryManager(geom)
+        
     def test_two_geometry_geojson(self):
         geom = {
           "type": "FeatureCollection",
