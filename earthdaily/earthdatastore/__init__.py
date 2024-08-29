@@ -904,7 +904,7 @@ class Auth:
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
             self.intersects = intersects
-            
+
         # if mask_with, need to add assets or to get mask item id
         if mask_with:
             if mask_with not in mask._available_masks:
@@ -1046,7 +1046,6 @@ class Auth:
                 xr_datacube = xr.merge(
                     (xr_datacube, clouds_datacube), compat="override"
                 )
-                
 
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
