@@ -13,9 +13,9 @@ class GeometryManager:
         return self._obj
 
     def to_intersects(self, crs="EPSG:4326"):
-        return json.loads(self._obj.to_crs(crs).dissolve().geometry.to_json(drop_id=True))[
-            "features"
-        ][0]["geometry"]
+        return json.loads(
+            self._obj.to_crs(crs).dissolve().geometry.to_json(drop_id=True)
+        )["features"][0]["geometry"]
 
     def to_wkt(self, crs="EPSG:4326"):
         wkts = list(self._obj.to_crs(crs=crs).to_wkt()["geometry"])
