@@ -904,7 +904,7 @@ class Auth:
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
             self.intersects = intersects
-
+            
         # if mask_with, need to add assets or to get mask item id
         if mask_with:
             if mask_with not in mask._available_masks:
@@ -943,8 +943,8 @@ class Auth:
         # query the items
         items = self.search(
             collections=collections,
-            bbox=bbox,
-            intersects=intersects,
+            bbox=list(cube_utils.GeometryManager(intersects).to_bbox()),
+            # intersects=intersects,
             datetime=datetime,
             assets=assets,
             prefer_alternate=prefer_alternate,
@@ -985,7 +985,8 @@ class Auth:
             groupby_date=None,
             **kwargs,
         )
-
+        if intersects is not None:
+            xr_datacube = xr_datacube.ed.clip(intersects)
         # Create mask datacube and apply it to xr_datacube
         if mask_with:
             kwargs["dtype"] = "int8"
@@ -1032,8 +1033,7 @@ class Auth:
                 clouds_datacube = datacube(
                     items,
                     groupby_date=None,
-                    intersects=intersects,
-                    bbox=bbox,
+                    bbox=list(cube_utils.GeometryManager(intersects).to_bbox()),
                     assets=mask_assets,
                     resampling=0,
                     **kwargs,
@@ -1041,9 +1041,12 @@ class Auth:
                 clouds_datacube = cube_utils._match_xy_dims(
                     clouds_datacube, xr_datacube
                 )
+                if intersects is not None:
+                    clouds_datacube = clouds_datacube.ed.clip(intersects)
                 xr_datacube = xr.merge(
                     (xr_datacube, clouds_datacube), compat="override"
                 )
+                
 
             Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
             xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
