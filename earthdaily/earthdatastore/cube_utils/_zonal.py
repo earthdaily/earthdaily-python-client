@@ -119,7 +119,7 @@ def zonal_stats(
     reducers: list = ["mean"],
     all_touched=True,
     label=None,
-    buffer_meters:int|float|None=None,
+    buffer_meters: int | float | None = None,
     **kwargs,
 ):
     """
@@ -175,13 +175,12 @@ def zonal_stats(
 
     t_start = time.time()
     dataset = dataset.rio.clip_box(*geoms.to_crs(dataset.rio.crs).total_bounds)
-    if isinstance(buffer_meters, float|int):
+    if isinstance(buffer_meters, float | int):
         input_crs = geoms.crs
         geoms = geoms.to_crs({"proj": "cea"})
-        geoms['geometry_original'] = geoms.geometry
+        geoms["geometry_original"] = geoms.geometry
         geoms.geometry = geoms.buffer(buffer_meters)
         geoms.to_crs(input_crs)
-    
 
     if method == "numpy":
         feats, yx_pos = _rasterize(geoms, dataset, all_touched=all_touched)
@@ -212,8 +211,8 @@ def zonal_stats(
         )
 
         # create the WKT geom
-        if isinstance(buffer_meters, float|int):
-            geoms.geometry = geoms['geometry_original']
+        if isinstance(buffer_meters, float | int):
+            geoms.geometry = geoms["geometry_original"]
         geometry = xr.DataArray(
             list(geoms.iloc[f - 1].to_crs("EPSG:4326").geometry.to_wkt()),
             dims=["feature"],
