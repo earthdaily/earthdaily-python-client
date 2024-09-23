@@ -943,7 +943,9 @@ class Auth:
         # query the items
         items = self.search(
             collections=collections,
-            bbox=list(cube_utils.GeometryManager(intersects).to_bbox()) if bbox is None else bbox,
+            bbox=list(cube_utils.GeometryManager(intersects).to_bbox())
+            if bbox is None
+            else bbox,
             datetime=datetime,
             assets=assets,
             prefer_alternate=prefer_alternate,
@@ -990,8 +992,8 @@ class Auth:
         if mask_with:
             if "geobox" not in kwargs:
                 kwargs["geobox"] = xr_datacube.odc.geobox
-            kwargs.pop('crs','')
-            kwargs.pop('resolution','')
+            kwargs.pop("crs", "")
+            kwargs.pop("resolution", "")
             kwargs["dtype"] = "int8"
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
@@ -1024,7 +1026,6 @@ class Auth:
                         collections[0]
                     ]: mask._native_mask_def_mapping[collections[0]]
                 }
-
 
                 clouds_datacube = datacube(
                     items,
