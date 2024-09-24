@@ -1303,6 +1303,8 @@ class Auth:
         ids_ = [x for n in (items_id.values()) for x in n]
         items_list = []
         step = 100
+        kwargs.setdefault('prefer_alternate','download')
+
         for items_start_idx in range(0, len(ids_), step):
             items = self.search(
                 collections=collections,
