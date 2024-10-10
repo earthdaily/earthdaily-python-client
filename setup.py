@@ -38,7 +38,7 @@ setup(
         "spyndex",
         "dask-image",
         "numba",
-        "geocube",
+        "urllib3",
         "click",
         "toml",
     ],
