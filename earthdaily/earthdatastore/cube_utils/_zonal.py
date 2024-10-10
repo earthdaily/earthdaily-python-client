@@ -75,7 +75,7 @@ def _zonal_stats_numpy(
         for idx in range(len(positions)):
             field_stats = []
             for reducer in reducers:
-                field_arr = dataset[..., *positions[idx]]
+                field_arr = dataset[(...,) + tuple(positions[idx])]
                 func = f"nan{reducer}" if hasattr(np, f"nan{reducer}") else reducer
                 field_arr = getattr(np, func)(field_arr, axis=-1)
                 field_stats.append(field_arr)
