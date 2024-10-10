@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.earthdatastore.cube_utils._zonal &mdash; earthdaily 0.2.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b76e3c8a" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=29c81e07"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+              <div class="version">
+                0.2.11
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../earthdaily.html">earthdaily package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="../cube_utils.html">earthdaily.earthdatastore.cube_utils</a></li>
+      <li class="breadcrumb-item active">earthdaily.earthdatastore.cube_utils._zonal</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for earthdaily.earthdatastore.cube_utils._zonal</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Fri Oct 13 09:32:31 2023</span>
+
+<span class="sd">@author: nkk</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">rasterio</span> <span class="kn">import</span> <span class="n">features</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">tqdm</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">custom_reducers</span>
+<span class="kn">from</span> <span class="nn">.preprocessing</span> <span class="kn">import</span> <span class="n">rasterize</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_M</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">csr_matrix</span><span class="p">((</span><span class="n">cols</span><span class="p">,</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">cols</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_indices_sparse</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">_compute_M</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">M</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_np_mode</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">values</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">isnan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">values</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="o">~</span><span class="n">isnan</span><span class="p">],</span> <span class="n">counts</span><span class="p">[</span><span class="o">~</span><span class="n">isnan</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">counts</span><span class="p">)]</span>
+
+
+<span class="k">def</span> <span class="nf">datacube_time_stats</span><span class="p">(</span><span class="n">datacube</span><span class="p">,</span> <span class="n">operations</span><span class="p">):</span>
+    <span class="n">datacube</span> <span class="o">=</span> <span class="n">datacube</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">operations</span><span class="p">:</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">datacube</span><span class="p">,</span> <span class="n">operation</span><span class="p">)(</span><span class="o">...</span><span class="p">)</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stat</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;stats&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">operation</span><span class="p">]}))</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;stats&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stats</span>
+
+
+<span class="k">def</span> <span class="nf">_rasterize</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">all_touched</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">feats</span> <span class="o">=</span> <span class="n">rasterize</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">all_touched</span><span class="o">=</span><span class="n">all_touched</span><span class="p">)</span>
+    <span class="n">yx_pos</span> <span class="o">=</span> <span class="n">_indices_sparse</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">feats</span><span class="p">,</span> <span class="n">yx_pos</span>
+
+
+<span class="k">def</span> <span class="nf">_memory_time_chunks</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">psutil</span>
+
+    <span class="k">if</span> <span class="n">memory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">memory</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">available</span> <span class="o">/</span> <span class="mf">1e6</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hoping to use a maximum memory </span><span class="si">{</span><span class="n">memory</span><span class="si">}</span><span class="s2">Mo.&quot;</span><span class="p">)</span>
+    <span class="n">nbytes_per_date</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">nbytes</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">)</span> <span class="o">/</span> <span class="n">dataset</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="mi">3</span>
+    <span class="n">max_time_chunks</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">nbytes_per_date</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">time_chunks</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">max_time_chunks</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
+    <span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Mo per date : </span><span class="si">{</span><span class="n">nbytes_per_date</span><span class="si">:</span><span class="s2">0.2f</span><span class="si">}</span><span class="s2">, total : </span><span class="si">{</span><span class="p">(</span><span class="n">nbytes_per_date</span><span class="o">*</span><span class="n">dataset</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="si">:</span><span class="s2">0.2f</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time chunks : </span><span class="si">{</span><span class="n">time_chunks</span><span class="si">}</span><span class="s2"> (on </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2"> time).&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">time_chunks</span>
+
+
+<span class="k">def</span> <span class="nf">_zonal_stats_numpy</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">reducers</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span> <span class="n">all_touched</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_zonal_stats_ufunc</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">reducers</span><span class="p">):</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)):</span>
+            <span class="n">field_stats</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">reducer</span> <span class="ow">in</span> <span class="n">reducers</span><span class="p">:</span>
+                <span class="n">field_arr</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[(</span><span class="o">...</span><span class="p">,)</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="n">idx</span><span class="p">])]</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;nan</span><span class="si">{</span><span class="n">reducer</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;nan</span><span class="si">{</span><span class="n">reducer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">reducer</span>
+                <span class="n">field_arr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">func</span><span class="p">)(</span><span class="n">field_arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">field_stats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field_arr</span><span class="p">)</span>
+            <span class="n">field_stats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">field_stats</span><span class="p">)</span>
+            <span class="n">zs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field_stats</span><span class="p">)</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">zs</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">zs</span>
+
+    <span class="n">dask_ufunc</span> <span class="o">=</span> <span class="s2">&quot;parallelized&quot;</span>
+
+    <span class="n">zs</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">apply_ufunc</span><span class="p">(</span>
+        <span class="n">_zonal_stats_ufunc</span><span class="p">,</span>
+        <span class="n">dataset</span><span class="p">,</span>
+        <span class="n">vectorize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">dask</span><span class="o">=</span><span class="n">dask_ufunc</span><span class="p">,</span>
+        <span class="n">input_core_dims</span><span class="o">=</span><span class="p">[[</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">]],</span>
+        <span class="n">output_core_dims</span><span class="o">=</span><span class="p">[[</span><span class="s2">&quot;feature&quot;</span><span class="p">,</span> <span class="s2">&quot;zonal_statistics&quot;</span><span class="p">]],</span>
+        <span class="n">exclude_dims</span><span class="o">=</span><span class="nb">set</span><span class="p">([</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]),</span>
+        <span class="n">output_dtypes</span><span class="o">=</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">reducers</span><span class="o">=</span><span class="n">reducers</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="n">positions</span><span class="p">),</span>
+        <span class="n">dask_gufunc_kwargs</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;allow_rechunk&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;output_sizes&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">feature</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">),</span> <span class="n">zonal_statistics</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">reducers</span><span class="p">)</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="k">del</span> <span class="n">dataset</span>
+
+    <span class="k">return</span> <span class="n">zs</span>
+
+
+<div class="viewcode-block" id="zonal_stats">
+<a class="viewcode-back" href="../../../../earthdaily.earthdatastore.cube_utils.html#earthdaily.earthdatastore.cube_utils.zonal_stats">[docs]</a>
+<span class="k">def</span> <span class="nf">zonal_stats</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">geoms</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;numpy&quot;</span><span class="p">,</span>
+    <span class="n">smart_load</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">memory</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reducers</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+    <span class="n">all_touched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">buffer_meters</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Xr Zonal stats using np.nan functions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataset : xr.Dataset</span>
+<span class="sd">        DESCRIPTION.</span>
+<span class="sd">    geoms : TYPE</span>
+<span class="sd">        DESCRIPTION.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        &quot;xvec&quot; or &quot;numpy&quot;. The default is &quot;numpy&quot;.</span>
+<span class="sd">    smart_load : bool</span>
+<span class="sd">        Will load in memory the maximum of time and loop on it for &quot;numpy&quot;</span>
+<span class="sd">        method. The default is False.</span>
+<span class="sd">    memory : int, optional</span>
+<span class="sd">        Only for the &quot;numpy&quot; method, by default it will take the maximum memory</span>
+<span class="sd">        available. But in some cases it can be too much or too little.</span>
+<span class="sd">        The default is None.</span>
+<span class="sd">    reducers : list, optional</span>
+<span class="sd">        Any np.nan function (&quot;mean&quot; is &quot;np.nanmean&quot;). The default is [&#39;mean&#39;].</span>
+
+<span class="sd">    Yields</span>
+<span class="sd">    ------</span>
+<span class="sd">    zs : TYPE</span>
+<span class="sd">        DESCRIPTION.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_loop_time_chunks</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">smart_load</span><span class="p">,</span> <span class="n">time_chunks</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Batching every </span><span class="si">{</span><span class="n">time_chunks</span><span class="si">}</span><span class="s2"> dates (</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="o">/</span><span class="n">time_chunks</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="si">}</span><span class="s2"> loops).&quot;</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">time_idx</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">trange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">time_chunks</span><span class="p">):</span>
+            <span class="n">isel_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                <span class="n">time_idx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">((</span><span class="n">time_idx</span> <span class="o">+</span> <span class="n">time_chunks</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">isel_time</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">smart_load</span><span class="p">:</span>
+                <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Subdataset of </span><span class="si">{</span><span class="n">ds</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2"> dates loaded in memory in </span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span><span class="si">:</span><span class="s2">0.2f</span><span class="si">}</span><span class="s2">s.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="c1"># for method in tqdm.tqdm([&quot;np&quot;]):</span>
+            <span class="n">zs</span> <span class="o">=</span> <span class="n">_zonal_stats_numpy</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">reducers</span><span class="p">)</span>
+            <span class="n">zs</span> <span class="o">=</span> <span class="n">zs</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+            <span class="k">del</span> <span class="n">ds</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zonal stats computed in </span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span><span class="si">:</span><span class="s2">0.2f</span><span class="si">}</span><span class="s2">s.&quot;</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">zs</span>
+
+    <span class="n">t_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">clip_box</span><span class="p">(</span><span class="o">*</span><span class="n">geoms</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span><span class="o">.</span><span class="n">total_bounds</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">buffer_meters</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">input_crs</span> <span class="o">=</span> <span class="n">geoms</span><span class="o">.</span><span class="n">crs</span>
+        <span class="n">geoms</span> <span class="o">=</span> <span class="n">geoms</span><span class="o">.</span><span class="n">to_crs</span><span class="p">({</span><span class="s2">&quot;proj&quot;</span><span class="p">:</span> <span class="s2">&quot;cea&quot;</span><span class="p">})</span>
+        <span class="n">geoms</span><span class="p">[</span><span class="s2">&quot;geometry_original&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geoms</span><span class="o">.</span><span class="n">geometry</span>
+        <span class="n">geoms</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">geoms</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">buffer_meters</span><span class="p">)</span>
+        <span class="n">geoms</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">input_crs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;numpy&quot;</span><span class="p">:</span>
+        <span class="n">feats</span><span class="p">,</span> <span class="n">yx_pos</span> <span class="o">=</span> <span class="n">_rasterize</span><span class="p">(</span><span class="n">geoms</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">all_touched</span><span class="o">=</span><span class="n">all_touched</span><span class="p">)</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">yx_pos</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">geoms</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span> <span class="k">for</span> <span class="n">position</span> <span class="ow">in</span> <span class="n">positions</span> <span class="k">if</span> <span class="n">position</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">yx_pos</span>
+        <span class="n">time_chunks</span> <span class="o">=</span> <span class="n">_memory_time_chunks</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">memory</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">smart_load</span><span class="p">:</span>
+            <span class="n">zs</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">z</span>
+                    <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">_loop_time_chunks</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">smart_load</span><span class="p">,</span> <span class="n">time_chunks</span><span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">zs</span> <span class="o">=</span> <span class="n">_zonal_stats_numpy</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">reducers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">zs</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="n">zonal_statistics</span><span class="o">=</span><span class="n">reducers</span><span class="p">)</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">zs</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">write_crs</span><span class="p">(</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+
+        <span class="c1"># keep only geom that have been found in the raster</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">feats</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">f</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">geoms</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">f</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;feature&quot;</span><span class="p">],</span> <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">zs</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">values</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># create the WKT geom</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">buffer_meters</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">geoms</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">geoms</span><span class="p">[</span><span class="s2">&quot;geometry_original&quot;</span><span class="p">]</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">geoms</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">f</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">to_wkt</span><span class="p">()),</span>
+            <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;feature&quot;</span><span class="p">],</span>
+            <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">zs</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">values</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="n">new_coords_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="n">geometry</span><span class="p">}</span>
+
+        <span class="c1"># add the label if a column is specified</span>
+        <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">geoms</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">f</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]),</span>
+                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;feature&quot;</span><span class="p">],</span>
+                <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="n">zs</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">values</span><span class="p">},</span>
+            <span class="p">)</span>
+            <span class="n">new_coords_kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
+
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">zs</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span><span class="o">**</span><span class="n">new_coords_kwargs</span><span class="p">)</span>
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">zs</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">feature</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">new_coords_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;xvec&quot;</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">xvec</span>
+
+        <span class="n">zs</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">xvec</span><span class="o">.</span><span class="n">zonal_stats</span><span class="p">(</span>
+            <span class="n">geoms</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+            <span class="n">y_coords</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="n">x_coords</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+            <span class="n">stats</span><span class="o">=</span><span class="n">reducers</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rasterize&quot;</span><span class="p">,</span>
+            <span class="n">all_touched</span><span class="o">=</span><span class="n">all_touched</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zonal stats method </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> tooks </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t_start</span><span class="si">}</span><span class="s2">s.&quot;</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">dataset</span>
+    <span class="k">return</span> <span class="n">zs</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+earthdaily.earthdatastore.cube\_utils.geometry\_manager module
+==============================================================
+
+.. automodule:: earthdaily.earthdatastore.cube_utils.geometry_manager
+   :members:
+   :undoc-members:
+   :show-inheritance:

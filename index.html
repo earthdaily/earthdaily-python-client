@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily documentation &mdash; earthdaily 0.2.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=29c81e07"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Gallery" href="_auto_examples/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            earthdaily
+          </a>
+              <div class="version">
+                0.2.11
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="earthdaily.html">earthdaily package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">earthdaily documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="earthdaily-documentation">
+<h1>earthdaily documentation<a class="headerlink" href="#earthdaily-documentation" title="Link to this heading"></a></h1>
+<aside class="sidebar">
+<p class="sidebar-title">About earthdaily</p>
+<div class="line-block">
+<div class="line"><strong>Author</strong>: EarthDaily DataScience Team</div>
+<div class="line"><strong>Source code</strong>: <a class="reference external" href="https://github.com/GEOSYS/earthdaily">Git project</a></div>
+<div class="line"><strong>Bug tracker</strong>: <a class="reference external" href="https://github.com/GEOSYS/earthdaily/issues">Git issues</a></div>
+<div class="line"><strong>Generated</strong>: Oct 10, 2024
+<strong>License</strong>: MIT</div>
+<div class="line"><strong>Version</strong>: 0.2.11</div>
+</div>
+</aside>
+<div id="top"></div>
+<!-- PROJECT SHIELDS -->
+<!--
+*** See the bottom of this document for the declaration of the reference variables
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+<!-- PROJECT LOGO -->
+<br />
+<p>
+  <h1 >EarthDaily Python Client</h3>
+  <p>
+    Your gateway to the Earth Data Store STAC Catalog.
+    <br />
+    <a href="https://earthdailyagro.com/"><strong>Who we are</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/earthdaily/earthdaily-python-client/">Project description</a>
+    ·
+    <a href="https://github.com/earthdaily/earthdaily-python-client/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/earthdaily/earthdaily-python-client/issues">Request Feature</a>
+  </p>
+</p>
+<div>
+<p><a class="reference external" href="https://badge.fury.io/py/earthdaily"><img alt="PyPI version" src="https://badge.fury.io/py/earthdaily.png" /></a>
+<a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/"><img alt="Documentation" src="https://img.shields.io/badge/Documentation-html-green.svg" /></a>
+<a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/actions/workflows/pytest-prod.yaml"><img alt="pytest-main" src="https://github.com/earthdaily/earthdaily-python-client/actions/workflows/pytest-prod.yaml/badge.svg" /></a></p>
+</div>
+<!--[![Stargazers][GitStars-shield]][GitStars-url]-->
+<!--[![Forks][forks-shield]][forks-url]-->
+<!--[![Stargazers][stars-shield]][stars-url]-->
+<!-- TABLE OF CONTENTS -->
+<details open>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#support-development">Support development</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#copyrights">Copyrights</a></li>
+  </ol>
+</details>
+<!-- ABOUT THE PROJECT -->
+<section id="about-the-project">
+<h2>About The Project<a class="headerlink" href="#about-the-project" title="Link to this heading"></a></h2>
+<p>In the realm of geospatial data analysis and Earth observation, the EarthDaily Python package emerges as a powerful toolset that seamlessly connects you to the vast and invaluable Stac catalog Earth Data Store. This package is designed with the vision of simplifying and optimizing your workflow, ensuring that you can harness the full potential of Earth observation data with ease and efficiency.</p>
+<p>Our package is built upon a foundation of best practices, meticulously crafted to elevate your data analysis experience. With EarthDaily, you can effortlessly navigate the complexities of datacube creation, including crucial processes like conversion to reflectance and automatic clipping to your area of interest. Additionally, we’ve taken care to make EarthDaily fully compatible with Dask, enabling you to scale your data preprocessing tasks with confidence and precision.</p>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<p>See <a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/">documentation</a> for more information</p>
+</section>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<p>Make sure you have valid EDS credentials. If you need to get trial access, please contact us.</p>
+<p>This package has been tested on Python 3.10, 3.11 and 3.12.</p>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h3>
+<section id="from-pypi-using-pip">
+<h4>From pypi, using pip<a class="headerlink" href="#from-pypi-using-pip" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">earthdaily</span></code></p>
+</section>
+<section id="from-repository-using-mamba-conda-and-pip">
+<h4>From repository, using mamba, conda and pip<a class="headerlink" href="#from-repository-using-mamba-conda-and-pip" title="Link to this heading"></a></h4>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Clone<span class="w"> </span>the<span class="w"> </span>repository<span class="w"> </span>and<span class="w"> </span>go<span class="w"> </span>inside
+<span class="go">git clone git@github.com:earthdaily/earthdaily-python-client.git</span>
+<span class="go">cd earthdaily-python-client</span>
+
+<span class="gp"># </span>Create<span class="w"> </span>a<span class="w"> </span>virtual<span class="w"> </span>environment<span class="w"> </span>named<span class="w"> </span>earthdaily<span class="w"> </span>and<span class="w"> </span>install<span class="w"> </span>package<span class="w"> </span>dependencies
+<span class="go">mamba env create -n earthdaily -f requirements.yml</span>
+<span class="go">conda activate earthdaily</span>
+
+<span class="gp"># </span>Install<span class="w"> </span>package<span class="w"> </span><span class="k">in</span><span class="w"> </span>editable<span class="w"> </span>mode
+<span class="go">pip install -e .</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="authentication">
+<h3>Authentication<a class="headerlink" href="#authentication" title="Link to this heading"></a></h3>
+<p>In order to generate a credentials file with the right variables and layout, you can use the <code class="docutils literal notranslate"><span class="pre">copy-earthdaily-credentials-template</span></code> script that is installed along the earthdaily package. It can generate credentials file as JSON, TOML or .env.
+Generate the credentials file of your liking and edit it to insert your credentials.</p>
+<section id="from-the-default-credentials-file">
+<h4>From the default credentials file<a class="headerlink" href="#from-the-default-credentials-file" title="Link to this heading"></a></h4>
+<p>Create a TOML credentials file in the default location:</p>
+<ul class="simple">
+<li><p>“$HOME/.earthdaily/credentials” on linux</p></li>
+<li><p>“$USERPROFILE/.earthdaily/credentials” on Windows</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">copy-earthdaily-credentials-template --default</span>
+</pre></div>
+</div>
+<p>Edit it to insert your credentials.
+The following code will automatically find and use the credentials for authentification.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">earthdaily</span> <span class="kn">import</span> <span class="n">EarthDataStore</span>
+<span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="from-a-json-file">
+<h4>From a JSON file<a class="headerlink" href="#from-a-json-file" title="Link to this heading"></a></h4>
+<p>Authentication credentials can be given as an input JSON file.
+You can generate a JSON credentials file with the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">copy-earthdaily-credentials-template --json &quot;/path/to/the/credentials_file.json&quot;</span>
+</pre></div>
+</div>
+<p>Edit it to insert your credentials.
+Then use it as input for authentification:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">earthdaily</span> <span class="kn">import</span> <span class="n">EarthDataStore</span>
+<span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">(</span><span class="n">json_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/path/to/the/credentials_file.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="from-a-toml-file">
+<h4>From a TOML file<a class="headerlink" href="#from-a-toml-file" title="Link to this heading"></a></h4>
+<p>Authentication credentials can be given as input with a TOML file.
+You can generate a TOML credentials file with the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">copy-earthdaily-credentials-template --toml &quot;/path/to/the/credentials_file&quot;</span>
+</pre></div>
+</div>
+<p>Edit it to insert your credentials.
+Then use it as input for authentification:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">earthdaily</span> <span class="kn">import</span> <span class="n">EarthDataStore</span>
+<span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">(</span><span class="n">toml_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/path/to/the/credentials_file&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="from-environment-variables">
+<h4>From environment variables<a class="headerlink" href="#from-environment-variables" title="Link to this heading"></a></h4>
+<p>Authentication credentials can be automatically parsed from environment variables.
+As a convenience python-dotenv is supported.</p>
+<p>You can generate a .env credentials file with the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">copy-earthdaily-credentials-template --env &quot;/path/to/the/.env&quot;</span>
+</pre></div>
+</div>
+<p>Or you can copy the <code class="docutils literal notranslate"><span class="pre">.env.sample</span></code> file from the repository and rename it to <code class="docutils literal notranslate"><span class="pre">.env</span></code>.
+Edit it to insert your credentials.
+Then add to your script/notebook:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+
+<span class="n">load_dotenv</span><span class="p">()</span>  <span class="c1"># take environment variables from .env.</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h3>
+<p>See the documentation for more information.</p>
+</section>
+<section id="support-development">
+<h3>Support development<a class="headerlink" href="#support-development" title="Link to this heading"></a></h3>
+<p>If you find this package useful, please consider supporting its development.</p>
+<!-- CONTRIBUTING -->
+</section>
+</section>
+<section id="id1">
+<h2>Support development<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>If this project has been useful, that it helped you or your business to save precious time, don’t hesitate to give it a star.</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>Distributed under the MIT License.</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
+</section>
+<section id="contact">
+<h2>Contact<a class="headerlink" href="#contact" title="Link to this heading"></a></h2>
+<p>For any additonal information, please <a class="reference external" href="mailto:sales&#37;&#52;&#48;earthdailyagro&#46;com">email us</a>.</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
+</section>
+<section id="copyrights">
+<h2>Copyrights<a class="headerlink" href="#copyrights" title="Link to this heading"></a></h2>
+<p>© EarthDaily | All Rights Reserved.</p>
+<p align="right">(<a href="#top">back to top</a>)</p></section>
+<div class="toctree-wrapper compound">
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">earthdaily documentation</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_auto_examples/index.html">Gallery</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="earthdaily.html">earthdaily package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.accessor.html">earthdaily.accessor package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.datasets.html">earthdaily.datasets package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.html">earthdaily.earthdatastore package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.utils.html">earthdaily.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#module-earthdaily">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.html#earthdaily.EarthDataStore"><code class="docutils literal notranslate"><span class="pre">EarthDataStore()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#adding-features-or-fixing-bugs">Adding features or fixing bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CONTRIBUTING.html#doc-building">Doc building</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id1">[0.2.11] - 2024-10-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#fixed">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id2">[0.2.10] - 2024-10-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id3">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id4">[0.2.9] - 2024-09-24</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id5">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id6">[0.2.8] - 2024-09-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id7">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id8">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id9">[0.2.7] - 2024-08-29</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#changed">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id10">[0.2.6] - 2024-08-29</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id12">[0.2.5] - 2024-08-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id13">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id14">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id15">[0.2.4] - 2024-08-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id16">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id17">[0.2.3] - 2024-07-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id18">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id19">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id20">[0.2.2] - 2024-07-03</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id21">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id22">[0.2.1] - 2024-06-24</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id23">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id24">[0.2.0] - 2024-06-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id25">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id26">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id27">[0.1.7] - 2024-06-14</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id28">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id29">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id30">[0.1.6] - 2024-06-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id31">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id32">[0.1.5] - 2024-06-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id33">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id34">[0.1.4] - 2024-05-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id35">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id36">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id37">[0.1.3] - 2024-05-22</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id38">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id39">[0.1.2] - 2024-05-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id40">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id41">[0.1.1] - 2024-05-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id42">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id43">[0.1.0] - 2024-04-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id44">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id45">[0.0.17] - 2024-04-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id46">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id47">[0.0.16] - 2024-04-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id48">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id49">[0.0.15] - 2024-04-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id50">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id51">[0.0.14] - 2024-04-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id52">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id53">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id54">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#removed">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id55">[0.0.13] - 2024-03-06</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id56">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id57">[0.0.12] - 2024-03-06</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id58">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id59">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id60">[0.0.11] - 2024-03-06</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id61">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id62">[0.0.10] - 2024-03-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id63">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id64">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id65">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id66">[0.0.9] - 2024-02-29</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id67">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id68">[0.0.8] - 2024-02-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id69">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id70">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id71">[0.0.7] - 2024-02-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id72">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id73">[0.0.6] - 2024-02-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id74">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id75">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id76">[0.0.5] - 2024-02-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id77">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id78">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id79">[0.0.4] - 2024-01-24</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id80">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id81">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id82">[0.0.3] - 2023-12-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id83">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id84">[0.0.2] - 2023-12-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id85">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id86">[0.0.1] - 2023-12-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id87">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id88">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#rc9-2023-12-12">[0.0.1-rc9] - 2023-12-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id89">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id90">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id91">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#rc8-2023-07-12">[0.0.1-rc8] - 2023-07-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id92">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id93">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#rc7-2023-11-22">[0.0.1-rc7] - 2023-11-22</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id94">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#rc6-2023-11-10">[0.0.1-rc6] - 2023-11-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id95">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#rc5-2023-11-10">[0.0.1-rc5] - 2023-11-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id96">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id97">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id98">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#rc4-2023-10-19">[0.0.1-rc4] 2023-10-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id99">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#rc3-2023-10-18">[0.0.1-rc3] 2023-10-18</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id100">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id101">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id102">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#rc2-2023-10-12">[0.0.1-rc2] 2023-10-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id103">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id104">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#rc1-2023-10-12">[0.0.1-rc1] 2023-10-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id105">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id106">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#beta-2023-09-20">[0.0.1-beta] 2023-09-20</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id107">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="_auto_examples/index.html" class="btn btn-neutral float-right" title="Gallery" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

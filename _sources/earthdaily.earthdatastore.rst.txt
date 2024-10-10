@@ -1,0 +1,19 @@
+earthdaily.earthdatastore package
+=================================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   earthdaily.earthdatastore.cube_utils
+   earthdaily.earthdatastore.mask
+
+Module contents
+---------------
+
+.. automodule:: earthdaily.earthdatastore
+   :members:
+   :undoc-members:
+   :show-inheritance:
