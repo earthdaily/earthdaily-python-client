@@ -39,7 +39,7 @@ _native_mask_asset_mapping = {
 class Mask:
     def __init__(self, dataset: xr.Dataset, intersects=None, bbox=None):
         self._obj = dataset
-        if bbox and intersects is None:
+        if bbox is not None and intersects is None:
             intersects = _bbox_to_intersects(bbox)
         if isinstance(intersects, gpd.GeoDataFrame):
             intersects = intersects.to_crs(self._obj.rio.crs)
