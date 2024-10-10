@@ -25,3 +25,4 @@ dependencies:
 - dask-image
 - toml
 - click
+- urllib3
