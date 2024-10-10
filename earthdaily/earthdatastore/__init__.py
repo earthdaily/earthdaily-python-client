@@ -311,15 +311,14 @@ def _get_client(config=None, presign_urls=True, request_payer=False):
         headers["x-amz-request-payer"] = "requester"
 
     retry = Retry(
-    total=5, backoff_factor=1, status_forcelist=[502, 503, 504], allowed_methods=None
+        total=5,
+        backoff_factor=1,
+        status_forcelist=[502, 503, 504],
+        allowed_methods=None,
     )
     stac_api_io = StacApiIO(max_retries=retry)
 
-    return Client.open(
-        eds_url,
-        headers=headers,
-        stac_io=stac_api_io
-    )
+    return Client.open(eds_url, headers=headers, stac_io=stac_api_io)
 
 
 class StacCollectionExplorer:
