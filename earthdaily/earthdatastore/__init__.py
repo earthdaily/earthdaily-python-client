@@ -16,6 +16,8 @@ from pathlib import Path
 from pystac.item_collection import ItemCollection
 from pystac_client.item_search import ItemSearch
 from pystac_client import Client
+from pystac_client.stac_api_io import StacApiIO
+from urllib3 import Retry
 from itertools import chain
 from odc import stac
 from . import _scales_collections, cube_utils, mask
@@ -308,9 +310,15 @@ def _get_client(config=None, presign_urls=True, request_payer=False):
     if request_payer:
         headers["x-amz-request-payer"] = "requester"
 
+    retry = Retry(
+    total=5, backoff_factor=1, status_forcelist=[502, 503, 504], allowed_methods=None
+    )
+    stac_api_io = StacApiIO(max_retries=retry)
+
     return Client.open(
         eds_url,
         headers=headers,
+        stac_io=stac_api_io
     )
 
 
