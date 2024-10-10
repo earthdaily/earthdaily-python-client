@@ -13,6 +13,7 @@ jobs:
           - ubuntu-latest
         python-version:
           - "3.12"
+          - "3.10"
     runs-on:  ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
