@@ -6,6 +6,7 @@ dependencies:
 - numpy
 - matplotlib
 - joblib
+- gdal=3.7.3
 - scipy
 - psutil
 - pystac-client
@@ -14,7 +15,7 @@ dependencies:
 - pandas>=2
 - geopandas
 - requests
-- xarray
+- xarray>=2024.7.0
 - rasterio
 - rioxarray
 - tqdm
