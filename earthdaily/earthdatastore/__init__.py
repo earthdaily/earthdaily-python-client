@@ -1210,7 +1210,7 @@ class Auth:
         if post_query:
             items_collection = post_query_items(items_collection, post_query)
         if len(items_collection) == 0 and raise_no_items:
-            raise _no_item_msg
+            raise parallel_search.NoItemsFoundError("No items found.")
         return items_collection
 
     def find_cloud_mask_items(
