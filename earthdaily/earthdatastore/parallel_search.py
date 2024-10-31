@@ -123,10 +123,9 @@ def datetime_split(
         freq = Timedelta(days=int(freq))
     elif not isinstance(freq, Timedelta):
         raise TypeError("freq must be 'auto', int, or Timedelta")
-    
-    
+
     # Return original range if smaller than frequency
-    if date_diff.days < freq.days or freq.days <= 1 :
+    if date_diff.days < freq.days or freq.days <= 1:
         return dt_range, freq
 
     # Generate date ranges
@@ -219,9 +218,7 @@ def parallel_search(func: Callable[..., T]) -> Callable[..., T]:
 
 
 def _should_run_parallel(
-    dt_range: Optional[tuple[datetime, datetime]], 
-    batch_days: Any, 
-    n_jobs: int
+    dt_range: Optional[tuple[datetime, datetime]], batch_days: Any, n_jobs: int
 ) -> bool:
     """Check if parallel execution should be used based on input parameters.
     Parameters
@@ -247,10 +244,10 @@ def _should_run_parallel(
     # Check for basic conditions that prevent parallel execution
     if not dt_range or batch_days is None or n_jobs <= 1:
         return False
-    
+
     # Split the datetime range
     date_ranges, freq = datetime_split(dt_range, batch_days)
-    
+
     # Check if splitting provides meaningful parallelization
     delta_days = (date_ranges[-1][-1] - date_ranges[0][0]).days
     return len(date_ranges) > 1 or delta_days > batch_days
