@@ -21,71 +21,12 @@ from urllib3 import Retry
 from itertools import chain
 from odc import stac
 from . import _scales_collections, cube_utils, mask
-
+from .parallel_search import parallel_search
 from .cube_utils import datacube, metacube, _datacubes, asset_mapper
 
 __all__ = ["datacube", "metacube", "xr", "stac"]
 
 logging.getLogger("earthdaily-earthdatastore")
-
-
-class NoItems(Warning):
-    pass
-
-
-_no_item_msg = NoItems("No item has been found for your query.")
-
-
-def _datetime_to_str(datetime):
-    start, end = ItemSearch(url=None)._format_datetime(datetime).split("/")
-    return start, end
-
-
-def _datetime_split(datetime, freq="auto"):
-    start, end = [pd.Timestamp(date) for date in _datetime_to_str(datetime)]
-    diff = end - start
-    if freq == "auto":
-        # freq increases of 5 days every 6 months
-        freq = diff // (5 + 5 * (diff.days // 183))
-    else:
-        freq = pd.Timedelta(days=freq)
-    if diff.days < freq.days:
-        return datetime
-    logging.info(f"Parallel search with datetime split every {freq.days} days.")
-    return [
-        (chunk, min(chunk + freq, end))
-        for chunk in pd.date_range(start, end, freq=freq)[:-1]
-    ]
-
-
-def _parallel_search(func):
-    def _search(*args, **kwargs):
-        from joblib import Parallel, delayed
-
-        t0 = time.time()
-        kwargs.setdefault("batch_days", "auto")
-        batch_days = kwargs.get("batch_days", None)
-        datetime = kwargs.get("datetime", None)
-        need_parallel = False
-        if datetime and batch_days is not None:
-            datetimes = _datetime_split(datetime, batch_days)
-            need_parallel = True if len(datetimes) > 1 else False
-            if need_parallel:
-                kwargs.pop("datetime")
-                kwargs["raise_no_items"] = False
-                items = Parallel(n_jobs=10, backend="threading")(
-                    delayed(func)(*args, datetime=datetime, **kwargs)
-                    for datetime in datetimes
-                )
-                items = ItemCollection(chain(*items))
-                if len(items) == 0:
-                    raise _no_item_msg
-        if not need_parallel:
-            items = func(*args, **kwargs)
-        logging.info(f"Search/load items : {np.round(time.time()-t0,3)}s.")
-        return items
-
-    return _search
 
 
 def post_query_items(items, query):
@@ -1112,7 +1053,7 @@ class Auth:
         fields["include"].extend([f"assets.{asset}" for asset in assets])
         return fields
 
-    @_parallel_search
+    @parallel_search
     def search(
         self,
         collections: str | list,
@@ -1124,6 +1065,7 @@ class Auth:
         assets=None,
         raise_no_items=True,
         batch_days="auto",
+        n_jobs=-1,
         **kwargs,
     ):
         """
@@ -1268,7 +1210,7 @@ class Auth:
         if post_query:
             items_collection = post_query_items(items_collection, post_query)
         if len(items_collection) == 0 and raise_no_items:
-            raise _no_item_msg
+            raise parallel_search.NoItemsFoundError("No items found.")
         return items_collection
 
     def find_cloud_mask_items(
