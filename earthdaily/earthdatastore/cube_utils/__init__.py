@@ -145,7 +145,7 @@ def _cube_odc(
         # assign metadata as coords
         ds = ds.assign_coords(**metadata)
     if "latitude" in ds.coords and "longitude" in ds.coords:
-        ds = ds.rename({"latitude":"y","longitude":"x"})
+        ds = ds.rename({"latitude": "y", "longitude": "x"})
     ds = ds.chunk(kwargs["chunks"])
 
     return ds

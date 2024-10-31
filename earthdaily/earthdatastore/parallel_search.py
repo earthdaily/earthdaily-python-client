@@ -12,10 +12,11 @@ import pandas as pd
 from pandas import Timestamp, Timedelta, DatetimeIndex
 from pystac_client.item_search import ItemSearch
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 DatetimeRange = Tuple[Union[datetime, Timestamp], Union[datetime, Timestamp]]
 DateRangeList = List[DatetimeRange]
+
 
 class NoItemsFoundError(Exception):
     """Exception raised when no items are found during search operation.
@@ -23,27 +24,29 @@ class NoItemsFoundError(Exception):
     This exception is raised when a parallel search operation yields no results,
     indicating that the search criteria did not match any items in the dataset.
     """
+
     pass
+
 
 def datetime_to_str(dt_range: DatetimeRange) -> Tuple[str, str]:
     """Convert a datetime range to a tuple of formatted strings.
-    
+
     Parameters
     ----------
     dt_range : tuple of (datetime or Timestamp)
         A tuple containing start and end datetimes to be converted.
-        
+
     Returns
     -------
     tuple of str
         A tuple containing two strings representing the formatted start and end dates.
-        
+
     Notes
     -----
     This function relies on ItemSearch._format_datetime internally to perform the
     actual formatting. The returned strings are split from a forward-slash separated
     string format.
-    
+
     Examples
     --------
     >>> start = pd.Timestamp('2023-01-01')
@@ -55,13 +58,12 @@ def datetime_to_str(dt_range: DatetimeRange) -> Tuple[str, str]:
     start, end = formatted.split("/")
     return start, end
 
+
 def datetime_split(
-    dt_range: DatetimeRange,
-    freq: Union[str, int, Timedelta] = "auto",
-    n_jobs: int = 10
+    dt_range: DatetimeRange, freq: Union[str, int, Timedelta] = "auto", n_jobs: int = 10
 ) -> Union[DatetimeRange, Tuple[DateRangeList, Timedelta]]:
     """Split a datetime range into smaller chunks based on specified frequency.
-    
+
     Parameters
     ----------
     dt_range : tuple of (datetime or Timestamp)
@@ -75,7 +77,7 @@ def datetime_split(
     n_jobs : int, default=10
         Number of jobs for parallel processing (currently unused in the function
         but maintained for API compatibility).
-        
+
     Returns
     -------
     Union[DatetimeRange, tuple[list[DatetimeRange], Timedelta]]
@@ -85,15 +87,15 @@ def datetime_split(
             Returns a tuple containing:
             - List of datetime range tuples split by the frequency
             - The Timedelta frequency used for splitting
-        
+
     Notes
     -----
     The automatic frequency calculation uses the formula:
     freq = total_days // (5 + 5 * (total_days // 183))
-    
+
     This ensures that the frequency increases by 5 days for every 6-month period
     in the total date range.
-    
+
     Examples
     --------
     >>> start = pd.Timestamp('2023-01-01')
@@ -101,7 +103,7 @@ def datetime_split(
     >>> splits, freq = datetime_split((start, end))
     >>> len(splits)  # Number of chunks
     12
-    
+
     >>> # Using fixed frequency
     >>> splits, freq = datetime_split((start, end), freq=30)  # 30 days
     >>> freq
@@ -110,7 +112,7 @@ def datetime_split(
     # Convert input dates to pandas Timestamps
     start, end = [pd.Timestamp(date) for date in datetime_to_str(dt_range)]
     date_diff = end - start
-    
+
     # Calculate or convert frequency
     if freq == "auto":
         # Calculate automatic frequency based on total range
@@ -121,18 +123,19 @@ def datetime_split(
         freq = Timedelta(days=int(freq))
     elif not isinstance(freq, Timedelta):
         raise TypeError("freq must be 'auto', int, or Timedelta")
-    
+
     # Return original range if smaller than frequency
     if date_diff.days < freq.days:
         return dt_range
-    
+
     # Generate date ranges
     date_ranges = [
         (chunk, min(chunk + freq, end))
         for chunk in pd.date_range(start, end, freq=freq)[:-1]
     ]
-    
+
     return date_ranges, freq
+
 
 def parallel_search(func: Callable[..., T]) -> Callable[..., T]:
     """Decorator for parallelizing search operations across datetime ranges.
@@ -168,7 +171,7 @@ def parallel_search(func: Callable[..., T]) -> Callable[..., T]:
     - batch_days : Controls the size of datetime batches
     - n_jobs : Controls the number of parallel jobs (max 10)
     - datetime : Required for parallel execution
-    
+
     The parallel execution uses threading backend from joblib.
 
     See Also
@@ -182,40 +185,40 @@ def parallel_search(func: Callable[..., T]) -> Callable[..., T]:
     ... def search_items(query, datetime=None, batch_days="auto", n_jobs=1):
     ...     # Search implementation
     ...     return items
-    >>> 
+    >>>
     >>> # Will execute in parallel if conditions are met
-    >>> items = search_items("query", 
+    >>> items = search_items("query",
     ...                     datetime=(start_date, end_date),
     ...                     batch_days=30,
     ...                     n_jobs=4)
     """
+
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> T:
         start_time = time.time()
-        
+
         # Set default parameters
         batch_days = kwargs.setdefault("batch_days", "auto")
         n_jobs = kwargs.setdefault("n_jobs", -1)
         dt_range = kwargs.get("datetime")
-        
+
         should_parallelize = _should_run_parallel(dt_range, batch_days, n_jobs)
-        
+
         if should_parallelize:
             items = _run_parallel_search(func, args, kwargs, dt_range, batch_days)
         else:
             items = func(*args, **kwargs)
-            
+
         execution_time = np.round(time.time() - start_time, 3)
         logging.info(f"Search/load items: {execution_time}s")
-        
+
         return items
 
     return wrapper
 
+
 def _should_run_parallel(
-    dt_range: Optional[tuple[datetime, datetime]],
-    batch_days: Any,
-    n_jobs: int
+    dt_range: Optional[tuple[datetime, datetime]], batch_days: Any, n_jobs: int
 ) -> bool:
     """Check if parallel execution should be used based on input parameters.
 
@@ -243,21 +246,22 @@ def _should_run_parallel(
     """
     if not dt_range or batch_days is None:
         return False
-    
+
     if n_jobs == 1:
         return False
-        
+
     date_ranges, freq = datetime_split(dt_range, batch_days)
     delta_days = (date_ranges[-1][-1] - date_ranges[0][0]).days
-    
+
     return len(date_ranges) > 1 or delta_days > batch_days
+
 
 def _run_parallel_search(
     func: Callable,
     args: tuple,
     kwargs: dict,
     dt_range: tuple[datetime, datetime],
-    batch_days: Any
+    batch_days: Any,
 ) -> T:
     """Execute the search function in parallel across datetime batches.
 
@@ -291,34 +295,32 @@ def _run_parallel_search(
     2. Configures parallel execution parameters
     3. Runs the search function in parallel using joblib
     4. Combines results from all parallel executions
-    
+
     The maximum number of parallel jobs is capped at 10, and -1 is converted to 10.
     """
     date_ranges, freq = datetime_split(dt_range, batch_days)
-    
-    logging.info(f"Search parallel with {kwargs['n_jobs']} jobs, split every {freq.days} days.")
-    
+
+    logging.info(
+        f"Search parallel with {kwargs['n_jobs']} jobs, split every {freq.days} days."
+    )
+
     # Prepare kwargs for parallel execution
     parallel_kwargs = kwargs.copy()
     parallel_kwargs.pop("datetime")
     parallel_kwargs["raise_no_items"] = False
-    
+
     # Handle n_jobs special case: -1 should become 10
     n_jobs = parallel_kwargs.get("n_jobs", 10)
     parallel_kwargs["n_jobs"] = 10 if (n_jobs == -1 or n_jobs > 10) else n_jobs
-    
+
     # Execute parallel search
-    results = Parallel(
-        n_jobs=parallel_kwargs["n_jobs"],
-        backend="threading"
-    )(
-        delayed(func)(*args, datetime=dt, **parallel_kwargs)
-        for dt in date_ranges
+    results = Parallel(n_jobs=parallel_kwargs["n_jobs"], backend="threading")(
+        delayed(func)(*args, datetime=dt, **parallel_kwargs) for dt in date_ranges
     )
-    
+
     # Combine results
     items = ItemCollection(chain(*results))
     if not items:
         raise NoItemsFoundError("No items found in parallel search")
-        
+
     return items
