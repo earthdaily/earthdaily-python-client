@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.12] - 2024-10-31
+
+### Added
+
+- `n_jobs` in search, default -1 (or 10).
+
+### Fixed
+
+- parallel search
+- latitude and longitude are switched to y,x when EPSG:4326 in CRS.
+
 ## [0.2.11] - 2024-10-10
 
 ### Fixed
