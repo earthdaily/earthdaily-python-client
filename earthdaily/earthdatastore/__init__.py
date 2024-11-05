@@ -70,38 +70,39 @@ def post_query_items(items, query):
     items = ItemCollection(items_)
     return items
 
+
 def _select_last_common_occurrences(first, second):
     """
     For each date in second dataset, select the last N occurrences of that date from first dataset,
     where N is the count of that date in second dataset.
-    
+
     Parameters:
     first (xarray.Dataset): Source dataset
     second (xarray.Dataset): Dataset containing the dates to match and their counts
-    
+
     Returns:
     xarray.Dataset: Subset of first dataset with selected time indices
     """
     # Convert times to datetime64[ns] if they aren't already
     first_times = first.time.astype("datetime64[ns]")
     second_times = second.time.astype("datetime64[ns]")
-    
+
     # Get unique dates and their counts from second dataset
     unique_dates, counts = np.unique(second_times.values, return_counts=True)
-    
+
     # Initialize list to store selected indices
     selected_indices = []
-    
+
     # For each unique date in second
     for date, count in zip(unique_dates, counts):
         # Find all indices where this date appears in first
         date_indices = np.where(first_times == date)[0]
         # Take the last 'count' number of indices
         selected_indices.extend(date_indices[-count:])
-    
+
     # Sort indices to maintain temporal order (or reverse them if needed)
     selected_indices = sorted(selected_indices, reverse=True)
-    
+
     # Select these indices from the first dataset
     return first.isel(time=selected_indices)
 
@@ -999,7 +1000,9 @@ class Auth:
                 )
                 xr_datacube["time"] = xr_datacube.time.astype("M8[ns]")
                 if xr_datacube.time.size != acm_datacube.time.size:
-                    xr_datacube = _select_last_common_occurrences(xr_datacube, acm_datacube)
+                    xr_datacube = _select_last_common_occurrences(
+                        xr_datacube, acm_datacube
+                    )
                 acm_datacube["time"] = xr_datacube["time"].time
                 acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
                 xr_datacube = xr.merge((xr_datacube, acm_datacube), compat="override")
