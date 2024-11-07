@@ -21,7 +21,7 @@ from urllib3 import Retry
 from itertools import chain
 from odc import stac
 from . import _scales_collections, cube_utils, mask
-from .parallel_search import parallel_search
+from .parallel_search import parallel_search, NoItemsFoundError
 from .cube_utils import datacube, metacube, _datacubes, asset_mapper
 
 __all__ = ["datacube", "metacube", "xr", "stac"]
@@ -1250,7 +1250,7 @@ class Auth:
         if post_query:
             items_collection = post_query_items(items_collection, post_query)
         if len(items_collection) == 0 and raise_no_items:
-            raise parallel_search.NoItemsFoundError("No items found.")
+            raise NoItemsFoundError("No items found.")
         return items_collection
 
     def find_cloud_mask_items(
