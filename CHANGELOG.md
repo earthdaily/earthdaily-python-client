@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Cloudmask providers list has been restored (due to new missing items warning).
+- `mask_with` list priority fixed due to new missing items warning.
 
 ## [0.2.13] - 2024-11-05
 
