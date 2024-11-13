@@ -9,6 +9,7 @@ from .accessor import EarthDailyAccessorDataArray, EarthDailyAccessorDataset
 
 __version__ = "0.2.15"
 
+
 def EarthDataStore(
     json_path: Optional[Path] = None,
     toml_path: Optional[Path] = None,
