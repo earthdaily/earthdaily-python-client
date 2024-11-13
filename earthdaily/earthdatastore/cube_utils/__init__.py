@@ -25,7 +25,7 @@ def _datacube_masks(method, *args, **kwargs):
         if isinstance(mask_with, str) and mask_with == "auto":
             mask_with = _auto_mask_order
         if isinstance(mask_with, list):
-            kwargs.pop("mask_with")                            
+            kwargs.pop("mask_with")
             for mask in mask_with:
                 try:
                     datacube = method(self, mask_with=mask, *args, **kwargs)
