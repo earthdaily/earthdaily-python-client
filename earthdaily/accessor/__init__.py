@@ -291,7 +291,7 @@ class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
                 available_indices.append(spyndex.indices[k] if details else k)
         return available_indices
 
-    def add_indices(self, indices: list, **kwargs):
+    def add_indices(self, indices: list[str | dict], **kwargs):
         """
         Uses spyndex to compute and add index.
 
@@ -300,8 +300,9 @@ class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
 
         Parameters
         ----------
-        indices : list
-            ['NDVI'].
+        indices : list[str|dict]
+            ['NDVI',{'NDVI2':'(red-nir)/(red+nir)'}].
+
         Returns
         -------
         xr.Dataset
@@ -312,10 +313,37 @@ class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
         params = {}
         params = self._auto_mapper()
         params.update(**kwargs)
-        idx = spyndex.computeIndex(index=indices, params=params, **kwargs)
 
-        if len(indices) == 1:
-            idx = idx.expand_dims(index=indices)
-        idx = idx.to_dataset(dim="index")
+        # str is for spyndex
+        indices_str = [index for index in indices if isinstance(index, str)]
+        # dict is customized ones
+        custom_indices = {
+            k: v
+            for index in indices
+            if isinstance(index, dict)
+            for k, v in index.items()
+        }
 
-        return xr.merge((self._obj, idx))
+        if len(indices_str) >= 1:
+            idx = spyndex.computeIndex(index=indices_str, params=params, **kwargs)
+
+            if len(indices_str) == 1:
+                idx = idx.expand_dims(index=indices_str)
+            idx = idx.to_dataset(dim="index")
+
+            self._obj = xr.merge((self._obj, idx))
+
+        if len(custom_indices) >= 1:
+            # custom indices
+            def custom_index_to_eval(ds, custom_index):
+                for data_var in ds.data_vars:
+                    custom_index = custom_index.replace(
+                        data_var, f"self._obj['{data_var}']"
+                    )
+                return custom_index
+
+            for data_var, formula in custom_indices.items():
+                index_eval = custom_index_to_eval(self._obj, formula)
+                self._obj[data_var] = eval(index_eval)
+
+        return self._obj
