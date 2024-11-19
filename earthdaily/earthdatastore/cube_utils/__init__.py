@@ -26,14 +26,13 @@ def _datacube_masks(method, *args, **kwargs):
             mask_with = _auto_mask_order
         if isinstance(mask_with, list):
             kwargs.pop("mask_with")
-            for idx, mask in enumerate(mask_with):
+            for mask in mask_with:
                 try:
                     datacube = method(self, mask_with=mask, *args, **kwargs)
                     break
-                except Warning as E:
-                    # if warning about no items for ag_cloud_mask for example
-                    if idx + 1 == len(mask_with):
-                        raise E
+                except Exception as error:
+                    if mask == mask_with[-1]:
+                        raise error
         else:
             datacube = method(self, *args, **kwargs)
         return datacube

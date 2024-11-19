@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2024-11-19
+
+### Added
+
+- `ed.add_indices` accessor now supports list of strings and dict for custom
+indices. For example : `['NDVI',{'NDVI2':'(nir-red)/(nir+red)'}]`.
+
+## [0.2.15] - 2024-11-13
+
+### Fixed
+
+- `mask_with` list priority fixed due to new missing items warning.
+
 ## [0.2.14] - 2024-11-08
 
 ### Fixed
