@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `ed.add_indices` accessor now supports list of strings and dict for custom
-indices. For example : `['NDVI',{'NDVI':'(nir-red)/(nir+red)'}]`.
+indices. For example : `['NDVI',{'NDVI2':'(nir-red)/(nir+red)'}]`.
 
 ## [0.2.15] - 2024-11-13
 
