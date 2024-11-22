@@ -213,11 +213,11 @@ def zonal_stats(
         # create the WKT geom
         if isinstance(buffer_meters, float | int):
             geoms.geometry = geoms["geometry_original"]
-            
+
         if geoms.crs.to_epsg() != 4326:
             geoms = geoms.to_crs("EPSG:4326")
         geometry = xr.DataArray(
-            geoms.iloc[list(f-1)].geometry.apply(lambda x: x.wkt).values,
+            geoms.iloc[list(f - 1)].geometry.apply(lambda x: x.wkt).values,
             dims=["feature"],
             coords={"feature": zs.feature.values},
         )
