@@ -1,0 +1,7 @@
+earthdaily.earthdatastore.cube\_utils.custom\_reducers module
+=============================================================
+
+.. automodule:: earthdaily.earthdatastore.cube_utils.custom_reducers
+   :members:
+   :undoc-members:
+   :show-inheritance:

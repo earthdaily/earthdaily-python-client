@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore collection metadata using earthdaily &mdash; earthdaily 0.3.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=4621528c"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Create a multisensor cube" href="multisensors_cube.html" />
+    <link rel="prev" title="Field evolution and zonal stats" href="field_evolution.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+              <div class="version">
+                0.3.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="common_band_names.html">EarthDaily unique common band names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compare_scale_s2.html">Compare Sentinel-2 scale/offset evolution during time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="field_evolution.html">Field evolution and zonal stats</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Explore collection metadata using earthdaily</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-librairies">Import librairies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#init-earthdatastore-with-environment-variables-or-default-credentials">Init earthdatastore with environment variables or default credentials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#explore-available-collections">Explore available collections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#explore-a-specific-collection">Explore a specific collection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#list-properties-available-per-item">List properties available per item</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-assets-and-metadata">Read assets and metadata</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="multisensors_cube.html">Create a multisensor cube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_steps_create_datacube.html">First steps to create a datacube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily_simulated_dataset.html">EarthDaily Simulated Dataset</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../earthdaily.html">earthdaily package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Gallery</a></li>
+      <li class="breadcrumb-item active">Explore collection metadata using earthdaily</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_auto_examples/summary_stack.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-summary-stack-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="explore-collection-metadata-using-earthdaily">
+<span id="sphx-glr-auto-examples-summary-stack-py"></span><h1>Explore collection metadata using earthdaily<a class="headerlink" href="#explore-collection-metadata-using-earthdaily" title="Link to this heading"></a></h1>
+<section id="import-librairies">
+<h2>Import librairies<a class="headerlink" href="#import-librairies" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">from</span> <span class="nn">rich.console</span> <span class="kn">import</span> <span class="n">Console</span>
+<span class="kn">from</span> <span class="nn">earthdaily</span> <span class="kn">import</span> <span class="n">EarthDataStore</span>
+
+<span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="init-earthdatastore-with-environment-variables-or-default-credentials">
+<h2>Init earthdatastore with environment variables or default credentials<a class="headerlink" href="#init-earthdatastore-with-environment-variables-or-default-credentials" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="explore-available-collections">
+<h2>Explore available collections<a class="headerlink" href="#explore-available-collections" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s2">&quot;Available collections&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">eds</span><span class="o">.</span><span class="n">explore</span><span class="p">():</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Available collections                             ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ ai-ready-mosaics                                  │
+│ ai-ready-mosaics-preview                          │
+│ ai-ready-mosaics-sample                           │
+│ alsat-1b-l2a-cog-edagro                           │
+│ alsat-1b-l2a-cog-edagro-ag-cloud-mask             │
+│ building-changes-map                              │
+│ cbers-4-l2a-cog-edagro                            │
+│ cbers-4-l2a-cog-edagro-ag-cloud-mask              │
+│ cbers4-mux                                        │
+│ cbers4-mux-clip                                   │
+│ cbers4-mux-l1c                                    │
+│ cropland-data-layer-us                            │
+│ deimos-1-l2a-cog-edagro                           │
+│ deimos-1-l2a-cog-edagro-ag-cloud-mask             │
+│ deimos-l2a-cog-edagro                             │
+│ deimos-l2a-cog-edagro-ag-cloud-mask               │
+│ deimos1-catalog                                   │
+│ deimos1-l1c                                       │
+│ dmc-l2a-cog-edagro                                │
+│ dmc-l2a-cog-edagro-ag-cloud-mask                  │
+│ dove-psb-sd-boa                                   │
+│ earthdaily-simulated-cloudless-l2a-cog-edagro     │
+│ earthdaily-simulated-l2a-cog-edagro               │
+│ earthdaily-simulated-l2a-cog-edagro-ag-cloud-mask │
+│ ecmwf-mars                                        │
+│ ecmwf-open-data                                   │
+│ ecostress-eco-l2t-lste-002                        │
+│ eda-albedo-map                                    │
+│ eda-analysis-ready-mosaic                         │
+│ eda-brightness-invariant                          │
+│ eda-calibration-sites                             │
+│ eda-cross-calibration                             │
+│ eda-dem                                           │
+│ eda-geoid                                         │
+│ eda-landcover                                     │
+│ eda-reference-image                               │
+│ eda-water-mask                                    │
+│ edagro-analytics-crop-mask-in-season              │
+│ edagro-analytics-crops-layer                      │
+│ edagro-analytics-field-borders-layer              │
+│ edagro-analytics-field-boundaries                 │
+│ edagro-landsat-cross-cal-coefficient              │
+│ edc-daily-acquisition-requests                    │
+│ esa-worldcover-landcover-2020-v100                │
+│ esa-worldcover-landcover-2021-v200                │
+│ esa-worldcover-s1-vvvhratio-2020-v100             │
+│ esa-worldcover-s1-vvvhratio-2021-v200             │
+│ esa-worldcover-s2-nvdi-2020-v100                  │
+│ esa-worldcover-s2-nvdi-2021-v200                  │
+│ esa-worldcover-s2-rgbnir-2020-v100                │
+│ esa-worldcover-s2-rgbnir-2021-v200                │
+│ esa-worldcover-s2-swir-2020-v100                  │
+│ esa-worldcover-s2-swir-2021-v200                  │
+│ gaofen-1-l2a-cog-edagro                           │
+│ gaofen-1-l2a-cog-edagro-ag-cloud-mask             │
+│ gaofen-6-l2a-cog-edagro                           │
+│ gaofen-6-l2a-cog-edagro-ag-cloud-mask             │
+│ goes                                              │
+│ himawari-l1b                                      │
+│ himawari-l2-cloud                                 │
+│ huanjing-2-l2a-cog-edagro                         │
+│ huanjing-2-l2a-cog-edagro-ag-cloud-mask           │
+│ jilin-1-cog-edagro                                │
+│ jilin-1-cog-edagro-ag-cloud-mask                  │
+│ kazstsat-l2a-cog-edagro                           │
+│ kazstsat-l2a-cog-edagro-ag-cloud-mask             │
+│ landsat-c2l1                                      │
+│ landsat-c2l1-data-coverage                        │
+│ landsat-c2l2-sr                                   │
+│ landsat-c2l2-st                                   │
+│ landsat-l2-cog-ag-cloud-mask                      │
+│ lulc-classification-map                           │
+│ modis-43A4-061                                    │
+│ modis-aqua-calibrated-radiance                    │
+│ modis-calibrated-radiance                         │
+│ modis-mod04-l2-061                                │
+│ modis-mod07-l2-061                                │
+│ modis-mod11-l2-061                                │
+│ modis-mod11a2-061                                 │
+│ modis-mod21-l2-061                                │
+│ modis-mod21a2-061                                 │
+│ modis-mod35-l2-061                                │
+│ modis-myd11-l2-061                                │
+│ modis-myd11a2-061                                 │
+│ modis-myd21-l2-061                                │
+│ modis-myd21a2-061                                 │
+│ modis-myd35-l2-061                                │
+│ mrc-catalog                                       │
+│ mrc-l1c                                           │
+│ msg-seviri                                        │
+│ msg-seviri-cloud-mask                             │
+│ nst-observer-catalog                              │
+│ nst-observer-l1c                                  │
+│ nst-observer-l2a                                  │
+│ palsar-catalog                                    │
+│ palsar-grd                                        │
+│ public-crop-mask                                  │
+│ resourcesat-2-l2a-cog-edagro                      │
+│ resourcesat-2-l2a-cog-edagro-ag-cloud-mask        │
+│ sentinel-1-grd                                    │
+│ sentinel-1-rtc                                    │
+│ sentinel-2-c1-l2a                                 │
+│ sentinel-2-c1-l2a-data-coverage                   │
+│ sentinel-2-eda-cloud-mask                         │
+│ sentinel-2-eda-cloud-mask-data-coverage           │
+│ sentinel-2-l1c                                    │
+│ sentinel-2-l1c-data-coverage                      │
+│ sentinel-2-l1c-ml-cloud-mask                      │
+│ sentinel-2-l2a                                    │
+│ sentinel-2-l2a-cog-ag-cloud-mask                  │
+│ sentinel-2-l2a-cog-ag-cloud-mask-geosys-private   │
+│ sentinel-2-l2a-data-coverage                      │
+│ sentinel-2-methane-product                        │
+│ simedc-ai-ready-data                              │
+│ simedc-ai-ready-data-clip                         │
+│ simedc-analysis-ready-data                        │
+│ simedc-analysis-ready-data-clip                   │
+│ simedc-quick-ortho                                │
+│ simedc-quick-ortho-clip                           │
+│ simedc-swir-catalog                               │
+│ simedc-swir-catalog-data-coverage                 │
+│ simedc-swir-l1c                                   │
+│ simedc-swir-l1c-clip                              │
+│ simedc-swir-l2a                                   │
+│ simedc-swir-l2a-clip                              │
+│ simedc-tir-catalog                                │
+│ simedc-tir-l1c                                    │
+│ simedc-tir-l1c-clip                               │
+│ simedc-visual-nrg                                 │
+│ simedc-visual-nrg-clip                            │
+│ simedc-visual-rgb                                 │
+│ simedc-visual-rgb-clip                            │
+│ simedc-vnir-catalog                               │
+│ simedc-vnir-catalog-data-coverage                 │
+│ simedc-vnir-l1c                                   │
+│ simedc-vnir-l1c-clip                              │
+│ simedc-vnir-l2a                                   │
+│ simedc-vnir-l2a-clip                              │
+│ typha-classification-map                          │
+│ venus-l2a                                         │
+│ venus-l2a-clip                                    │
+│ viirs-vj121-002                                   │
+│ viirs-vj121a1d-002                                │
+│ viirs-vj121a1n-002                                │
+│ viirs-vj121a2-002                                 │
+│ viirs-vnp21-002                                   │
+│ viirs-vnp21a1d-002                                │
+│ viirs-vnp21a1n-002                                │
+│ viirs-vnp21a2-002                                 │
+│ worldview-cog-edagro                              │
+│ worldview-cog-edagro-ag-cloud-mask                │
+│ zy-1-cog-edagro                                   │
+│ zy-1-cog-edagro-ag-cloud-mask                     │
+└───────────────────────────────────────────────────┘
+</pre></div>
+</div>
+</section>
+<section id="explore-a-specific-collection">
+<h2>Explore a specific collection<a class="headerlink" href="#explore-a-specific-collection" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">collection</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">explore</span><span class="p">(</span><span class="s2">&quot;venus-l2a&quot;</span><span class="p">)</span>
+<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">collection</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[15:22:08] {                                                 summary_stack.py:36
+               &#39;type&#39;: &#39;Collection&#39;,
+               &#39;id&#39;: &#39;venus-l2a&#39;,
+               &#39;stac_version&#39;: &#39;1.0.0&#39;,
+               &#39;description&#39;: &#39;venus-l2a&#39;,
+               &#39;links&#39;: [
+                   {
+                       &#39;rel&#39;: &#39;self&#39;,
+                       &#39;href&#39;:
+           &#39;https://api.eds.earthdaily.com/archive/v1/stac/v
+           1/collections/venus-l2a&#39;,
+                       &#39;type&#39;: &#39;application/json&#39;
+                   },
+                   {
+                       &#39;rel&#39;: &#39;parent&#39;,
+                       &#39;href&#39;:
+           &#39;https://api.eds.earthdaily.com/archive/v1/stac/v
+           1&#39;,
+                       &#39;type&#39;: &#39;application/json&#39;
+                   },
+                   {
+                       &#39;rel&#39;: &#39;items&#39;,
+                       &#39;href&#39;:
+           &#39;https://api.eds.earthdaily.com/archive/v1/stac/v
+           1/collections/venus-l2a/items&#39;,
+                       &#39;type&#39;: &#39;application/geo+json&#39;
+                   },
+                   {
+                       &#39;rel&#39;: &#39;root&#39;,
+                       &#39;href&#39;:
+           &#39;https://api.eds.earthdaily.com/archive/v1/stac/v
+           1&#39;,
+                       &#39;type&#39;: &#39;application/json&#39;,
+                       &#39;title&#39;: &#39;Platform API (STAC
+           Compliant)&#39;
+                   }
+               ],
+               &#39;stac_extensions&#39;: [
+                   &#39;https://earthdaily-stac-extensions.s3.am
+           azonaws.com/eda_stats/v1.0.0/schema.json&#39;
+               ],
+               &#39;item_assets&#39;: None,
+               &#39;eda_stats:items&#39;: {
+                   &#39;count&#39;: 35771,
+                   &#39;count_by_year&#39;: {
+                       &#39;2017&#39;: 398,
+                       &#39;2018&#39;: 6134,
+                       &#39;2019&#39;: 9996,
+                       &#39;2020&#39;: 7207,
+                       &#39;2021&#39;: 0,
+                       &#39;2022&#39;: 3803,
+                       &#39;2023&#39;: 6376,
+                       &#39;2024&#39;: 1857
+                   },
+                   &#39;count_by_year_month&#39;: {
+                       &#39;2017&#39;: {
+                           &#39;2017-01&#39;: 0,
+                           &#39;2017-02&#39;: 0,
+                           &#39;2017-03&#39;: 0,
+                           &#39;2017-04&#39;: 0,
+                           &#39;2017-05&#39;: 0,
+                           &#39;2017-06&#39;: 0,
+                           &#39;2017-07&#39;: 0,
+                           &#39;2017-08&#39;: 0,
+                           &#39;2017-09&#39;: 0,
+                           &#39;2017-10&#39;: 0,
+                           &#39;2017-11&#39;: 101,
+                           &#39;2017-12&#39;: 297
+                       },
+                       &#39;2018&#39;: {
+                           &#39;2018-01&#39;: 193,
+                           &#39;2018-02&#39;: 564,
+                           &#39;2018-03&#39;: 318,
+                           &#39;2018-04&#39;: 610,
+                           &#39;2018-05&#39;: 451,
+                           &#39;2018-06&#39;: 502,
+                           &#39;2018-07&#39;: 646,
+                           &#39;2018-08&#39;: 757,
+                           &#39;2018-09&#39;: 267,
+                           &#39;2018-10&#39;: 503,
+                           &#39;2018-11&#39;: 617,
+                           &#39;2018-12&#39;: 706
+                       },
+                       &#39;2019&#39;: {
+                           &#39;2019-01&#39;: 640,
+                           &#39;2019-02&#39;: 657,
+                           &#39;2019-03&#39;: 776,
+                           &#39;2019-04&#39;: 838,
+                           &#39;2019-05&#39;: 879,
+                           &#39;2019-06&#39;: 862,
+                           &#39;2019-07&#39;: 948,
+                           &#39;2019-08&#39;: 847,
+                           &#39;2019-09&#39;: 1060,
+                           &#39;2019-10&#39;: 935,
+                           &#39;2019-11&#39;: 767,
+                           &#39;2019-12&#39;: 787
+                       },
+                       &#39;2020&#39;: {
+                           &#39;2020-01&#39;: 176,
+                           &#39;2020-02&#39;: 554,
+                           &#39;2020-03&#39;: 815,
+                           &#39;2020-04&#39;: 754,
+                           &#39;2020-05&#39;: 826,
+                           &#39;2020-06&#39;: 729,
+                           &#39;2020-07&#39;: 803,
+                           &#39;2020-08&#39;: 894,
+                           &#39;2020-09&#39;: 871,
+                           &#39;2020-10&#39;: 785,
+                           &#39;2020-11&#39;: 0,
+                           &#39;2020-12&#39;: 0
+                       },
+                       &#39;2021&#39;: {
+                           &#39;2021-01&#39;: 0,
+                           &#39;2021-02&#39;: 0,
+                           &#39;2021-03&#39;: 0,
+                           &#39;2021-04&#39;: 0,
+                           &#39;2021-05&#39;: 0,
+                           &#39;2021-06&#39;: 0,
+                           &#39;2021-07&#39;: 0,
+                           &#39;2021-08&#39;: 0,
+                           &#39;2021-09&#39;: 0,
+                           &#39;2021-10&#39;: 0,
+                           &#39;2021-11&#39;: 0,
+                           &#39;2021-12&#39;: 0
+                       },
+                       &#39;2022&#39;: {
+                           &#39;2022-01&#39;: 0,
+                           &#39;2022-02&#39;: 0,
+                           &#39;2022-03&#39;: 274,
+                           &#39;2022-04&#39;: 385,
+                           &#39;2022-05&#39;: 423,
+                           &#39;2022-06&#39;: 577,
+                           &#39;2022-07&#39;: 482,
+                           &#39;2022-08&#39;: 614,
+                           &#39;2022-09&#39;: 212,
+                           &#39;2022-10&#39;: 282,
+                           &#39;2022-11&#39;: 209,
+                           &#39;2022-12&#39;: 345
+                       },
+                       &#39;2023&#39;: {
+                           &#39;2023-01&#39;: 423,
+                           &#39;2023-02&#39;: 571,
+                           &#39;2023-03&#39;: 682,
+                           &#39;2023-04&#39;: 616,
+                           &#39;2023-05&#39;: 322,
+                           &#39;2023-06&#39;: 459,
+                           &#39;2023-07&#39;: 527,
+                           &#39;2023-08&#39;: 716,
+                           &#39;2023-09&#39;: 644,
+                           &#39;2023-10&#39;: 660,
+                           &#39;2023-11&#39;: 467,
+                           &#39;2023-12&#39;: 289
+                       },
+                       &#39;2024&#39;: {
+                           &#39;2024-01&#39;: 388,
+                           &#39;2024-02&#39;: 395,
+                           &#39;2024-03&#39;: 255,
+                           &#39;2024-04&#39;: 248,
+                           &#39;2024-05&#39;: 189,
+                           &#39;2024-06&#39;: 168,
+                           &#39;2024-07&#39;: 214,
+                           &#39;2024-08&#39;: 0,
+                           &#39;2024-09&#39;: 0,
+                           &#39;2024-10&#39;: 0,
+                           &#39;2024-11&#39;: 0,
+                           &#39;2024-12&#39;: 0
+                       }
+                   }
+               },
+               &#39;title&#39;: &#39;Venµs L2A&#39;,
+               &#39;extent&#39;: {
+                   &#39;spatial&#39;: {
+                       &#39;bbox&#39;: [
+                           [
+                               -155.37677,
+                               -67.1161,
+                               170.49466,
+                               79.1044
+                           ]
+                       ]
+                   },
+                   &#39;temporal&#39;: {
+                       &#39;interval&#39;: [
+                           [
+                               &#39;2017-11-01T10:06:54Z&#39;,
+                               &#39;2024-07-18T05:58:23Z&#39;
+                           ]
+                       ]
+                   }
+               },
+               &#39;license&#39;: &#39;CC BY-NC 4.0&#39;,
+               &#39;providers&#39;: [
+                   {
+                       &#39;name&#39;: &#39;Theia&#39;,
+                       &#39;roles&#39;: [
+                           &#39;licensor&#39;,
+                           &#39;producer&#39;,
+                           &#39;processor&#39;
+                       ]
+                   },
+                   {
+                       &#39;name&#39;: &#39;EarthDaily Analytics&#39;,
+                       &#39;roles&#39;: [&#39;processor&#39;, &#39;host&#39;],
+                       &#39;url&#39;: &#39;https://earthdaily.com&#39;
+                   }
+               ],
+               &#39;summaries&#39;: {
+                   &#39;gsd&#39;: [4, 5],
+                   &#39;mission&#39;: [&#39;venus&#39;],
+                   &#39;eo:bands&#39;: [
+                       {
+                           &#39;name&#39;: &#39;B1&#39;,
+                           &#39;common_name&#39;: &#39;coastal&#39;,
+                           &#39;description&#39;: &#39;B1&#39;,
+                           &#39;center_wavelength&#39;: 0.424
+                       },
+                       {
+                           &#39;name&#39;: &#39;B2&#39;,
+                           &#39;common_name&#39;: &#39;coastal&#39;,
+                           &#39;description&#39;: &#39;B2&#39;,
+                           &#39;center_wavelength&#39;: 0.447
+                       },
+                       {
+                           &#39;name&#39;: &#39;B3&#39;,
+                           &#39;common_name&#39;: &#39;blue&#39;,
+                           &#39;description&#39;: &#39;B3&#39;,
+                           &#39;center_wavelength&#39;: 0.492
+                       },
+                       {
+                           &#39;name&#39;: &#39;B4&#39;,
+                           &#39;common_name&#39;: &#39;green&#39;,
+                           &#39;description&#39;: &#39;B4&#39;,
+                           &#39;center_wavelength&#39;: 0.555
+                       },
+                       {
+                           &#39;name&#39;: &#39;B5&#39;,
+                           &#39;common_name&#39;: &#39;yellow&#39;,
+                           &#39;description&#39;: &#39;B5&#39;,
+                           &#39;center_wavelength&#39;: 0.62
+                       },
+                       {
+                           &#39;name&#39;: &#39;B6&#39;,
+                           &#39;common_name&#39;: &#39;yellow&#39;,
+                           &#39;description&#39;: &#39;B6&#39;,
+                           &#39;center_wavelength&#39;: 0.62
+                       },
+                       {
+                           &#39;name&#39;: &#39;B7&#39;,
+                           &#39;common_name&#39;: &#39;red&#39;,
+                           &#39;description&#39;: &#39;B7&#39;,
+                           &#39;center_wavelength&#39;: 0.666
+                       },
+                       {
+                           &#39;name&#39;: &#39;B8&#39;,
+                           &#39;common_name&#39;: &#39;rededge&#39;,
+                           &#39;description&#39;: &#39;B8&#39;,
+                           &#39;center_wavelength&#39;: 0.702
+                       },
+                       {
+                           &#39;name&#39;: &#39;B9&#39;,
+                           &#39;common_name&#39;: &#39;rededge&#39;,
+                           &#39;description&#39;: &#39;B9&#39;,
+                           &#39;center_wavelength&#39;: 0.741
+                       },
+                       {
+                           &#39;name&#39;: &#39;B10&#39;,
+                           &#39;common_name&#39;: &#39;rededge&#39;,
+                           &#39;description&#39;: &#39;B10&#39;,
+                           &#39;center_wavelength&#39;: 0.782
+                       },
+                       {
+                           &#39;name&#39;: &#39;B11&#39;,
+                           &#39;common_name&#39;: &#39;nir08&#39;,
+                           &#39;description&#39;: &#39;B11&#39;,
+                           &#39;center_wavelength&#39;: 0.861
+                       },
+                       {
+                           &#39;name&#39;: &#39;B12&#39;,
+                           &#39;common_name&#39;: &#39;nir09&#39;,
+                           &#39;description&#39;: &#39;B12&#39;,
+                           &#39;center_wavelength&#39;: 0.909
+                       }
+                   ],
+                   &#39;platform&#39;: [&#39;VENUS&#39;],
+                   &#39;instruments&#39;: [&#39;VENUS&#39;],
+                   &#39;constellation&#39;: [&#39;VENUS&#39;]
+               }
+           }
+</pre></div>
+</div>
+</section>
+<section id="list-properties-available-per-item">
+<h2>List properties available per item<a class="headerlink" href="#list-properties-available-per-item" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s2">&quot;properties&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">,</span> <span class="s2">&quot;dtype&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Properties for </span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">item_properties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># item_properties is a dict</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>                Properties for Exploring collection &quot;venus-l2a&quot;
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━┓
+┃ properties                  ┃ values                                 ┃ dtype ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━┩
+│ constellation               │ VENUS                                  │ str   │
+│ created                     │ 2024-07-27T00:07:31.240837Z            │ str   │
+│ datetime                    │ 2024-07-18T05:58:23.000000Z            │ str   │
+│ description                 │                                        │ str   │
+│ eda:geometry_tags           │ [&#39;RESOLVED_CLOCKWISE_POLYGON&#39;]         │ list  │
+│ eda:loose_validation_status │ VALID                                  │ str   │
+│ eda:num_cols                │ 10886                                  │ int   │
+│ eda:num_rows                │ 9720                                   │ int   │
+│ eda:original_geometry       │ {&#39;type&#39;: &#39;Polygon&#39;, &#39;coordinates&#39;:     │ dict  │
+│                             │ [[[46.154724121094, -15.772232055664], │       │
+│                             │ [46.561134338379, -15.769696235657],   │       │
+│                             │ [46.563858032227, -16.121057510376],   │       │
+│                             │ [46.15673828125, -16.123653411865],    │       │
+│                             │ [46.154724121094, -15.772232055664]]]} │       │
+│ eda:product_type            │ REFLECTANCE                            │ str   │
+│ eda:sensor_type             │ OPTICAL                                │ str   │
+│ eda:source_created          │ 2024-07-26T04:16:20.000000Z            │ str   │
+│ eda:source_updated          │ 2024-07-26T04:21:27.000000Z            │ str   │
+│ eda:status                  │ PUBLISHED                              │ str   │
+│ eda:tracking_id             │ LMgWQmvP4xDBKD7fwf7XHH                 │ str   │
+│ eda:unusable_cover          │ 4.0                                    │ float │
+│ eda:water_cover             │ 0.0                                    │ float │
+│ end_datetime                │ 2024-07-18T05:58:23.000000Z            │ str   │
+│ eo:bands                    │ [{&#39;name&#39;: &#39;B1&#39;, &#39;common_name&#39;:         │ list  │
+│                             │ &#39;coastal&#39;, &#39;description&#39;: &#39;B1&#39;,        │       │
+│                             │ &#39;center_wavelength&#39;: 0.424}, {&#39;name&#39;:  │       │
+│                             │ &#39;B2&#39;, &#39;common_name&#39;: &#39;coastal&#39;,        │       │
+│                             │ &#39;description&#39;: &#39;B2&#39;,                   │       │
+│                             │ &#39;center_wavelength&#39;: 0.447}, {&#39;name&#39;:  │       │
+│                             │ &#39;B3&#39;, &#39;common_name&#39;: &#39;blue&#39;,           │       │
+│                             │ &#39;description&#39;: &#39;B3&#39;,                   │       │
+│                             │ &#39;center_wavelength&#39;: 0.492}, {&#39;name&#39;:  │       │
+│                             │ &#39;B4&#39;, &#39;common_name&#39;: &#39;green&#39;,          │       │
+│                             │ &#39;description&#39;: &#39;B4&#39;,                   │       │
+│                             │ &#39;center_wavelength&#39;: 0.555}, {&#39;name&#39;:  │       │
+│                             │ &#39;B5&#39;, &#39;common_name&#39;: &#39;yellow&#39;,         │       │
+│                             │ &#39;description&#39;: &#39;B5&#39;,                   │       │
+│                             │ &#39;center_wavelength&#39;: 0.62}, {&#39;name&#39;:   │       │
+│                             │ &#39;B6&#39;, &#39;common_name&#39;: &#39;yellow&#39;,         │       │
+│                             │ &#39;description&#39;: &#39;B6&#39;,                   │       │
+│                             │ &#39;center_wavelength&#39;: 0.62}, {&#39;name&#39;:   │       │
+│                             │ &#39;B7&#39;, &#39;common_name&#39;: &#39;red&#39;,            │       │
+│                             │ &#39;description&#39;: &#39;B7&#39;,                   │       │
+│                             │ &#39;center_wavelength&#39;: 0.666}, {&#39;name&#39;:  │       │
+│                             │ &#39;B8&#39;, &#39;common_name&#39;: &#39;rededge&#39;,        │       │
+│                             │ &#39;description&#39;: &#39;B8&#39;,                   │       │
+│                             │ &#39;center_wavelength&#39;: 0.702}, {&#39;name&#39;:  │       │
+│                             │ &#39;B9&#39;, &#39;common_name&#39;: &#39;rededge&#39;,        │       │
+│                             │ &#39;description&#39;: &#39;B9&#39;,                   │       │
+│                             │ &#39;center_wavelength&#39;: 0.741}, {&#39;name&#39;:  │       │
+│                             │ &#39;B10&#39;, &#39;common_name&#39;: &#39;rededge&#39;,       │       │
+│                             │ &#39;description&#39;: &#39;B10&#39;,                  │       │
+│                             │ &#39;center_wavelength&#39;: 0.782}, {&#39;name&#39;:  │       │
+│                             │ &#39;B11&#39;, &#39;common_name&#39;: &#39;nir08&#39;,         │       │
+│                             │ &#39;description&#39;: &#39;B11&#39;,                  │       │
+│                             │ &#39;center_wavelength&#39;: 0.861}, {&#39;name&#39;:  │       │
+│                             │ &#39;B12&#39;, &#39;common_name&#39;: &#39;nir09&#39;,         │       │
+│                             │ &#39;description&#39;: &#39;B12&#39;,                  │       │
+│                             │ &#39;center_wavelength&#39;: 0.909}]           │       │
+│ eo:cloud_cover              │ 4.0                                    │ float │
+│ gsd                         │ 4.0                                    │ float │
+│ instruments                 │ [&#39;VENUS&#39;]                              │ list  │
+│ license                     │ CC-BY-NC-4.0                           │ str   │
+│ mission                     │ venus                                  │ str   │
+│ platform                    │ VENUS                                  │ str   │
+│ processing:level            │ L2A                                    │ str   │
+│ proj:epsg                   │ 32738                                  │ int   │
+│ providers                   │ [{&#39;name&#39;: &#39;Theia&#39;, &#39;roles&#39;:            │ list  │
+│                             │ [&#39;licensor&#39;, &#39;producer&#39;,               │       │
+│                             │ &#39;processor&#39;]}, {&#39;url&#39;:                 │       │
+│                             │ &#39;https://earthdaily.com&#39;, &#39;name&#39;:      │       │
+│                             │ &#39;EarthDaily Analytics&#39;, &#39;roles&#39;:       │       │
+│                             │ [&#39;processor&#39;, &#39;host&#39;]}]                │       │
+│ sat:absolute_orbit          │ 37555                                  │ int   │
+│ start_datetime              │ 2024-07-18T05:58:23.000000Z            │ str   │
+│ theia:location              │ BOMBETOK                               │ str   │
+│ theia:product_id            │ VENUS-XS_20240718-055823-000_L2A_BOMB… │ str   │
+│ theia:product_version       │ 3.1                                    │ str   │
+│ theia:publication_date      │ 2024-07-26T04:09:15.991000Z            │ str   │
+│ theia:sensor_mode           │ XS                                     │ str   │
+│ theia:source_uuid           │ 1db9d36d-4ac9-5e90-a8a6-8d131543bcfc   │ str   │
+│ title                       │ VENUS-XS_20240718-055823-000_L2A_BOMB… │ str   │
+│ updated                     │ 2024-07-27T00:42:35.622561Z            │ str   │
+│ view:azimuth                │ 98.409243                              │ float │
+│ view:incidence_angle        │ 33.278014999999996                     │ float │
+│ view:sun_azimuth            │ 52.0377014474                          │ float │
+│ view:sun_elevation          │ 31.999223066299997                     │ float │
+└─────────────────────────────┴────────────────────────────────────────┴───────┘
+</pre></div>
+</div>
+</section>
+<section id="read-assets-and-metadata">
+<h2>Read assets and metadata<a class="headerlink" href="#read-assets-and-metadata" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s2">&quot;assets&quot;</span><span class="p">,</span> <span class="s2">&quot;common_name&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Assets for </span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">collection</span><span class="o">.</span><span class="n">assets</span><span class="p">():</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span>
+        <span class="n">asset</span><span class="p">,</span>
+        <span class="n">collection</span><span class="o">.</span><span class="n">assets</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;eo:bands&quot;</span><span class="p">,</span> <span class="p">[{}])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;common_name&quot;</span><span class="p">),</span>
+        <span class="n">collection</span><span class="o">.</span><span class="n">assets</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;eo:bands&quot;</span><span class="p">,</span> <span class="p">[{}])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+<span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>           Assets for Exploring collection &quot;venus-l2a&quot;
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
+┃ assets                             ┃ common_name ┃ description ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
+│ atmospheric_biophysical_parameters │             │             │
+│ detailed_cloud_mask                │             │             │
+│ edge_image                         │             │             │
+│ image_file_FRE_B1                  │ coastal     │ B1          │
+│ image_file_FRE_B10                 │ rededge     │ B10         │
+│ image_file_FRE_B11                 │ nir08       │ B11         │
+│ image_file_FRE_B12                 │ nir09       │ B12         │
+│ image_file_FRE_B2                  │ coastal     │ B2          │
+│ image_file_FRE_B3                  │ blue        │ B3          │
+│ image_file_FRE_B4                  │ green       │ B4          │
+│ image_file_FRE_B5                  │ yellow      │ B5          │
+│ image_file_FRE_B6                  │ yellow      │ B6          │
+│ image_file_FRE_B7                  │ red         │ B7          │
+│ image_file_FRE_B8                  │ rededge     │ B8          │
+│ image_file_FRE_B9                  │ rededge     │ B9          │
+│ image_file_SRE_B1                  │ coastal     │ B1          │
+│ image_file_SRE_B10                 │ rededge     │ B10         │
+│ image_file_SRE_B11                 │ nir08       │ B11         │
+│ image_file_SRE_B12                 │ nir09       │ B12         │
+│ image_file_SRE_B2                  │ coastal     │ B2          │
+│ image_file_SRE_B3                  │ blue        │ B3          │
+│ image_file_SRE_B4                  │ green       │ B4          │
+│ image_file_SRE_B5                  │ yellow      │ B5          │
+│ image_file_SRE_B6                  │ yellow      │ B6          │
+│ image_file_SRE_B7                  │ red         │ B7          │
+│ image_file_SRE_B8                  │ rededge     │ B8          │
+│ image_file_SRE_B9                  │ rededge     │ B9          │
+│ interpolated_pixel_mask            │             │             │
+│ job_processing_data                │             │             │
+│ license                            │             │             │
+│ mask                               │             │             │
+│ pixel_mask                         │             │             │
+│ quality_mask                       │             │             │
+│ saturation_mask                    │             │             │
+│ solar_data                         │             │             │
+│ stac_json                          │             │             │
+│ thumbnail                          │             │             │
+│ useful_image                       │             │             │
+│ useful_image_data                  │             │             │
+│ viewing_data                       │             │             │
+└────────────────────────────────────┴─────────────┴─────────────┘
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.481 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-summary-stack-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/f0bdba5af702323607ba14eaaed0c117/summary_stack.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">summary_stack.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/1b3ef95dfb501b605e9ed5ca57624e5a/summary_stack.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">summary_stack.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/aeb75b8770cdba4442774ff2f8921beb/summary_stack.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">summary_stack.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="field_evolution.html" class="btn btn-neutral float-left" title="Field evolution and zonal stats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="multisensors_cube.html" class="btn btn-neutral float-right" title="Create a multisensor cube" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
