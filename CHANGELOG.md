@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- wkt geometriy has now the full precision when storing it in zonal stats.
+- wkt geometries have now the full precision when storing it in zonal stats.
 
 ## [0.3.0] - 2024-11-19
 
