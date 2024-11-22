@@ -263,7 +263,7 @@ class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
             "vh": "VH",
             "hh": "HH",
             "hv": "HV",
-        }
+        } 
 
         params = {}
         data_vars = list(

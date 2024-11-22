@@ -183,7 +183,7 @@ def zonal_stats(
         geoms.to_crs(input_crs)
 
     if method == "numpy":
-        feats, yx_pos = _rasterize(geoms, dataset, all_touched=all_touched)
+        feats, yx_pos = _rasterize(geoms.copy(), dataset, all_touched=all_touched)
         positions = [np.asarray(yx_pos[i + 1]) for i in np.arange(geoms.shape[0])]
         positions = [position for position in positions if position.size > 0]
         del yx_pos
@@ -213,8 +213,11 @@ def zonal_stats(
         # create the WKT geom
         if isinstance(buffer_meters, float | int):
             geoms.geometry = geoms["geometry_original"]
+            
+        if geoms.crs.to_epsg() != 4326:
+            geoms = geoms.to_crs("EPSG:4326")
         geometry = xr.DataArray(
-            list(geoms.iloc[f - 1].to_crs("EPSG:4326").geometry.to_wkt()),
+            geoms.iloc[list(f-1)].geometry.apply(lambda x: x.wkt).values,
             dims=["feature"],
             coords={"feature": zs.feature.values},
         )
