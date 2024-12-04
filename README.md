@@ -45,6 +45,7 @@ cd earthdaily-python-client
 
 # Create a conda environment and install dependencies
 conda env create -n earthdaily -f requirements.yml
+conda init
 conda activate earthdaily
 
 # Install package in editable mode
@@ -63,7 +64,7 @@ In your script or notebook, add:
 ```python
 from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
+load_dotenv(".env")  # Load environment variables from .env file
 ```
 
 ## Support development
