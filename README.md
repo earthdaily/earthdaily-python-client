@@ -67,6 +67,9 @@ from dotenv import load_dotenv
 load_dotenv(".env")  # Load environment variables from .env file
 ```
 
+## Quickstart
+To help you get started quickly, we provide a `quickstart.ipynb` Jupyter notebook that demonstrates how to use the EarthDaily Python client. You only need your `.env` file with your authentication credentials to run it. Simply open the notebook, load your environment variables as shown above, and follow the instructions to begin accessing and analyzing Earth observation data.
+
 ## Support development
 
 If this project has been helpful and saved you time, please consider giving it a star ⭐
