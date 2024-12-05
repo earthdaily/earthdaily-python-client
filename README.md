@@ -57,7 +57,7 @@ pip install -e .
 Authentication credentials can be automatically parsed from environment variables.
 The [python-dotenv](https://github.com/theskumar/python-dotenv) package is supported for convenience.
 
-Rename the `.env.sample` file in this repository to `.env` and enter your credentials.
+Rename the `.env.sample` file in this repository to `.env` and enter your credentials. Note this file is gitingored and will not be committed.
 
 In your script or notebook, add:
 
