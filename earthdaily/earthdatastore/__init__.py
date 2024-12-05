@@ -496,7 +496,7 @@ class Auth:
         return config
 
     @classmethod
-    def read_credentials_from_ini(cls, profile:str='default') -> dict:
+    def read_credentials_from_ini(cls, profile: str = "default") -> dict:
         """
         Read Earth Data Store credentials from a ini file.
 
@@ -511,11 +511,12 @@ class Auth:
         """
 
         from configparser import ConfigParser
+
         ini_path = Path.home() / ".earthdaily/credentials"
         ini_config = ConfigParser()
-        ini_config.read(ini_path)  
+        ini_config.read(ini_path)
         ini_config = ini_config[profile]
-        config = {key.upper():value for key,value in ini_config.items()}
+        config = {key.upper(): value for key, value in ini_config.items()}
         return config
 
     @classmethod
@@ -580,7 +581,7 @@ class Auth:
             Dictionary containing credentials
         """
         import toml
-        
+
         if not toml_path.exists():
             raise FileNotFoundError(
                 f"Credentials file {toml_path} not found. Make sure the path is valid"
