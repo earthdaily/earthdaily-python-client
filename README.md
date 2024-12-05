@@ -27,8 +27,11 @@ This package is designed to make geospatial workflows more efficient and accessi
 
 ### Prerequisites
 
-Make sure you have valid Earth Data Store authentication credentials. To request access, please [contact us](mailto:sales@earthdailyagro.com).
+Make sure you have valid Earth Data Store authentication credentials. These can be retrieved from the [EarthDaily Account Management](https://console.earthdaily.com/account) page.
 
+<p align="center">
+<img src="docs/assets/images/account.png" width="450">
+</p>
 
 ## Installation
 
@@ -57,7 +60,13 @@ pip install -e .
 Authentication credentials can be automatically parsed from environment variables.
 The [python-dotenv](https://github.com/theskumar/python-dotenv) package is supported for convenience.
 
-Rename the `.env.sample` file in this repository to `.env` and enter your credentials. Note this file is gitingored and will not be committed.
+Rename the `.env.sample` file in this repository to `.env` and enter your Earth Data Store authentication credentials. 
+Note this file is gitingored and will not be committed.
+An example of a completed credentials file is shown below:
+
+<p align="center">
+<img src="docs/assets/images/creds.png" width="650">
+</p>
 
 In your script or notebook, add:
 
@@ -75,12 +84,6 @@ Simply open the notebook, load your environment variables as shown above, and fo
 ## Support development
 
 If this project has been helpful and saved you time, please consider giving it a star ⭐
-
-
-## Contact
-
-For additional information, please [email us](mailto:sales@earthdailyagro.com).
-
 
 ## Copyrights
 
