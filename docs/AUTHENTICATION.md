@@ -59,7 +59,7 @@ from earthdaily import EarthDataStore
 eds = EarthDataStore(toml_path = Path("/path/to/the/credentials_file"))
 ```
 
-### Authentication from Environment Variables
+#### Authentication from Environment Variables
 
 Authentication credentials can be automatically parsed from environment variables.
 The [python-dotenv](https://github.com/theskumar/python-dotenv) package is supported for convenience.
