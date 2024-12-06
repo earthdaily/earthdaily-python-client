@@ -62,11 +62,6 @@ The [python-dotenv](https://github.com/theskumar/python-dotenv) package is suppo
 
 Rename the `.env.sample` file in this repository to `.env` and enter your Earth Data Store authentication credentials. 
 Note this file is gitingored and will not be committed.
-An example of a completed credentials file is shown below:
-
-<p align="center">
-<img src="docs/assets/images/creds.png" width="650">
-</p>
 
 In your script or notebook, add:
 
