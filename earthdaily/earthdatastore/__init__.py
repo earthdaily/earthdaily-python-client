@@ -10,7 +10,6 @@ import psutil
 import requests
 import xarray as xr
 import numpy as np
-import toml
 from typing import Optional
 from pathlib import Path
 from pystac.item_collection import ItemCollection
@@ -492,15 +491,32 @@ class Auth:
             config = cls.read_credentials_from_environment()
 
         else:
-            toml_path = Path.home() / ".earthdaily/credentials"
+            config = cls.read_credentials_from_ini()
 
-            if profile is None:
-                profile = "default"
+        return config
 
-            config = cls.read_credentials_from_toml(
-                toml_path=toml_path, profile=profile
-            )
+    @classmethod
+    def read_credentials_from_ini(cls, profile: str = "default") -> dict:
+        """
+        Read Earth Data Store credentials from a ini file.
 
+        Parameters
+        ----------
+        ini_path : Path
+            The path to the INI file containing the Earth Data Store credentials.
+        Returns
+        -------
+        dict
+           Dictionary containing credentials
+        """
+
+        from configparser import ConfigParser
+
+        ini_path = Path.home() / ".earthdaily/credentials"
+        ini_config = ConfigParser()
+        ini_config.read(ini_path)
+        ini_config = ini_config[profile]
+        config = {key.upper(): value for key, value in ini_config.items()}
         return config
 
     @classmethod
@@ -564,6 +580,8 @@ class Auth:
         dict
             Dictionary containing credentials
         """
+        import toml
+
         if not toml_path.exists():
             raise FileNotFoundError(
                 f"Credentials file {toml_path} not found. Make sure the path is valid"
