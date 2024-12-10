@@ -36,6 +36,7 @@ earthdaily documentation
    :caption: Documentation API
 
    earthdaily
+   AUTHENTICATION
    CONTRIBUTING
    CHANGELOG
 
