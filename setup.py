@@ -7,6 +7,9 @@ with open("earthdaily/__init__.py", encoding="utf8") as f:
         if line.startswith("__version__"):
             version = line.split("=")[1].split('"')[1]
 
+with open("README.md", encoding="utf-8") as f:
+    long_description = f.read()
+
 setup(
     name="earthdaily",
     packages=find_packages(exclude=['tests']),
@@ -14,7 +17,7 @@ setup(
     description="earthdaily: easy authentication, search and retrieval of Earth Data Store collections data",
     author="EarthDaily Agro",
     python_requires=">=3.10",
-    long_description=open("README.md").read(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=[
         "numpy",
