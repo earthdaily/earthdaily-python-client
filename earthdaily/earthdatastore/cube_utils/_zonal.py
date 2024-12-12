@@ -16,6 +16,7 @@ from .preprocessing import rasterize
 from scipy.sparse import csr_matrix
 from scipy.stats import mode
 
+
 def _compute_M(data):
     cols = np.arange(data.size)
     return csr_matrix((cols, (data.ravel(), cols)), shape=(data.max() + 1, data.size))
@@ -24,6 +25,7 @@ def _compute_M(data):
 def _indices_sparse(data):
     M = _compute_M(data)
     return [np.unravel_index(row.data, data.shape) for row in M]
+
 
 def datacube_time_stats(datacube, operations):
     datacube = datacube.groupby("time")
@@ -68,7 +70,7 @@ def _zonal_stats_numpy(
             field_stats = []
             for reducer in reducers:
                 field_arr = dataset[(...,) + tuple(positions[idx])]
-                if reducer == 'mode':
+                if reducer == "mode":
                     field_arr = mode(field_arr, axis=-1, nan_policy="omit").mode
                 else:
                     func = f"nan{reducer}" if hasattr(np, f"nan{reducer}") else reducer
