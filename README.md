@@ -30,7 +30,7 @@ This package is designed to make geospatial workflows more efficient and accessi
 Make sure you have valid Earth Data Store authentication credentials. These can be retrieved from the [EarthDaily Account Management](https://console.earthdaily.com/account) page.
 
 <p align="center">
-<img src="docs/assets/images/account.png" width="450">
+<img src="https://github.com/earthdaily/earthdaily-python-client/raw/main/docs/assets/images/account.png" width="450">
 </p>
 
 ## Installation
