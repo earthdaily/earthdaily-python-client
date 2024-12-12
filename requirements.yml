@@ -6,7 +6,7 @@ dependencies:
 - numpy
 - matplotlib
 - joblib
-- gdal=3.7.3
+- gdal
 - scipy
 - psutil
 - pystac-client
