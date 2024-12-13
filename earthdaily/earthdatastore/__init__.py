@@ -28,46 +28,125 @@ __all__ = ["datacube", "metacube", "xr", "stac"]
 logging.getLogger("earthdaily-earthdatastore")
 
 
-def post_query_items(items, query):
-    """Applies query to items fetched from the STAC catalog.
-
+def apply_single_condition(item_value, condition_op: str, condition_value: [any,list[any]]) -> bool:
+    """
+    Apply a single comparison condition to an item's property value.
+    
     Parameters
     ----------
-    items : list
-        List of items
-    query : dict
-        Query to post
-
+    item_value : any
+        The value of the property in the item.
+    condition_op : str
+        The comparison operator (e.g., 'lt', 'gt', 'eq').
+    condition_value : [any, list[any]]
+        The value or list of values to compare against.
+    
     Returns
     -------
-    items : ItemCollection
-        filtered items
+    bool
+        True if the condition is met, False otherwise.
     """
-    items_ = []
-    for idx, item in enumerate(items):
-        queries_results = 0
-        for k, v in query.items():
-            if k not in item.properties.keys():
-                continue
-            for v_op, v_val in v.items():
-                if isinstance(v_val, list):
-                    results = 0
-                    for v_val_ in v_val:
-                        operation = operator.__dict__[v_op](item.properties[k], v_val_)
+    # Ensure condition_value is always a list
+    values = condition_value if isinstance(condition_value, list) else [condition_value]
+    
+    # Get the comparison function from the operator module
+    op_func = operator.__dict__.get(condition_op)
+    if not op_func:
+        raise ValueError(f"Unsupported operator: {condition_op}")
+    
+    # Check if any value meets the condition
+    return any(op_func(item_value, val) for val in values)
 
-                        if operation:
-                            results += 1
-                    if results == len(v_val):
-                        queries_results += 1
-                else:
-                    operation = operator.__dict__[v_op](item.properties[k], v_val)
-                    if operation:
-                        queries_results += 1
-        if queries_results == len(query.keys()):
-            items_.append(item)
+def validate_property_condition(item: any, property_name: str, conditions: dict[str,any]) -> bool:
+    """
+    Validate if an item meets all conditions for a specific property.
+    
+    Parameters
+    ----------
+    item : any
+        The STAC item to check.
+    property_name : str
+        The name of the property to validate.
+    conditions : dict[str, any]
+        Dictionary of conditions to apply to the property.
+    
+    Returns
+    -------
+    bool
+        True if all conditions are met, False otherwise.
+    """
+    # Check if the property exists in the item
+    if property_name not in item.properties:
+        return False
+    
+    # Check each condition for the property
+    return all(
+        apply_single_condition(
+            item.properties.get(property_name), 
+            condition_op, 
+            condition_value
+        )
+        for condition_op, condition_value in conditions.items()
+    )
 
-    items = ItemCollection(items_)
-    return items
+def filter_items(items: list[any], query: dict[str, dict[str, any]]) -> list[any]:
+    """
+    Filter items based on a complex query dictionary.
+    
+    Parameters
+    ----------
+    items : list[any]
+        List of STAC items to filter.
+    query : dict[str, dict[str, any]]
+        Query filter with operations to apply to item properties.
+    
+    Returns
+    -------
+    list[any]
+        Filtered list of items matching the query.
+    
+    Examples
+    --------
+    >>> query = {
+    ...     'eo:cloud_cover': {'lt': [10], 'gt': [0]},
+    ...     'datetime': {'eq': '2023-01-01'}
+    ... }
+    >>> filtered_items = filter_items(catalog_items, query)
+    """
+    return [
+        item for item in items
+        if all(
+            validate_property_condition(item, property_name, conditions)
+            for property_name, conditions in query.items()
+        )
+    ]
+
+def post_query_items(items: list[any], query: dict[str, dict[str, any]]) -> ItemCollection:  
+    """
+    Apply a query filter to items fetched from a STAC catalog and return an ItemCollection.
+    
+    Parameters
+    ----------
+    items : list[any]
+        List of STAC items to filter.
+    query : dict[str, dict[str, any]]
+        Query filter with operations to apply to item properties.
+    
+    Returns
+    -------
+    ItemCollection
+        Filtered collection of items matching the query.
+    
+    Examples
+    --------
+    >>> query = {
+    ...     'eo:cloud_cover': {'lt': [10], 'gt': [0]},
+    ...     'datetime': {'eq': '2023-01-01'}
+    ... }
+    >>> filtered_items = post_query_items(catalog_items, query)
+    """
+    filtered_items = filter_items(items, query)
+    return ItemCollection(filtered_items)  # Assuming ItemCollection is imported/defined elsewhere
 
 
 def _select_last_common_occurrences(first, second):
@@ -132,80 +211,78 @@ def _cloud_path_to_http(cloud_path):
 
 
 def enhance_assets(
-    items,
-    alternate="download",
-    use_http_url=False,
-    add_default_scale_factor=False,
-):
-    """Enhance assets with extra fields.
+    items: ItemCollection,
+    alternate: str = "download",
+    use_http_url: bool = False,
+    add_default_scale_factor: bool = False,
+) -> ItemCollection:
+    """
+    Enhance STAC item assets with additional metadata and URL transformations.
 
     Parameters
     ----------
     items : ItemCollection
-        A PySTAC ItemCollection
-    alternate : str, optional
-        Alternate asset to use, by default "download"
+        Collection of STAC items to enhance
+    alternate : Optional[str], optional
+        Alternate asset href to use, by default "download"
     use_http_url : bool, optional
-        Use HTTP URL instead of cloud path, by default False
+        Convert cloud URLs to HTTP URLs, by default False
     add_default_scale_factor : bool, optional
-        Add default scale, offset, nodata factor to assets, by default False
+        Add default scale, offset, nodata to raster bands, by default False
 
     Returns
     -------
-    items : ItemCollection
-        Updated PySTAC ItemCollection
+    ItemCollection
+        Enhanced collection of STAC items
     """
+    def _enhance_asset(item, asset_key):
+        asset = item.assets[asset_key]
+        
+        # Alternate href
+        if alternate:
+            href = (asset.extra_fields
+                    .get("alternate", {})
+                    .get(alternate, {})
+                    .get("href"))
+            if href:
+                asset.href = href
+        
+        # HTTP URL conversion
+        if use_http_url:
+            href = asset.to_dict().get("href")
+            if href:
+                asset.href = _cloud_path_to_http(href)
+        
+        # Default scale factors
+        if add_default_scale_factor:
+            scale_factor_collection = _scales_collections.get(
+                item.collection_id, [{}]
+            )
+            
+            for scales_collection in scale_factor_collection:
+                if asset_key in scales_collection.get("assets", []):
+                    # Ensure raster:bands exists
+                    if "raster:bands" not in asset.extra_fields:
+                        asset.extra_fields["raster:bands"] = [{}]
+                    
+                    # Add scale factors if not present
+                    band_config = asset.extra_fields["raster:bands"][0]
+                    if not band_config.get("scale"):
+                        band_config.update({
+                            "scale": scales_collection["scale"],
+                            "offset": scales_collection["offset"],
+                            "nodata": scales_collection["nodata"]
+                        })
+        
+        return item
 
+    # Only process if any enhancement is requested
     if any((alternate, use_http_url, add_default_scale_factor)):
         for idx, item in enumerate(items):
             keys = list(item.assets.keys())
-            for asset in keys:
-                # use the alternate href if it exists
-                if alternate:
-                    href = (
-                        item.assets[asset]
-                        .extra_fields.get("alternate", {})
-                        .get(alternate, {})
-                        .get("href")
-                    )
-                    if href:
-                        items[idx].assets[asset].href = href
-                # use HTTP URL instead of cloud path
-                if use_http_url:
-                    href = item.assets[asset].to_dict().get("href", {})
-                    if href:
-                        items[idx].assets[asset].href = _cloud_path_to_http(href)
-                if add_default_scale_factor:
-                    scale_factor_collection = (
-                        _scales_collections.scale_factor_collections.get(
-                            item.collection_id, [{}]
-                        )
-                    )
-                    for scales_collection in scale_factor_collection:
-                        if asset in scales_collection.get("assets", []):
-                            if (
-                                "raster:bands"
-                                not in items[idx].assets[asset].extra_fields
-                            ):
-                                items[idx].assets[asset].extra_fields[
-                                    "raster:bands"
-                                ] = [{}]
-                            if (
-                                not items[idx]
-                                .assets[asset]
-                                .extra_fields["raster:bands"][0]
-                                .get("scale")
-                            ):
-                                items[idx].assets[asset].extra_fields["raster:bands"][
-                                    0
-                                ]["scale"] = scales_collection["scale"]
-                                items[idx].assets[asset].extra_fields["raster:bands"][
-                                    0
-                                ]["offset"] = scales_collection["offset"]
-                                items[idx].assets[asset].extra_fields["raster:bands"][
-                                    0
-                                ]["nodata"] = scales_collection["nodata"]
-
+            for asset_key in keys:
+                items[idx] = _enhance_asset(item, asset_key)
+    
     return items
 
 
