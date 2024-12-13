@@ -235,55 +235,58 @@ def enhance_assets(
     ItemCollection
         Enhanced collection of STAC items
     """
-    def _enhance_asset(item, asset_key):
-        asset = item.assets[asset_key]
-        
-        # Alternate href
-        if alternate:
-            href = (asset.extra_fields
-                    .get("alternate", {})
-                    .get(alternate, {})
-                    .get("href"))
-            if href:
-                asset.href = href
-        
-        # HTTP URL conversion
-        if use_http_url:
-            href = asset.to_dict().get("href")
-            if href:
-                asset.href = _cloud_path_to_http(href)
-        
-        # Default scale factors
-        if add_default_scale_factor:
-            scale_factor_collection = _scales_collections.get(
-                item.collection_id, [{}]
-            )
-            
-            for scales_collection in scale_factor_collection:
-                if asset_key in scales_collection.get("assets", []):
-                    # Ensure raster:bands exists
-                    if "raster:bands" not in asset.extra_fields:
-                        asset.extra_fields["raster:bands"] = [{}]
-                    
-                    # Add scale factors if not present
-                    band_config = asset.extra_fields["raster:bands"][0]
-                    if not band_config.get("scale"):
-                        band_config.update({
-                            "scale": scales_collection["scale"],
-                            "offset": scales_collection["offset"],
-                            "nodata": scales_collection["nodata"]
-                        })
-        
-        return item
-
-    # Only process if any enhancement is requested
     if any((alternate, use_http_url, add_default_scale_factor)):
         for idx, item in enumerate(items):
             keys = list(item.assets.keys())
-            for asset_key in keys:
-                items[idx] = _enhance_asset(item, asset_key)
-    
+            for asset in keys:
+                # use the alternate href if it exists
+                if alternate:
+                    href = (
+                        item.assets[asset]
+                        .extra_fields.get("alternate", {})
+                        .get(alternate, {})
+                        .get("href")
+                    )
+                    if href:
+                        items[idx].assets[asset].href = href
+                # use HTTP URL instead of cloud path
+                if use_http_url:
+                    href = item.assets[asset].to_dict().get("href", {})
+                    if href:
+                        items[idx].assets[asset].href = _cloud_path_to_http(href)
+                if add_default_scale_factor:
+                    scale_factor_collection = (
+                        _scales_collections.scale_factor_collections.get(
+                            item.collection_id, [{}]
+                        )
+                    )
+                    for scales_collection in scale_factor_collection:
+                        if asset in scales_collection.get("assets", []):
+                            if (
+                                "raster:bands"
+                                not in items[idx].assets[asset].extra_fields
+                            ):
+                                items[idx].assets[asset].extra_fields[
+                                    "raster:bands"
+                                ] = [{}]
+                            if (
+                                not items[idx]
+                                .assets[asset]
+                                .extra_fields["raster:bands"][0]
+                                .get("scale")
+                            ):
+                                items[idx].assets[asset].extra_fields["raster:bands"][
+                                    0
+                                ]["scale"] = scales_collection["scale"]
+                                items[idx].assets[asset].extra_fields["raster:bands"][
+                                    0
+                                ]["offset"] = scales_collection["offset"]
+                                items[idx].assets[asset].extra_fields["raster:bands"][
+                                    0
+                                ]["nodata"] = scales_collection["nodata"]
+
     return items
+
 
 
 def _get_token(config=None):

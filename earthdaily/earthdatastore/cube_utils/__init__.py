@@ -63,7 +63,7 @@ def _datacube_masks(method: Callable) -> Callable:
     
     return wrapper
 
-def datacubes(method: Callable) -> Callable:
+def _datacubes(method: Callable) -> Callable:
     """
     Decorator to handle multiple collections and create meta-datacubes.
     
