@@ -298,7 +298,6 @@ def enhance_assets(
     return items
 
 
-
 def _get_token(config=None):
     """Get token for interacting with the Earth Data Store API.
 
