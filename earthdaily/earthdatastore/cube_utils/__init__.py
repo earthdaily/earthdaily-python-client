@@ -22,33 +22,34 @@ _auto_mask_order = ["cloudmask", "ag_cloud_mask", "native"]
 def _datacube_masks(method: Callable) -> Callable:
     """
     Decorator to handle automatic mask selection and application.
-    
+
     This decorator provides a flexible way to apply masks to a datacube,
     with an 'auto' mode that tries multiple mask options.
-    
+
     Parameters
     ----------
     method : Callable
         The method to be wrapped with mask application logic.
-    
+
     Returns
     -------
     Callable
         A wrapped method with enhanced mask handling capabilities.
     """
+
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         # Handle mask selection
         mask_with = kwargs.get("mask_with", None)
-        
+
         # If 'auto' is specified, use the predefined auto mask order
         if isinstance(mask_with, str) and mask_with == "auto":
             mask_with = _auto_mask_order
-        
+
         # If mask_with is a list, try each mask sequentially
         if isinstance(mask_with, list):
             kwargs.pop("mask_with", None)
-            
+
             for mask in mask_with:
                 try:
                     datacube = method(self, mask_with=mask, *args, **kwargs)
@@ -57,36 +58,36 @@ def _datacube_masks(method: Callable) -> Callable:
                     # If this is the last mask, re-raise the exception
                     if mask == mask_with[-1]:
                         raise error
-        
+
         # If no special mask handling is needed, call the method directly
         return method(self, *args, **kwargs)
-    
+
     return wrapper
 
 def _datacubes(method: Callable) -> Callable:
     """
     Decorator to handle multiple collections and create meta-datacubes.
-    
+
     This decorator provides logic for processing multiple collections,
     allowing creation of meta-datacubes when multiple collections are provided.
-    
+
     Parameters
     ----------
     method : Callable
         The method to be wrapped with multi-collection handling logic.
-    
+
     Returns
     -------
     Callable
         A wrapped method with enhanced multi-collection processing capabilities.
     """
+
     @wraps(method)
     @_datacube_masks
     def wrapper(self, *args, **kwargs):
         # Determine collections from args or kwargs
-        collections = kwargs.get("collections", 
-                                 args[0] if len(args) > 0 else None)
-        
+        collections = kwargs.get("collections", args[0] if len(args) > 0 else None)
+
         # If multiple collections are provided, process them separately
         if isinstance(collections, list) and len(collections) > 1:
             # Remove collections from kwargs or args
@@ -94,25 +95,25 @@ def _datacubes(method: Callable) -> Callable:
                 kwargs.pop("collections")
             else:
                 args = args[1:]
-            
+
             # Process each collection
             datacubes = []
             for idx, collection in enumerate(collections):
                 # Create datacube for each collection
                 datacube = method(self, collections=collection, *args, **kwargs)
-                
+
                 # Use the first datacube's geobox for subsequent datacubes
                 if idx == 0:
                     kwargs["geobox"] = datacube.odc.geobox
-                
+
                 datacubes.append(datacube)
-            
+
             # Combine datacubes into a meta-datacube
             return metacube(*datacubes)
-        
+
         # If only one collection, process normally
         return method(self, *args, **kwargs)
-    
+
     return wrapper
 
 
@@ -359,7 +360,7 @@ def datacube(
 def rescale_assets_with_items(
     items_collection: list,
     ds: xr.Dataset,
-    assets: None|list[str] = None,
+    assets: None | list[str] = None,
     boa_offset_applied_control: bool = True,
     boa_offset_applied_force_by_date: bool = True,
 ) -> xr.Dataset:
@@ -390,7 +391,7 @@ def rescale_assets_with_items(
         If there's a mismatch between items and datacube time or dates.
     """
     logging.info("Rescaling dataset")
-    
+
     # Deduplicate items by datetime
     unique_items = {}
     for item in items_collection:
@@ -399,7 +400,9 @@ def rescale_assets_with_items(
 
     # Validate items match dataset time
     if len(items_collection) != ds.time.size:
-        raise ValueError("Mismatch between items and datacube time. Set rescale to False.")
+        raise ValueError(
+            "Mismatch between items and datacube time. Set rescale to False."
+        )
 
     # Prepare assets list
     assets = assets or list(ds.data_vars.keys())
@@ -408,42 +411,63 @@ def rescale_assets_with_items(
     # Process scaling for each time step
     for idx, time in enumerate(ds.time.values):
         item = items_collection[idx]
-        
+
         # Date validation
         if pd.Timestamp(time).strftime("%Y%m%d") != item.datetime.strftime("%Y%m%d"):
-            raise ValueError("Mismatch between items and datacube dates. Set rescale to False.")
+            raise ValueError(
+                "Mismatch between items and datacube dates. Set rescale to False."
+            )
 
         # BOA offset handling for Sentinel-2 L2A
-        boa_offset_applied = item.properties.get('earthsearch:boa_offset_applied', False)
+        boa_offset_applied = item.properties.get(
+            "earthsearch:boa_offset_applied", False
+        )
         if boa_offset_applied_control and item.collection_id == "sentinel-2-l2a":
             if boa_offset_applied_force_by_date:
-                boa_offset_applied = pd.Timestamp(time) >= pd.Timestamp('2022-02-28')
+                boa_offset_applied = pd.Timestamp(time) >= pd.Timestamp("2022-02-28")
 
         # Process each asset
         for ds_asset in assets:
             # Handle multi-band assets
             asset, band_idx = _parse_asset_band(ds_asset)
-            
+
             if asset not in item.assets:
                 continue
 
-            raster_bands = item.assets[asset].extra_fields.get('raster:bands', [])
+            raster_bands = item.assets[asset].extra_fields.get("raster:bands", [])
             if not raster_bands or len(raster_bands) < band_idx:
                 continue
 
             rasterbands = raster_bands[band_idx - 1]
-            scale = rasterbands.get('scale', 1)
-            offset = rasterbands.get('offset', 0)
+            scale = rasterbands.get("scale", 1)
+            offset = rasterbands.get("offset", 0)
 
             # Special handling for Sentinel-2 BOA offset
-            if (item.collection_id == "sentinel-2-l2a" and 
-                boa_offset_applied_control and 
-                ds_asset in ["blue", "red", "green", "nir", "nir08", "nir09", "swir16", "swir22", "rededge1", "rededge2", "rededge3"] and 
-                boa_offset_applied):
+            if (
+                item.collection_id == "sentinel-2-l2a"
+                and boa_offset_applied_control
+                and ds_asset
+                in [
+                    "blue",
+                    "red",
+                    "green",
+                    "nir",
+                    "nir08",
+                    "nir09",
+                    "swir16",
+                    "swir22",
+                    "rededge1",
+                    "rededge2",
+                    "rededge3",
+                ]
+                and boa_offset_applied
+            ):
                 offset = 0
 
             # Track scaling parameters
-            scales.setdefault(ds_asset, {}).setdefault(scale, {}).setdefault(offset, []).append(time)
+            scales.setdefault(ds_asset, {}).setdefault(scale, {}).setdefault(
+                offset, []
+            ).append(time)
 
     # Apply rescaling
     if scales:
@@ -458,17 +482,18 @@ def rescale_assets_with_items(
 
         # Merge scaled assets
         ds_scaled = xr.merge(scaled_assets).sortby("time")
-        
+
         # Preserve unscaled variables
         missing_vars = [var for var in ds.data_vars if var not in scales]
         if missing_vars:
             ds_scaled = xr.merge([ds_scaled, ds[missing_vars]])
-        
+
         ds_scaled.attrs = ds.attrs
         ds = ds_scaled
 
     logging.info("Rescaling complete")
     return ds.sortby("time")
+
 
 def _parse_asset_band(ds_asset: str) -> tuple[str, int]:
     """
@@ -484,10 +509,11 @@ def _parse_asset_band(ds_asset: str) -> tuple[str, int]:
     tuple[str, int]
         Tuple of (asset name, band index)
     """
-    parts = ds_asset.split('.')
+    parts = ds_asset.split(".")
     if len(parts) == 2 and parts[1][-1].isdigit():
         return parts[0], int(parts[1][-1])
     return ds_asset, 1
+
 
 def _propagade_rio(src, ds):
     coords = ["epsg", "spatial_ref"]

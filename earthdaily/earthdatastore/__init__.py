@@ -28,10 +28,12 @@ __all__ = ["datacube", "metacube", "xr", "stac"]
 logging.getLogger("earthdaily-earthdatastore")
 
 
-def apply_single_condition(item_value, condition_op: str, condition_value: [any,list[any]]) -> bool:
+def apply_single_condition(
+    item_value, condition_op: str, condition_value: [any, list[any]]
+) -> bool:
     """
     Apply a single comparison condition to an item's property value.
-    
+
     Parameters
     ----------
     item_value : any
@@ -40,7 +42,7 @@ def apply_single_condition(item_value, condition_op: str, condition_value: [any,
         The comparison operator (e.g., 'lt', 'gt', 'eq').
     condition_value : [any, list[any]]
         The value or list of values to compare against.
-    
+
     Returns
     -------
     bool
@@ -48,19 +50,22 @@ def apply_single_condition(item_value, condition_op: str, condition_value: [any,
     """
     # Ensure condition_value is always a list
     values = condition_value if isinstance(condition_value, list) else [condition_value]
-    
+
     # Get the comparison function from the operator module
     op_func = operator.__dict__.get(condition_op)
     if not op_func:
         raise ValueError(f"Unsupported operator: {condition_op}")
-    
+
     # Check if any value meets the condition
     return any(op_func(item_value, val) for val in values)
 
-def validate_property_condition(item: any, property_name: str, conditions: dict[str,any]) -> bool:
+
+def validate_property_condition(
+    item: any, property_name: str, conditions: dict[str, any]
+) -> bool:
     """
     Validate if an item meets all conditions for a specific property.
-    
+
     Parameters
     ----------
     item : any
@@ -69,7 +74,7 @@ def validate_property_condition(item: any, property_name: str, conditions: dict[
         The name of the property to validate.
     conditions : dict[str, any]
         Dictionary of conditions to apply to the property.
-    
+
     Returns
     -------
     bool
@@ -78,33 +83,32 @@ def validate_property_condition(item: any, property_name: str, conditions: dict[
     # Check if the property exists in the item
     if property_name not in item.properties:
         return False
-    
+
     # Check each condition for the property
     return all(
         apply_single_condition(
-            item.properties.get(property_name), 
-            condition_op, 
-            condition_value
+            item.properties.get(property_name), condition_op, condition_value
         )
         for condition_op, condition_value in conditions.items()
     )
 
+
 def filter_items(items: list[any], query: dict[str, dict[str, any]]) -> list[any]:
     """
     Filter items based on a complex query dictionary.
-    
+
     Parameters
     ----------
     items : list[any]
         List of STAC items to filter.
     query : dict[str, dict[str, any]]
         Query filter with operations to apply to item properties.
-    
+
     Returns
     -------
     list[any]
         Filtered list of items matching the query.
-    
+
     Examples
     --------
     >>> query = {
@@ -114,29 +118,33 @@ def filter_items(items: list[any], query: dict[str, dict[str, any]]) -> list[any
     >>> filtered_items = filter_items(catalog_items, query)
     """
     return [
-        item for item in items
+        item
+        for item in items
         if all(
             validate_property_condition(item, property_name, conditions)
             for property_name, conditions in query.items()
         )
     ]
 
-def post_query_items(items: list[any], query: dict[str, dict[str, any]]) -> ItemCollection:  
+
+def post_query_items(
+    items: list[any], query: dict[str, dict[str, any]]
+) -> ItemCollection:
     """
     Apply a query filter to items fetched from a STAC catalog and return an ItemCollection.
-    
+
     Parameters
     ----------
     items : list[any]
         List of STAC items to filter.
     query : dict[str, dict[str, any]]
         Query filter with operations to apply to item properties.
-    
+
     Returns
     -------
     ItemCollection
         Filtered collection of items matching the query.
-    
+
     Examples
     --------
     >>> query = {
@@ -146,7 +154,9 @@ def post_query_items(items: list[any], query: dict[str, dict[str, any]]) -> Item
     >>> filtered_items = post_query_items(catalog_items, query)
     """
     filtered_items = filter_items(items, query)
-    return ItemCollection(filtered_items)  # Assuming ItemCollection is imported/defined elsewhere
+    return ItemCollection(
+        filtered_items
+    )  # Assuming ItemCollection is imported/defined elsewhere
 
 
 def _select_last_common_occurrences(first, second):
