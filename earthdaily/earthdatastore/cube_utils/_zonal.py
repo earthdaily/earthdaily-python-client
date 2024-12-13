@@ -11,7 +11,6 @@ import xarray as xr
 import tqdm
 import logging
 import time
-from . import custom_reducers
 from .preprocessing import rasterize
 from scipy.sparse import csr_matrix
 from scipy.stats import mode
