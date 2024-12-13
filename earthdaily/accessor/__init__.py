@@ -78,7 +78,7 @@ def _xr_rio_clip(datacube, geom):
 
 
 @xr.register_dataarray_accessor("ed")
-class EarthDailyAccessorDataArray:
+class __EarthDailyAccessorDataArray:
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
 
@@ -206,7 +206,7 @@ class EarthDailyAccessorDataArray:
 
 
 @xr.register_dataset_accessor("ed")
-class EarthDailyAccessorDataset(EarthDailyAccessorDataArray):
+class __EarthDailyAccessorDataset(__EarthDailyAccessorDataArray):
     def __init__(self, xarray_obj):
         self._obj = xarray_obj
 
