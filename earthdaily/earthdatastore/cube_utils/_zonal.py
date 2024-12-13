@@ -14,6 +14,7 @@ import time
 from . import custom_reducers
 from .preprocessing import rasterize
 from scipy.sparse import csr_matrix
+from scipy.stats import mode
 
 
 def _compute_M(data):
@@ -24,13 +25,6 @@ def _compute_M(data):
 def _indices_sparse(data):
     M = _compute_M(data)
     return [np.unravel_index(row.data, data.shape) for row in M]
-
-
-def _np_mode(arr, **kwargs):
-    values, counts = np.unique(arr, return_counts=True)
-    isnan = np.isnan(values)
-    values, counts = values[~isnan], counts[~isnan]
-    return values[np.argmax(counts)]
 
 
 def datacube_time_stats(datacube, operations):
@@ -76,8 +70,11 @@ def _zonal_stats_numpy(
             field_stats = []
             for reducer in reducers:
                 field_arr = dataset[(...,) + tuple(positions[idx])]
-                func = f"nan{reducer}" if hasattr(np, f"nan{reducer}") else reducer
-                field_arr = getattr(np, func)(field_arr, axis=-1)
+                if reducer == "mode":
+                    field_arr = mode(field_arr, axis=-1, nan_policy="omit").mode
+                else:
+                    func = f"nan{reducer}" if hasattr(np, f"nan{reducer}") else reducer
+                    field_arr = getattr(np, func)(field_arr, axis=-1)
                 field_stats.append(field_arr)
             field_stats = np.asarray(field_stats)
             zs.append(field_stats)
@@ -187,8 +184,8 @@ def zonal_stats(
         positions = [np.asarray(yx_pos[i + 1]) for i in np.arange(geoms.shape[0])]
         positions = [position for position in positions if position.size > 0]
         del yx_pos
-        time_chunks = _memory_time_chunks(dataset, memory)
-        if smart_load:
+        if "time" in dataset.dims and smart_load:
+            time_chunks = _memory_time_chunks(dataset, memory)
             zs = xr.concat(
                 [
                     z
