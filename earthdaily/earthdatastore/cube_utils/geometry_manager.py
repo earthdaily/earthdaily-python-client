@@ -2,6 +2,7 @@ import shapely
 import json
 import geopandas as gpd
 
+
 class GeometryManager:
     """
     A class to manage and convert various types of geometries into different formats.
