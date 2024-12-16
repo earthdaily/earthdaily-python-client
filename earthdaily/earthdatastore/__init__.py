@@ -1030,13 +1030,16 @@ class Auth:
                     assets.append(sensor_mask)
                 elif isinstance(assets, dict):
                     assets[sensor_mask] = sensor_mask
-
+        if bbox is None and intersects:
+            bbox_query = list(cube_utils.GeometryManager(intersects).to_bbox())
+        if bbox:
+            bbox_query = bbox
+        else:
+            bbox_query= None
         # query the items
         items = self.search(
             collections=collections,
-            bbox=list(cube_utils.GeometryManager(intersects).to_bbox())
-            if bbox is None
-            else bbox,
+            bbox=bbox_query,
             datetime=datetime,
             assets=assets,
             prefer_alternate=prefer_alternate,
