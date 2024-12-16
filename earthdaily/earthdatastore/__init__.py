@@ -1035,7 +1035,7 @@ class Auth:
         if bbox:
             bbox_query = bbox
         else:
-            bbox_query= None
+            bbox_query = None
         # query the items
         items = self.search(
             collections=collections,

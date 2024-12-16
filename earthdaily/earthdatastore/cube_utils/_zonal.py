@@ -212,9 +212,9 @@ def zonal_stats(
 
         if geoms.crs.to_epsg() != 4326:
             geoms = geoms.to_crs("EPSG:4326")
-        
+
         geometry = xr.DataArray(
-            geoms.geometry.iloc[list(f-1)].to_wkt(rounding_precision=-1).values,
+            geoms.geometry.iloc[list(f - 1)].to_wkt(rounding_precision=-1).values,
             dims=["feature"],
             coords={"feature": zs.feature.values},
         )
