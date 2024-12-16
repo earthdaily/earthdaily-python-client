@@ -34,7 +34,7 @@ class TestZonalStats(unittest.TestCase):
             Polygon([(0, 0), (0, 0.5), (0.5, 0.5), (0.5, 0)]),
             Polygon([(1, 1), (9, 1), (9, 2.1), (1, 1)])
         ]
-        # out of bound geom #            Polygon([(10,10), (10,11), (11,11), (11,10)])]
+
         gdf = gpd.GeoDataFrame({"geometry": geometry}, crs="EPSG:4326")
         gdf.index = ['ok1', 'nok', 'ok2']
         gdf['label'] = [1, 1, 5]
