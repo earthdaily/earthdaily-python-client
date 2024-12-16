@@ -1031,7 +1031,7 @@ class Auth:
                 elif isinstance(assets, dict):
                     assets[sensor_mask] = sensor_mask
         bbox_query = None
-        
+
         if bbox is None and intersects is not None:
             bbox_query = list(cube_utils.GeometryManager(intersects).to_bbox())
         elif bbox is not None and intersects is None:
