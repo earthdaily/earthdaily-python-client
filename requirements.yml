@@ -4,14 +4,14 @@ channels:
  - defaults
 dependencies:
 - numpy
-- matplotlib
+- matplotlib<3.9
 - joblib
 - gdal
 - scipy
 - psutil
 - pystac-client
 - pystac
-- odc-stac<0.4
+- odc-stac<0.3.10
 - pandas>=2
 - geopandas
 - requests
