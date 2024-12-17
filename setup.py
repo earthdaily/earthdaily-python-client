@@ -27,7 +27,7 @@ setup(
         "psutil",
         "pystac-client",
         "pystac",
-        "odc-stac<=0.3.9",
+        "odc-stac<0.3.10",
         "pandas>=2",
         "geopandas",
         "requests",

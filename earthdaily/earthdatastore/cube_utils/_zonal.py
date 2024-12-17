@@ -11,7 +11,6 @@ import xarray as xr
 import tqdm
 import logging
 import time
-from . import custom_reducers
 from .preprocessing import rasterize
 from scipy.sparse import csr_matrix
 from scipy.stats import mode
@@ -213,8 +212,9 @@ def zonal_stats(
 
         if geoms.crs.to_epsg() != 4326:
             geoms = geoms.to_crs("EPSG:4326")
+
         geometry = xr.DataArray(
-            geoms.iloc[list(f - 1)].geometry.apply(lambda x: x.wkt).values,
+            geoms.geometry.iloc[list(f - 1)].to_wkt(rounding_precision=-1).values,
             dims=["feature"],
             coords={"feature": zs.feature.values},
         )
