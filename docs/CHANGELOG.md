@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.5] - Unreleased
+
+### Changed
+
+- After benchmark, default `chunks` size is `dict(x=512,y=512, time=1)` and 
+not "auto" for x and y anymore.
+- `odc-stac` newest version is now supported (and fix for odc-stac has 
+been submitted).
+
 ## [0.3.4] - 2024-12-17
 
 ### Fixed
@@ -21,7 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- xarray accessor classes are now privates to avoid having them in autocomplementation.
+- xarray accessor classes are now privates to avoid having them in 
+autocomplementation.
 
 ## [0.3.2] - 2024-12-10
 
