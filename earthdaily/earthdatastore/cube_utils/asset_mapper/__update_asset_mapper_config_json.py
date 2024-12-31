@@ -8,7 +8,7 @@ Created on Fri Dec 15 09:03:08 2023
 import earthdaily
 import json
 
-eds = earthdaily.earthdatastore.Auth()
+eds = earthdaily.EarthDataStore()
 asset_mapper_path = (
     earthdaily.earthdatastore.cube_utils.asset_mapper.__asset_mapper_config_path
 )
