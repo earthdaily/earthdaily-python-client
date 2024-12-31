@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.5] - Unreleased
 
+### Added
+
+- `native` cloudmask is now supported for `sentinel-2-c1-l2a`.
+
 ### Changed
 
 - After benchmark, default `chunks` size is `dict(x=512,y=512, time=1)` and 
