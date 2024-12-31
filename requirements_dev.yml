@@ -7,7 +7,7 @@ dependencies:
   - pandas
   - libtiff
   - gdal
-  - geopandas
+  - geopandas=0.14.4
   - dask>=2024.4
   - shapely
   - xarray>=2024.7.0
