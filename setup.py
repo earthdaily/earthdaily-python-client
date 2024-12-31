@@ -29,7 +29,7 @@ setup(
         "pystac",
         "odc-stac<0.3.10",
         "pandas>=2",
-        "geopandas",
+        "geopandas>=1",
         "requests",
         "xarray",
         "rasterio",
