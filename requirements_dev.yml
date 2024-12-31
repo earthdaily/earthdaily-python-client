@@ -6,7 +6,7 @@ dependencies:
   - numpy
   - pandas
   - libtiff
-  - gdal
+  - gdal<=3.8
   - geopandas>=1
   - dask>=2024.4
   - shapely
