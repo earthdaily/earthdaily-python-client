@@ -4,20 +4,16 @@ import operator
 import os
 import warnings
 import time
-import pandas as pd
 import geopandas as gpd
-import psutil
 import requests
 import xarray as xr
 import numpy as np
 from typing import Optional
 from pathlib import Path
 from pystac.item_collection import ItemCollection
-from pystac_client.item_search import ItemSearch
 from pystac_client import Client
 from pystac_client.stac_api_io import StacApiIO
 from urllib3 import Retry
-from itertools import chain
 from odc import stac
 from . import _scales_collections, cube_utils, mask
 from .parallel_search import parallel_search, NoItemsFoundError
