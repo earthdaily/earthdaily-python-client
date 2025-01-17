@@ -16,6 +16,7 @@ def EarthDataStore(
     profile: Optional[str] = None,
     presign_urls: bool = True,
     request_payer: bool = False,
+    asset_proxy_enabled: bool = False,
 ) -> earthdatastore.Auth:
     """
     Open earth data store connection to allow for datacube requests.
@@ -34,6 +35,10 @@ def EarthDataStore(
     profile : profile, optional
         Name of the profile to use in the TOML file.
         Uses "default" by default.
+    asset_proxy_enabled : bool, optional
+        If True, the asset proxy URLs will be returned instead of pre-signed URLs.
+        Both asset_proxy_enabled and presign_urls cannot be True at the same time. asset_proxy_enabled takes precedence.
+        Uses False by default.
 
     Returns
     -------
@@ -46,4 +51,5 @@ def EarthDataStore(
         profile=profile,
         presign_urls=presign_urls,
         request_payer=request_payer,
+        asset_proxy_enabled=asset_proxy_enabled,
     )

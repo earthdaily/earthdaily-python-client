@@ -338,7 +338,7 @@ def _get_token(config=None):
     return json.loads(token_response.text)["access_token"], eds_url
 
 
-def _get_client(config=None, presign_urls=True, request_payer=False):
+def _get_client(config=None, presign_urls=True, request_payer=False, asset_proxy_enabled=False):
     """Get client for interacting with the Earth Data Store API.
 
     By default, Earth Data Store will look for environment variables called
@@ -350,6 +350,8 @@ def _get_client(config=None, presign_urls=True, request_payer=False):
         A JSON string or a dictionary with the credentials for the Earth Data Store.
     presign_urls : bool, optional
         Use presigned URLs, by default True
+    asset_proxy_enabled : bool, optional
+        Use asset proxy URLs, by default False
 
     Returns
     -------
@@ -369,7 +371,9 @@ def _get_client(config=None, presign_urls=True, request_payer=False):
         token, eds_url = _get_token(config)
 
     headers = {"Authorization": f"bearer {token}"}
-    if presign_urls:
+    if asset_proxy_enabled:
+        headers["X-Proxy-Asset-Urls"] = "True"
+    elif presign_urls:
         headers["X-Signed-Asset-Urls"] = "True"
 
     if request_payer:
@@ -445,7 +449,7 @@ class StacCollectionExplorer:
 
 class Auth:
     def __init__(
-        self, config: str | dict = None, presign_urls=True, request_payer=False
+        self, config: str | dict = None, presign_urls=True, request_payer=False, asset_proxy_enabled=False
     ):
         """
         A client for interacting with the Earth Data Store API.
@@ -457,6 +461,8 @@ class Auth:
         config : str | dict, optional
             The path to the json file containing the Earth Data Store credentials,
             or a dict with those credentials.
+        asset_proxy_enabled : bool, optional
+            Use asset proxy URLs, by default False
 
         Returns
         -------
@@ -484,6 +490,7 @@ class Auth:
         self.__auth_config = config
         self.__presign_urls = presign_urls
         self.__request_payer = request_payer
+        self.__asset_proxy_enabled = asset_proxy_enabled
         self._first_items_ = {}
         self._staccollectionexplorer = {}
         self.__time_eds_log = time.time()
@@ -497,6 +504,7 @@ class Auth:
         profile: Optional[str] = None,
         presign_urls: bool = True,
         request_payer: bool = False,
+        asset_proxy_enabled: bool = False,
     ) -> "Auth":
         """
         Secondary Constructor.
@@ -515,6 +523,8 @@ class Auth:
         profile : profile, optional
             Name of the profile to use in the TOML file.
             Uses "default" by default.
+        asset_proxy_enabled : bool, optional
+            Use asset proxy URLs, by default False
 
         Returns
         -------
@@ -532,7 +542,7 @@ class Auth:
                 raise ValueError(f"Missing value for {item}")
 
         return cls(
-            config=config, presign_urls=presign_urls, request_payer=request_payer
+            config=config, presign_urls=presign_urls, request_payer=request_payer, asset_proxy_enabled=asset_proxy_enabled
         )
 
     @classmethod
@@ -699,7 +709,7 @@ class Auth:
             if t:
                 logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
             self._client = _get_client(
-                self.__auth_config, self.__presign_urls, self.__request_payer
+                self.__auth_config, self.__presign_urls, self.__request_payer, self.__asset_proxy_enabled
             )
             self.__time_eds_log = time.time()
 
