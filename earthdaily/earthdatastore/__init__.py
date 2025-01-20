@@ -371,7 +371,7 @@ def _get_client(config=None, presign_urls=True, asset_proxy_enabled=False):
         headers["X-Proxy-Asset-Urls"] = "True"
     elif presign_urls:
         headers["X-Signed-Asset-Urls"] = "True"
-        
+
     retry = Retry(
         total=5,
         backoff_factor=1,
@@ -533,7 +533,9 @@ class Auth:
                 raise ValueError(f"Missing value for {item}")
 
         return cls(
-            config=config, presign_urls=presign_urls, asset_proxy_enabled=asset_proxy_enabled
+            config=config,
+            presign_urls=presign_urls,
+            asset_proxy_enabled=asset_proxy_enabled,
         )
 
     @classmethod
