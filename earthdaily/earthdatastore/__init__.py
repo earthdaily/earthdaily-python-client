@@ -334,7 +334,7 @@ def _get_token(config=None):
     return json.loads(token_response.text)["access_token"], eds_url
 
 
-def _get_client(config=None, presign_urls=True, request_payer=False, asset_proxy_enabled=False):
+def _get_client(config=None, presign_urls=True, asset_proxy_enabled=False):
     """Get client for interacting with the Earth Data Store API.
 
     By default, Earth Data Store will look for environment variables called
@@ -371,10 +371,7 @@ def _get_client(config=None, presign_urls=True, request_payer=False, asset_proxy
         headers["X-Proxy-Asset-Urls"] = "True"
     elif presign_urls:
         headers["X-Signed-Asset-Urls"] = "True"
-
-    if request_payer:
-        headers["x-amz-request-payer"] = "requester"
-
+        
     retry = Retry(
         total=5,
         backoff_factor=1,
@@ -445,7 +442,7 @@ class StacCollectionExplorer:
 
 class Auth:
     def __init__(
-        self, config: str | dict = None, presign_urls=True, request_payer=False, asset_proxy_enabled=False
+        self, config: str | dict = None, presign_urls=True, asset_proxy_enabled=False
     ):
         """
         A client for interacting with the Earth Data Store API.
@@ -485,7 +482,6 @@ class Auth:
         self._client = None
         self.__auth_config = config
         self.__presign_urls = presign_urls
-        self.__request_payer = request_payer
         self.__asset_proxy_enabled = asset_proxy_enabled
         self._first_items_ = {}
         self._staccollectionexplorer = {}
@@ -499,7 +495,6 @@ class Auth:
         toml_path: Optional[Path] = None,
         profile: Optional[str] = None,
         presign_urls: bool = True,
-        request_payer: bool = False,
         asset_proxy_enabled: bool = False,
     ) -> "Auth":
         """
@@ -538,7 +533,7 @@ class Auth:
                 raise ValueError(f"Missing value for {item}")
 
         return cls(
-            config=config, presign_urls=presign_urls, request_payer=request_payer, asset_proxy_enabled=asset_proxy_enabled
+            config=config, presign_urls=presign_urls, asset_proxy_enabled=asset_proxy_enabled
         )
 
     @classmethod
@@ -705,7 +700,7 @@ class Auth:
             if t:
                 logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
             self._client = _get_client(
-                self.__auth_config, self.__presign_urls, self.__request_payer, self.__asset_proxy_enabled
+                self.__auth_config, self.__presign_urls, self.__asset_proxy_enabled
             )
             self.__time_eds_log = time.time()
 

@@ -15,7 +15,6 @@ def EarthDataStore(
     toml_path: Optional[Path] = None,
     profile: Optional[str] = None,
     presign_urls: bool = True,
-    request_payer: bool = False,
     asset_proxy_enabled: bool = False,
 ) -> earthdatastore.Auth:
     """
@@ -50,6 +49,5 @@ def EarthDataStore(
         toml_path=toml_path,
         profile=profile,
         presign_urls=presign_urls,
-        request_payer=request_payer,
         asset_proxy_enabled=asset_proxy_enabled,
     )

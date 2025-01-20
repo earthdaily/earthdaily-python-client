@@ -21,7 +21,6 @@ class TestEarthDataStore(unittest.TestCase):
             toml_path=None,
             profile=None,
             presign_urls=True,
-            request_payer=False,
             asset_proxy_enabled=True,
         )
 
