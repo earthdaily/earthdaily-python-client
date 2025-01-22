@@ -13,7 +13,7 @@ class TestEdsAuth(unittest.TestCase):
     @patch("earthdaily.earthdatastore.Auth.read_credentials_from_json")
     def test_read_credentials_from_json(self, mock_read_json):
         mock_read_json.return_value = {
-            "EDS_AUTH_URL": "https://valid-auth-url.com",
+            "EDS_AUTH_URL": "https://auth.example.com",
             "EDS_SECRET": "secret_value",
             "EDS_CLIENT_ID": "client_id_value",
         }
