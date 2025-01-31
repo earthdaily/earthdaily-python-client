@@ -6,7 +6,7 @@ import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point
 from dask import array as da
-import spyndex
+# import spyndex
 from dask_image import ndfilters as dask_ndimage
 from scipy import ndimage
 from xarray.core.extensions import AccessorRegistrationWarning

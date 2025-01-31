@@ -16,21 +16,21 @@
 
    {% block functions %}
    {% if functions %}
-   .. rubric:: {{ _('Functions alt') }}
-
+   .. rubric:: {{ _('Functions') }}
    .. autosummary::
       :toctree:
       :nosignatures:
    {% for item in functions %}
-   .. autosummary:: {{ item }}
-      :recursive:
-      :template: function.rst
- 
-       
+      {{ item }}
    {%- endfor %}
+   .. automodule:: {{ fullname }}
+      :members:
+      :exclude-members: {% for item in classes %}{{ item }}, {% endfor %}{% for item in attributes %}{{ item }}, {% endfor %}{% for item in exceptions %}{{ item }}{% endfor %}
+      :undoc-members:
+      :noindex:
    {% endif %}
    {% endblock %}
-
+   
    {% block classes %}
    {% if classes %}
    .. rubric:: {{ _('Classes') }}

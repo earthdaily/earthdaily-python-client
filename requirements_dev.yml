@@ -7,7 +7,7 @@ dependencies:
   - pandas
   - libtiff
   - gdal
-  - geopandas=0.14.4
+  - geopandas
   - dask>=2024.4
   - shapely
   - xarray>=2024.7.0
@@ -29,7 +29,7 @@ dependencies:
   - graypy
   - pystac-client
   - stackstac
-  - odc-stac<0.3.10
+  - odc-stac
   - pillow
   - sphinx=7.2.6
   - autopep8
@@ -40,6 +40,7 @@ dependencies:
   - sphinx-gallery
   - sphinx-copybutton
   - sphinx-automodapi
+  - sphinx-autodoc-typehints
   - pytest
   - pytest-cov
   - myst-parser

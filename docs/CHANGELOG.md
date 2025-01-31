@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `native` cloudmask is now supported for `sentinel-2-c1-l2a`.
+- `asset_proxy` has been implemented by @imanshafiei540, see https://github.com/earthdaily/earthdaily-python-client/issues/142
 
 ### Changed
 
@@ -16,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 not "auto" for x and y anymore.
 - `odc-stac` newest version is now supported (and fix for odc-stac has 
 been submitted).
+
+### Fixed
+
+- Issue in rescale when several datetime were identical #146.
+- Bring back the API section for the documentation #140.
 
 ## [0.3.4] - 2024-12-17
 
