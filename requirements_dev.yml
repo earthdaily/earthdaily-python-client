@@ -6,8 +6,9 @@ dependencies:
   - numpy>=2.2
   - pandas
   - pystac>=1.12.1
+  - sqlite=3.48
   - libtiff
-  - gdal
+  - gdal=3.10.1
   - geopandas>=1
   - dask>=2024.4
   - shapely
