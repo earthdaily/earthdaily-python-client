@@ -1,0 +1,41 @@
+earthdaily.earthdatastore.Auth
+==============================
+
+.. currentmodule:: earthdaily.earthdatastore
+
+.. autoclass:: Auth
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~Auth.datacube
+      ~Auth.explore
+      ~Auth.find_cloud_mask_items
+      ~Auth.from_credentials
+      ~Auth.get_access_token
+      ~Auth.read_credentials
+      ~Auth.read_credentials_from_environment
+      ~Auth.read_credentials_from_ini
+      ~Auth.read_credentials_from_json
+      ~Auth.read_credentials_from_toml
+      ~Auth.search
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Auth.client
+   
+   

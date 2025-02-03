@@ -1,0 +1,45 @@
+﻿earthdaily
+==========
+
+.. automodule:: earthdaily
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      EarthDataStore
+   .. automodule:: earthdaily
+      :members:
+      :exclude-members: 
+      :undoc-members:
+      :noindex:
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   earthdaily.accessor
+   earthdaily.datasets
+   earthdaily.earthdatastore
+   earthdaily.utils
+
