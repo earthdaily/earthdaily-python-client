@@ -397,11 +397,14 @@ def rescale_assets_with_items(
     unique_items = {}
     for item in items_collection:
         unique_items.setdefault(item.datetime, item)
-        
+
     items_collection_per_date = list(unique_items.values())
 
     # Validate items match dataset time
-    if len(items_collection_per_date) != ds.time.size and len(items_collection) != ds.time.size:
+    if (
+        len(items_collection_per_date) != ds.time.size
+        and len(items_collection) != ds.time.size
+    ):
         raise ValueError(
             "Mismatch between items and datacube time. Set rescale to False."
         )
