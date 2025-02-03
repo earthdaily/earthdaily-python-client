@@ -1,8 +1,10 @@
-API Reference
-=============
-   
-.. toctree::
-   :maxdepth: 3
-   :caption: Documentation API
+API Documentation
+===============
 
+.. autosummary::
+   :toctree: _autosummary
+   :recursive:
+   :template: custom-module-template.rst
+   
    earthdaily
+

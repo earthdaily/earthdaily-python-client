@@ -24,19 +24,21 @@ author = "Geosys/EarthDailyAgro"
 
 
 extensions = [
-    "sphinx.ext.autodoc",
+    'sphinx.ext.autodoc',  # For automatic API documentation
+    'sphinx.ext.napoleon',  # For Google/NumPy style docstrings
+    'sphinx.ext.viewcode',  # To add links to source code
+    'sphinx_autodoc_typehints',  # For better type hint support
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
-    "sphinx.ext.napoleon",
-    #"nbsphinx",
     "sphinx_gallery.gen_gallery",
     "sphinx_copybutton",
-    "sphinx_automodapi.automodapi",  # for a page per function
+    "sphinx_automodapi.automodapi",
+    "sphinx_automodapi.smart_resolver",# for a page per function
     "myst_parser",
-    # "sphinxawesome.deprecated"
 ]
 #
-automodapi_toctreedirnm = "_API"
+automodapi_writereprocessed = True
+automodsumm_inherited_members = True
 numpydoc_show_class_members = False
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.abspath(".."))

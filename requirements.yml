@@ -11,9 +11,9 @@ dependencies:
 - psutil
 - pystac-client
 - pystac
-- odc-stac<0.3.10
+- odc-stac
 - pandas>=2
-- geopandas
+- geopandas>=1
 - requests
 - xarray>=2024.7.0
 - rasterio

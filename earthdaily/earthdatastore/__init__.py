@@ -2,30 +2,38 @@ import json
 import logging
 import operator
 import os
-import warnings
 import time
-import pandas as pd
+import warnings
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Optional
+
 import geopandas as gpd
-import psutil
+import numpy as np
 import requests
 import xarray as xr
-import numpy as np
-from typing import Optional
-from pathlib import Path
+from odc import stac
 from pystac.item_collection import ItemCollection
-from pystac_client.item_search import ItemSearch
 from pystac_client import Client
 from pystac_client.stac_api_io import StacApiIO
 from urllib3 import Retry
-from itertools import chain
-from odc import stac
+
 from . import _scales_collections, cube_utils, mask
-from .parallel_search import parallel_search, NoItemsFoundError
-from .cube_utils import datacube, metacube, _datacubes, asset_mapper
+from .cube_utils import _datacubes, asset_mapper, datacube, metacube
+from .parallel_search import NoItemsFoundError, parallel_search
 
 __all__ = ["datacube", "metacube", "xr", "stac"]
 
 logging.getLogger("earthdaily-earthdatastore")
+
+
+@dataclass
+class EarthDataStoreConfig:
+    auth_url: Optional[str] = None
+    client_secret: Optional[str] = None
+    client_id: Optional[str] = None
+    eds_url: str = "https://api.earthdaily.com/platform/v1/stac"
+    access_token: Optional[str] = None
 
 
 def apply_single_condition(
@@ -298,94 +306,6 @@ def enhance_assets(
     return items
 
 
-def _get_token(config=None):
-    """Get token for interacting with the Earth Data Store API.
-
-    By default, Earth Data Store will look for environment variables called
-    EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
-
-    Parameters
-    ----------
-    config : str | dict, optional
-        A JSON string or a dictionary with the credentials for the Earth Data Store.
-    presign_urls : bool, optional
-        Use presigned URLs, by default True
-
-    Returns
-    -------
-    token : str
-    eds_url : the earthdatastore url
-
-    """
-    if config is None:
-        config = os.getenv
-    auth_url = config("EDS_AUTH_URL")
-    secret = config("EDS_SECRET")
-    client_id = config("EDS_CLIENT_ID")
-    eds_url = config("EDS_API_URL", "https://api.earthdaily.com/platform/v1/stac")
-    if auth_url is None or secret is None or client_id is None:
-        raise AttributeError(
-            "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
-        )
-
-    token_response = requests.post(
-        auth_url,
-        data={"grant_type": "client_credentials"},
-        allow_redirects=False,
-        auth=(client_id, secret),
-    )
-    token_response.raise_for_status()
-    return json.loads(token_response.text)["access_token"], eds_url
-
-
-def _get_client(config=None, presign_urls=True, request_payer=False):
-    """Get client for interacting with the Earth Data Store API.
-
-    By default, Earth Data Store will look for environment variables called
-    EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
-
-    Parameters
-    ----------
-    config : str | dict, optional
-        A JSON string or a dictionary with the credentials for the Earth Data Store.
-    presign_urls : bool, optional
-        Use presigned URLs, by default True
-
-    Returns
-    -------
-    client : Client
-        A PySTAC client for interacting with the Earth Data Store STAC API.
-
-    """
-
-    if isinstance(config, tuple):  # token
-        token, eds_url = config
-        logging.log(level=logging.INFO, msg="Using token to reauth")
-    else:
-        if isinstance(config, dict):
-            config = config.get
-        elif isinstance(config, str) and config.endswith(".json"):
-            config = json.load(open(config, "rb")).get
-        token, eds_url = _get_token(config)
-
-    headers = {"Authorization": f"bearer {token}"}
-    if presign_urls:
-        headers["X-Signed-Asset-Urls"] = "True"
-
-    if request_payer:
-        headers["x-amz-request-payer"] = "requester"
-
-    retry = Retry(
-        total=5,
-        backoff_factor=1,
-        status_forcelist=[502, 503, 504],
-        allowed_methods=None,
-    )
-    stac_api_io = StacApiIO(max_retries=retry)
-
-    return Client.open(eds_url, headers=headers, stac_io=stac_api_io)
-
-
 class StacCollectionExplorer:
     """
     A class to explore a STAC collection.
@@ -445,7 +365,7 @@ class StacCollectionExplorer:
 
 class Auth:
     def __init__(
-        self, config: str | dict = None, presign_urls=True, request_payer=False
+        self, config: str | dict = None, presign_urls=True, asset_proxy_enabled=False
     ):
         """
         A client for interacting with the Earth Data Store API.
@@ -457,6 +377,8 @@ class Auth:
         config : str | dict, optional
             The path to the json file containing the Earth Data Store credentials,
             or a dict with those credentials.
+        asset_proxy_enabled : bool, optional
+            Use asset proxy URLs, by default False
 
         Returns
         -------
@@ -483,7 +405,7 @@ class Auth:
         self._client = None
         self.__auth_config = config
         self.__presign_urls = presign_urls
-        self.__request_payer = request_payer
+        self.__asset_proxy_enabled = asset_proxy_enabled
         self._first_items_ = {}
         self._staccollectionexplorer = {}
         self.__time_eds_log = time.time()
@@ -496,7 +418,7 @@ class Auth:
         toml_path: Optional[Path] = None,
         profile: Optional[str] = None,
         presign_urls: bool = True,
-        request_payer: bool = False,
+        asset_proxy_enabled: bool = False,
     ) -> "Auth":
         """
         Secondary Constructor.
@@ -515,6 +437,8 @@ class Auth:
         profile : profile, optional
             Name of the profile to use in the TOML file.
             Uses "default" by default.
+        asset_proxy_enabled : bool, optional
+            Use asset proxy URLs, by default False
 
         Returns
         -------
@@ -532,7 +456,9 @@ class Auth:
                 raise ValueError(f"Missing value for {item}")
 
         return cls(
-            config=config, presign_urls=presign_urls, request_payer=request_payer
+            config=config,
+            presign_urls=presign_urls,
+            asset_proxy_enabled=asset_proxy_enabled,
         )
 
     @classmethod
@@ -686,6 +612,135 @@ class Auth:
 
         return config
 
+    def get_access_token(self, config: Optional[EarthDataStoreConfig] = None):
+        """
+        Retrieve an access token for interacting with the EarthDataStore API.
+
+        By default, the method will look for environment variables:
+        EDS_AUTH_URL, EDS_SECRET, and EDS_CLIENT_ID. Alternatively, a configuration
+        object or dictionary can be passed to override these values.
+
+        Parameters
+        ----------
+        config : EarthDataStoreConfig, optional
+            A configuration object containing the Earth Data Store credentials.
+
+        Returns
+        -------
+        str
+            The access token for authenticating with the Earth Data Store API.
+        """
+        if not config:
+            config = self._config_parser(self.__auth_config)
+        response = requests.post(
+            config.auth_url,
+            data={"grant_type": "client_credentials"},
+            allow_redirects=False,
+            auth=(config.client_id, config.client_secret),
+        )
+        response.raise_for_status()
+        return response.json()["access_token"]
+
+    def _config_parser(self, config=None):
+        """
+        Parse and construct the EarthDataStoreConfig object from various input formats.
+
+        The method supports configuration as a dictionary, JSON file path, tuple,
+        or environment variables.
+
+        Parameters
+        ----------
+        config : dict or str or tuple, optional
+            Configuration source. It can be:
+            - A dictionary containing the required API credentials.
+            - A string path to a JSON file containing these credentials.
+            - A tuple of (access_token, eds_url).
+            - None, in which case environment variables will be used.
+
+        Returns
+        -------
+        EarthDataStoreConfig
+            A configuration object containing the required API credentials.
+
+        Raises
+        ------
+        AttributeError
+            If required credentials are missing in the provided input or environment variables.
+        """
+        if isinstance(config, tuple):  # token
+            access_token, eds_url = config
+            logging.log(level=logging.INFO, msg="Using token to reauth")
+            return EarthDataStoreConfig(eds_url=eds_url, access_token=access_token)
+        else:
+            if isinstance(config, dict):
+                config = config.get
+            elif isinstance(config, str) and config.endswith(".json"):
+                config = json.load(open(config, "rb")).get
+
+            if config is None:
+                config = os.getenv
+            auth_url = config("EDS_AUTH_URL")
+            client_secret = config("EDS_SECRET")
+            client_id = config("EDS_CLIENT_ID")
+            eds_url = config(
+                "EDS_API_URL", "https://api.earthdaily.com/platform/v1/stac"
+            )
+            if auth_url is None or client_secret is None or client_id is None:
+                raise AttributeError(
+                    "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
+                )
+            return EarthDataStoreConfig(
+                auth_url=auth_url,
+                client_secret=client_secret,
+                client_id=client_id,
+                eds_url=eds_url,
+            )
+
+    def _get_client(self, config=None, presign_urls=True, asset_proxy_enabled=False):
+        """Get client for interacting with the EarthDataStore API.
+
+        By default, Earth Data Store will look for environment variables called
+        EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
+
+        Parameters
+        ----------
+        config : str | dict, optional
+            A JSON string or a dictionary with the credentials for the Earth Data Store.
+        presign_urls : bool, optional
+            Use presigned URLs, by default True
+        asset_proxy_enabled : bool, optional
+            Use asset proxy URLs, by default False
+
+        Returns
+        -------
+        client : Client
+            A PySTAC client for interacting with the Earth Data Store STAC API.
+
+        """
+
+        config = self._config_parser(config)
+
+        if config.access_token:
+            access_token = config.access_token
+        else:
+            access_token = self.get_access_token(config)
+
+        headers = {"Authorization": f"bearer {access_token}"}
+        if asset_proxy_enabled:
+            headers["X-Proxy-Asset-Urls"] = "True"
+        elif presign_urls:
+            headers["X-Signed-Asset-Urls"] = "True"
+
+        retry = Retry(
+            total=5,
+            backoff_factor=1,
+            status_forcelist=[502, 503, 504],
+            allowed_methods=None,
+        )
+        stac_api_io = StacApiIO(max_retries=retry)
+
+        return Client.open(config.eds_url, headers=headers, stac_io=stac_api_io)
+
     @property
     def client(self) -> Client:
         """
@@ -698,8 +753,8 @@ class Auth:
         if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
             if t:
                 logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
-            self._client = _get_client(
-                self.__auth_config, self.__presign_urls, self.__request_payer
+            self._client = self._get_client(
+                self.__auth_config, self.__presign_urls, self.__asset_proxy_enabled
             )
             self.__time_eds_log = time.time()
 

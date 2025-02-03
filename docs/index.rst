@@ -34,13 +34,11 @@ earthdaily documentation
 .. toctree::
    :maxdepth: 3
    :caption: Documentation API
-
-   earthdaily
+   
+   API
    AUTHENTICATION
    CONTRIBUTING
    CHANGELOG
-
-
 
 
 Indices and tables

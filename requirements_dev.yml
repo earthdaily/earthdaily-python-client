@@ -29,7 +29,7 @@ dependencies:
   - graypy
   - pystac-client
   - stackstac
-  - odc-stac<0.3.10
+  - odc-stac
   - pillow
   - sphinx=7.2.6
   - autopep8
@@ -40,6 +40,7 @@ dependencies:
   - sphinx-gallery
   - sphinx-copybutton
   - sphinx-automodapi
+  - sphinx-autodoc-typehints
   - pytest
   - pytest-cov
   - myst-parser

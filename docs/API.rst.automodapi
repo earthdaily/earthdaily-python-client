@@ -1,0 +1,16 @@
+API Reference
+=============
+   
+
+earthdaily Package
+------------------
+
+.. automodule:: earthdaily
+
+Functions
+^^^^^^^^^
+
+.. automodsumm:: earthdaily
+    :functions-only:
+    :toctree: api
+
