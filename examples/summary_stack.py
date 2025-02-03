@@ -32,7 +32,7 @@ console.print(table)
 # Explore a specific collection
 # -------------------------------------------
 
-collection = eds.explore("venus-l2a")
+collection = eds.explore("sentinel-2-c1-l2a")
 console.log(collection.properties)
 
 ##############################################################################
