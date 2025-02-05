@@ -51,7 +51,7 @@ dependencies:
   - rst2pdf
   - python-dotenv
   - scipy
-  - dask-image
+  - dask-image>2024
   - geocube
   - spyndex
   - sphinx-rtd-theme

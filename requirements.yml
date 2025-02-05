@@ -23,7 +23,7 @@ dependencies:
 - rich
 - dask>=2024.4
 - spyndex
-- dask-image
+- dask-image>=2024
 - toml
 - click
 - urllib3
