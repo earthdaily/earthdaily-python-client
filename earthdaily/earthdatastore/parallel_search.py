@@ -242,7 +242,7 @@ def _should_run_parallel(
     - Either multiple date ranges exist or the total days exceed batch_days
     """
     # Check for basic conditions that prevent parallel execution
-    if not dt_range or batch_days is None or n_jobs <= 1:
+    if not dt_range or batch_days is None or (n_jobs <= 1 and n_jobs >= 0):
         return False
 
     # Split the datetime range

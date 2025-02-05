@@ -40,6 +40,13 @@ earthdaily documentation
    CONTRIBUTING
    CHANGELOG
 
+.. autosummary::
+   :toctree: _autosummary
+   :recursive:
+   :template: custom-module-template.rst
+   
+   earthdaily
+
 
 Indices and tables
 ==================
