@@ -7,7 +7,7 @@ from .accessor import __EarthDailyAccessorDataArray, __EarthDailyAccessorDataset
 # to hide warnings from rioxarray or nano seconds conversion
 # warnings.filterwarnings("ignore")
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 
 
 def EarthDataStore(
