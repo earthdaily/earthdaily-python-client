@@ -244,10 +244,11 @@ def _should_run_parallel(
     # Check for basic conditions that prevent parallel execution
     if not dt_range or batch_days is None or (n_jobs <= 1 and n_jobs >= 0):
         return False
-
     # Split the datetime range
     date_ranges, freq = datetime_split(dt_range, batch_days)
-
+    # if str, means single date
+    if isinstance(date_ranges, str):
+        return False
     # Check if splitting provides meaningful parallelization
     delta_days = (date_ranges[-1][-1] - date_ranges[0][0]).days
     return len(date_ranges) > 1 or delta_days > batch_days
