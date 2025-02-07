@@ -1,31 +1,38 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
-from earthdaily import EarthDataStore
-from earthdaily.earthdatastore import Auth
+from earthdatastore._auth_client import CognitoAuth
+from earthdatastore._eds_client import EDSClient
+from earthdatastore._eds_config import EDSConfig
 
 
-class TestEarthDataStore(unittest.TestCase):
-    @patch("earthdaily.earthdatastore.Auth.from_credentials")
-    def test_asset_proxy_enabled(self, mock_from_credentials):
-        # Mock the return value of from_credentials
-        mock_auth_instance = MagicMock(spec=Auth)
-        mock_from_credentials.return_value = mock_auth_instance
+class TestEDSClient(unittest.TestCase):
+    @patch("earthdatastore._auth_client.CognitoAuth.get_token", return_value="test_token")
+    def test_create_auth_cognito(self, mock_auth):
+        config = EDSConfig(
+            auth_method="cognito",
+            client_id="client_id",
+            client_secret="client_secret",
+            token_url="token_url",
+        )
+        client = EDSClient(config)
 
-        # Call EarthDataStore with asset_proxy_enabled set to True
-        auth_instance = EarthDataStore(asset_proxy_enabled=True)
+        self.assertIsInstance(client.auth, CognitoAuth)
+        self.assertEqual(client.api_requester.auth.get_token(), "test_token")
 
-        # Assert that from_credentials was called with asset_proxy_enabled=True
-        mock_from_credentials.assert_called_once_with(
-            json_path=None,
-            toml_path=None,
-            profile=None,
-            presign_urls=True,
-            asset_proxy_enabled=True,
+    def test_unsupported_auth_method(self):
+        config = EDSConfig(
+            auth_method="unsupported_method",
+            client_id="client_id",
+            client_secret="client_secret",
+            token_url="token_url",
         )
 
-        # Assert that the returned instance is the mocked instance
-        self.assertEqual(auth_instance, mock_auth_instance)
+        with self.assertRaises(ValueError) as context:
+            EDSClient(config)
+
+        self.assertIn("Unsupported auth method", str(context.exception))
+
 
 if __name__ == "__main__":
     unittest.main()

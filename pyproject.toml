@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "earthdatastore"
+version = "0.1.0"
+description = "EarthDaily Analytics | Clients | Earth Data Store"
+authors = ["Platform Team <info@earthdaily.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.32.3"
+tqdm = "^4.66.5"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.3"
+tox = "^4.14.1"
+pytest = "^8.0.0"
+pytest-cov = "^5.0.0"
+types-tqdm = "^4.66.0.20240417"
+
+
+[tool.poetry.group.agriculture.dependencies]
+joblib = "^1.4.2"
+numpy = "^2.2.2"
+pystac = "^1.12.1"
+pandas = "^2.2.3"
+pystac-client = "^0.8.5"
+geopandas = "^1.0.1"
+xarray = "^2025.1.2"
+rasterio = "^1.4.3"
+scipy = "^1.15.1"
+stackstac = "^0.5.1"
+odc-stac = "^0.3.11"
+psutil = "^6.1.1"
+toml = "^0.10.2"
+rioxarray = "^0.18.2"
+spyndex = "^0.6.0"
+setuptools = "^75.8.0"
+pyarrow = "^19.0.0"
+dask-image = "^2024.5.3"
+
+
+[tool.poetry.group.platform.dependencies]
+pystac-client = "^0.8.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+lint.select = ["E", "F", "I"]
+lint.ignore = []
+line-length = 120
+
+[tool.pytest.ini_options]
+addopts = "--cov=earthdatastore --cov-report=term-missing"
+testpaths = ["tests"]
