@@ -1,25 +1,26 @@
-name: EarthDaily Python Client Pipeline
+name: earthdaily-python-client CI
 
 on:
   workflow_dispatch:
 
 jobs:
   test:
-    name: Test on Python ${{ matrix.python-version }}
+    name: Unit Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "poetry"
+      
+      - name: Install GDAL and dependencies
+        run: |
+          apt-get update
+          apt-get install -y gdal-bin libgdal-dev
 
       - name: Install Poetry
         run: pip install poetry
@@ -30,19 +31,23 @@ jobs:
       - name: Run tests with tox
         run: poetry run tox -e py${{ matrix.python-version }}
 
-  lint:
-    name: Lint Code
+  lint-format-type:
+    name: Lint, Format and Type Check
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-          cache: "poetry"
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install GDAL and dependencies
+        run: |
+          apt-get update
+          apt-get install -y gdal-bin libgdal-dev
 
       - name: Install Poetry
         run: pip install poetry
@@ -52,26 +57,9 @@ jobs:
 
       - name: Run Linting
         run: poetry run tox -e lint
-
-  format:
-    name: Check Formatting
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: "poetry"
-
-      - name: Install Poetry
-        run: pip install poetry
-
-      - name: Install dependencies
-        run: poetry install
-
+      
       - name: Run Formatting Check
         run: poetry run tox -e format
+      
+      # - name: Run MyPy
+      #   run: poetry run tox -e mypy
