@@ -1,6 +1,10 @@
 name: earthdaily-python-client CI
 
 on:
+  push:
+    branches:
+      - main
+      - beta/*
   workflow_dispatch:
 
 jobs:
