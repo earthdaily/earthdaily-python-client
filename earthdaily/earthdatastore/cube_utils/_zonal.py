@@ -114,7 +114,7 @@ def zonal_stats(
     memory: int = None,
     reducers: list = ["mean"],
     all_touched=True,
-    label=None,
+    preserve_columns=True,
     buffer_meters: int | float | None = None,
     **kwargs,
 ):
@@ -221,13 +221,6 @@ def zonal_stats(
         new_coords_kwargs = {"index": index, "geometry": geometry}
 
         # add the label if a column is specified
-        if label:
-            label = xr.DataArray(
-                list(geoms[label].iloc[f - 1]),
-                dims=["feature"],
-                coords={"feature": zs.feature.values},
-            )
-            new_coords_kwargs["label"] = label
 
         zs = zs.assign_coords(**new_coords_kwargs)
         zs = zs.set_index(feature=list(new_coords_kwargs.keys()))
@@ -244,6 +237,22 @@ def zonal_stats(
             all_touched=all_touched,
             **kwargs,
         )
+        zs = zs.drop("geometry")
+        zs = zs.assign_coords(geometry=('feature',geoms.geometry.to_wkt(rounding_precision=-1).values))
+        zs = zs.assign_coords(index=('feature',geoms.index))
+        zs = zs.set_index(feature=["geometry","index"])
+        zs = zs.transpose('time', 'feature', 'zonal_statistics')
+        
+    # store columns
+    if preserve_columns:
+        coords = [col for col in geoms.columns if col not in geoms._geometry_column_name]
+        values = geoms.loc[zs.index.values][coords].values.T
+        for coord, value in zip(coords,values):
+            zs = zs.assign_coords({coord:("feature",value)})
+        feature_index_names = list(zs['feature'].to_index().names)
+        feature_index_names.extend(coords)
+        zs = zs.set_index(feature=feature_index_names)
+
     logging.info(f"Zonal stats method {method} tooks {time.time()-t_start}s.")
     del dataset
     return zs

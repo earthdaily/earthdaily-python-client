@@ -133,7 +133,7 @@ class __EarthDailyAccessorDataArray:
         self,
         geometry,
         reducers: list = ["mean"],
-        label: str = None,
+        preserve_columns: bool= True,
         lazy_load=True,
         **kwargs,
     ):
@@ -146,6 +146,8 @@ class __EarthDailyAccessorDataArray:
             A geometry (wkt, geopandas...)
         stats : list, optional
             The default is ["mean"].
+        preserve_columns : bool, optional
+            The default is True.
         raise_missing_geometry : bool, optional
             DESCRIPTION. The default is False.
         **kwargs : dict
@@ -165,7 +167,7 @@ class __EarthDailyAccessorDataArray:
             geometry,
             reducers=reducers,
             smart_load=not lazy_load,
-            label=label,
+            preserve_columns=preserve_columns,
             **kwargs,
         )
 
