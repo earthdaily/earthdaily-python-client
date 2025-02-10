@@ -116,7 +116,7 @@ def datetime_split(
     # Calculate or convert frequency
     if freq == "auto":
         # Calculate automatic frequency, 1 process per month
-        freq = Timedelta(days=np.ceil(date_diff.days/30)*31)
+        freq = Timedelta(days=np.ceil(date_diff.days / 30) * 31)
     elif isinstance(freq, (int, str)):
         freq = Timedelta(days=int(freq))
     elif not isinstance(freq, Timedelta):

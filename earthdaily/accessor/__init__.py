@@ -133,7 +133,7 @@ class __EarthDailyAccessorDataArray:
         self,
         geometry,
         reducers: list = ["mean"],
-        preserve_columns: bool= True,
+        preserve_columns: bool = True,
         lazy_load=True,
         **kwargs,
     ):

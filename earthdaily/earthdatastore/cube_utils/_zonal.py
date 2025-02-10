@@ -238,18 +238,22 @@ def zonal_stats(
             **kwargs,
         )
         zs = zs.drop("geometry")
-        zs = zs.assign_coords(geometry=('feature',geoms.geometry.to_wkt(rounding_precision=-1).values))
-        zs = zs.assign_coords(index=('feature',geoms.index))
-        zs = zs.set_index(feature=["geometry","index"])
-        zs = zs.transpose('time', 'feature', 'zonal_statistics')
-        
+        zs = zs.assign_coords(
+            geometry=("feature", geoms.geometry.to_wkt(rounding_precision=-1).values)
+        )
+        zs = zs.assign_coords(index=("feature", geoms.index))
+        zs = zs.set_index(feature=["geometry", "index"])
+        zs = zs.transpose("time", "feature", "zonal_statistics")
+
     # store columns
     if preserve_columns:
-        coords = [col for col in geoms.columns if col not in geoms._geometry_column_name]
+        coords = [
+            col for col in geoms.columns if col not in geoms._geometry_column_name
+        ]
         values = geoms.loc[zs.index.values][coords].values.T
-        for coord, value in zip(coords,values):
-            zs = zs.assign_coords({coord:("feature",value)})
-        feature_index_names = list(zs['feature'].to_index().names)
+        for coord, value in zip(coords, values):
+            zs = zs.assign_coords({coord: ("feature", value)})
+        feature_index_names = list(zs["feature"].to_index().names)
         feature_index_names.extend(coords)
         zs = zs.set_index(feature=feature_index_names)
 
