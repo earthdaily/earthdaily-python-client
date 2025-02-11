@@ -272,8 +272,6 @@ def zonal_stats(
         )
         lazy_load = not kwargs['smart_load']
     
-    # Start timing
-    start_time = time.time()
     
     # Clip dataset to geometry bounds
     dataset = dataset.rio.clip_box(*geometries.to_crs(dataset.rio.crs).total_bounds)
