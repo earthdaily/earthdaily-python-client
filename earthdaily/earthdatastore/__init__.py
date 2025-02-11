@@ -1032,7 +1032,7 @@ class Auth:
 
         Returns
         -------
-        xr_datacube : TYPE
+        ds : TYPE
             DESCRIPTION.
 
         """
@@ -1125,7 +1125,7 @@ class Auth:
                 )
 
         # Create datacube from items
-        xr_datacube = datacube(
+        ds = datacube(
             items,
             intersects=intersects,
             bbox=bbox,
@@ -1137,11 +1137,11 @@ class Auth:
             **kwargs,
         )
         if intersects is not None:
-            xr_datacube = xr_datacube.ed.clip(intersects)
-        # Create mask datacube and apply it to xr_datacube
+            ds = ds.ed.clip(intersects)
+        # Create mask datacube and apply it to ds
         if mask_with:
             if "geobox" not in kwargs:
-                kwargs["geobox"] = xr_datacube.odc.geobox
+                kwargs["geobox"] = ds.odc.geobox
             kwargs.pop("crs", "")
             kwargs.pop("resolution", "")
             kwargs["dtype"] = "int8"
@@ -1153,79 +1153,77 @@ class Auth:
                     "ag_cloud_mask": {"agriculture-cloud-mask": "ag_cloud_mask"},
                     "cloud_mask": {"cloud-mask": "cloud_mask"},
                 }
-                acm_items = self.find_cloud_mask_items(
+                items_mask = self.find_cloud_mask_items(
                     items, cloudmask=mask_with, **cloud_search_kwargs
                 )
-                acm_datacube = datacube(
-                    acm_items,
+                ds_mask = datacube(
+                    items_mask,
                     intersects=intersects,
                     bbox=bbox,
                     groupby_date=None,
                     assets=mask_asset_mapping[mask_with],
                     **kwargs,
                 )
-                xr_datacube["time"] = xr_datacube.time.astype("M8[ns]")
-                if xr_datacube.time.size != acm_datacube.time.size:
-                    xr_datacube = _select_last_common_occurrences(
-                        xr_datacube, acm_datacube
+                ds["time"] = ds.time.astype("M8[ns]")
+                if ds.time.size != ds_mask.time.size:
+                    ds = _select_last_common_occurrences(
+                        ds, ds_mask
                     )
-                acm_datacube["time"] = xr_datacube["time"].time
-                acm_datacube = cube_utils._match_xy_dims(acm_datacube, xr_datacube)
-                xr_datacube = xr.merge((xr_datacube, acm_datacube), compat="override")
+                ds_mask["time"] = ds["time"].time
+                ds_mask = cube_utils._match_xy_dims(ds_mask, ds)
+                ds = xr.merge((ds, ds_mask), compat="override")
 
-                # mask_kwargs.update(acm_datacube=acm_datacube)
+                # mask_kwargs.update(ds_mask=ds_mask)
             else:
-                mask_assets = {
+                assets_mask = {
                     mask._native_mask_asset_mapping[
                         collections[0]
                     ]: mask._native_mask_def_mapping[collections[0]]
                 }
 
-                clouds_datacube = datacube(
+                ds_mask = datacube(
                     items,
                     groupby_date=None,
                     bbox=list(cube_utils.GeometryManager(intersects).to_bbox()),
-                    assets=mask_assets,
+                    assets=assets_mask,
                     resampling=0,
                     **kwargs,
                 )
-                clouds_datacube = cube_utils._match_xy_dims(
-                    clouds_datacube, xr_datacube
+                ds_mask = cube_utils._match_xy_dims(
+                    ds_mask, ds
                 )
                 if intersects is not None:
-                    clouds_datacube = clouds_datacube.ed.clip(intersects)
-                xr_datacube = xr.merge(
-                    (xr_datacube, clouds_datacube), compat="override"
+                    ds_mask = ds_mask.ed.clip(intersects)
+                ds = xr.merge(
+                    (ds, ds_mask), compat="override"
                 )
 
-            Mask = mask.Mask(xr_datacube, intersects=intersects, bbox=bbox)
-            xr_datacube = getattr(Mask, mask_with)(**mask_kwargs)
+            Mask = mask.Mask(ds, intersects=intersects, bbox=bbox)
+            ds = getattr(Mask, mask_with)(**mask_kwargs)
 
         # keep only one value per pixel per day
-        if groupby_date:
-            xr_datacube = xr_datacube.groupby("time.date", restore_coord_dims=True)
-            xr_datacube = getattr(xr_datacube, groupby_date)().rename(dict(date="time"))
-            xr_datacube["time"] = xr_datacube.time.astype("M8[ns]")
+        if groupby_date:    
+            ds = cube_utils._groupby_date(ds, groupby_date)
 
         # To filter by cloud_cover / clear_cover, we need to compute clear pixels as field level
         if clear_cover or mask_statistics:
-            xy = xr_datacube[mask_with].isel(time=0).size
+            xy = ds[mask_with].isel(time=0).size
 
-            null_pixels = xr_datacube[mask_with].isnull().sum(dim=("x", "y"))
+            null_pixels = ds[mask_with].isnull().sum(dim=("x", "y"))
             n_pixels_as_labels = xy - null_pixels
 
-            xr_datacube = xr_datacube.assign_coords(
+            ds = ds.assign_coords(
                 {"clear_pixels": ("time", n_pixels_as_labels.data)}
             )
 
-            xr_datacube = xr_datacube.assign_coords(
+            ds = ds.assign_coords(
                 {
                     "clear_percent": (
                         "time",
                         np.multiply(
                             np.divide(
-                                xr_datacube["clear_pixels"].data,
-                                xr_datacube.attrs["usable_pixels"],
+                                ds["clear_pixels"].data,
+                                ds.attrs["usable_pixels"],
                             ),
                             100,
                         ).astype(np.int8),
@@ -1233,14 +1231,14 @@ class Auth:
                 }
             )
 
-            xr_datacube["clear_pixels"] = xr_datacube["clear_pixels"].load()
-            xr_datacube["clear_percent"] = xr_datacube["clear_percent"].load()
+            ds["clear_pixels"] = ds["clear_pixels"].load()
+            ds["clear_percent"] = ds["clear_percent"].load()
         if mask_with:
-            xr_datacube = xr_datacube.drop(mask_with)
+            ds = ds.drop_vars(mask_with)
         if clear_cover:
-            xr_datacube = mask.filter_clear_cover(xr_datacube, clear_cover)
+            ds = mask.filter_clear_cover(ds, clear_cover)
 
-        return xr_datacube
+        return ds
 
     def _update_search_for_assets(self, assets):
         fields = {
