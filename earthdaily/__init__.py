@@ -4,7 +4,7 @@ from . import earthdatastore, datasets
 from .accessor import __EarthDailyAccessorDataArray, __EarthDailyAccessorDataset
 from earthdaily.core import options
 
-__all__ = ['options']
+__all__ = ["options"]
 # import warnings
 # to hide warnings from rioxarray or nano seconds conversion
 # warnings.filterwarnings("ignore")

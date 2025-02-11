@@ -1166,9 +1166,7 @@ class Auth:
                 )
                 ds["time"] = ds.time.astype("M8[ns]")
                 if ds.time.size != ds_mask.time.size:
-                    ds = _select_last_common_occurrences(
-                        ds, ds_mask
-                    )
+                    ds = _select_last_common_occurrences(ds, ds_mask)
                 ds_mask["time"] = ds["time"].time
                 ds_mask = cube_utils._match_xy_dims(ds_mask, ds)
                 ds = xr.merge((ds, ds_mask), compat="override")
@@ -1189,20 +1187,16 @@ class Auth:
                     resampling=0,
                     **kwargs,
                 )
-                ds_mask = cube_utils._match_xy_dims(
-                    ds_mask, ds
-                )
+                ds_mask = cube_utils._match_xy_dims(ds_mask, ds)
                 if intersects is not None:
                     ds_mask = ds_mask.ed.clip(intersects)
-                ds = xr.merge(
-                    (ds, ds_mask), compat="override"
-                )
+                ds = xr.merge((ds, ds_mask), compat="override")
 
             Mask = mask.Mask(ds, intersects=intersects, bbox=bbox)
             ds = getattr(Mask, mask_with)(**mask_kwargs)
 
         # keep only one value per pixel per day
-        if groupby_date:    
+        if groupby_date:
             ds = cube_utils._groupby_date(ds, groupby_date)
 
         # To filter by cloud_cover / clear_cover, we need to compute clear pixels as field level
@@ -1212,9 +1206,7 @@ class Auth:
             null_pixels = ds[mask_with].isnull().sum(dim=("x", "y"))
             n_pixels_as_labels = xy - null_pixels
 
-            ds = ds.assign_coords(
-                {"clear_pixels": ("time", n_pixels_as_labels.data)}
-            )
+            ds = ds.assign_coords({"clear_pixels": ("time", n_pixels_as_labels.data)})
 
             ds = ds.assign_coords(
                 {

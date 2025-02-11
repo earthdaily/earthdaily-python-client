@@ -11,7 +11,7 @@ from dataclasses import dataclass
 @dataclass
 class OptionDef:
     """Definition of a configuration option.
-    
+
     Parameters
     ----------
     default : Any
@@ -23,6 +23,7 @@ class OptionDef:
     valid_values : Optional[List[Any]], optional
         A list of valid values for this option, by default None.
     """
+
     default: Any
     description: str
     validator: Optional[Callable[[Any], bool]] = None
@@ -30,17 +31,17 @@ class OptionDef:
 
     def validate(self, value: Any) -> bool:
         """Validate a value against this option's constraints.
-        
+
         Parameters
         ----------
         value : Any
             The value to validate.
-            
+
         Returns
         -------
         bool
             True if validation passes.
-            
+
         Raises
         ------
         ValueError
@@ -55,18 +56,17 @@ class OptionDef:
         if self.valid_values is not None:
             if value not in self.valid_values:
                 raise ValueError(
-                    f"Invalid value: {value}. "
-                    f"Must be one of: {self.valid_values}"
+                    f"Invalid value: {value}. " f"Must be one of: {self.valid_values}"
                 )
         return True
 
 
 # Define all available options
 OPTIONS: Dict[str, OptionDef] = {
-    'groupby_date_engine': OptionDef(
+    "groupby_date_engine": OptionDef(
         default="numpy",
         description="Engine to use for grouping by date",
-        valid_values=['numpy', 'numba', 'numbagg', 'flox']
+        valid_values=["numpy", "numba", "numbagg", "flox"],
     )
 }
 
@@ -91,31 +91,33 @@ class Options:
     list_options()
         List all available options with their descriptions.
     """
-    
+
     def __init__(self):
         # Store the actual values
-        self._options = {
-            key: opt.default for key, opt in OPTIONS.items()
-        }
-        
+        self._options = {key: opt.default for key, opt in OPTIONS.items()}
+
         # Create properties for each option
         for key in OPTIONS:
-            setattr(Options, key, property(
-                fget=lambda self, _key=key: self._options[_key],
-                fset=lambda self, value, _key=key: self._set_option(_key, value),
-                doc=OPTIONS[key].description
-            ))
-    
+            setattr(
+                Options,
+                key,
+                property(
+                    fget=lambda self, _key=key: self._options[_key],
+                    fset=lambda self, value, _key=key: self._set_option(_key, value),
+                    doc=OPTIONS[key].description,
+                ),
+            )
+
     def _set_option(self, key: str, value: Any) -> None:
         """Internal method to set an option value with validation.
-        
+
         Parameters
         ----------
         key : str
             The name of the option to set.
         value : Any
             The value to set.
-            
+
         Raises
         ------
         KeyError
@@ -125,24 +127,24 @@ class Options:
         """
         if key not in OPTIONS:
             raise KeyError(f"Unknown option: {key}")
-        
+
         option_def = OPTIONS[key]
         option_def.validate(value)
         self._options[key] = value
-    
+
     def get_option(self, key: str) -> Any:
         """Get the value of an option.
-        
+
         Parameters
         ----------
         key : str
             The name of the option to retrieve.
-            
+
         Returns
         -------
         Any
             The value of the option.
-            
+
         Raises
         ------
         KeyError
@@ -151,17 +153,17 @@ class Options:
         if key not in self._options:
             raise KeyError(f"Unknown option: {key}")
         return self._options[key]
-    
+
     def set_option(self, key: str, value: Any) -> None:
         """Set the value of an option.
-        
+
         Parameters
         ----------
         key : str
             The name of the option to set.
         value : Any
             The value to set the option to.
-            
+
         Raises
         ------
         KeyError
@@ -170,15 +172,15 @@ class Options:
             If the value is invalid.
         """
         self._set_option(key, value)
-    
+
     def reset_option(self, key: str) -> None:
         """Reset an option to its default value.
-        
+
         Parameters
         ----------
         key : str
             The name of the option to reset.
-            
+
         Raises
         ------
         KeyError
@@ -186,23 +188,23 @@ class Options:
         """
         if key not in OPTIONS:
             raise KeyError(f"Unknown option: {key}")
-        
+
         self._options[key] = OPTIONS[key].default
 
     def describe_option(self, key: str) -> str:
         """Get a description of an option.
-        
+
         Parameters
         ----------
         key : str
             The name of the option to describe.
-            
+
         Returns
         -------
         str
             A string describing the option, including its current value,
             default value, and constraints.
-            
+
         Raises
         ------
         KeyError
@@ -210,29 +212,29 @@ class Options:
         """
         if key not in OPTIONS:
             raise KeyError(f"Unknown option: {key}")
-        
+
         opt_def = OPTIONS[key]
         current_value = self._options[key]
-        
+
         description = [
             f"Option: {key}",
             f"Description: {opt_def.description}",
             f"Current value: {current_value}",
             f"Default value: {opt_def.default}",
         ]
-        
+
         if opt_def.valid_values is not None:
             description.append(f"Valid values: {opt_def.valid_values}")
         if opt_def.validator is not None:
             description.append(
                 f"Validator: {opt_def.validator.__doc__ or 'no description'}"
             )
-        
+
         return "\n".join(description)
 
     def list_options(self) -> str:
         """List all available options with their descriptions.
-        
+
         Returns
         -------
         str
@@ -244,20 +246,21 @@ class Options:
 # Global instance
 options = Options()
 
+
 # Public API functions
 def get_option(key: str) -> Any:
     """Get the value of an option.
-    
+
     Parameters
     ----------
     key : str
         The name of the option to retrieve.
-        
+
     Returns
     -------
     Any
         The value of the option.
-        
+
     Raises
     ------
     KeyError
@@ -265,16 +268,17 @@ def get_option(key: str) -> Any:
     """
     return options.get_option(key)
 
+
 def set_option(key: str, value: Any) -> None:
     """Set the value of an option.
-    
+
     Parameters
     ----------
     key : str
         The name of the option to set.
     value : Any
         The value to set the option to.
-        
+
     Raises
     ------
     KeyError
@@ -284,14 +288,15 @@ def set_option(key: str, value: Any) -> None:
     """
     options.set_option(key, value)
 
+
 def reset_option(key: str) -> None:
     """Reset an option to its default value.
-    
+
     Parameters
     ----------
     key : str
         The name of the option to reset.
-        
+
     Raises
     ------
     KeyError
@@ -299,20 +304,21 @@ def reset_option(key: str) -> None:
     """
     options.reset_option(key)
 
+
 def describe_option(key: str) -> str:
     """Get a description of an option.
-    
+
     Parameters
     ----------
     key : str
         The name of the option to describe.
-        
+
     Returns
     -------
     str
         A string describing the option, including its current value,
         default value, and constraints.
-        
+
     Raises
     ------
     KeyError
@@ -320,9 +326,10 @@ def describe_option(key: str) -> str:
     """
     return options.describe_option(key)
 
+
 def list_options() -> str:
     """List all available options with their descriptions.
-    
+
     Returns
     -------
     str
