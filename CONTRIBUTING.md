@@ -1,4 +1,4 @@
-# Contributing to EarthDataStore
+# Contributing to EarthDaily Python Client
 
 This document will guide you through the steps required to set up your development environment, develop, test, and contribute to the project.
 
@@ -15,7 +15,7 @@ Ensure you have the following installed on your machine:
 1. **Clone the repository**:
    ```bash
    git clone git@github.com:earthdaily/earthdaily-python-client.git
-   cd earthdatastore
+   cd earthdaily-python-client
    ```
 
 2. **Install dependencies using Poetry**:
@@ -129,4 +129,4 @@ If you encounter any bugs or have feature requests, please create an issue in ou
 
 Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
 
-Thank you for contributing to EarthDataStore Python Client!
+Thank you for contributing to EarthDaily Python Client!

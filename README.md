@@ -7,7 +7,7 @@ The Earth Data Store (EDS) Client is a Python library for interacting with the E
 You can install the EDS Client using pip:
 
 ```bash
-pip install earthdatastore
+pip install earthdaily
 ```
 
 ## Environment Variables

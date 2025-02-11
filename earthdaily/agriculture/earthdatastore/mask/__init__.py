@@ -5,7 +5,7 @@ import psutil
 import xarray as xr
 from rasterio.features import geometry_mask
 
-from earthdatastore.agriculture.earthdatastore.cube_utils import _bbox_to_intersects
+from earthdaily.agriculture.earthdatastore.cube_utils import _bbox_to_intersects
 
 dask.config.set(**{"array.slicing.split_large_chunks": True})
 

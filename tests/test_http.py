@@ -1,14 +1,14 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from earthdatastore._http_client import HTTPClient, HTTPRequest
+from earthdaily._http_client import HTTPClient, HTTPRequest
 
 
 class TestHTTPClient(unittest.TestCase):
     def setUp(self):
         self.client = HTTPClient()
 
-    @patch("earthdatastore._http_client.requests.request")
+    @patch("earthdaily._http_client.requests.request")
     def test_send_success(self, mock_request):
         # Prepare mock response
         mock_response = Mock()
@@ -32,7 +32,7 @@ class TestHTTPClient(unittest.TestCase):
         self.assertEqual(response.body, {"result": "success"})
         self.assertEqual(response.headers, {"Content-Type": "application/json"})
 
-    @patch("earthdatastore._http_client.requests.request")
+    @patch("earthdaily._http_client.requests.request")
     def test_send_failure(self, mock_request):
         # Prepare mock response
         mock_response = Mock()

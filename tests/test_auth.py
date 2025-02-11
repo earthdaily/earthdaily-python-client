@@ -1,14 +1,14 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from earthdatastore._auth_client import CognitoAuth
+from earthdaily._auth_client import CognitoAuth
 
 
 class TestCognitoAuth(unittest.TestCase):
     def setUp(self):
         self.auth = CognitoAuth("client_id", "client_secret", "token_url")
 
-    @patch("earthdatastore._auth_client.requests.Session.post")
+    @patch("earthdaily._auth_client.requests.Session.post")
     def test_authenticate_success(self, mock_post):
         # Prepare mock response
         mock_response = Mock()
@@ -21,7 +21,7 @@ class TestCognitoAuth(unittest.TestCase):
         self.assertEqual(token, "test_token")
         mock_post.assert_called_once()
 
-    @patch("earthdatastore._auth_client.requests.Session.post")
+    @patch("earthdaily._auth_client.requests.Session.post")
     def test_authenticate_failure(self, mock_post):
         # Prepare mock response
         mock_response = Mock()

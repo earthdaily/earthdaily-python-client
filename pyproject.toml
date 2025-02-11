@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "earthdatastore"
+name = "earthdaily"
 version = "1.0.0b1"
 description = "EarthDaily Python Client"
 authors = ["EarthDaily <info@earthdaily.com>"]
@@ -53,5 +53,5 @@ lint.ignore = []
 line-length = 120
 
 [tool.pytest.ini_options]
-addopts = "--cov=earthdatastore --cov-report=term-missing"
+addopts = "--cov=earthdaily --cov-report=term-missing"
 testpaths = ["tests"]

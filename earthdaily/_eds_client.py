@@ -1,8 +1,8 @@
-from earthdatastore._api_requester import APIRequester
-from earthdatastore._auth_client import Authentication, CognitoAuth
-from earthdatastore._eds_config import EDSConfig
-from earthdatastore.agriculture import EarthDataStore
-from earthdatastore.platform import PlatformService
+from earthdaily._api_requester import APIRequester
+from earthdaily._auth_client import Authentication, CognitoAuth
+from earthdaily._eds_config import EDSConfig
+from earthdaily.agriculture import EarthDataStore
+from earthdaily.platform import PlatformService
 
 
 class EDSClient:

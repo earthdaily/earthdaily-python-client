@@ -1,13 +1,13 @@
 import unittest
 from unittest.mock import patch
 
-from earthdatastore._auth_client import CognitoAuth
-from earthdatastore._eds_client import EDSClient
-from earthdatastore._eds_config import EDSConfig
+from earthdaily._auth_client import CognitoAuth
+from earthdaily._eds_client import EDSClient
+from earthdaily._eds_config import EDSConfig
 
 
 class TestEDSClient(unittest.TestCase):
-    @patch("earthdatastore._auth_client.CognitoAuth.get_token", return_value="test_token")
+    @patch("earthdaily._auth_client.CognitoAuth.get_token", return_value="test_token")
     def test_create_auth_cognito(self, mock_auth):
         config = EDSConfig(
             auth_method="cognito",

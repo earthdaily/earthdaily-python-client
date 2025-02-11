@@ -1,5 +1,5 @@
-from earthdatastore._auth_client import Authentication
-from earthdatastore._http_client import HTTPClient, HTTPRequest, HTTPResponse
+from earthdaily._auth_client import Authentication
+from earthdaily._http_client import HTTPClient, HTTPRequest, HTTPResponse
 
 
 class APIRequester:

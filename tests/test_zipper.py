@@ -4,7 +4,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from earthdatastore._zipper import Zipper
+from earthdaily._zipper import Zipper
 
 
 class TestZipper(unittest.TestCase):

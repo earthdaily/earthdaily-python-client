@@ -5,8 +5,8 @@ from unittest.mock import MagicMock, patch
 
 import requests
 
-from earthdatastore._uploader import HttpUploader
-from earthdatastore.exceptions import UnsupportedAssetException
+from earthdaily._uploader import HttpUploader
+from earthdaily.exceptions import UnsupportedAssetException
 
 
 class TestHttpUploader(unittest.TestCase):

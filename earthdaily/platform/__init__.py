@@ -1,7 +1,7 @@
 from pystac_client import Client
 from pystac_client.stac_api_io import StacApiIO
 
-from earthdatastore._api_requester import APIRequester
+from earthdaily._api_requester import APIRequester
 
 
 class PlatformService:

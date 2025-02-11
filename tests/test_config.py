@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from earthdatastore import EDSConfig
+from earthdaily import EDSConfig
 
 
 class TestEDSConfig(unittest.TestCase):

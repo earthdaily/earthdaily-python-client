@@ -7,8 +7,8 @@ import requests
 from requests.exceptions import RequestException
 from tqdm import tqdm
 
-from earthdatastore._eds_logging import LoggerConfig
-from earthdatastore.exceptions import UnsupportedAssetException
+from earthdaily._eds_logging import LoggerConfig
+from earthdaily.exceptions import UnsupportedAssetException
 
 logger = LoggerConfig(logger_name=__name__).get_logger()
 
