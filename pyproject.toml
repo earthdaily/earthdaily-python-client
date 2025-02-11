@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "earthdatastore"
+name = "earthdaily"
 version = "1.0.0b1"
-description = "EarthDaily Analytics | Clients | Earth Data Store"
-authors = ["Platform Team <info@earthdaily.com>"]
+description = "EarthDaily Python Client"
+authors = ["EarthDaily <info@earthdaily.com>"]
 license = "MIT"
 readme = "README.md"
 
