@@ -15,8 +15,9 @@ pip install earthdatastore
 Before running the script, ensure the following environment variables are set:
 
 - **`EDS_CLIENT_ID`**: Your application's Client ID for authenticating with the Earth Data Store.
-- **`EDS_CLIENT_SECRET`**: The Client Secret associated with your Client ID.
-- **`EDS_TOKEN_URL`**: The URL used for obtaining authentication tokens.
+- **`EDS_SECRET`**: The Client Secret associated with your Client ID.
+- **`EDS_AUTH_URL`**: The URL used for obtaining authentication tokens.
+- **`EDS_API_URL`**: The URL used for interacting with the API’s endpoints.
 
 Alternatively, if you prefer not to use environment variables, you can directly pass these values through the `EDSConfig` in your script:
 
@@ -42,4 +43,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-If you encounter any problems or have any questions, please [open an issue](https://gitlab.com/earthdaily/eda/eds/client/earthdatastore/-/issues) on our GitLab repository.
+If you encounter any problems or have any questions, please [open an issue](https://github.com/earthdaily/earthdaily-python-client/issues/new) on our GitHub repository.

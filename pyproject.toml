@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "earthdaily"
+name = "earthdatastore"
 version = "1.0.0b1"
 description = "EarthDaily Python Client"
 authors = ["EarthDaily <info@earthdaily.com>"]

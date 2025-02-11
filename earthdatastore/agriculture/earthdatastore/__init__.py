@@ -338,7 +338,7 @@ class Auth:
         """
         A client for interacting with the Earth Data Store API.
         By default, Earth Data Store will look for environment variables called
-        EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
+        EDS_AUTH_URL, EDS_SECRET, EDS_CLIENT_ID and EDS_API_URL.
 
         Parameters
         ----------

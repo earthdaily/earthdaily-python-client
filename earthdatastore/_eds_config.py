@@ -19,8 +19,9 @@ class EDSConfig:
 
     Required Environment Variables (if not passed during initialization):
     - `EDS_CLIENT_ID`: The client ID for authentication.
-    - `EDS_CLIENT_SECRET`: The client secret for authentication.
-    - `EDS_TOKEN_URL`: The token URL used for retrieving the authentication token.
+    - `EDS_SECRET`: The client secret for authentication.
+    - `EDS_AUTH_URL`: The token URL used for retrieving the authentication token.
+    - `EDS_API_URL`: The URL used for interacting with the API’s endpoints.
 
     Parameters:
     ----------
@@ -32,10 +33,10 @@ class EDSConfig:
         The client ID for authentication. If not provided, it defaults to `EDS_CLIENT_ID` from environment variables.
     client_secret: str
         The client secret for authentication.
-        If not provided, it defaults to `EDS_CLIENT_SECRET` from environment variables.
+        If not provided, it defaults to `EDS_SECRET` from environment variables.
     token_url: str
         The token URL to retrieve authentication tokens.
-        If not provided, it defaults to `EDS_TOKEN_URL` from environment variables.
+        If not provided, it defaults to `EDS_AUTH_URL` from environment variables.
     base_url: str, optional
         The base URL for the Earth Data Store API. Defaults to "https://api.earthdaily.com".
     pre_sign_urls: bool, optional
@@ -50,9 +51,9 @@ class EDSConfig:
 
     auth_method: str = field(default_factory=lambda: os.getenv("EDS_AUTH_METHOD", "cognito"))
     client_id: str = field(default_factory=lambda: os.getenv("EDS_CLIENT_ID", ""))
-    client_secret: str = field(default_factory=lambda: os.getenv("EDS_CLIENT_SECRET", ""))
-    token_url: str = field(default_factory=lambda: os.getenv("EDS_TOKEN_URL", ""))
-    base_url: str = "https://api.earthdaily.com"
+    client_secret: str = field(default_factory=lambda: os.getenv("EDS_SECRET", ""))
+    token_url: str = field(default_factory=lambda: os.getenv("EDS_AUTH_URL", ""))
+    base_url: str = field(default_factory=lambda: os.getenv("EDS_API_URL", "https://api.earthdaily.com"))
 
     # Platform specific configurations
     pre_sign_urls: bool = True
@@ -64,9 +65,9 @@ class EDSConfig:
         if not self.client_id:
             missing_fields.append("client_id (or EDS_CLIENT_ID)")
         if not self.client_secret:
-            missing_fields.append("client_secret (or EDS_CLIENT_SECRET)")
+            missing_fields.append("client_secret (or EDS_SECRET)")
         if not self.token_url:
-            missing_fields.append("token_url (or EDS_TOKEN_URL)")
+            missing_fields.append("token_url (or EDS_AUTH_URL)")
 
         if missing_fields:
             raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")

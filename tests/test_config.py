@@ -22,14 +22,16 @@ class TestEDSConfig(unittest.TestCase):
 
     def test_config_with_env_vars(self):
         os.environ["EDS_CLIENT_ID"] = "env_client_id"
-        os.environ["EDS_CLIENT_SECRET"] = "env_client_secret"
-        os.environ["EDS_TOKEN_URL"] = "env_token_url"
+        os.environ["EDS_SECRET"] = "env_client_secret"
+        os.environ["EDS_AUTH_URL"] = "env_token_url"
+        os.environ["EDS_API_URL"] = "https://EDS_API_URL.com"
 
         config = EDSConfig()
 
         self.assertEqual(config.client_id, "env_client_id")
         self.assertEqual(config.client_secret, "env_client_secret")
         self.assertEqual(config.token_url, "env_token_url")
+        self.assertEqual(config.base_url, "https://EDS_API_URL.com")
 
     def test_config_with_passed_values(self):
         config = EDSConfig(

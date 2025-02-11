@@ -14,7 +14,7 @@ Ensure you have the following installed on your machine:
 
 1. **Clone the repository**:
    ```bash
-   git clone git@gitlab.com:earthdaily/eda/eds/client/earthdatastore.git
+   git clone git@github.com:earthdaily/earthdaily-python-client.git
    cd earthdatastore
    ```
 
@@ -50,7 +50,7 @@ Ensure you have the following installed on your machine:
    ```bash
    git push origin feature/your-feature-name
    ```
-   Then, go to the GitLab repository and create a new merge request.
+   Then, go to the GitHub repository and create a new pull request.
 
 ## Running Tests
 
@@ -115,7 +115,7 @@ Note: Publishing is typically handled by our CI/CD pipeline. Only perform manual
 
 ## Continuous Integration
 
-Our project uses GitLab CI for continuous integration. The configuration can be found in `.gitlab-ci.yml` at the root of the repository. It automatically runs tests, linting, and builds for each merge request.
+Our project uses GitHub Actions for continuous integration. The configuration can be found in `.github/workflows` at the root of the repository. It automatically runs tests, linting, and builds for each merge request.
 
 ## Documentation
 
@@ -123,7 +123,7 @@ When adding new features or making significant changes, please update the docume
 
 ## Reporting Issues
 
-If you encounter any bugs or have feature requests, please create an issue in our GitLab repository. Provide as much detail as possible, including steps to reproduce for bugs, and clear descriptions for feature requests.
+If you encounter any bugs or have feature requests, please create an issue in our GitHub repository. Provide as much detail as possible, including steps to reproduce for bugs, and clear descriptions for feature requests.
 
 ## Code of Conduct
 
