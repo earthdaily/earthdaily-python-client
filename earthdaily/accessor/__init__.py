@@ -133,7 +133,7 @@ class __EarthDailyAccessorDataArray:
         self,
         geometry,
         reducers: list = ["mean"],
-        label: str = None,
+        preserve_columns: bool = True,
         lazy_load=True,
         **kwargs,
     ):
@@ -146,6 +146,8 @@ class __EarthDailyAccessorDataArray:
             A geometry (wkt, geopandas...)
         stats : list, optional
             The default is ["mean"].
+        preserve_columns : bool, optional
+            The default is True.
         raise_missing_geometry : bool, optional
             DESCRIPTION. The default is False.
         **kwargs : dict
@@ -164,8 +166,8 @@ class __EarthDailyAccessorDataArray:
             self._obj,
             geometry,
             reducers=reducers,
-            smart_load=not lazy_load,
-            label=label,
+            lazy_load=lazy_load,
+            preserve_columns=preserve_columns,
             **kwargs,
         )
 
@@ -200,7 +202,7 @@ class __EarthDailyAccessorDataArray:
         ]
         if keep_spatial_ref and "spatial_ref" in unfrozen_coords:
             unfrozen_coords.pop(
-                np.argwhere(np.in1d(unfrozen_coords, "spatial_ref"))[0][0]
+                np.argwhere(np.isin(unfrozen_coords, "spatial_ref"))[0][0]
             )
         return self._obj.drop(unfrozen_coords)
 

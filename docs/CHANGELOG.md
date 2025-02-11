@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-02-11
+
+### Added
+
+- `zonal_stats` now preserves GeoDataFrame columns (`preserve_columns=True`).
+
+### Changed
+
+- `label` arg has been deprecated from `zonal_stats`.
+- `zonal_stats` has same output between `xvec` and `numpy` method.
+- `smart_load` is becoming `lazy_load` (`smart_load=True` is `lazy_load=False`)
+- Required `pystac-client>=0.7`.
+- `groupby_date` engine is fixed to `numpy`. Change is available via 
+`earthdaily.option.set_option('groupby_date_engine','numba')` for example.
+
 ## [0.4.2] - 2025-02-05
 
 ### Fixed

@@ -11,20 +11,21 @@ Using Agriculture cloud mask from EarthDaily, and data from L2A, zonal stats for
 
 import geopandas as gpd
 from matplotlib import pyplot as plt
-from earthdaily import datasets, EarthDataStore
+import earthdaily as ed
+import xarray as xr
 
 ##############################################################################
 # Load plot
 # -------------------------------------------
 
 # load geojson
-pivot = datasets.load_pivot()
+pivot = ed.datasets.load_pivot()
 
 ##############################################################################
 # Init earthdatastore with environment variables or default credentials
 # ----------------------------------------------------------------------------
 
-eds = EarthDataStore()
+eds = ed.EarthDataStore()
 
 ##############################################################################
 # Search for collection items for June 2022.
@@ -36,8 +37,8 @@ pivot_cube = eds.datacube(
     datetime=["2022-06"],
     assets=["red", "green", "blue", "nir"],
     mask_with="native",
-    clear_cover=50,
-)
+    clear_cover=50
+    )
 pivot_cube.clear_percent.plot.scatter(x="time")
 
 ##############################################################################

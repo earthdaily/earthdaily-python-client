@@ -1,6 +1,5 @@
 import numpy as np
 import xarray as xr
-import rioxarray as rxr
 import geopandas as gpd
 from shapely.geometry import Polygon
 import earthdaily
@@ -44,7 +43,7 @@ class TestZonalStats(unittest.TestCase):
 
     def test_basic(self):
         zonalstats = earthdaily.earthdatastore.cube_utils.zonal_stats(
-            self.datacube, self.gdf, method="numpy", reducers=["min", "max"], all_touched=False, label="label")
+            self.datacube, self.gdf, method="numpy", reducers=["min", "max"], all_touched=False)
         for operation in ["min", "max"]:
             self._check_results(
                 zonalstats["first_var"].sel(zonal_statistics=operation).values, operation=operation
@@ -56,6 +55,13 @@ class TestZonalStats(unittest.TestCase):
             "max": np.asarray([[9, 15], [self.constant, self.constant]])
         }
         self.assertTrue(np.all(stats_values == results[operation]))
-                          
+        
+    def test_compare_ed_xvec(self):
+        res= {}
+        for method in ["numpy","xvec"]:
+            res[method] = earthdaily.earthdatastore.cube_utils.zonal_stats(
+                self.datacube, self.gdf, method="numpy", reducers=["max"], all_touched=False)
+        self.assertTrue(np.array_equal(res["numpy"]['first_var'].values, res["xvec"]['first_var'].values))
+        
 if __name__ == "__main__":
     unittest.main()

@@ -9,8 +9,9 @@ dependencies:
 - gdal
 - scipy
 - psutil
-- pystac-client
-- pystac
+- flox
+- pystac-client>=0.7
+- pystac>=1.12.1
 - odc-stac
 - pandas>=2
 - geopandas>=1

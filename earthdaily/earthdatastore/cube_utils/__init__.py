@@ -14,9 +14,23 @@ import rioxarray
 from functools import wraps
 import json
 from typing import Callable
+from earthdaily.core import options
 
-__all__ = ["GeometryManager", "rioxarray", "zonal_stats", "zonal_stats_numpy"]
+logging.getLogger("earthdaily-cube_utils")
+
+__all__ = ["GeometryManager", "rioxarray", "zonal_stats"]
 _auto_mask_order = ["cloudmask", "ag_cloud_mask", "native"]
+
+
+def _groupby_date(ds, func):
+    print(options.groupby_date_engine)
+    if ds.time.size != np.unique(ds.time.dt.date).size:
+        ds = ds.groupby("time.date")
+        ds = getattr(ds, func)(engine=options.groupby_date_engine, skipna=True).rename(
+            dict(date="time")
+        )
+        ds["time"] = ds.time.astype("M8[ns]")
+    return ds
 
 
 def _datacube_masks(method: Callable) -> Callable:
@@ -164,7 +178,7 @@ def _cube_odc(
         if isinstance(kwargs["resampling"], int):
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
 
-    kwargs["chunks"] = kwargs.get("chunks", dict(x=512, y=512, time=1))
+    kwargs["chunks"] = kwargs.get("chunks", dict(x="auto", y="auto", time=1))
 
     if "geobox" in kwargs.keys() and "geopolygon" in kwargs.keys():
         kwargs.pop("geopolygon")
@@ -314,11 +328,9 @@ def datacube(
 
     # drop na dates
     ds = ds.isel(dict(time=np.where(~np.isnan(ds.time))[0]))
+
     if groupby_date:
-        if ds.time.size != np.unique(ds.time).size:
-            ds = ds.groupby("time")
-            ds = getattr(ds, groupby_date)()
-            # get grouped value if several tiles at same exactly date
+        ds = _groupby_date(ds, groupby_date)
     if bbox is not None and intersects is None:
         intersects = _bbox_to_intersects(bbox)
     if intersects is not None:
@@ -481,7 +493,7 @@ def rescale_assets_with_items(
             asset_scaled = []
             for scale, offset_data in scale_data.items():
                 for offset, times in offset_data.items():
-                    mask = np.in1d(ds.time, times)
+                    mask = np.isin(ds.time, times)
                     asset_scaled.append(ds[[asset]].isel(time=mask) * scale + offset)
             scaled_assets.append(xr.concat(asset_scaled, dim="time"))
 

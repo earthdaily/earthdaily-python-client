@@ -2,12 +2,14 @@ from typing import Optional
 from pathlib import Path
 from . import earthdatastore, datasets
 from .accessor import __EarthDailyAccessorDataArray, __EarthDailyAccessorDataset
+from earthdaily.core import options
 
+__all__ = ["options"]
 # import warnings
 # to hide warnings from rioxarray or nano seconds conversion
 # warnings.filterwarnings("ignore")
 
-__version__ = "0.4.2"
+__version__ = "0.5.0"
 
 
 def EarthDataStore(
