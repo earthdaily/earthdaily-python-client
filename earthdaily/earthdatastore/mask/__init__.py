@@ -170,7 +170,7 @@ class Mask:
             all_touched=False,
         )
         self.clip_mask_arr = clip_mask_arr
-        usable_pixels = np.sum(np.in1d(clip_mask_arr, False))
+        usable_pixels = np.sum(np.isin(clip_mask_arr, False))
         self._obj.attrs["usable_pixels"] = usable_pixels
         return self._obj
 
