@@ -1,6 +1,5 @@
 import numpy as np
 import xarray as xr
-import rioxarray as rxr
 import geopandas as gpd
 from shapely.geometry import Polygon
 import earthdaily
@@ -44,7 +43,7 @@ class TestZonalStats(unittest.TestCase):
 
     def test_basic(self):
         zonalstats = earthdaily.earthdatastore.cube_utils.zonal_stats(
-            self.datacube, self.gdf, method="numpy", reducers=["min", "max"], all_touched=False, label="label")
+            self.datacube, self.gdf, method="numpy", reducers=["min", "max"], all_touched=False)
         for operation in ["min", "max"]:
             self._check_results(
                 zonalstats["first_var"].sel(zonal_statistics=operation).values, operation=operation

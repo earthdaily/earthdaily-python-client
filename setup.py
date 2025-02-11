@@ -25,7 +25,7 @@ setup(
         "joblib",
         "scipy",
         "psutil",
-        "pystac-client",
+        "pystac-client>=0.7.0",
         "pystac",
         "odc-stac",
         "pandas>=2",
