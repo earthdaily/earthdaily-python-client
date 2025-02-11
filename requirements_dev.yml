@@ -2,7 +2,7 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - python>=3.10
+  - python>=3.11
   - numpy>=2.2
   - pandas
   - pystac>=1.12.1
@@ -12,6 +12,7 @@ dependencies:
   - geopandas>=1
   - dask>=2024.4
   - shapely
+  - flox
   - xarray>=2024.7.0
   - rasterio 
   - rioxarray
@@ -29,7 +30,7 @@ dependencies:
   - h5netcdf
   - joblib
   - graypy
-  - pystac-client
+  - pystac-client>=0.7
   - stackstac
   - odc-stac
   - pillow

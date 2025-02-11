@@ -28,6 +28,7 @@ setup(
         "pystac-client>=0.7.0",
         "pystac",
         "odc-stac",
+        "flox",
         "pandas>=2",
         "geopandas>=1",
         "requests",
