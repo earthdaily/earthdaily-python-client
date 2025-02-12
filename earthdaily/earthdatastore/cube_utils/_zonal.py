@@ -380,7 +380,7 @@ def _process_time_chunks(
         compute_start = time.time()
         chunk_stats = StatisticalOperations.zonal_stats(ds_chunk, positions, reducers)
         logger.debug(f"Computed chunk statistics in {(time.time()-compute_start):.2f}s")
-
+        
         chunks.append(chunk_stats)
 
     return xr.concat(chunks, dim="time")

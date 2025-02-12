@@ -26,7 +26,6 @@ __all__ = ["datacube", "metacube", "xr", "stac"]
 
 logging.getLogger("earthdaily-earthdatastore")
 
-
 @dataclass
 class EarthDataStoreConfig:
     auth_url: Optional[str] = None
@@ -1262,6 +1261,7 @@ class Auth:
         raise_no_items=True,
         batch_days="auto",
         n_jobs=-1,
+        deduplicate_items=True,
         **kwargs,
     ):
         """
@@ -1407,6 +1407,9 @@ class Auth:
             items_collection = post_query_items(items_collection, post_query)
         if len(items_collection) == 0 and raise_no_items:
             raise NoItemsFoundError("No items found.")
+        if deduplicate_items:
+            from ._filter_duplicate import filter_duplicate_items
+            items_collection = filter_duplicate_items(items_collection)
         return items_collection
 
     def find_cloud_mask_items(
