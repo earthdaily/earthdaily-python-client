@@ -71,7 +71,8 @@ OPTIONS: Dict[str, OptionDef] = {
     "disable_known_warning": OptionDef(
         default=True,
         description="Disable known warning from dependencies (value in cast)",
-        valid_values=[True,False])
+        valid_values=[True, False],
+    ),
 }
 
 

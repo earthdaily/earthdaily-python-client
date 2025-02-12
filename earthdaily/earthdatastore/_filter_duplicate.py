@@ -5,11 +5,12 @@ from pystac import ItemCollection
 from functools import lru_cache
 import logging
 
+
 @dataclass(frozen=True)
 class StacGroup:
     """
     Immutable container for STAC items sharing spatial and temporal characteristics.
-    
+
     Attributes
     ----------
     datetime : datetime
@@ -17,11 +18,16 @@ class StacGroup:
     bbox : tuple[float, ...] | None
         Bounding box coordinates as (west, south, east, north) or None
     """
+
     datetime: datetime
     bbox: Optional[Tuple[float, ...]]
 
-    def matches(self, other_dt: datetime, other_bbox: Optional[Tuple[float, ...]], 
-                threshold: timedelta) -> bool:
+    def matches(
+        self,
+        other_dt: datetime,
+        other_bbox: Optional[Tuple[float, ...]],
+        threshold: timedelta,
+    ) -> bool:
         """
         Check if another datetime and bbox match this group within threshold.
 
@@ -39,8 +45,8 @@ class StacGroup:
         bool
             True if the other datetime and bbox match within threshold
         """
-        return (self.bbox == other_bbox and 
-                abs(self.datetime - other_dt) <= threshold)
+        return self.bbox == other_bbox and abs(self.datetime - other_dt) <= threshold
+
 
 @lru_cache(maxsize=1024)
 def _parse_datetime(dt_str: str) -> datetime:
@@ -57,7 +63,8 @@ def _parse_datetime(dt_str: str) -> datetime:
     datetime
         Parsed datetime object
     """
-    return datetime.fromisoformat(dt_str.replace('Z', '+00:00'))
+    return datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
+
 
 def _extract_item_metadata(item: Dict) -> Tuple[datetime, Optional[Tuple[float, ...]]]:
     """
@@ -73,11 +80,14 @@ def _extract_item_metadata(item: Dict) -> Tuple[datetime, Optional[Tuple[float, 
     tuple[datetime, tuple[float, ...] | None]
         Tuple of (datetime, bbox)
     """
-    dt = _parse_datetime(item['properties']['datetime'])
-    bbox = tuple(item['bbox']) if 'bbox' in item else None
+    dt = _parse_datetime(item["properties"]["datetime"])
+    bbox = tuple(item["bbox"]) if "bbox" in item else None
     return dt, bbox
 
-def _group_items(items: Iterator[Dict], time_threshold: timedelta) -> Dict[StacGroup, List[Dict]]:
+
+def _group_items(
+    items: Iterator[Dict], time_threshold: timedelta
+) -> Dict[StacGroup, List[Dict]]:
     """
     Group STAC items by spatial and temporal proximity.
 
@@ -94,19 +104,20 @@ def _group_items(items: Iterator[Dict], time_threshold: timedelta) -> Dict[StacG
         Dictionary mapping groups to their constituent items
     """
     groups: Dict[StacGroup, List[Dict]] = {}
-    
+
     for item in items:
         dt, bbox = _extract_item_metadata(item)
-        
+
         # Find matching group or create new one
         matching_group = next(
             (group for group in groups if group.matches(dt, bbox, time_threshold)),
-            StacGroup(datetime=dt, bbox=bbox)
+            StacGroup(datetime=dt, bbox=bbox),
         )
-        
+
         groups.setdefault(matching_group, []).append(item)
-    
+
     return groups
+
 
 def _select_latest_items(items: List[Dict]) -> List[Dict]:
     """
@@ -124,19 +135,21 @@ def _select_latest_items(items: List[Dict]) -> List[Dict]:
     """
     if not items:
         return []
-        
+
     latest_timestamp = max(
-        _parse_datetime(item['properties']['updated']) 
-        for item in items
+        _parse_datetime(item["properties"]["updated"]) for item in items
     )
-    
+
     return [
-        item for item in items
-        if _parse_datetime(item['properties']['updated']) == latest_timestamp
+        item
+        for item in items
+        if _parse_datetime(item["properties"]["updated"]) == latest_timestamp
     ]
 
-def filter_duplicate_items(items: ItemCollection, 
-                     time_threshold: timedelta = timedelta(minutes=5)) -> ItemCollection:
+
+def filter_duplicate_items(
+    items: ItemCollection, time_threshold: timedelta = timedelta(minutes=5)
+) -> ItemCollection:
     """
     Deduplicate STAC items based on spatial and temporal proximity.
 
@@ -195,12 +208,13 @@ def filter_duplicate_items(items: ItemCollection,
     'S2A_31TCJ_20190416_1_L2A'
     """
     # Convert ItemCollection to features and group them
-    grouped_items = _group_items(items.to_dict()['features'], time_threshold)
-    
+    grouped_items = _group_items(items.to_dict()["features"], time_threshold)
+
     # Select latest items from each group and flatten
     deduplicated = [
-        item for group_items in grouped_items.values()
+        item
+        for group_items in grouped_items.values()
         for item in _select_latest_items(group_items)
     ]
-    logging.info(f'Deduplication removes {len(items)-len(deduplicated)} items.')
+    logging.info(f"Deduplication removes {len(items)-len(deduplicated)} items.")
     return ItemCollection(deduplicated)

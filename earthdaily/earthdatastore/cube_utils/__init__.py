@@ -17,6 +17,7 @@ from typing import Callable
 from earthdaily.core import options
 from rasterio.errors import NotGeoreferencedWarning
 import warnings
+
 logging.getLogger("earthdaily-cube_utils")
 
 __all__ = ["GeometryManager", "rioxarray", "zonal_stats"]
@@ -247,15 +248,22 @@ def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
 
     return ds
 
+
 def _disable_known_datacube_warning():
     if options.disable_known_warning:
-        warnings.filterwarnings('ignore', 
-                               message="Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.",
-                               category=NotGeoreferencedWarning,
-                               module='rasterio.warp')
-        warnings.filterwarnings('ignore', category=RuntimeWarning, 
-                               message='invalid value encountered in cast',
-                               module='dask.array.chunk')
+        warnings.filterwarnings(
+            "ignore",
+            message="Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.",
+            category=NotGeoreferencedWarning,
+            module="rasterio.warp",
+        )
+        warnings.filterwarnings(
+            "ignore",
+            category=RuntimeWarning,
+            message="invalid value encountered in cast",
+            module="dask.array.chunk",
+        )
+
 
 def datacube(
     items_collection=None,
