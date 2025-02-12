@@ -344,6 +344,10 @@ def datacube(
             if nodata == 0 or nodata:
                 nodatas.update({ds_asset: nodata})
             break
+    # apply nodata
+    ds = _apply_nodata(ds, nodatas)
+    if rescale:
+        ds = rescale_assets_with_items(items_collection, ds, assets=assets)
 
     # drop na dates
     ds = ds.isel(dict(time=np.where(~np.isnan(ds.time))[0]))
@@ -360,10 +364,6 @@ def datacube(
         # no need anymore thanks to geobox/geopolygon in doc
         # ds = ds.rio.clip_box(*intersects.to_crs(ds.rio.crs).total_bounds)
         ds = ds.rio.clip(intersects.to_crs(ds.rio.crs).geometry)
-    # apply nodata
-    ds = _apply_nodata(ds, nodatas)
-    if rescale:
-        ds = rescale_assets_with_items(items_collection, ds, assets=assets)
     if engine == "stackstac":
         ds = _autofix_unfrozen_coords_dtype(ds)
     if cross_calibration_items is not None and len(cross_calibration_items) > 0:
