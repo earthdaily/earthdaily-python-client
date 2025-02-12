@@ -1410,6 +1410,7 @@ class Auth:
             raise NoItemsFoundError("No items found.")
         if deduplicate_items:
             from ._filter_duplicate import filter_duplicate_items
+
             items_collection = filter_duplicate_items(items_collection)
         return items_collection
 
