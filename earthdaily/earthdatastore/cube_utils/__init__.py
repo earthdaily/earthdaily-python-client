@@ -23,7 +23,6 @@ _auto_mask_order = ["cloudmask", "ag_cloud_mask", "native"]
 
 
 def _groupby_date(ds, func):
-    print(options.groupby_date_engine)
     if ds.time.size != np.unique(ds.time.dt.date).size:
         ds = ds.groupby("time.date")
         ds = getattr(ds, func)(engine=options.groupby_date_engine, skipna=True).rename(
