@@ -50,7 +50,7 @@ class MemoryManager:
         """
         if max_memory_mb is None:
             max_memory_mb = psutil.virtual_memory().available / 1e6
-            logger.debug(f"Using maximum available memory: {max_memory_mb:.2f}MB")
+            logger.info(f"Using maximum available memory: {max_memory_mb:.2f}MB")
 
         bytes_per_date = (dataset.nbytes / 1e6) / dataset.time.size * 3
         max_chunks = int(np.arange(0, max_memory_mb, bytes_per_date + 0.1).size)
@@ -58,8 +58,8 @@ class MemoryManager:
             dataset.time.size / np.arange(0, dataset.time.size, max_chunks).size
         )
 
-        logger.debug(
-            f"Memory per date: {bytes_per_date:.2f}MB, Total: {(bytes_per_date*dataset.time.size):.2f}MB"
+        logger.info(
+            f"Estimated memory per date: {bytes_per_date:.2f}MB, Total: {(bytes_per_date*dataset.time.size):.2f}MB"
         )
         logger.debug(
             f"Time chunks: {time_chunks} (total time steps: {dataset.time.size})"

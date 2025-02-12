@@ -15,6 +15,8 @@ from functools import wraps
 import json
 from typing import Callable
 from earthdaily.core import options
+from rasterio.errors import NotGeoreferencedWarning
+import warnings
 
 logging.getLogger("earthdaily-cube_utils")
 
@@ -23,12 +25,12 @@ _auto_mask_order = ["cloudmask", "ag_cloud_mask", "native"]
 
 
 def _groupby_date(ds, func):
-    print(options.groupby_date_engine)
     if ds.time.size != np.unique(ds.time.dt.date).size:
+        kwargs = {}
+        if xr.get_options()["use_flox"]:
+            kwargs = dict(engine=options.groupby_date_engine, skipna=True)
         ds = ds.groupby("time.date")
-        ds = getattr(ds, func)(engine=options.groupby_date_engine, skipna=True).rename(
-            dict(date="time")
-        )
+        ds = getattr(ds, func)(**kwargs).rename(dict(date="time"))
         ds["time"] = ds.time.astype("M8[ns]")
     return ds
 
@@ -247,6 +249,22 @@ def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
     return ds
 
 
+def _disable_known_datacube_warning():
+    if options.disable_known_warning:
+        warnings.filterwarnings(
+            "ignore",
+            message="Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.",
+            category=NotGeoreferencedWarning,
+            module="rasterio.warp",
+        )
+        warnings.filterwarnings(
+            "ignore",
+            category=RuntimeWarning,
+            message="invalid value encountered in cast",
+            module="dask.array.chunk",
+        )
+
+
 def datacube(
     items_collection=None,
     bbox=None,
@@ -260,6 +278,7 @@ def datacube(
     properties: (bool | str | list) = False,
     **kwargs,
 ):
+    _disable_known_datacube_warning()
     logging.info(f"Building datacube with {len(items_collection)} items")
     times = [
         np.datetime64(d.datetime.strftime("%Y-%m-%d %X.%f")).astype("datetime64[ns]")

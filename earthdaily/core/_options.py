@@ -67,7 +67,12 @@ OPTIONS: Dict[str, OptionDef] = {
         default="numpy",
         description="Engine to use for grouping by date",
         valid_values=["numpy", "numba", "numbagg", "flox"],
-    )
+    ),
+    "disable_known_warning": OptionDef(
+        default=True,
+        description="Disable known warning from dependencies (value in cast)",
+        valid_values=[True, False],
+    ),
 }
 
 
