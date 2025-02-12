@@ -263,7 +263,14 @@ def _disable_known_datacube_warning():
             message="invalid value encountered in cast",
             module="dask.array.chunk",
         )
-
+        warnings.filterwarnings(
+            "ignore",
+            category=RuntimeWarning,
+            message="All-NaN slice encountered")
+        warnings.filterwarnings(
+            "ignore",
+            category=RuntimeWarning,
+            message="Mean of empty slice")
 
 def datacube(
     items_collection=None,
