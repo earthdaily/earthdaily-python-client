@@ -24,10 +24,10 @@ from earthdaily import datasets, EarthDataStore
 eds = EarthDataStore()
 
 collections = ["sentinel-2-l2a", "landsat-c2l2-sr"]
-datetime = ["2022-07-01", "2022-09-01"]
+datetime = ["2022-07-20", "2022-09-01"]
 intersects = datasets.load_pivot_corumba()
 assets = ["blue", "green", "red", "nir"]
-mask_with = "ag_cloud_mask"
+mask_with = "native"
 clear_cover = 50
 resampling = "cubic"
 cross_calibration_collection = "sentinel-2-l2a"
