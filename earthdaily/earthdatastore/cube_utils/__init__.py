@@ -25,12 +25,10 @@ _auto_mask_order = ["cloudmask", "ag_cloud_mask", "native"]
 def _groupby_date(ds, func):
     if ds.time.size != np.unique(ds.time.dt.date).size:
         kwargs = {}
-        if xr.get_options()['use_flox']:
-            kwargs = dict(engine=options.groupby_date_engine, skipna=True)  
+        if xr.get_options()["use_flox"]:
+            kwargs = dict(engine=options.groupby_date_engine, skipna=True)
         ds = ds.groupby("time.date")
-        ds = getattr(ds, func)(**kwargs).rename(
-            dict(date="time")
-        )
+        ds = getattr(ds, func)(**kwargs).rename(dict(date="time"))
         ds["time"] = ds.time.astype("M8[ns]")
     return ds
 
