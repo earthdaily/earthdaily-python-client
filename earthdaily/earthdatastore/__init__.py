@@ -1118,6 +1118,7 @@ class Auth:
                             "eq": cross_calibration_collection
                         },
                     },
+                    deduplicate_items=False
                 )
             except Warning:
                 raise Warning(
