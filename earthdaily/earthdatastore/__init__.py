@@ -1166,8 +1166,10 @@ class Auth:
                 )
                 ds["time"] = ds.time.astype("M8[ns]")
                 if ds.time.size != ds_mask.time.size:
-                    raise NotImplementedError("Sensor and cloudmask don't havethe same time.\
-                                              {ds.time.size} for sensor and {ds_mask.time.size} for cloudmask.")
+                    raise NotImplementedError(
+                        "Sensor and cloudmask don't havethe same time.\
+                                              {ds.time.size} for sensor and {ds_mask.time.size} for cloudmask."
+                    )
                 ds_mask["time"] = ds["time"].time
                 ds_mask = cube_utils._match_xy_dims(ds_mask, ds)
                 ds = xr.merge((ds, ds_mask), compat="override")

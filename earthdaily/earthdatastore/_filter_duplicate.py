@@ -45,7 +45,10 @@ class StacGroup:
         bool
             True if the other datetime and bbox match within threshold
         """
-        return self.footprint == other_footprint and abs(self.datetime - other_dt) <= threshold
+        return (
+            self.footprint == other_footprint
+            and abs(self.datetime - other_dt) <= threshold
+        )
 
 
 @lru_cache(maxsize=1024)
@@ -66,7 +69,9 @@ def _parse_datetime(dt_str: str) -> datetime:
     return datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
 
 
-def _extract_item_metadata(item: Dict, method='proj:transform') -> Tuple[datetime, Optional[Tuple[float, ...]]]:
+def _extract_item_metadata(
+    item: Dict, method="proj:transform"
+) -> Tuple[datetime, Optional[Tuple[float, ...]]]:
     """
     Extract datetime and footprint from a STAC item.
 
@@ -81,11 +86,13 @@ def _extract_item_metadata(item: Dict, method='proj:transform') -> Tuple[datetim
         Tuple of (datetime, footprint)
     """
     dt = _parse_datetime(item["properties"]["datetime"])
-    _first_item =  list(item['assets'].keys())[0]
-    if method=='proj:transform':
-        footprint = tuple(item['assets'][_first_item].get('proj:transform',item['bbox']))
-    elif method=='bbox':
-        footprint = tuple(round(bbox,6) for bbox in item.bbox)
+    _first_item = list(item["assets"].keys())[0]
+    if method == "proj:transform":
+        footprint = tuple(
+            item["assets"][_first_item].get("proj:transform", item["bbox"])
+        )
+    elif method == "bbox":
+        footprint = tuple(round(bbox, 6) for bbox in item.bbox)
     return dt, footprint
 
 
@@ -154,8 +161,7 @@ def _select_latest_items(items: List[Dict]) -> List[Dict]:
 def filter_duplicate_items(
     items: ItemCollection,
     time_threshold: timedelta = timedelta(minutes=5),
-    method='proj:transform'
-    
+    method="proj:transform",
 ) -> ItemCollection:
     """
     Deduplicate STAC items based on spatial and temporal proximity.
@@ -176,7 +182,7 @@ def filter_duplicate_items(
 
     time_threshold : timedelta, optional
         Maximum time difference to consider items as duplicates, by default 5 minutes
-        
+
     method : str
         'proj:transform' or 'bbox' to compare against
 
@@ -226,10 +232,10 @@ def filter_duplicate_items(
         for group_items in grouped_items.values()
         for item in _select_latest_items(group_items)
     ]
-    duplicates = (len(items)-len(deduplicated))
+    duplicates = len(items) - len(deduplicated)
     if duplicates:
         logging.info(f"Deduplication removes {duplicates} items.")
 
-    deduplicated = sorted(deduplicated, key=lambda x: x['properties']['datetime'])
+    deduplicated = sorted(deduplicated, key=lambda x: x["properties"]["datetime"])
 
     return ItemCollection(deduplicated)
