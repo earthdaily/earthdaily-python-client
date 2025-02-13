@@ -46,6 +46,12 @@ setup(
         "click",
         "toml",
     ],
+    extras_require={
+        "dev": [
+            "ruff>=0.9.6,<1.0.0",
+            "mypy>=1.0.0,<2.0.0",
+        ]
+    },
     include_package_data=True,
     package_data={"":['*.geojson','*.json']},
     license="MIT",
