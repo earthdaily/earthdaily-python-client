@@ -59,9 +59,9 @@ class MemoryManager:
         )
 
         logger.info(
-            f"Estimated memory per date: {bytes_per_date:.2f}MB, Total: {(bytes_per_date*dataset.time.size):.2f}MB"
+            f"Estimated memory per date: {bytes_per_date:.2f}MB. Total: {(bytes_per_date*dataset.time.size):.2f}MB"
         )
-        logger.debug(
+        logger.info(
             f"Time chunks: {time_chunks} (total time steps: {dataset.time.size})"
         )
 
@@ -444,7 +444,7 @@ def _compute_xvec_stats(
 
     # Preserve additional columns if requested
     if preserve_columns:
-        _preserve_geometry_columns(stats, geometries)
+        stats = _preserve_geometry_columns(stats, geometries)
 
     return stats
 
@@ -483,7 +483,7 @@ def _format_numpy_output(
 
     # Preserve additional columns if requested
     if preserve_columns:
-        _preserve_geometry_columns(stats, geometries)
+        stats = _preserve_geometry_columns(stats, geometries)
 
     return stats
 
@@ -501,3 +501,5 @@ def _preserve_geometry_columns(stats: xr.Dataset, geometries: gpd.GeoDataFrame) 
     feature_index = list(stats["feature"].to_index().names)
     feature_index.extend(cols)
     stats = stats.set_index(feature=feature_index)
+    
+    return stats
