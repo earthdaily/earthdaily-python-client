@@ -96,7 +96,7 @@ class __EarthDailyAccessorDataArray:
     def whittaker(
         self,
         beta: float = 10000.0,
-        weights: (np.ndarray, list) = None,
+        weights: np.ndarray | list | None = None,
         time="time",
     ):
         from . import whittaker
@@ -105,7 +105,7 @@ class __EarthDailyAccessorDataArray:
 
     def sel_nearest_dates(
         self,
-        target: (xr.Dataset, xr.DataArray),
+        target: xr.Dataset | xr.DataArray,
         max_delta: int = 0,
         method: str = "nearest",
         return_target: bool = False,
@@ -178,7 +178,7 @@ class __EarthDailyAccessorDataArray:
             kwargs=dict(window_size=window_size),
         )
 
-    def centroid(self, to_wkt: str = False, to_4326: bool = True):
+    def centroid(self, to_wkt: bool = False, to_4326: bool = True):
         """Return the geographic center point in 4326/WKT of this dataset."""
         # we can use a cache on our accessor objects, because accessors
         # themselves are cached on instances that access them.

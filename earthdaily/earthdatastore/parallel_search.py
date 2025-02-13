@@ -1,3 +1,6 @@
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
 from functools import wraps
 from typing import Callable, TypeVar, Any, Optional, Union, Tuple, List
 

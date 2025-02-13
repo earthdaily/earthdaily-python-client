@@ -1,3 +1,6 @@
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
 import dask
 import geopandas as gpd
 import numpy as np
