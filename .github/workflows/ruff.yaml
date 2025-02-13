@@ -12,12 +12,12 @@ jobs:
     - uses: actions/checkout@v3
     - uses: chartboost/ruff-action@v1
       with:
-        version: 0.2.2
+        version: 0.9.6
         src: "./earthdaily"
         args: --ignore F401,E722
     - uses: chartboost/ruff-action@v1
       with:
-        version: 0.2.2
+        version: 0.9.6
         src: "./earthdaily"
         args: format
     - uses: stefanzweifel/git-auto-commit-action@v5
