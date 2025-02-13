@@ -501,5 +501,5 @@ def _preserve_geometry_columns(stats: xr.Dataset, geometries: gpd.GeoDataFrame) 
     feature_index = list(stats["feature"].to_index().names)
     feature_index.extend(cols)
     stats = stats.set_index(feature=feature_index)
-    
+
     return stats
