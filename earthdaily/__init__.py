@@ -1,3 +1,10 @@
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    __version__ = version("earthdaily")
+except PackageNotFoundError:
+    __version__ = "0.0.0"
+
 # Authentication-related imports
 from earthdaily._api_requester import APIRequester
 from earthdaily._auth_client import Authentication, CognitoAuth

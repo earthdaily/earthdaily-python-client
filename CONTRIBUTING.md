@@ -20,6 +20,7 @@ Ensure you have the following installed on your machine:
 
 2. **Install dependencies using Poetry**:
    ```bash
+   python3.12 -m venv .venv 
    poetry install
    ```
 

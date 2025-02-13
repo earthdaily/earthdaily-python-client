@@ -9,16 +9,6 @@ stdout*
 .idea
 .vscode
 
-
-# Sphinx documentation
-.ipynb_checkpoints/
-
-docs/tutorials/pystac-example*
-docs/tutorials/spacenet-stac/
-docs/tutorials/spacenet-cog-stac/
-docs/tutorials/data/
-docs/quickstart_stac/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -91,6 +81,9 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/_auto_examples/
+docs/_autosummary/
+docs/_modules/
 
 # PyBuilder
 .pybuilder/
@@ -160,6 +153,3 @@ cython_debug/
 
 # asv environments
 .asv
-
-# EarthDaily
-examples/
