@@ -1,0 +1,6 @@
+earthdaily.earthdatastore.apply\_single\_condition
+==================================================
+
+.. currentmodule:: earthdaily.earthdatastore
+
+.. autofunction:: apply_single_condition

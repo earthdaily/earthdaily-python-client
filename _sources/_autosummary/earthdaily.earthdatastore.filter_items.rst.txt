@@ -1,0 +1,6 @@
+earthdaily.earthdatastore.filter\_items
+=======================================
+
+.. currentmodule:: earthdaily.earthdatastore
+
+.. autofunction:: filter_items
