@@ -15,28 +15,28 @@ class StacGroup:
     ----------
     datetime : datetime
         Reference datetime for the group
-    bbox : tuple[float, ...] | None
+    footprint : tuple[float, ...] | None
         Bounding box coordinates as (west, south, east, north) or None
     """
 
     datetime: datetime
-    bbox: Optional[Tuple[float, ...]]
+    footprint: Optional[Tuple[float, ...]]
 
     def matches(
         self,
         other_dt: datetime,
-        other_bbox: Optional[Tuple[float, ...]],
+        other_footprint: Optional[Tuple[float, ...]],
         threshold: timedelta,
     ) -> bool:
         """
-        Check if another datetime and bbox match this group within threshold.
+        Check if another datetime and footprint match this group within threshold.
 
         Parameters
         ----------
         other_dt : datetime
             Datetime to compare against
-        other_bbox : tuple[float, ...] | None
-            Bounding box to compare against
+        other_fontprint : tuple[float, ...] | None
+            Proj:transform or Bounding box to compare against
         threshold : timedelta
             Maximum allowed time difference
 
@@ -45,7 +45,10 @@ class StacGroup:
         bool
             True if the other datetime and bbox match within threshold
         """
-        return self.bbox == other_bbox and abs(self.datetime - other_dt) <= threshold
+        return (
+            self.footprint == other_footprint
+            and abs(self.datetime - other_dt) <= threshold
+        )
 
 
 @lru_cache(maxsize=1024)
@@ -66,9 +69,11 @@ def _parse_datetime(dt_str: str) -> datetime:
     return datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
 
 
-def _extract_item_metadata(item: Dict) -> Tuple[datetime, Optional[Tuple[float, ...]]]:
+def _extract_item_metadata(
+    item: Dict, method="proj:transform"
+) -> Tuple[datetime, Optional[Tuple[float, ...]]]:
     """
-    Extract datetime and bbox from a STAC item.
+    Extract datetime and footprint from a STAC item.
 
     Parameters
     ----------
@@ -78,11 +83,18 @@ def _extract_item_metadata(item: Dict) -> Tuple[datetime, Optional[Tuple[float, 
     Returns
     -------
     tuple[datetime, tuple[float, ...] | None]
-        Tuple of (datetime, bbox)
+        Tuple of (datetime, footprint)
     """
     dt = _parse_datetime(item["properties"]["datetime"])
-    bbox = tuple(item["bbox"]) if "bbox" in item else None
-    return dt, bbox
+    any_asset = item.get("assets", {}) != {}
+    if any_asset and method == "proj:transform":
+        _first_item = list(item["assets"].keys())[0]
+        footprint = tuple(
+            item["assets"][_first_item].get("proj:transform", item["bbox"])
+        )
+    else:
+        footprint = tuple(round(bbox, 6) for bbox in item["bbox"])
+    return dt, footprint
 
 
 def _group_items(
@@ -106,12 +118,12 @@ def _group_items(
     groups: Dict[StacGroup, List[Dict]] = {}
 
     for item in items:
-        dt, bbox = _extract_item_metadata(item)
+        dt, footprint = _extract_item_metadata(item)
 
         # Find matching group or create new one
         matching_group = next(
-            (group for group in groups if group.matches(dt, bbox, time_threshold)),
-            StacGroup(datetime=dt, bbox=bbox),
+            (group for group in groups if group.matches(dt, footprint, time_threshold)),
+            StacGroup(datetime=dt, footprint=footprint),
         )
 
         groups.setdefault(matching_group, []).append(item)
@@ -148,7 +160,9 @@ def _select_latest_items(items: List[Dict]) -> List[Dict]:
 
 
 def filter_duplicate_items(
-    items: ItemCollection, time_threshold: timedelta = timedelta(minutes=5)
+    items: ItemCollection,
+    time_threshold: timedelta = timedelta(minutes=5),
+    method="proj:transform",
 ) -> ItemCollection:
     """
     Deduplicate STAC items based on spatial and temporal proximity.
@@ -164,11 +178,14 @@ def filter_duplicate_items(
                 ISO format acquisition timestamp
             - properties.updated : str
                 ISO format update timestamp
-            - bbox : list[float], optional
-                Bounding box coordinates [west, south, east, north]
+            - footprint : list[float], optional
+                Bounding box coordinates [west, south, east, north] or proj:transform.
 
     time_threshold : timedelta, optional
         Maximum time difference to consider items as duplicates, by default 5 minutes
+
+    method : str
+        'proj:transform' or 'bbox' to compare against
 
     Returns
     -------
@@ -216,5 +233,10 @@ def filter_duplicate_items(
         for group_items in grouped_items.values()
         for item in _select_latest_items(group_items)
     ]
-    logging.info(f"Deduplication removes {len(items)-len(deduplicated)} items.")
+    duplicates = len(items) - len(deduplicated)
+    if duplicates:
+        logging.info(f"Deduplication removes {duplicates} items.")
+
+    deduplicated = sorted(deduplicated, key=lambda x: x["properties"]["datetime"])
+
     return ItemCollection(deduplicated)
