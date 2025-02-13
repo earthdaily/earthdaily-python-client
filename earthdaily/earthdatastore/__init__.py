@@ -1166,7 +1166,8 @@ class Auth:
                 )
                 ds["time"] = ds.time.astype("M8[ns]")
                 if ds.time.size != ds_mask.time.size:
-                    ds = _select_last_common_occurrences(ds, ds_mask)
+                    raise NotImplementedError("Sensor and cloudmask don't havethe same time.\
+                                              {ds.time.size} for sensor and {ds_mask.time.size} for cloudmask.")
                 ds_mask["time"] = ds["time"].time
                 ds_mask = cube_utils._match_xy_dims(ds_mask, ds)
                 ds = xr.merge((ds, ds_mask), compat="override")
@@ -1460,6 +1461,7 @@ class Auth:
                 collections=collections,
                 ids=ids_[items_start_idx : items_start_idx + step],
                 limit=step,
+                deduplicate_items=False,
                 **kwargs,
             )
             items_list.extend(list(items))

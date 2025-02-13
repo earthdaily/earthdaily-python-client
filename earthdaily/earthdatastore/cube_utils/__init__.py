@@ -392,7 +392,7 @@ def datacube(
                 json.dumps(ds.coords[coord].values[idx])
                 for idx in range(ds.coords[coord].size)
             ]
-
+    ds = ds.sortby(ds.time)
     return ds
 
 
@@ -510,7 +510,7 @@ def rescale_assets_with_items(
             # Track scaling parameters
             scales.setdefault(ds_asset, {}).setdefault(scale, {}).setdefault(
                 offset, []
-            ).append(time)
+            ).append(idx)
 
     # Apply rescaling
     if scales:
@@ -519,8 +519,7 @@ def rescale_assets_with_items(
             asset_scaled = []
             for scale, offset_data in scale_data.items():
                 for offset, times in offset_data.items():
-                    mask = np.isin(ds.time, times)
-                    asset_scaled.append(ds[[asset]].isel(time=mask) * scale + offset)
+                    asset_scaled.append(ds[[asset]].isel(time=times) * scale + offset)
             scaled_assets.append(xr.concat(asset_scaled, dim="time"))
 
         # Merge scaled assets
