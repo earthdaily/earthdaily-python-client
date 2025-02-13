@@ -12,7 +12,7 @@ with open("README.md", encoding="utf-8") as f:
 
 setup(
     name="earthdaily",
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=["tests"]),
     version=version,
     description="earthdaily: easy authentication, search and retrieval of Earth Data Store collections data",
     author="EarthDaily Agro",
@@ -53,13 +53,13 @@ setup(
         ]
     },
     include_package_data=True,
-    package_data={"":['*.geojson','*.json']},
+    package_data={"": ["*.geojson", "*.json"]},
     license="MIT",
     zip_safe=False,
     keywords=["Earth Data Store", "earthdaily", "earthdailyagro", "stac"],
-    entry_points = {
-        'console_scripts': [
-            'copy-earthdaily-credentials-template=earthdaily.utils.copy_credentials_template:cli'
+    entry_points={
+        "console_scripts": [
+            "copy-earthdaily-credentials-template=earthdaily.utils.copy_credentials_template:cli"
         ],
     },
 )

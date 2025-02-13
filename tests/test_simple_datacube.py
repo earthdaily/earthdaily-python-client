@@ -1,6 +1,7 @@
 import unittest
 import earthdaily
 
+
 class TestEarthDataStore(unittest.TestCase):
     def setUp(self):
         self.eds = earthdaily.EarthDataStore()
@@ -24,11 +25,9 @@ class TestEarthDataStore(unittest.TestCase):
             assets=["blue", "green", "red"],
             intersects=self.pivot,
             datetime="2023-07-01",
-            mask_with=['native']
+            mask_with=["native"],
         )
-        self.assertEqual(
-            list(datacube.data_vars.keys()), ["blue", "green", "red"]
-        )
+        self.assertEqual(list(datacube.data_vars.keys()), ["blue", "green", "red"])
 
 
 if __name__ == "__main__":

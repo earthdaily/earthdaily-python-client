@@ -12,19 +12,17 @@ Example:
     >>> stats = zonal_stats(dataset, polygons, reducers=["mean", "max"])
 """
 
-from typing import Union, List, Optional, Tuple, Dict
 import logging
 import time
-from pathlib import Path
+from typing import List, Optional, Tuple, Union
 
-import numpy as np
-import xarray as xr
-import pandas as pd
 import geopandas as gpd
+import numpy as np
+import psutil
+import xarray as xr
 from scipy.sparse import csr_matrix
 from scipy.stats import mode
 from tqdm.auto import trange
-import psutil
 
 from .preprocessing import rasterize
 
@@ -411,7 +409,10 @@ def _compute_xvec_stats(
         ImportError: If xvec package is not installed
     """
     try:
-        import xvec
+        # Importing xvec for its zonal statistics computation capabilities.
+        # The import is marked with `# noqa: F401` to ignore the unused import warning
+        # because it is dynamically used later in the code.
+        import xvec  # noqa: F401
     except ImportError:
         raise ImportError(
             "The xvec method requires the xvec package. "

@@ -9,7 +9,7 @@ import time
 import numpy as np
 from pystac.item_collection import ItemCollection
 import pandas as pd
-from pandas import Timestamp, Timedelta, DatetimeIndex
+from pandas import Timestamp, Timedelta
 from pystac_client.item_search import ItemSearch
 
 T = TypeVar("T")

@@ -1,8 +1,9 @@
-from typing import Optional
 from pathlib import Path
-from . import earthdatastore, datasets
-from .accessor import __EarthDailyAccessorDataArray, __EarthDailyAccessorDataset
+from typing import Optional
+
 from earthdaily.core import options
+
+from . import earthdatastore
 
 __all__ = ["options"]
 

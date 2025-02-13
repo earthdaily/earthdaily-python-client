@@ -1,15 +1,12 @@
-import warnings
-import xarray as xr
-import rioxarray as rxr
-import numpy as np
-import pandas as pd
 import geopandas as gpd
-from shapely.geometry import Point
-from dask import array as da
+import numpy as np
 import spyndex
+import xarray as xr
+from dask import array as da
 from dask_image import ndfilters as dask_ndimage
 from scipy import ndimage
-from xarray.core.extensions import AccessorRegistrationWarning
+from shapely.geometry import Point
+
 from ..earthdatastore.cube_utils import GeometryManager
 
 
@@ -159,7 +156,7 @@ class __EarthDailyAccessorDataArray:
             With new dimension "zonal_statistics" and "geometry".
 
         """
-        from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
+        from ..earthdatastore.cube_utils import GeometryManager, zonal_stats
 
         geometry = GeometryManager(geometry).to_geopandas()
         return zonal_stats(
