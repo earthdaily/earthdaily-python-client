@@ -86,14 +86,14 @@ def _extract_item_metadata(
         Tuple of (datetime, footprint)
     """
     dt = _parse_datetime(item["properties"]["datetime"])
-    any_asset = item.get('assets',{}) != {}
-    if any_asset and method == 'proj:transform':
-        _first_item = list(item["assets"].keys())[0]    
+    any_asset = item.get("assets", {}) != {}
+    if any_asset and method == "proj:transform":
+        _first_item = list(item["assets"].keys())[0]
         footprint = tuple(
             item["assets"][_first_item].get("proj:transform", item["bbox"])
         )
     else:
-        footprint = tuple(round(bbox, 6) for bbox in item['bbox'])
+        footprint = tuple(round(bbox, 6) for bbox in item["bbox"])
     return dt, footprint
 
 
