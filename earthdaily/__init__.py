@@ -3,7 +3,7 @@ from typing import Optional
 
 from earthdaily.core import options
 
-from . import earthdatastore
+from . import datasets, earthdatastore  # noqa: F401
 
 __all__ = ["options"]
 
