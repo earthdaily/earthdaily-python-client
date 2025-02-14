@@ -4,11 +4,9 @@ Created on Fri Jun  7 16:19:54 2024
 @author: nkk
 """
 
-import xarray as xr
 import numpy as np
+import xarray as xr
 from scipy.linalg import solve_banded
-import warnings
-from dask import array as da
 
 
 def whittaker(dataset, beta=10000.0, weights=None, time="time"):

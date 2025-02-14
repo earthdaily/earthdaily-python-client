@@ -12,19 +12,20 @@ Example:
     >>> stats = zonal_stats(dataset, polygons, reducers=["mean", "max"])
 """
 
-from typing import Union, List, Optional, Tuple, Dict
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
 import logging
 import time
-from pathlib import Path
+from typing import List, Optional, Tuple, Union
 
-import numpy as np
-import xarray as xr
-import pandas as pd
 import geopandas as gpd
+import numpy as np
+import psutil
+import xarray as xr
 from scipy.sparse import csr_matrix
 from scipy.stats import mode
 from tqdm.auto import trange
-import psutil
 
 from .preprocessing import rasterize
 
@@ -59,7 +60,7 @@ class MemoryManager:
         )
 
         logger.info(
-            f"Estimated memory per date: {bytes_per_date:.2f}MB. Total: {(bytes_per_date*dataset.time.size):.2f}MB"
+            f"Estimated memory per date: {bytes_per_date:.2f}MB. Total: {(bytes_per_date * dataset.time.size):.2f}MB"
         )
         logger.info(
             f"Time chunks: {time_chunks} (total time steps: {dataset.time.size})"
@@ -374,12 +375,14 @@ def _process_time_chunks(
             ds_chunk = ds_chunk.load()
             logger.debug(
                 f"Loaded {ds_chunk.time.size} dates in "
-                f"{(time.time()-load_start):.2f}s"
+                f"{(time.time() - load_start):.2f}s"
             )
 
         compute_start = time.time()
         chunk_stats = StatisticalOperations.zonal_stats(ds_chunk, positions, reducers)
-        logger.debug(f"Computed chunk statistics in {(time.time()-compute_start):.2f}s")
+        logger.debug(
+            f"Computed chunk statistics in {(time.time() - compute_start):.2f}s"
+        )
 
         chunks.append(chunk_stats)
 
@@ -411,7 +414,10 @@ def _compute_xvec_stats(
         ImportError: If xvec package is not installed
     """
     try:
-        import xvec
+        # Importing xvec for its zonal statistics computation capabilities.
+        # The import is marked with `# noqa: F401` to ignore the unused import warning
+        # because it is dynamically used later in the code.
+        import xvec  # noqa: F401
     except ImportError:
         raise ImportError(
             "The xvec method requires the xvec package. "
@@ -488,7 +494,9 @@ def _format_numpy_output(
     return stats
 
 
-def _preserve_geometry_columns(stats: xr.Dataset, geometries: gpd.GeoDataFrame) -> None:
+def _preserve_geometry_columns(
+    stats: xr.Dataset, geometries: gpd.GeoDataFrame
+) -> xr.Dataset:
     """Preserve geometry columns in output statistics."""
     cols = [
         col for col in geometries.columns if col != geometries._geometry_column_name

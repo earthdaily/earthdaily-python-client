@@ -1,22 +1,28 @@
-from collections import defaultdict
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
+import json
 import logging
-import pandas as pd
+import warnings
+from collections import defaultdict
+from functools import wraps
+from typing import Callable
+
 import geopandas as gpd
 import numpy as np
+import pandas as pd
+import rioxarray
 import xarray as xr
 from rasterio.enums import Resampling
-from shapely.geometry import box
-from .geometry_manager import GeometryManager
-from ._zonal import zonal_stats
-from .harmonizer import Harmonizer
-from .asset_mapper import AssetMapper
-import rioxarray
-from functools import wraps
-import json
-from typing import Callable
-from earthdaily.core import options
 from rasterio.errors import NotGeoreferencedWarning
-import warnings
+from shapely.geometry import box
+
+from earthdaily.core import options
+
+from ._zonal import zonal_stats
+from .asset_mapper import AssetMapper
+from .geometry_manager import GeometryManager
+from .harmonizer import Harmonizer
 
 logging.getLogger("earthdaily-cube_utils")
 
@@ -275,13 +281,13 @@ def datacube(
     items_collection=None,
     bbox=None,
     intersects=None,
-    assets: list | dict = None,
+    assets: list | dict | None = None,
     engine="odc",
     rescale=True,
     groupby_date="mean",
     common_band_names=True,
     cross_calibration_items: list | None = None,
-    properties: (bool | str | list) = False,
+    properties: bool | str | list = False,
     **kwargs,
 ):
     _disable_known_datacube_warning()
@@ -327,7 +333,7 @@ def datacube(
     nodatas = {}
     for ds_asset in ds.data_vars:
         for item in items_collection:
-            empty_dict_list = []
+            empty_dict_list: list = []
             band_idx = 1
             asset = ds_asset
             if len(parts := ds_asset.split(".")) == 2:
@@ -431,7 +437,7 @@ def rescale_assets_with_items(
     logging.info("Rescaling dataset")
 
     # Deduplicate items by datetime
-    unique_items = {}
+    unique_items: dict = {}
     for item in items_collection:
         unique_items.setdefault(item.datetime, item)
 

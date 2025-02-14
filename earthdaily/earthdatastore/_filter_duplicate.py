@@ -1,3 +1,6 @@
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
 from typing import List, Dict, Tuple, Optional, Iterator
 from datetime import datetime, timedelta
 from dataclasses import dataclass

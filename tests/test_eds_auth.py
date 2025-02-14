@@ -44,7 +44,11 @@ class TestEdsAuth(unittest.TestCase):
         credentials = Auth.read_credentials_from_environment()
         self.assertEqual(credentials["EDS_CLIENT_ID"], "client_id_value")
 
-    @patch("builtins.open", new_callable=mock_open, read_data="[default]\nEDS_AUTH_URL=https://auth.example.com\nEDS_SECRET=secret_value\nEDS_CLIENT_ID=client_id_value")
+    @patch(
+        "builtins.open",
+        new_callable=mock_open,
+        read_data="[default]\nEDS_AUTH_URL=https://auth.example.com\nEDS_SECRET=secret_value\nEDS_CLIENT_ID=client_id_value",
+    )
     @patch("pathlib.Path.exists", return_value=True)
     def test_read_credentials_from_ini(self, mock_exists, mock_open):
         credentials = Auth.read_credentials_from_ini(profile="default")
@@ -64,11 +68,17 @@ class TestEdsAuth(unittest.TestCase):
         self.assertEqual(result.client_secret, "secret_value")
         self.assertEqual(result.client_id, "client_id_value")
 
-    @patch("builtins.open", new_callable=mock_open, read_data=json.dumps({
-        "EDS_AUTH_URL": "https://auth.example.com",
-        "EDS_SECRET": "secret_value",
-        "EDS_CLIENT_ID": "client_id_value"
-    }))
+    @patch(
+        "builtins.open",
+        new_callable=mock_open,
+        read_data=json.dumps(
+            {
+                "EDS_AUTH_URL": "https://auth.example.com",
+                "EDS_SECRET": "secret_value",
+                "EDS_CLIENT_ID": "client_id_value",
+            }
+        ),
+    )
     def test_parse_json_file(self, mock_open_file):
         result = self.auth_instance._config_parser(config="path/to/credentials.json")
         self.assertIsInstance(result, EarthDataStoreConfig)
@@ -102,7 +112,10 @@ class TestEdsAuth(unittest.TestCase):
     def test_missing_credentials(self):
         with self.assertRaises(AttributeError) as context:
             self.auth_instance._config_parser(config={})
-        self.assertIn("You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID", str(context.exception))
+        self.assertIn(
+            "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID",
+            str(context.exception),
+        )
 
     @patch("requests.post")
     def test_get_access_token(self, mock_post):
@@ -142,14 +155,21 @@ class TestEdsAuth(unittest.TestCase):
 
         mock_get_client.return_value = MagicMock()
 
-        auth_instance = Auth.from_credentials(json_path=Path("/path/to/credentials.json"))
+        auth_instance = Auth.from_credentials(
+            json_path=Path("/path/to/credentials.json")
+        )
 
         self.assertIsInstance(auth_instance, Auth)
-        self.assertEqual(auth_instance._Auth__auth_config["EDS_CLIENT_ID"], "client_id_value")
+        self.assertEqual(
+            auth_instance._Auth__auth_config["EDS_CLIENT_ID"], "client_id_value"
+        )
         self.assertEqual(auth_instance._Auth__auth_config["EDS_SECRET"], "secret_value")
-        self.assertEqual(auth_instance._Auth__auth_config["EDS_AUTH_URL"], "https://auth.example.com")
+        self.assertEqual(
+            auth_instance._Auth__auth_config["EDS_AUTH_URL"], "https://auth.example.com"
+        )
 
         mock_get_client.assert_called_once()
+
 
 if __name__ == "__main__":
     unittest.main()
