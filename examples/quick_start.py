@@ -22,16 +22,6 @@ def initialize_client():
     return EDSClient(config)
 
 
-def explore_agriculture(client):
-    """Fetch agricultural data using the EarthDaily client."""
-    try:
-        response = client.agriculture.explore()
-        print("\n✅ Agriculture Explore Response:")
-        print(response)
-    except EDSAPIError as e:
-        print(f"\n❌ API error: {e}\nStatus Code: {e.status_code}\nDetails: {e.body}")
-
-
 def search_stac_items(client):
     """Search for STAC items in the EarthDaily platform."""
     try:
@@ -55,7 +45,6 @@ def main():
     print("\n🚀 Initializing EarthDaily Client...")
     client = initialize_client()
 
-    explore_agriculture(client)
     search_stac_items(client)
 
 
