@@ -24,13 +24,8 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
 
-      - name: Configure Poetry
-        env:
-          PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-        run: poetry config pypi-token.pypi "$PYPI_TOKEN" --local
-
       - name: Build package
         run: poetry build
 
       - name: Publish to PyPI
-        run: poetry publish --no-interaction
+        uses: pypa/gh-action-pypi-publish@release/v1
