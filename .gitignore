@@ -1,12 +1,19 @@
-# ---> Python
+*.pyc
+*.egg-info
+*.eggs
+.DS_Store
+data
+config.json
+stdout*
+/integration*
+.idea
+.vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-.spyproject/
-.spyproject/*
-.ipynb_checkpoints
-.ipynb_checkpoints/*
+
 # C extensions
 *.so
 
@@ -23,18 +30,12 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+MANIFEST
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -49,12 +50,17 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
+.nox/
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
-*,cover
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
 
 # Translations
 *.mo
@@ -62,22 +68,88 @@ coverage.xml
 
 # Django stuff:
 *.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
 
 # Sphinx documentation
 docs/_build/
-docs/_*/
-docs/_*
+docs/_auto_examples/
+docs/_autosummary/
+docs/_modules/
 
 # PyBuilder
+.pybuilder/
 target/
 
-# Auth
-.vscode/
+# Jupyter Notebook
+.ipynb_checkpoints
 
-docs/html/.doctrees/
+# IPython
+profile_default/
+ipython_config.py
 
-docs/sg_execution_times.rst
+# pyenv
+#   For a library or package, you might want to ignore these files since the code is
+#   intended to run in multiple environments; otherwise, check them in:
+.python-version
 
-docs/html/
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+# Pipfile.lock
 
-*.0
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# asv environments
+.asv

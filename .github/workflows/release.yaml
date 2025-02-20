@@ -1,0 +1,34 @@
+name: Publish to PyPI
+
+on:
+  push:
+    tags:
+      - "1.*"  # Matches tags like 1.0.0b1, 1.0.0, 1.1.0, etc.
+
+jobs:
+  pypi-publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/earthdaily
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Configure Poetry
+        run: poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Build package
+        run: poetry build
+
+      - name: Publish to PyPI
+        run: poetry publish --no-interaction
