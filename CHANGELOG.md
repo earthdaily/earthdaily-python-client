@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0b1] - 2025-02-19
+
+### Added
+- New Modular Architecture: Introduced a structured repository layout to support multiple services (platform, ordering, agriculture, etc.).
+- Versioning & Tagging: Adopted PEP 440 standards for beta releases.
+- New Client API: Introduced `EDSClient` and `EDSConfig` for managing configurations and requests within `v1`.
+- Deployment Workflow: Set up deployment automation to push pre-releases to PyPi.
+
+### Notes
+- `v0` has been removed from this beta release. Future updates will determine how to migrate `v0` functionalities into `v1`.
+- Further discussions needed on how to freeze `v0`, allowing only critical/security patches, and how to transition its methods into `v1` without breaking functionality.
+
 ## [0.5.3] - 2025-02-13
 
 ### Fixed
