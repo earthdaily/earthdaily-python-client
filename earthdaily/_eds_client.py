@@ -1,5 +1,5 @@
 from earthdaily._api_requester import APIRequester
-from earthdaily._auth_client import Authentication, CognitoAuth
+from earthdaily._auth_client import Authentication
 from earthdaily._eds_config import EDSConfig
 from earthdaily.agriculture import EarthDataStore
 from earthdaily.platform import PlatformService
@@ -12,8 +12,7 @@ class EDSClient:
     This client manages authentication and facilitates service interactions through the APIRequester,
     using configurations specified in EDSConfig.
 
-    The client uses to the authentication strategy provided
-    in the configuration, such as Cognito, to handle access to the EDS services.
+    The client uses the client_credentials flow to access the EDS services.
 
     Attributes:
     ----------
@@ -43,22 +42,14 @@ class EDSClient:
 
     def _create_auth(self) -> Authentication:
         """
-        Creates the authentication mechanism based on the provided auth_method.
+        Creates the authentication mechanism.
 
         Returns:
         -------
         Authentication:
-            An instance of an authentication class (CognitoAuth or Auth0Auth).
-
-        Raises:
-        -------
-        ValueError:
-            If the provided auth_method is unsupported.
+            An instance of an authentication class.
         """
-        if self.config.auth_method == "cognito":
-            return CognitoAuth(self.config.client_id, self.config.client_secret, self.config.token_url)
-        else:
-            raise ValueError(f"Unsupported auth method: {self.config.auth_method}")
+        return Authentication(self.config.client_id, self.config.client_secret, self.config.token_url)
 
     @property
     def platform(self):

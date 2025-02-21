@@ -7,7 +7,7 @@ except PackageNotFoundError:
 
 # Authentication-related imports
 from earthdaily._api_requester import APIRequester
-from earthdaily._auth_client import Authentication, CognitoAuth
+from earthdaily._auth_client import Authentication
 
 # Client and config-related imports
 from earthdaily._eds_client import EDSClient
@@ -21,7 +21,6 @@ from earthdaily.platform import PlatformService
 
 __all__ = [
     "Authentication",
-    "CognitoAuth",
     "APIRequester",
     "HTTPClient",
     "HTTPRequest",

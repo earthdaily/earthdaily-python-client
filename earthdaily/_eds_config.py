@@ -25,10 +25,6 @@ class EDSConfig:
 
     Parameters:
     ----------
-    auth_method: str
-        The authentication method to be used. Defaults to 'cognito'.
-        If no `auth_method` is provided during initialization,
-        the method defaults to `EDS_CLIENT_ID` from environment variables if available; otherwise, it uses "cognito".
     client_id: str
         The client ID for authentication. If not provided, it defaults to `EDS_CLIENT_ID` from environment variables.
     client_secret: str
@@ -48,8 +44,6 @@ class EDSConfig:
         If any of the required parameters (client_id, client_secret, token_url) are not provided either via input
         or environment variables.
     """
-
-    auth_method: str = field(default_factory=lambda: os.getenv("EDS_AUTH_METHOD", "cognito"))
     client_id: str = field(default_factory=lambda: os.getenv("EDS_CLIENT_ID", ""))
     client_secret: str = field(default_factory=lambda: os.getenv("EDS_SECRET", ""))
     token_url: str = field(default_factory=lambda: os.getenv("EDS_AUTH_URL", ""))

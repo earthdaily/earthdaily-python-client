@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from earthdaily._auth_client import CognitoAuth
+from earthdaily._auth_client import Authentication
 
 
-class TestCognitoAuth(unittest.TestCase):
+class TestAuth(unittest.TestCase):
     def setUp(self):
-        self.auth = CognitoAuth("client_id", "client_secret", "token_url")
+        self.auth = Authentication("client_id", "client_secret", "token_url")
 
     @patch("earthdaily._auth_client.requests.Session.post")
     def test_authenticate_success(self, mock_post):
@@ -33,7 +33,7 @@ class TestCognitoAuth(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             self.auth.authenticate()
 
-        self.assertIn("Invalid response from Cognito", str(context.exception))
+        self.assertIn("Invalid response from Auth provider", str(context.exception))
 
 
 if __name__ == "__main__":

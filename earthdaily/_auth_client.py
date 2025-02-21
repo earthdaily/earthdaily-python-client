@@ -1,67 +1,22 @@
 import json
 import time
-from abc import ABC, abstractmethod
 
 import requests
 
 
-class Authentication(ABC):
+class Authentication:
     """
-    Abstract base class for all authentication methods.
-
-    This class serves as a template for different authentication methods. Each subclass should
-    implement the `authenticate` method according to its specific protocol, updating internal state
-    with the new credentials. It is not intended to return these values directly.
-
-    Methods:
-    -------
-    authenticate():
-        Abstract method to be implemented by subclasses. This method should handle
-        the authentication process and update internal state such as the token and expiry time.
-
-    get_token() -> str:
-        Returns a valid access token. This method checks if the current token is valid
-        and if not, it re-authenticates to obtain a new token.
-    """
-
-    @abstractmethod
-    def authenticate(self) -> None:
-        """
-        An abstract method to handle authentication and update internal state with new credentials.
-
-        This method must be implemented by subclasses to perform the authentication process specific to
-        the authentication method being used. It should update internal state, such as the token and
-        its expiry, rather than returning these details.
-        """
-        pass
-
-    @abstractmethod
-    def get_token(self) -> str:
-        """
-        Returns a valid access token. This method should check the token's validity and
-        re-authenticate if necessary to ensure the token is still valid before returning it.
-
-        Returns:
-        -------
-        str:
-            The valid access token.
-        """
-        pass
-
-
-class CognitoAuth(Authentication):
-    """
-    Authentication class for AWS Cognito using the OAuth 2.0 client credentials flow.
+    Authentication class using the OAuth 2.0 client credentials flow.
 
     This class exchanges client credentials (client_id and client_secret) for an access token
-    at the Cognito token endpoint and handles token renewal when necessary.
+    at the token endpoint and handles token renewal when necessary.
 
     Attributes:
     ----------
     client_id: str
-        The client ID for AWS Cognito.
+        client ID
     client_secret: str
-        The client secret for AWS Cognito.
+        client secret
     token_url: str
         The token endpoint URL to retrieve the access token.
     token: str, optional
@@ -77,9 +32,9 @@ class CognitoAuth(Authentication):
         Parameters:
         ----------
         client_id : str
-            The client ID for AWS Cognito.
+            client ID
         client_secret : str
-            The client secret for AWS Cognito.
+            client secret
         token_url : str
             The token endpoint URL to retrieve the access token.
         """
@@ -91,10 +46,10 @@ class CognitoAuth(Authentication):
 
     def authenticate(self) -> None:
         """
-        Authenticates with AWS Cognito using client credentials and retrieves an access token.
+        Authenticates using client credentials and retrieves an access token.
 
         This method initializes a session and configures it to use HTTP Basic Authentication with the provided
-        client_id and client_secret. It performs an HTTP POST request to the Cognito token endpoint, specifically
+        client_id and client_secret. It performs an HTTP POST request to the token endpoint, specifically
         requesting an access token via the client credentials grant type.
 
         Raises:
@@ -116,7 +71,7 @@ class CognitoAuth(Authentication):
             token_data = response.json()
 
             if "access_token" not in token_data:
-                raise ValueError(f"Invalid response from Cognito: {token_data}")
+                raise ValueError(f"Invalid response from Auth provider: {token_data}")
 
             self.expiry = time.time() + token_data["expires_in"]
             self.token = token_data["access_token"]
