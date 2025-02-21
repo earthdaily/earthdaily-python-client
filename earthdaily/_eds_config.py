@@ -44,6 +44,7 @@ class EDSConfig:
         If any of the required parameters (client_id, client_secret, token_url) are not provided either via input
         or environment variables.
     """
+
     client_id: str = field(default_factory=lambda: os.getenv("EDS_CLIENT_ID", ""))
     client_secret: str = field(default_factory=lambda: os.getenv("EDS_SECRET", ""))
     token_url: str = field(default_factory=lambda: os.getenv("EDS_AUTH_URL", ""))
