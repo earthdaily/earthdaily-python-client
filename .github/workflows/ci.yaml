@@ -29,8 +29,8 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
 
-      - name: Install dependencies
-        run: poetry install
+      - name: Install tests dependencies
+        run: poetry install --only tests
 
       - name: Run tests with tox
         run: poetry run tox -e py${{ matrix.python-version }}
@@ -56,8 +56,8 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
 
-      - name: Install dependencies
-        run: poetry install
+      - name: Install tests dependencies
+        run: poetry install --only tests
 
       - name: Run Linting
         run: poetry run tox -e lint
