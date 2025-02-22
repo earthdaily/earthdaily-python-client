@@ -1,0 +1,1129 @@
+{
+    "sentinel-2-l2a": [
+        {
+            "coastal44": "coastal",
+            "coastal": "coastal",
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "nir08": "nir08",
+            "nir09": "nir09",
+            "swir16": "swir16",
+            "swir22": "swir22",
+            "rededge": "rededge2",
+            "rededge70": "rededge1",
+            "rededge74": "rededge2",
+            "rededge78": "rededge3",
+            "watervapor": "wvp",
+            "native-cloud-mask": "scl",
+            "native": "scl",
+            "aot": "aot",
+            "visual": "visual",
+            "aot-jp2": "aot-jp2",
+            "nir-jp2": "nir-jp2",
+            "red-jp2": "red-jp2",
+            "scl-jp2": "scl-jp2",
+            "wvp-jp2": "wvp-jp2",
+            "blue-jp2": "blue-jp2",
+            "green-jp2": "green-jp2",
+            "nir08-jp2": "nir08-jp2",
+            "nir09-jp2": "nir09-jp2",
+            "thumbnail": "thumbnail",
+            "swir16-jp2": "swir16-jp2",
+            "swir22-jp2": "swir22-jp2",
+            "visual-jp2": "visual-jp2",
+            "coastal-jp2": "coastal-jp2",
+            "rededge1-jp2": "rededge1-jp2",
+            "rededge2-jp2": "rededge2-jp2",
+            "rededge3-jp2": "rededge3-jp2",
+            "granule_metadata": "granule_metadata",
+            "tileinfo_metadata": "tileinfo_metadata",
+            "scl": "scl",
+            "wvp": "wvp",
+            "rededge1": "rededge1",
+            "rededge2": "rededge2",
+            "rededge3": "rededge3"
+        }
+    ],
+    "landsat-c2l2-sr": [
+        {
+            "coastal44": "coastal",
+            "coastal": "coastal",
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir08",
+            "nir08": "nir08",
+            "swir16": "swir16",
+            "swir22": "swir22",
+            "native-cloud-mask": "qa_pixel",
+            "native": "qa_pixel",
+            "SAA": "SAA",
+            "SZA": "SZA",
+            "VAA": "VAA",
+            "VZA": "VZA",
+            "index": "index",
+            "ANG.txt": "ANG.txt",
+            "MTL.txt": "MTL.txt",
+            "MTL.xml": "MTL.xml",
+            "MTL.json": "MTL.json",
+            "qa_radsat": "qa_radsat",
+            "thumbnail": "thumbnail",
+            "qa_aerosol": "qa_aerosol",
+            "reduced_resolution_browse": "reduced_resolution_browse",
+            "qa_pixel": "qa_pixel"
+        }
+    ],
+    "landsat-c2l2-st": [
+        {
+            "lwir": "lwir11",
+            "lwir11": "lwir11",
+            "native-cloud-mask": "qa_pixel",
+            "native": "qa_pixel",
+            "qa": "qa",
+            "SAA": "SAA",
+            "SZA": "SZA",
+            "VAA": "VAA",
+            "VZA": "VZA",
+            "DRAD": "DRAD",
+            "EMIS": "EMIS",
+            "EMSD": "EMSD",
+            "TRAD": "TRAD",
+            "URAD": "URAD",
+            "ATRAN": "ATRAN",
+            "CDIST": "CDIST",
+            "index": "index",
+            "ANG.txt": "ANG.txt",
+            "MTL.txt": "MTL.txt",
+            "MTL.xml": "MTL.xml",
+            "MTL.json": "MTL.json",
+            "qa_radsat": "qa_radsat",
+            "thumbnail": "thumbnail",
+            "reduced_resolution_browse": "reduced_resolution_browse",
+            "qa_pixel": "qa_pixel"
+        }
+    ],
+    "venus-l2a": [
+        {
+            "coastal42": "image_file_SRE_B1",
+            "coastal44": "image_file_SRE_B2",
+            "coastal": "image_file_SRE_B2",
+            "blue": "image_file_SRE_B3",
+            "green": "image_file_SRE_B4",
+            "yellow": "image_file_SRE_B5",
+            "red": "image_file_SRE_B7",
+            "nir": "image_file_SRE_B11",
+            "nir08": "image_file_SRE_B11",
+            "nir09": "image_file_SRE_B12",
+            "rededge": "image_file_SRE_B09",
+            "rededge70": "image_file_SRE_B08",
+            "rededge74": "image_file_SRE_B09",
+            "rededge78": "image_file_SRE_B10",
+            "native-cloud-mask": "detailed_cloud_mask",
+            "native": "detailed_cloud_mask",
+            "mask": "mask",
+            "license": "license",
+            "stac_json": "stac_json",
+            "thumbnail": "thumbnail",
+            "edge_image": "edge_image",
+            "pixel_mask": "pixel_mask",
+            "solar_data": "solar_data",
+            "quality_mask": "quality_mask",
+            "useful_image": "useful_image",
+            "viewing_data": "viewing_data",
+            "saturation_mask": "saturation_mask",
+            "image_file_FRE_B1": "image_file_FRE_B1",
+            "image_file_FRE_B2": "image_file_FRE_B2",
+            "image_file_FRE_B3": "image_file_FRE_B3",
+            "image_file_FRE_B4": "image_file_FRE_B4",
+            "image_file_FRE_B5": "image_file_FRE_B5",
+            "image_file_FRE_B6": "image_file_FRE_B6",
+            "image_file_FRE_B7": "image_file_FRE_B7",
+            "image_file_FRE_B8": "image_file_FRE_B8",
+            "image_file_FRE_B9": "image_file_FRE_B9",
+            "image_file_SRE_B6": "image_file_SRE_B6",
+            "image_file_SRE_B8": "image_file_SRE_B8",
+            "image_file_SRE_B9": "image_file_SRE_B9",
+            "useful_image_data": "useful_image_data",
+            "image_file_FRE_B10": "image_file_FRE_B10",
+            "image_file_FRE_B11": "image_file_FRE_B11",
+            "image_file_FRE_B12": "image_file_FRE_B12",
+            "job_processing_data": "job_processing_data",
+            "interpolated_pixel_mask": "interpolated_pixel_mask",
+            "atmospheric_biophysical_parameters": "atmospheric_biophysical_parameters",
+            "image_file_SRE_B1": "image_file_SRE_B1",
+            "image_file_SRE_B2": "image_file_SRE_B2",
+            "image_file_SRE_B3": "image_file_SRE_B3",
+            "image_file_SRE_B4": "image_file_SRE_B4",
+            "image_file_SRE_B5": "image_file_SRE_B5",
+            "image_file_SRE_B7": "image_file_SRE_B7",
+            "image_file_SRE_B10": "image_file_SRE_B10",
+            "image_file_SRE_B11": "image_file_SRE_B11",
+            "image_file_SRE_B12": "image_file_SRE_B12",
+            "detailed_cloud_mask": "detailed_cloud_mask"
+        }
+    ],
+    "earthdaily-simulated-cloudless-l2a-cog-edagro": [
+        {
+            "coastal44": "image_file_C",
+            "coastal": "image_file_C",
+            "blue": "image_file_B",
+            "green": "image_file_G",
+            "yellow": "image_file_Y",
+            "red": "image_file_R",
+            "nir": "image_file_NIR",
+            "nir08": "image_file_NIR",
+            "swir12": "image_file_SWIR1",
+            "swir16": "image_file_SWIR2",
+            "cirrus": "image_file_CI",
+            "rededge": "image_file_RE2",
+            "rededge70": "image_file_RE1",
+            "rededge74": "image_file_RE2",
+            "rededge78": "image_file_RE3",
+            "watervapor1": "image_file_RWVP1",
+            "watervapor2": "image_file_RWVP2",
+            "lwir": "image_file_ST",
+            "lwir11": "image_file_ST",
+            "tir1": "image_file_TIR",
+            "tir2": "image_file_TIR2",
+            "tir3": "image_file_TIR3",
+            "aqua": "image_file_A",
+            "wildfire": "image_file_W",
+            "me1": "image_file_ME1",
+            "me2": "image_file_ME2",
+            "solar_data": "solar_data",
+            "viewing_data": "viewing_data",
+            "atmospheric_biophysical_parameters": "atmospheric_biophysical_parameters",
+            "image_file_SWIR2": "image_file_SWIR2"
+        }
+    ],
+    "alsat-1b-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "cbers-4-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "deimos-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir"
+        }
+    ],
+    "gaofen-1-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "gaofen-6-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "kazstsat-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "huanjing-2-l2a-cog-edagro": [
+        {
+            "blue": "blue",
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "dmc-l2a-cog-edagro": [
+        {
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "resourcesat-2-l2a-cog-edagro": [
+        {
+            "green": "green",
+            "red": "red",
+            "nir": "nir",
+            "raster": "raster"
+        }
+    ],
+    "alsat-1b-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "cbers-4-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "cbers4-mux": [
+        {
+            "B5": "B5",
+            "B6": "B6",
+            "B7": "B7",
+            "B8": "B8",
+            "metadata": "metadata",
+            "thumbnail": "thumbnail"
+        }
+    ],
+    "cropland-data-layer-us": [
+        {
+            "data": "data",
+            "metadata": "metadata",
+            "full_data": "full_data"
+        }
+    ],
+    "deimos-1-l2a-cog-edagro": [
+        {
+            "raster": "raster"
+        }
+    ],
+    "deimos-1-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "deimos1-catalog": [
+        {
+            "browse": "browse",
+            "readme": "readme",
+            "license": "license",
+            "metadata": "metadata",
+            "thumbnail": "thumbnail",
+            "cloud_mask": "cloud_mask",
+            "geolocation": "geolocation"
+        }
+    ],
+    "dmc-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "ecmwf-mars": [
+        {
+            "weather": "weather"
+        }
+    ],
+    "ecmwf-open-data": [
+        {
+            "r": "r",
+            "t": "t",
+            "u": "u",
+            "v": "v",
+            "sp": "sp",
+            "tp": "tp",
+            "tcwv": "tcwv"
+        }
+    ],
+    "eda-albedo-map": [
+        {
+            "albedo-map": "albedo-map"
+        }
+    ],
+    "eda-analysis-ready-mosaic": [
+        {
+            "mosaic": "mosaic",
+            "thumbnail": "thumbnail",
+            "cloud_mask": "cloud_mask",
+            "data_source_map": "data_source_map",
+            "data_source_metadata": "data_source_metadata"
+        }
+    ],
+    "eda-dem": [
+        {
+            "dem": "dem"
+        }
+    ],
+    "eda-geoid": [
+        {
+            "geoid": "geoid"
+        }
+    ],
+    "eda-landcover": [
+        {
+            "landcover": "landcover"
+        }
+    ],
+    "eda-reference-image": [
+        {
+            "reference-image": "reference-image"
+        }
+    ],
+    "eda-water-mask": [
+        {
+            "water-mask": "water-mask"
+        }
+    ],
+    "edagro-analytics-crops-layer": [
+        {
+            "data": "data",
+            "cropmask": "cropmask",
+            "metadata": "metadata"
+        }
+    ],
+    "edagro-analytics-field-borders-layer": [
+        {
+            "data": "data"
+        }
+    ],
+    "gaofen-1-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "gaofen-6-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "goes": [
+        {
+            "OR_ABI-L2-AODF-M6_G16_s20233490810206_e20233490819514_c20233490820523.nc": "OR_ABI-L2-AODF-M6_G16_s20233490810206_e20233490819514_c20233490820523.nc",
+            "OR_ABI-L2-ACMF-M6_G18_s20241430900220_e20241430909528_c20241430910280.nc": "OR_ABI-L2-ACMF-M6_G18_s20241430900220_e20241430909528_c20241430910280.nc",
+            "OR_ABI-L2-AODF-M6_G16_s20242051220205_e20242051229513_c20242051234228.nc": "OR_ABI-L2-AODF-M6_G16_s20242051220205_e20242051229513_c20242051234228.nc",
+            "OR_ABI-L2-TPWF-M6_G16_s20242051350205_e20242051359513_c20242051401117.nc": "OR_ABI-L2-TPWF-M6_G16_s20242051350205_e20242051359513_c20242051401117.nc",
+            "OR_ABI-L1b-RadF-M6C11_G18_s20243660910217_e20243660919525_c20243660919596.nc": "OR_ABI-L1b-RadF-M6C11_G18_s20243660910217_e20243660919525_c20243660919596.nc"
+        }
+    ],
+    "himawari-l1b": [
+        {
+            "HS_H09_20231215_0550_B01_FLDK_R10_S0110.DAT.bz2": "HS_H09_20231215_0550_B01_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B02_FLDK_R10_S0110.DAT.bz2": "HS_H09_20231215_0550_B02_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B03_FLDK_R05_S0110.DAT.bz2": "HS_H09_20231215_0550_B03_FLDK_R05_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B04_FLDK_R10_S0110.DAT.bz2": "HS_H09_20231215_0550_B04_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B05_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B05_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B06_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B06_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B07_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B07_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B08_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B08_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B09_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B09_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B10_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B10_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B11_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B11_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B12_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B12_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B13_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B13_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B14_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B14_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B15_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B15_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20231215_0550_B16_FLDK_R20_S0110.DAT.bz2": "HS_H09_20231215_0550_B16_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B01_FLDK_R10_S0110.DAT.bz2": "HS_H09_20240522_0550_B01_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B02_FLDK_R10_S0110.DAT.bz2": "HS_H09_20240522_0550_B02_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B03_FLDK_R05_S0110.DAT.bz2": "HS_H09_20240522_0550_B03_FLDK_R05_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B04_FLDK_R10_S0110.DAT.bz2": "HS_H09_20240522_0550_B04_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B05_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B05_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B06_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B06_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B07_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B07_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B08_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B08_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B09_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B09_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B10_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B10_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B11_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B11_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B12_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B12_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B13_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B13_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B14_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B14_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B15_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B15_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240522_0550_B16_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240522_0550_B16_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B01_FLDK_R10_S0110.DAT.bz2": "HS_H09_20240723_1150_B01_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B02_FLDK_R10_S0110.DAT.bz2": "HS_H09_20240723_1150_B02_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B03_FLDK_R05_S0110.DAT.bz2": "HS_H09_20240723_1150_B03_FLDK_R05_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B04_FLDK_R10_S0110.DAT.bz2": "HS_H09_20240723_1150_B04_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B05_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B05_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B06_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B06_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B07_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B07_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B08_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B08_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B09_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B09_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B10_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B10_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B11_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B11_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B12_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B12_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B13_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B13_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B14_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B14_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B15_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B15_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20240723_1150_B16_FLDK_R20_S0110.DAT.bz2": "HS_H09_20240723_1150_B16_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B01_FLDK_R10_S0110.DAT.bz2": "HS_H09_20241231_0850_B01_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B02_FLDK_R10_S0110.DAT.bz2": "HS_H09_20241231_0850_B02_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B03_FLDK_R05_S0110.DAT.bz2": "HS_H09_20241231_0850_B03_FLDK_R05_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B04_FLDK_R10_S0110.DAT.bz2": "HS_H09_20241231_0850_B04_FLDK_R10_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B05_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B05_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B06_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B06_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B07_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B07_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B08_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B08_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B09_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B09_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B10_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B10_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B11_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B11_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B12_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B12_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B13_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B13_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B14_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B14_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B15_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B15_FLDK_R20_S0110.DAT.bz2",
+            "HS_H09_20241231_0850_B16_FLDK_R20_S0110.DAT.bz2": "HS_H09_20241231_0850_B16_FLDK_R20_S0110.DAT.bz2"
+        }
+    ],
+    "himawari-l2-cloud": [
+        {
+            "AHI-CHGT_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc": "AHI-CHGT_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc",
+            "AHI-CMSK_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc": "AHI-CMSK_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc",
+            "AHI-CPHS_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc": "AHI-CPHS_v1r0_h08_s202212130450206_e202212130450540_c202212130508561.nc"
+        }
+    ],
+    "huanjing-2-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "kazstsat-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "landsat-c2l1": [
+        {
+            "SAA": "SAA",
+            "SZA": "SZA",
+            "VAA": "VAA",
+            "VZA": "VZA",
+            "pan": "pan",
+            "red": "red",
+            "blue": "blue",
+            "green": "green",
+            "index": "index",
+            "nir08": "nir08",
+            "cirrus": "cirrus",
+            "lwir11": "lwir11",
+            "lwir12": "lwir12",
+            "swir16": "swir16",
+            "swir22": "swir22",
+            "ANG.txt": "ANG.txt",
+            "MTL.txt": "MTL.txt",
+            "MTL.xml": "MTL.xml",
+            "coastal": "coastal",
+            "MTL.json": "MTL.json",
+            "qa_pixel": "qa_pixel",
+            "qa_radsat": "qa_radsat",
+            "thumbnail": "thumbnail",
+            "reduced_resolution_browse": "reduced_resolution_browse"
+        }
+    ],
+    "landsat-l2-cog-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "modis-43A4-061": [
+        {
+            "hdf": "hdf",
+            "metadata": "metadata",
+            "tilejson": "tilejson",
+            "rendered_preview": "rendered_preview",
+            "Nadir_Reflectance_Band1": "Nadir_Reflectance_Band1",
+            "Nadir_Reflectance_Band2": "Nadir_Reflectance_Band2",
+            "Nadir_Reflectance_Band3": "Nadir_Reflectance_Band3",
+            "Nadir_Reflectance_Band4": "Nadir_Reflectance_Band4",
+            "Nadir_Reflectance_Band5": "Nadir_Reflectance_Band5",
+            "Nadir_Reflectance_Band6": "Nadir_Reflectance_Band6",
+            "Nadir_Reflectance_Band7": "Nadir_Reflectance_Band7",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band1": "BRDF_Albedo_Band_Mandatory_Quality_Band1",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band2": "BRDF_Albedo_Band_Mandatory_Quality_Band2",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band3": "BRDF_Albedo_Band_Mandatory_Quality_Band3",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band4": "BRDF_Albedo_Band_Mandatory_Quality_Band4",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band5": "BRDF_Albedo_Band_Mandatory_Quality_Band5",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band6": "BRDF_Albedo_Band_Mandatory_Quality_Band6",
+            "BRDF_Albedo_Band_Mandatory_Quality_Band7": "BRDF_Albedo_Band_Mandatory_Quality_Band7"
+        }
+    ],
+    "modis-aqua-calibrated-radiance": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-calibrated-radiance": [
+        {
+            "s3": "s3",
+            "data": "data",
+            "service": "service",
+            "documentation": "documentation"
+        }
+    ],
+    "modis-mod04-l2-061": [
+        {
+            "data": "data",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod07-l2-061": [
+        {
+            "data": "data",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod35-l2-061": [
+        {
+            "data": "data",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd35-l2-061": [
+        {
+            "data": "data",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "mrc-catalog": [
+        {
+            "browse": "browse",
+            "readme": "readme",
+            "license": "license",
+            "metadata": "metadata",
+            "thumbnail": "thumbnail",
+            "cloud_mask": "cloud_mask",
+            "geolocation": "geolocation"
+        }
+    ],
+    "msg-seviri": [
+        {
+            "Metadata": "Metadata",
+            "Product download": "Product download",
+            "Metadata in JSON format": "Metadata in JSON format"
+        }
+    ],
+    "msg-seviri-cloud-mask": [
+        {
+            "Metadata": "Metadata",
+            "Product download": "Product download",
+            "Metadata in JSON format": "Metadata in JSON format"
+        }
+    ],
+    "resourcesat-2-l2a-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "sentinel-1-grd": [
+        {
+            "data": "data",
+            "thumbnail": "thumbnail",
+            "manifest.safe": "manifest.safe",
+            "productInfo.json": "productInfo.json",
+            "annotation/iw-vh.xml": "annotation/iw-vh.xml",
+            "annotation/iw-vv.xml": "annotation/iw-vv.xml",
+            "preview/thumbnail.png": "preview/thumbnail.png",
+            "measurement/iw-vh.tiff": "measurement/iw-vh.tiff",
+            "measurement/iw-vv.tiff": "measurement/iw-vv.tiff",
+            "preview/icons/logo.png": "preview/icons/logo.png",
+            "preview/quick-look.png": "preview/quick-look.png",
+            "preview/map-overlay.kml": "preview/map-overlay.kml",
+            "report-20231206T225118.pdf": "report-20231206T225118.pdf",
+            "support/s1-level-1-rfi.xsd": "support/s1-level-1-rfi.xsd",
+            "support/s1-map-overlay.xsd": "support/s1-map-overlay.xsd",
+            "support/s1-object-types.xsd": "support/s1-object-types.xsd",
+            "annotation/rfi/rfi-iw-vh.xml": "annotation/rfi/rfi-iw-vh.xml",
+            "annotation/rfi/rfi-iw-vv.xml": "annotation/rfi/rfi-iw-vv.xml",
+            "preview/product-preview.html": "preview/product-preview.html",
+            "support/s1-level-1-noise.xsd": "support/s1-level-1-noise.xsd",
+            "support/s1-level-1-product.xsd": "support/s1-level-1-product.xsd",
+            "support/s1-product-preview.xsd": "support/s1-product-preview.xsd",
+            "support/s1-level-1-quicklook.xsd": "support/s1-level-1-quicklook.xsd",
+            "support/s1-level-1-calibration.xsd": "support/s1-level-1-calibration.xsd",
+            "support/s1-level-1-measurement.xsd": "support/s1-level-1-measurement.xsd",
+            "annotation/calibration/noise-iw-vh.xml": "annotation/calibration/noise-iw-vh.xml",
+            "annotation/calibration/noise-iw-vv.xml": "annotation/calibration/noise-iw-vv.xml",
+            "annotation/calibration/calibration-iw-vh.xml": "annotation/calibration/calibration-iw-vh.xml",
+            "annotation/calibration/calibration-iw-vv.xml": "annotation/calibration/calibration-iw-vv.xml",
+            "report-20240521T170707.pdf": "report-20240521T170707.pdf",
+            "annotation/ew-hh.xml": "annotation/ew-hh.xml",
+            "annotation/ew-hv.xml": "annotation/ew-hv.xml",
+            "measurement/ew-hh.tiff": "measurement/ew-hh.tiff",
+            "measurement/ew-hv.tiff": "measurement/ew-hv.tiff",
+            "report-20240722T214724.pdf": "report-20240722T214724.pdf",
+            "annotation/rfi/rfi-ew-hh.xml": "annotation/rfi/rfi-ew-hh.xml",
+            "annotation/rfi/rfi-ew-hv.xml": "annotation/rfi/rfi-ew-hv.xml",
+            "annotation/calibration/noise-ew-hh.xml": "annotation/calibration/noise-ew-hh.xml",
+            "annotation/calibration/noise-ew-hv.xml": "annotation/calibration/noise-ew-hv.xml",
+            "annotation/calibration/calibration-ew-hh.xml": "annotation/calibration/calibration-ew-hh.xml",
+            "annotation/calibration/calibration-ew-hv.xml": "annotation/calibration/calibration-ew-hv.xml",
+            "report-20241230T215634.pdf": "report-20241230T215634.pdf"
+        }
+    ],
+    "sentinel-1-rtc": [
+        {
+            "vh": "vh",
+            "vv": "vv",
+            "tilejson": "tilejson",
+            "rendered_preview": "rendered_preview",
+            "hh": "hh",
+            "hv": "hv"
+        }
+    ],
+    "sentinel-2-l1c": [
+        {
+            "data": "data",
+            "B01.jp2": "B01.jp2",
+            "B02.jp2": "B02.jp2",
+            "B03.jp2": "B03.jp2",
+            "B04.jp2": "B04.jp2",
+            "B05.jp2": "B05.jp2",
+            "B06.jp2": "B06.jp2",
+            "B07.jp2": "B07.jp2",
+            "B08.jp2": "B08.jp2",
+            "B09.jp2": "B09.jp2",
+            "B10.jp2": "B10.jp2",
+            "B11.jp2": "B11.jp2",
+            "B12.jp2": "B12.jp2",
+            "B8A.jp2": "B8A.jp2",
+            "TCI.jp2": "TCI.jp2",
+            "metadata": "metadata",
+            "thumbnail": "thumbnail",
+            "preview.jp2": "preview.jp2",
+            "preview.jpg": "preview.jpg",
+            "metadata.xml": "metadata.xml",
+            "tileInfo.json": "tileInfo.json",
+            "preview/B01.jp2": "preview/B01.jp2",
+            "preview/B02.jp2": "preview/B02.jp2",
+            "preview/B03.jp2": "preview/B03.jp2",
+            "preview/B04.jp2": "preview/B04.jp2",
+            "preview/B05.jp2": "preview/B05.jp2",
+            "preview/B06.jp2": "preview/B06.jp2",
+            "preview/B07.jp2": "preview/B07.jp2",
+            "preview/B08.jp2": "preview/B08.jp2",
+            "preview/B09.jp2": "preview/B09.jp2",
+            "preview/B10.jp2": "preview/B10.jp2",
+            "preview/B11.jp2": "preview/B11.jp2",
+            "preview/B12.jp2": "preview/B12.jp2",
+            "preview/B8A.jp2": "preview/B8A.jp2",
+            "auxiliary/CAMSFO": "auxiliary/CAMSFO",
+            "auxiliary/ECMWFT": "auxiliary/ECMWFT",
+            "productInfo.json": "productInfo.json",
+            "qi/CLASSI_B00.jp2": "qi/CLASSI_B00.jp2",
+            "qi/DETFOO_B01.jp2": "qi/DETFOO_B01.jp2",
+            "qi/DETFOO_B02.jp2": "qi/DETFOO_B02.jp2",
+            "qi/DETFOO_B03.jp2": "qi/DETFOO_B03.jp2",
+            "qi/DETFOO_B04.jp2": "qi/DETFOO_B04.jp2",
+            "qi/DETFOO_B05.jp2": "qi/DETFOO_B05.jp2",
+            "qi/DETFOO_B06.jp2": "qi/DETFOO_B06.jp2",
+            "qi/DETFOO_B07.jp2": "qi/DETFOO_B07.jp2",
+            "qi/DETFOO_B08.jp2": "qi/DETFOO_B08.jp2",
+            "qi/DETFOO_B09.jp2": "qi/DETFOO_B09.jp2",
+            "qi/DETFOO_B10.jp2": "qi/DETFOO_B10.jp2",
+            "qi/DETFOO_B11.jp2": "qi/DETFOO_B11.jp2",
+            "qi/DETFOO_B12.jp2": "qi/DETFOO_B12.jp2",
+            "qi/DETFOO_B8A.jp2": "qi/DETFOO_B8A.jp2",
+            "qi/QUALIT_B01.jp2": "qi/QUALIT_B01.jp2",
+            "qi/QUALIT_B02.jp2": "qi/QUALIT_B02.jp2",
+            "qi/QUALIT_B03.jp2": "qi/QUALIT_B03.jp2",
+            "qi/QUALIT_B04.jp2": "qi/QUALIT_B04.jp2",
+            "qi/QUALIT_B05.jp2": "qi/QUALIT_B05.jp2",
+            "qi/QUALIT_B06.jp2": "qi/QUALIT_B06.jp2",
+            "qi/QUALIT_B07.jp2": "qi/QUALIT_B07.jp2",
+            "qi/QUALIT_B08.jp2": "qi/QUALIT_B08.jp2",
+            "qi/QUALIT_B09.jp2": "qi/QUALIT_B09.jp2",
+            "qi/QUALIT_B10.jp2": "qi/QUALIT_B10.jp2",
+            "qi/QUALIT_B11.jp2": "qi/QUALIT_B11.jp2",
+            "qi/QUALIT_B12.jp2": "qi/QUALIT_B12.jp2",
+            "qi/QUALIT_B8A.jp2": "qi/QUALIT_B8A.jp2",
+            "product/inspire.xml": "product/inspire.xml",
+            "product/metadata.xml": "product/metadata.xml",
+            "product/manifest.safe": "product/manifest.safe",
+            "qi/SENSOR_QUALITY.xml": "qi/SENSOR_QUALITY.xml",
+            "qi/GENERAL_QUALITY.xml": "qi/GENERAL_QUALITY.xml",
+            "product/productInfo.json": "product/productInfo.json",
+            "qi/GEOMETRIC_QUALITY.xml": "qi/GEOMETRIC_QUALITY.xml",
+            "qi/FORMAT_CORRECTNESS.xml": "qi/FORMAT_CORRECTNESS.xml",
+            "product/datastrip/0/metadata.xml": "product/datastrip/0/metadata.xml",
+            "product/datastrip/0/qi/SENSOR_QUALITY_report.xml": "product/datastrip/0/qi/SENSOR_QUALITY_report.xml",
+            "product/datastrip/0/qi/GENERAL_QUALITY_report.xml": "product/datastrip/0/qi/GENERAL_QUALITY_report.xml",
+            "product/datastrip/0/qi/GEOMETRIC_QUALITY_report.xml": "product/datastrip/0/qi/GEOMETRIC_QUALITY_report.xml",
+            "product/datastrip/0/qi/FORMAT_CORRECTNESS_report.xml": "product/datastrip/0/qi/FORMAT_CORRECTNESS_report.xml",
+            "product/datastrip/0/qi/RADIOMETRIC_QUALITY_report.xml": "product/datastrip/0/qi/RADIOMETRIC_QUALITY_report.xml"
+        }
+    ],
+    "sentinel-2-l2a-cog-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "sentinel-2-l2a-cog-ag-cloud-mask-geosys-private": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "sentinel-2-methane-product": [
+        {
+            "colourized_geotiff": "colourized_geotiff",
+            "thumbnail": "thumbnail"
+        }
+    ],
+    "ecostress-eco-l2t-lste-002": [
+        {
+            "browse": "browse",
+            "metadata": "metadata",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_QC": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_QC",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_LST": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_LST",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_cloud": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_cloud",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_water": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_water",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_EmisWB": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_EmisWB",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_height": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_height",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_LST_err": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_LST_err",
+            "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_view_zenith": "002/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01/ECOv002_L2T_LSTE_33232_015_18KYE_20240516T193004_0711_01_view_zenith",
+            "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_QC": "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_QC",
+            "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_LST": "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_LST",
+            "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_cloud": "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_cloud",
+            "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_water": "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_water",
+            "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_EmisWB": "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_EmisWB",
+            "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_height": "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_height",
+            "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_LST_err": "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_LST_err",
+            "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_view_zenith": "002/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01/ECOv002_L2T_LSTE_34168_009_21UVQ_20240716T023349_0712_01_view_zenith",
+            "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_QC": "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_QC",
+            "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_LST": "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_LST",
+            "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_cloud": "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_cloud",
+            "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_water": "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_water",
+            "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_EmisWB": "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_EmisWB",
+            "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_height": "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_height",
+            "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_LST_err": "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_LST_err",
+            "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_view_zenith": "002/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01/ECOv002_L2T_LSTE_34461_010_18PYC_20240804T000934_0712_01_view_zenith"
+        }
+    ],
+    "esa-worldcover-landcover-2020-v100": [
+        {
+            "ESA_WORLDCOVER_10M_MAP": "ESA_WORLDCOVER_10M_MAP"
+        }
+    ],
+    "esa-worldcover-landcover-2021-v200": [
+        {
+            "ESA_WORLDCOVER_10M_MAP": "ESA_WORLDCOVER_10M_MAP"
+        }
+    ],
+    "esa-worldcover-s1-vvvhratio-2020-v100": [
+        {
+            "s1_vvvhratio_2020": "s1_vvvhratio_2020"
+        }
+    ],
+    "esa-worldcover-s1-vvvhratio-2021-v200": [
+        {
+            "s1_vvvhratio_2021": "s1_vvvhratio_2021"
+        }
+    ],
+    "esa-worldcover-s2-nvdi-2020-v100": [
+        {
+            "s2_ndvi_2020": "s2_ndvi_2020"
+        }
+    ],
+    "esa-worldcover-s2-nvdi-2021-v200": [
+        {
+            "s2_ndvi_2021": "s2_ndvi_2021"
+        }
+    ],
+    "esa-worldcover-s2-rgbnir-2020-v100": [
+        {
+            "s2_rgbnir_2020": "s2_rgbnir_2020"
+        }
+    ],
+    "esa-worldcover-s2-rgbnir-2021-v200": [
+        {
+            "s2_rgbnir_2021": "s2_rgbnir_2021"
+        }
+    ],
+    "esa-worldcover-s2-swir-2020-v100": [
+        {
+            "s2_swir_2020": "s2_swir_2020"
+        }
+    ],
+    "esa-worldcover-s2-swir-2021-v200": [
+        {
+            "s2_swir_2021": "s2_swir_2021"
+        }
+    ],
+    "lulc-classification-map": [
+        {
+            "thumbnail": "thumbnail",
+            "lulc-classification-map": "lulc-classification-map"
+        }
+    ],
+    "modis-mod11-l2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod11a2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod21-l2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-mod21a2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd11-l2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd11a2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd21-l2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "modis-myd21a2-061": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "metadata": "metadata"
+        }
+    ],
+    "nst-observer-catalog": [
+        {
+            "browse": "browse",
+            "thumbnail": "thumbnail",
+            "cloud_mask": "cloud_mask"
+        }
+    ],
+    "viirs-vj121-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vj121a1d-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vj121a1n-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vj121a2-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vnp21-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vnp21a1d-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vnp21a1n-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "viirs-vnp21a2-002": [
+        {
+            "data": "data",
+            "browse": "browse",
+            "opendap": "opendap",
+            "metadata": "metadata"
+        }
+    ],
+    "public-crop-mask": [
+        {
+            "cropmask": "cropmask",
+            "metadata": "metadata"
+        }
+    ],
+    "sentinel-2-c1-l2a": [
+        {
+            "aot": "aot",
+            "nir": "nir",
+            "red": "red",
+            "scl": "scl",
+            "wvp": "wvp",
+            "blue": "blue",
+            "snow": "snow",
+            "cloud": "cloud",
+            "green": "green",
+            "nir08": "nir08",
+            "nir09": "nir09",
+            "swir16": "swir16",
+            "swir22": "swir22",
+            "visual": "visual",
+            "coastal": "coastal",
+            "preview": "preview",
+            "rededge1": "rededge1",
+            "rededge2": "rededge2",
+            "rededge3": "rededge3",
+            "thumbnail": "thumbnail",
+            "aot-10m-jp2": "aot-10m-jp2",
+            "aot-20m-jp2": "aot-20m-jp2",
+            "aot-60m-jp2": "aot-60m-jp2",
+            "nir-10m-jp2": "nir-10m-jp2",
+            "red-10m-jp2": "red-10m-jp2",
+            "red-20m-jp2": "red-20m-jp2",
+            "red-60m-jp2": "red-60m-jp2",
+            "scl-20m-jp2": "scl-20m-jp2",
+            "scl-60m-jp2": "scl-60m-jp2",
+            "wvp-10m-jp2": "wvp-10m-jp2",
+            "wvp-20m-jp2": "wvp-20m-jp2",
+            "wvp-60m-jp2": "wvp-60m-jp2",
+            "blue-10m-jp2": "blue-10m-jp2",
+            "blue-20m-jp2": "blue-20m-jp2",
+            "blue-60m-jp2": "blue-60m-jp2",
+            "green-10m-jp2": "green-10m-jp2",
+            "green-20m-jp2": "green-20m-jp2",
+            "green-60m-jp2": "green-60m-jp2",
+            "nir08-20m-jp2": "nir08-20m-jp2",
+            "nir08-60m-jp2": "nir08-60m-jp2",
+            "nir09-60m-jp2": "nir09-60m-jp2",
+            "swir16-20m-jp2": "swir16-20m-jp2",
+            "swir16-60m-jp2": "swir16-60m-jp2",
+            "swir22-20m-jp2": "swir22-20m-jp2",
+            "swir22-60m-jp2": "swir22-60m-jp2",
+            "visual-10m-jp2": "visual-10m-jp2",
+            "visual-20m-jp2": "visual-20m-jp2",
+            "visual-60m-jp2": "visual-60m-jp2",
+            "coastal-20m-jp2": "coastal-20m-jp2",
+            "coastal-60m-jp2": "coastal-60m-jp2",
+            "granule_metadata": "granule_metadata",
+            "product_metadata": "product_metadata",
+            "rededge1-20m-jp2": "rededge1-20m-jp2",
+            "rededge1-60m-jp2": "rededge1-60m-jp2",
+            "rededge2-20m-jp2": "rededge2-20m-jp2",
+            "rededge2-60m-jp2": "rededge2-60m-jp2",
+            "rededge3-20m-jp2": "rededge3-20m-jp2",
+            "rededge3-60m-jp2": "rededge3-60m-jp2",
+            "tileinfo_metadata": "tileinfo_metadata"
+        }
+    ],
+    "sentinel-2-eda-cloud-mask": [
+        {
+            "cloud-mask": "cloud-mask"
+        }
+    ],
+    "ai-ready-mosaics-sample": [
+        {
+            "red": "red",
+            "blue": "blue",
+            "green": "green",
+            "nir08": "nir08",
+            "swir16": "swir16",
+            "swir22": "swir22",
+            "coastal": "coastal",
+            "licence": "licence",
+            "thumbnail": "thumbnail",
+            "cloud_mask": "cloud_mask",
+            "work_order": "work_order",
+            "data_source_map": "data_source_map",
+            "data_source_metadata": "data_source_metadata"
+        }
+    ],
+    "jilin-1-cog-edagro": [
+        {
+            "nir": "nir",
+            "red": "red",
+            "blue": "blue",
+            "green": "green"
+        }
+    ],
+    "jilin-1-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "worldview-cog-edagro": [
+        {
+            "nir": "nir",
+            "red": "red",
+            "blue": "blue",
+            "green": "green"
+        }
+    ],
+    "worldview-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ],
+    "zy-1-cog-edagro": [
+        {
+            "nir": "nir",
+            "red": "red",
+            "blue": "blue",
+            "green": "green"
+        }
+    ],
+    "zy-1-cog-edagro-ag-cloud-mask": [
+        {
+            "agriculture-cloud-mask": "agriculture-cloud-mask"
+        }
+    ]
+}

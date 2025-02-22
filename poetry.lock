@@ -680,6 +680,31 @@ testing = ["covdefaults (>=2.3)", "coverage (>=7.6.10)", "diff-cover (>=9.2.1)",
 typing = ["typing-extensions (>=4.12.2) ; python_version < \"3.11\""]
 
 [[package]]
+name = "flox"
+version = "0.10.0"
+description = "GroupBy operations for dask.array"
+optional = true
+python-versions = ">=3.10"
+groups = ["main"]
+markers = "extra == \"agriculture\""
+files = [
+    {file = "flox-0.10.0-py3-none-any.whl", hash = "sha256:895e4806a93d544e6a52602828ffeae4e6814d3adcbd98d19bdf2ca8f29559c7"},
+    {file = "flox-0.10.0.tar.gz", hash = "sha256:4d326f13597c99ea0ce260b54f4c88d071445816efc83e42e3f8d4030e835654"},
+]
+
+[package.dependencies]
+numpy = ">=1.22"
+numpy_groupies = ">=0.9.19"
+packaging = ">=21.3"
+pandas = ">=1.5"
+scipy = ">=1.9"
+toolz = "*"
+
+[package.extras]
+all = ["cachey", "dask", "numba", "numbagg", "xarray"]
+test = ["netCDF4"]
+
+[[package]]
 name = "fonttools"
 version = "4.56.0"
 description = "Tools to manipulate font files"
@@ -1655,6 +1680,26 @@ files = [
     {file = "numpy-2.2.3-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:783145835458e60fa97afac25d511d00a1eca94d4a8f3ace9fe2043003c678e4"},
     {file = "numpy-2.2.3.tar.gz", hash = "sha256:dbdc15f0c81611925f382dfa97b3bd0bc2c1ce19d4fe50482cb0ddc12ba30020"},
 ]
+
+[[package]]
+name = "numpy-groupies"
+version = "0.11.2"
+description = "Optimised tools for group-indexing operations: aggregated sum and more."
+optional = true
+python-versions = ">=3.9"
+groups = ["main"]
+markers = "extra == \"agriculture\""
+files = [
+    {file = "numpy_groupies-0.11.2-py3-none-any.whl", hash = "sha256:8d0d686160f860c12d97f12f457116f8b8bebfa33a68b8efcd24dcfedc2837f1"},
+    {file = "numpy_groupies-0.11.2.tar.gz", hash = "sha256:2fda978c4d28d2f1633a63972f425d0a7f2f12a75505d215b41b6de712e2ec4b"},
+]
+
+[package.dependencies]
+numpy = "*"
+
+[package.extras]
+dev = ["numba", "pandas", "pytest"]
+fast = ["numba"]
 
 [[package]]
 name = "odc-geo"
@@ -3895,10 +3940,10 @@ test = ["big-O", "importlib-resources ; python_version < \"3.9\"", "jaraco.funct
 type = ["pytest-mypy"]
 
 [extras]
-agriculture = ["dask-image", "geopandas", "joblib", "numpy", "odc-stac", "pandas", "psutil", "pyarrow", "pystac", "pystac-client", "rasterio", "rioxarray", "scipy", "setuptools", "spyndex", "stackstac", "toml", "xarray"]
+agriculture = ["dask-image", "flox", "geopandas", "joblib", "numpy", "odc-stac", "pandas", "psutil", "pyarrow", "pystac", "pystac-client", "rasterio", "rioxarray", "scipy", "setuptools", "spyndex", "stackstac", "toml", "xarray"]
 platform = ["pystac-client"]
 
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "7def15bb35a2fa1d44d6bc8ad39528509b2f87c7fb39d72683286caf1141e574"
+content-hash = "a16a8201bd4b13d4edff343237044840c216d099b5ede44ce0fe98a2b2aa077e"

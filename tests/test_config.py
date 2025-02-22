@@ -45,6 +45,12 @@ class TestEDSConfig(unittest.TestCase):
         self.assertEqual(config.token_url, "input_token_url")
 
     def test_config_missing_required_fields(self):
+        # EDS_CLIENT_ID is missing
+        os.environ["EDS_CLIENT_ID"] = ""
+        os.environ["EDS_SECRET"] = "env_client_secret"
+        os.environ["EDS_AUTH_URL"] = "env_token_url"
+        os.environ["EDS_API_URL"] = "https://EDS_API_URL.com"
+
         with self.assertRaises(ValueError) as context:
             EDSConfig()
 
