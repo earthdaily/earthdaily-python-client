@@ -2,7 +2,6 @@
 *.egg-info
 *.eggs
 .DS_Store
-data
 config.json
 stdout*
 /integration*
