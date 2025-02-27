@@ -3,24 +3,55 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, mock_open, patch
 
+from earthdaily.agriculture import EarthDataStore
 from earthdaily.agriculture.earthdatastore import Auth, EarthDataStoreConfig
 
 
 class TestEdsAuth(unittest.TestCase):
     def setUp(self):
-        self.auth_instance = Auth()
+        """Patch requests.post so it's available for all tests"""
+        self.patcher_requests_post = patch("requests.post")
+        self.mock_post = self.patcher_requests_post.start()
+
+        # Mock response for requests.post
+        self.mock_response = MagicMock()
+        self.mock_response.json.return_value = {"access_token": "mocked_token"}
+        self.mock_response.raise_for_status = MagicMock()
+        self.mock_post.return_value = self.mock_response
+
+        self.patcher_client_open = patch("pystac_client.Client.open")
+        self.mock_client_open = self.patcher_client_open.start()
+        self.mock_client_instance = MagicMock()
+        self.mock_client_open.return_value = self.mock_client_instance
+
+        config = {
+            "EDS_AUTH_URL": "https://auth.example.com",
+            "EDS_SECRET": "secret_value",
+            "EDS_CLIENT_ID": "client_id_value",
+        }
+        self.auth_instance = Auth(config=config)
+
+    def tearDown(self):
+        """Stop patching requests.post after each test"""
+        self.patcher_requests_post.stop()
+        self.patcher_client_open.stop()
 
     @patch("earthdaily.agriculture.earthdatastore.Auth.read_credentials_from_json")
     def test_read_credentials_from_json(self, mock_read_json):
+        json_path = Path("/path/to/credentials.json")
         mock_read_json.return_value = {
             "EDS_AUTH_URL": "https://auth.example.com",
             "EDS_SECRET": "secret_value",
             "EDS_CLIENT_ID": "client_id_value",
         }
-        json_path = Path("/path/to/credentials.json")
-        credentials = Auth.read_credentials_from_json(json_path)
-        mock_read_json.assert_called_once_with(json_path)
+        client = EarthDataStore(json_path=json_path)
+        mock_read_json.assert_called_once_with(json_path=json_path)
+
+        credentials = client.read_credentials_from_json(json_path)
+        self.assertIsInstance(credentials, dict)
         self.assertEqual(credentials["EDS_AUTH_URL"], "https://auth.example.com")
+        self.assertEqual(credentials["EDS_SECRET"], "secret_value")
+        self.assertEqual(credentials["EDS_CLIENT_ID"], "client_id_value")
 
     @patch("earthdaily.agriculture.earthdatastore.Auth.read_credentials_from_toml")
     def test_read_credentials_from_toml(self, mock_read_toml):
@@ -57,12 +88,15 @@ class TestEdsAuth(unittest.TestCase):
         self.assertEqual(credentials["EDS_CLIENT_ID"], "client_id_value")
 
     def test_parse_dict(self):
+        """Test that _config_parser correctly parses a dictionary into EarthDataStoreConfig"""
         config = {
             "EDS_AUTH_URL": "https://auth.example.com",
             "EDS_SECRET": "secret_value",
             "EDS_CLIENT_ID": "client_id_value",
         }
+
         result = self.auth_instance._config_parser(config=config)
+
         self.assertIsInstance(result, EarthDataStoreConfig)
         self.assertEqual(result.auth_url, "https://auth.example.com")
         self.assertEqual(result.client_secret, "secret_value")
