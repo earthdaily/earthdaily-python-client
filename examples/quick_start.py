@@ -26,13 +26,17 @@ def search_stac_items(client):
     """Search for STAC items in the EarthDaily platform."""
     try:
         print("\n🔍 Searching for Venus-L2A items...")
-        search_result = client.platform.pystac_client.search(collections=["venus-l2a"], limit=10)
+        search_result = client.platform.pystac_client.search(
+            collections=["sentinel-2-l2a"],
+            query={"eda:ag_cloud_mask_available": {"eq": True}},
+            datetime="2024-06-01T00:00:00Z/2024-08-01T00:00:00Z",
+            max_items=50,
+        )
 
         items = search_result.items()
         print("\n🌍 STAC items Found:")
         for item in items:
             print(item)
-            break  # Print only the first item for brevity
 
     except EDSAPIError as e:
         print(f"\n❌ API error: {e}\nStatus Code: {e.status_code}\nDetails: {e.body}")

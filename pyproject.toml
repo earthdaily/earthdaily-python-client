@@ -1,6 +1,6 @@
 [project]
 name = "earthdaily"
-version = "1.0.0b2"
+version = "1.0.0b3"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
@@ -34,7 +34,8 @@ agriculture = [
     "spyndex>=0.6.0",
     "setuptools>=75.8.0",
     "pyarrow>=19.0.0",
-    "dask-image>=2024.5.3"
+    "dask-image>=2024.5.3",
+    "flox (>=0.10.0,<0.11.0)"
 ]
 
 [tool.poetry.group.tests.dependencies]
