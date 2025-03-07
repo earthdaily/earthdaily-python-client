@@ -506,7 +506,7 @@ class Auth:
             config = cls.read_credentials_from_environment()
 
         else:
-            config = cls.read_credentials_from_ini()
+            config = cls.read_credentials_from_ini(profile=profile)
 
         return config
 
