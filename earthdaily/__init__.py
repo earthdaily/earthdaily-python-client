@@ -6,7 +6,7 @@ from earthdaily.core import options
 
 __all__ = ["options"]
 
-__version__ = "0.5.3"
+__version__ = "0.5.4"
 
 
 def EarthDataStore(

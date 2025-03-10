@@ -161,7 +161,7 @@ def _select_latest_items(items: List[Dict]) -> List[Dict]:
 
 def filter_duplicate_items(
     items: ItemCollection,
-    time_threshold: timedelta = timedelta(minutes=5),
+    time_threshold: timedelta = timedelta(minutes=60),
     method="proj:transform",
 ) -> ItemCollection:
     """
