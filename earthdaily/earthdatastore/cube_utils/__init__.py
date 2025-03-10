@@ -522,7 +522,7 @@ def rescale_assets_with_items(
             scaled_assets.append(xr.concat(asset_scaled, dim="time"))
 
         # Merge scaled assets
-        ds_scaled = xr.merge(scaled_assets).sortby("time")
+        ds_scaled = xr.merge(scaled_assets,join="override", compat="override").sortby("time")
 
         # Preserve unscaled variables
         missing_vars = [var for var in ds.data_vars if var not in scales]
