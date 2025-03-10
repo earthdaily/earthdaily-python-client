@@ -526,6 +526,7 @@ class Auth:
         """
 
         from configparser import ConfigParser
+
         if profile is None:
             profile = "default"
         ini_path = Path.home() / ".earthdaily/credentials"
