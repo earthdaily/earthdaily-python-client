@@ -1,0 +1,10 @@
+earthdaily.datasets.data package
+================================
+
+Module contents
+---------------
+
+.. automodule:: earthdaily.datasets.data
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,6 @@
+earthdaily.earthdatastore.cube\_utils.rescale\_assets\_with\_items
+==================================================================
+
+.. currentmodule:: earthdaily.earthdatastore.cube_utils
+
+.. autofunction:: rescale_assets_with_items

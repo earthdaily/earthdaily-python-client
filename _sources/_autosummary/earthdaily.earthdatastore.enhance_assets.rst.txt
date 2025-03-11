@@ -1,0 +1,6 @@
+earthdaily.earthdatastore.enhance\_assets
+=========================================
+
+.. currentmodule:: earthdaily.earthdatastore
+
+.. autofunction:: enhance_assets

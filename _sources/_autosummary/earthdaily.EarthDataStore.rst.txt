@@ -1,0 +1,6 @@
+earthdaily.EarthDataStore
+=========================
+
+.. currentmodule:: earthdaily
+
+.. autofunction:: EarthDataStore

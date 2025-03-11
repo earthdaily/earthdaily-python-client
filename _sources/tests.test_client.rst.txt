@@ -1,0 +1,7 @@
+tests.test\_client module
+=========================
+
+.. automodule:: tests.test_client
+   :members:
+   :undoc-members:
+   :show-inheritance:

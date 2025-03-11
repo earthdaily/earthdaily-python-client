@@ -1,0 +1,6 @@
+earthdaily.earthdatastore.mask.QA\_PIXEL\_cloud\_detection
+==========================================================
+
+.. currentmodule:: earthdaily.earthdatastore.mask
+
+.. autofunction:: QA_PIXEL_cloud_detection

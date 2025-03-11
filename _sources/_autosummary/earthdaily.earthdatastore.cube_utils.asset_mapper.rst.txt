@@ -1,0 +1,32 @@
+earthdaily.earthdatastore.cube\_utils.asset\_mapper
+===================================================
+
+.. automodule:: earthdaily.earthdatastore.cube_utils.asset_mapper
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      AssetMapper
+   
+   
+
+   
+   
+   
+
+
+
