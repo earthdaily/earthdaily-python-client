@@ -3,7 +3,6 @@ Utility script used for copying credentials templates to a user-defined path
 """
 
 import click
-import dotenv
 import json
 import toml
 from pathlib import Path
