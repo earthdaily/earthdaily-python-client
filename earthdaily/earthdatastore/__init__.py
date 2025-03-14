@@ -2,6 +2,7 @@ import json
 import logging
 import operator
 import os
+import platform
 import time
 import warnings
 from dataclasses import dataclass
@@ -365,7 +366,11 @@ class StacCollectionExplorer:
 
 class Auth:
     def __init__(
-        self, config: str | dict = None, presign_urls=True, asset_proxy_enabled=False
+        self,
+        config: str | dict = None,
+        presign_urls=True,
+        asset_proxy_enabled=False,
+        client_version: str = "0.0.0",
     ):
         """
         A client for interacting with the Earth Data Store API.
@@ -379,6 +384,9 @@ class Auth:
             or a dict with those credentials.
         asset_proxy_enabled : bool, optional
             Use asset proxy URLs, by default False
+        client_version : str, optional
+            The version of the client.
+            Uses the current version by default.
 
         Returns
         -------
@@ -402,6 +410,7 @@ class Auth:
                 FutureWarning,
             )
 
+        self._client_version = client_version
         self._client = None
         self.__auth_config = config
         self.__presign_urls = presign_urls
@@ -417,6 +426,7 @@ class Auth:
         json_path: Optional[Path] = None,
         toml_path: Optional[Path] = None,
         profile: Optional[str] = None,
+        client_version: str = "0.0.0",
         presign_urls: bool = True,
         asset_proxy_enabled: bool = False,
     ) -> "Auth":
@@ -437,6 +447,9 @@ class Auth:
         profile : profile, optional
             Name of the profile to use in the TOML file.
             Uses "default" by default.
+        client_version : str, optional
+            The version of the client.
+            Uses the current version by default.
         asset_proxy_enabled : bool, optional
             Use asset proxy URLs, by default False
 
@@ -459,6 +472,7 @@ class Auth:
             config=config,
             presign_urls=presign_urls,
             asset_proxy_enabled=asset_proxy_enabled,
+            client_version=client_version,
         )
 
     @classmethod
@@ -732,6 +746,30 @@ class Auth:
             headers["X-Proxy-Asset-Urls"] = "True"
         elif presign_urls:
             headers["X-Signed-Asset-Urls"] = "True"
+
+        try:
+            python_version = platform.python_version()
+            system_platform = platform.platform()
+            uname_info = " ".join(platform.uname())
+        except Exception:
+            python_version = "(unknown)"
+            system_platform = "(unknown)"
+            uname_info = "(unknown)"
+
+        user_agent = f"EarthDaily-Python-Client/{self._client_version} (Python/{python_version}; {system_platform})"
+
+        client_metadata = {
+            "client_version": self._client_version,
+            "language": "Python",
+            "publisher": "EarthDaily",
+            "http_library": "requests",
+            "python_version": python_version,
+            "platform": system_platform,
+            "system_info": uname_info,
+        }
+
+        headers["User-Agent"] = user_agent
+        headers["X-EDA-Client-User-Agent"] = json.dumps(client_metadata)
 
         retry = Retry(
             total=5,
