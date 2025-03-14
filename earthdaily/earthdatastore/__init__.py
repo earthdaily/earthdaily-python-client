@@ -366,7 +366,11 @@ class StacCollectionExplorer:
 
 class Auth:
     def __init__(
-        self, config: str | dict = None, presign_urls=True, asset_proxy_enabled=False, client_version: str = "0.0.0"
+        self,
+        config: str | dict = None,
+        presign_urls=True,
+        asset_proxy_enabled=False,
+        client_version: str = "0.0.0",
     ):
         """
         A client for interacting with the Earth Data Store API.
