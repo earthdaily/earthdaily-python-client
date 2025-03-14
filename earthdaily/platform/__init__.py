@@ -31,8 +31,7 @@ class PlatformService:
             f"{api_requester.base_url}/platform/v1/stac",
             stac_io=StacApiIO(max_retries=3),
             headers={
-                "Content-Type": "application/json",
-                "Accept": "application/json",
+                **api_requester.headers,
                 "Authorization": f"Bearer {api_requester.auth.get_token()}",
                 "X-Signed-Asset-Urls": str(pre_sign_urls),
             },

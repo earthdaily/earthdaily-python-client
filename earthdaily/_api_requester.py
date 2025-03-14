@@ -1,3 +1,7 @@
+import json
+import platform
+from importlib.metadata import PackageNotFoundError, version
+
 from earthdaily._auth_client import Authentication
 from earthdaily._http_client import HTTPClient, HTTPRequest, HTTPResponse
 
@@ -17,6 +21,8 @@ class APIRequester:
         The authentication manager to obtain tokens for API requests.
     http_client: HTTPClient
         The HTTP client responsible for making actual HTTP requests.
+    headers: dict
+        The default headers to be included in every request.
 
     Methods:
     -------
@@ -39,6 +45,62 @@ class APIRequester:
         self.base_url = base_url
         self.auth = auth
         self.http_client = HTTPClient()
+        self.headers = self._generate_headers()
+
+    def _generate_headers(self) -> dict[str, str]:
+        """
+        Generates HTTP headers for the EarthDaily Python client.
+
+        This method collects metadata about the client environment, including the client version,
+        Python version, and system information, to construct headers that are used in HTTP requests.
+
+        Returns:
+            dict[str, str]: A dictionary containing the following headers:
+                - "X-EDA-Client-User-Agent": A JSON string with detailed client metadata.
+                - "User-Agent": A user agent string with the client version and system information.
+
+        Metadata collected:
+            - client_version: The version of the EarthDaily Python client.
+            - language: The programming language used (Python).
+            - publisher: The publisher of the client (EarthDaily).
+            - http_library: The HTTP library used (requests).
+            - python_version: The version of Python being used.
+            - platform: The platform information.
+            - system_info: Detailed system information.
+
+        If any metadata collection fails, default values are used to ensure the headers are always generated.
+        """
+
+        try:
+            client_version = version("earthdaily-python-client")
+        except PackageNotFoundError:
+            client_version = "0.0.0"
+
+        try:
+            python_version = platform.python_version()
+            system_platform = platform.platform()
+            uname_info = " ".join(platform.uname())
+        except Exception:
+            python_version = "(unknown)"
+            system_platform = "(unknown)"
+            uname_info = "(unknown)"
+
+        user_agent = f"EarthDaily-Python-Client/{client_version} (Python/{python_version}; {system_platform})"
+
+        client_metadata = {
+            "client_version": client_version,
+            "language": "Python",
+            "publisher": "EarthDaily",
+            "http_library": "requests",
+            "python_version": python_version,
+            "platform": system_platform,
+            "system_info": uname_info,
+        }
+
+        return {
+            "X-EDA-Client-User-Agent": json.dumps(client_metadata),
+            "User-Agent": user_agent,
+        }
 
     def send_request(self, request: HTTPRequest) -> HTTPResponse:
         """
@@ -59,6 +121,7 @@ class APIRequester:
             The HTTPResponse object containing status code, body, and headers.
         """
 
+        request.headers.update(self.headers)
         request.headers["Authorization"] = f"Bearer {self.auth.get_token()}"
         response = self.http_client.send(request)
         return response
