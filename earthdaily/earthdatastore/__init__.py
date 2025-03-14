@@ -2,6 +2,7 @@ import json
 import logging
 import operator
 import os
+import platform
 import time
 import warnings
 from dataclasses import dataclass
@@ -17,6 +18,8 @@ from pystac.item_collection import ItemCollection
 from pystac_client import Client
 from pystac_client.stac_api_io import StacApiIO
 from urllib3 import Retry
+
+from earthdaily import __version__ as earthdaily_version
 
 from . import _scales_collections, cube_utils, mask
 from .cube_utils import _datacubes, asset_mapper, datacube, metacube
@@ -732,6 +735,30 @@ class Auth:
             headers["X-Proxy-Asset-Urls"] = "True"
         elif presign_urls:
             headers["X-Signed-Asset-Urls"] = "True"
+        
+        try:
+            python_version = platform.python_version()
+            system_platform = platform.platform()
+            uname_info = " ".join(platform.uname())
+        except Exception:
+            python_version = "(unknown)"
+            system_platform = "(unknown)"
+            uname_info = "(unknown)"
+
+        user_agent = f"EarthDaily-Python-Client/{earthdaily_version} (Python/{python_version}; {system_platform})"
+
+        client_metadata = {
+            "client_version": earthdaily_version,
+            "language": "Python",
+            "publisher": "EarthDaily",
+            "http_library": "requests",
+            "python_version": python_version,
+            "platform": system_platform,
+            "system_info": uname_info,
+        }
+
+        headers["User-Agent"] = user_agent
+        headers["X-EDA-Client-User-Agent"] = json.dumps(client_metadata)
 
         retry = Retry(
             total=5,
