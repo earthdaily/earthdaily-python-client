@@ -735,7 +735,7 @@ class Auth:
             headers["X-Proxy-Asset-Urls"] = "True"
         elif presign_urls:
             headers["X-Signed-Asset-Urls"] = "True"
-        
+
         try:
             python_version = platform.python_version()
             system_platform = platform.platform()
