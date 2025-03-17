@@ -512,7 +512,7 @@ class Auth:
             config = cls.read_credentials_from_environment()
 
         else:
-            config = cls.read_credentials_from_ini()
+            config = cls.read_credentials_from_ini(profile=profile)
 
         return config
 
@@ -533,6 +533,8 @@ class Auth:
 
         from configparser import ConfigParser
 
+        if profile is None:
+            profile = "default"
         ini_path = Path.home() / ".earthdaily/credentials"
         ini_config = ConfigParser()
         ini_config.read(ini_path)
