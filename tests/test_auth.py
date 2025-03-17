@@ -6,13 +6,14 @@ in the default credentials in order for the test to work.
 
 import json
 import os
-import unittest
 import tempfile
-import toml
+import unittest
 from pathlib import Path
 
-from earthdaily.earthdatastore import Auth
+import toml
+
 from earthdaily import EarthDataStore
+from earthdaily.earthdatastore import Auth
 
 
 class TestAuth(unittest.TestCase):

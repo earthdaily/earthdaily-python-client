@@ -2,10 +2,11 @@
 Utility script used for copying credentials templates to a user-defined path
 """
 
-import click
 import json
-import toml
 from pathlib import Path
+
+import click
+import toml
 
 default_path = Path.home() / ".earthdaily/credentials"
 

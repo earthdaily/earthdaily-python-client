@@ -13,9 +13,10 @@ The second one is the most turnkey one, the one we recommend, it allows to do al
 # Import librairies
 # -------------------------------------------
 
-import earthdaily
 from matplotlib import pyplot as plt
-from earthdaily import datasets, EarthDataStore
+
+import earthdaily
+from earthdaily import EarthDataStore, datasets
 
 ##########################
 # Loading geometry

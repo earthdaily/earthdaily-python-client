@@ -1,9 +1,11 @@
+import unittest
+
+import geopandas as gpd
 import numpy as np
 import xarray as xr
-import geopandas as gpd
 from shapely.geometry import Polygon
+
 import earthdaily
-import unittest
 
 
 class TestZonalStats(unittest.TestCase):

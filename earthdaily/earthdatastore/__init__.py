@@ -1,6 +1,5 @@
 # mypy: ignore-errors
 # TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
-
 import json
 import logging
 import operator
@@ -14,6 +13,7 @@ from typing import Any, Optional
 import geopandas as gpd
 import numpy as np
 import requests
+import toml
 import xarray as xr
 from odc import stac
 from pystac.item_collection import ItemCollection
@@ -603,8 +603,6 @@ class Auth:
         dict
             Dictionary containing credentials
         """
-        import toml
-
         if toml_path is None or not toml_path.exists():
             raise FileNotFoundError(
                 f"Credentials file {toml_path} not found. Make sure the path is valid"

@@ -4,8 +4,8 @@ This module provides a centralized configuration system for the earthdaily packa
 allowing users to set and retrieve options that affect package behavior.
 """
 
-from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional
 
 
 @dataclass

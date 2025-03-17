@@ -9,6 +9,7 @@ Using Agriculture cloud mask from EarthDaily, and data from L2A, zonal stats for
 # -------------------------------------------
 
 from matplotlib import pyplot as plt
+
 import earthdaily as ed
 
 ##############################################################################

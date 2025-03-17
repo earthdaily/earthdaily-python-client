@@ -10,7 +10,8 @@ With Sentinel-2 and Landsat, using Sentinel-2 spatial resolution."""
 # -------------------------------------------
 
 from matplotlib import pyplot as plt
-from earthdaily import datasets, EarthDataStore
+
+from earthdaily import EarthDataStore, datasets
 
 ##############################################################################
 # Set parameters

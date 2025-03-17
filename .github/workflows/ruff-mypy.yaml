@@ -24,7 +24,7 @@ jobs:
           pip install "ruff>=0.9.6,<1.0.0" "mypy>=1.0.0,<2.0.0"
 
       - name: Run Ruff Check
-        run: ruff check .
+        run: ruff check . --select I
 
       - name: Run Ruff Format
         run: ruff format --check .

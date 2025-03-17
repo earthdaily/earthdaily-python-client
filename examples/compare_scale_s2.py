@@ -9,6 +9,7 @@ Using SCL data from L2A"""
 # -------------------------------------------
 
 from matplotlib import pyplot as plt
+
 from earthdaily import EarthDataStore, datasets
 
 ##############################################################################

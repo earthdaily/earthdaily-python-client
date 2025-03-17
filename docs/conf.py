@@ -11,9 +11,8 @@
 # TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
 
 import os
-import sys
 import re
-
+import sys
 
 os.environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 project = "earthdaily"

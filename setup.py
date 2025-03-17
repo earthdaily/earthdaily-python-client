@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 # Retrieve release number from text file VERSION.
 # See https://packaging.python.org/guides/single-sourcing-package-version/.

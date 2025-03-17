@@ -5,8 +5,9 @@ Created on Fri Dec 15 09:03:08 2023
 @author: nkk
 """
 
-import earthdaily
 import json
+
+import earthdaily
 
 if __name__ == "__main__":
     eds = earthdaily.EarthDataStore()
