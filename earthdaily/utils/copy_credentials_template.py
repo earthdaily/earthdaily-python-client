@@ -6,7 +6,6 @@ import click
 import json
 from pathlib import Path
 
-import click
 import toml
 
 default_path = Path.home() / ".earthdaily/credentials"

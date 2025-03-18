@@ -373,7 +373,7 @@ class Auth:
         config: str | dict = None,
         presign_urls=True,
         asset_proxy_enabled=False,
-        client_version: str = "0.0.0"
+        client_version: str = "0.0.0",
     ):
         """
         A client for interacting with the Earth Data Store API.
@@ -510,22 +510,22 @@ class Auth:
         try:
             if json_path is not None:
                 config = cls.read_credentials_from_json(json_path=json_path)
-    
+
             elif toml_path is not None:
                 config = cls.read_credentials_from_toml(
                     toml_path=toml_path, profile=profile
                 )
-    
+
             elif (
                 os.getenv("EDS_AUTH_URL")
                 and os.getenv("EDS_SECRET")
                 and os.getenv("EDS_CLIENT_ID")
             ):
                 config = cls.read_credentials_from_environment()
-    
+
             else:
                 config = cls.read_credentials_from_ini(profile=profile)
-        except:
+        except Exception:
             raise NotImplementedError("Credentials weren't found.")
         return config
 

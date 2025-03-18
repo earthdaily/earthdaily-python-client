@@ -20,7 +20,6 @@ import geopandas as gpd
 import numpy as np
 import psutil
 import xarray as xr
-import geopandas as gpd
 from scipy.sparse import csr_matrix
 from scipy.stats import mode
 from tqdm.auto import trange
@@ -411,13 +410,12 @@ def _compute_xvec_stats(
     Raises:
         ImportError: If xvec package is not installed
     """
-    try:
-        # Importing xvec for its zonal statistics computation capabilities.
-        # The import is marked with `# noqa: F401` to ignore the unused import warning
-        # because it is dynamically used later in the code.
+    from importlib.util import find_spec
+
+    if find_spec("xvec"):
         import xvec  # noqa: F401
-    except ImportError:
-        raise ImportError(
+    else:
+        ImportError(
             "The xvec method requires the xvec package. "
             "Please install it with: pip install xvec"
         )
