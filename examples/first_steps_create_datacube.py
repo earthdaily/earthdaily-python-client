@@ -13,11 +13,10 @@ The second one is the most turnkey one, the one we recommend, it allows to do al
 # Import librairies
 # -------------------------------------------
 
-
-import geopandas as gpd
-import earthdaily
 from matplotlib import pyplot as plt
-from earthdaily import datasets, EarthDataStore
+
+import earthdaily
+from earthdaily import EarthDataStore, datasets
 
 ##########################
 # Loading geometry
@@ -83,6 +82,4 @@ s2_datacube = earthdaily.earthdatastore.mask.filter_clear_cover(
     s2_datacube, 50
 )  # at least 50% of clear pixels
 #
-s2_datacube.ed.plot_rgb(
-    vmin=0, vmax=0.2, col="time", col_wrap=4
-)
+s2_datacube.ed.plot_rgb(vmin=0, vmax=0.2, col="time", col_wrap=4)

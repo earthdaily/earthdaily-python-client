@@ -1,9 +1,12 @@
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
+import operator
 from datetime import datetime
 
+import numpy as np
 import pytz
 import xarray as xr
-import numpy as np
-import operator
 
 
 class Harmonizer:

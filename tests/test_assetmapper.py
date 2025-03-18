@@ -40,5 +40,6 @@ class TestAssetMapper(unittest.TestCase):
             list(rededges.values()),
         )
 
+
 if __name__ == "__main__":
     unittest.main()
