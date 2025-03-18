@@ -7,8 +7,9 @@ Explore collection metadata using earthdaily
 # Import librairies
 # -------------------------------------------
 
-from rich.table import Table
 from rich.console import Console
+from rich.table import Table
+
 from earthdaily import EarthDataStore
 
 console = Console()

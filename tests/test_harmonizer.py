@@ -74,7 +74,6 @@ class TestHarmonizer(unittest.TestCase):
             },
         )
 
-
     def test_check_timerange(self):
         xcal_item_from_20230901_to_20230915 = self.generate_fake_xcal_item(
             "fake_xcal_item", "2023-09-01T00:00:00Z", "2023-09-15T23:59:59Z", {}, ""

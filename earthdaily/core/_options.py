@@ -4,8 +4,8 @@ This module provides a centralized configuration system for the earthdaily packa
 allowing users to set and retrieve options that affect package behavior.
 """
 
-from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional
 
 
 @dataclass
@@ -56,7 +56,7 @@ class OptionDef:
         if self.valid_values is not None:
             if value not in self.valid_values:
                 raise ValueError(
-                    f"Invalid value: {value}. " f"Must be one of: {self.valid_values}"
+                    f"Invalid value: {value}. Must be one of: {self.valid_values}"
                 )
         return True
 

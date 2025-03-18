@@ -27,5 +27,6 @@ class TestEarthDataStore(unittest.TestCase):
         # Assert that the returned instance is the mocked instance
         self.assertEqual(auth_instance, mock_auth_instance)
 
+
 if __name__ == "__main__":
     unittest.main()
