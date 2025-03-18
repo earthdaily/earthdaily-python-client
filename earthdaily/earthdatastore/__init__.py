@@ -496,24 +496,26 @@ class Auth:
         dict
             Dictionary containing credentials
         """
-        if json_path is not None:
-            config = cls.read_credentials_from_json(json_path=json_path)
-
-        elif toml_path is not None:
-            config = cls.read_credentials_from_toml(
-                toml_path=toml_path, profile=profile
-            )
-
-        elif (
-            os.getenv("EDS_AUTH_URL")
-            and os.getenv("EDS_SECRET")
-            and os.getenv("EDS_CLIENT_ID")
-        ):
-            config = cls.read_credentials_from_environment()
-
-        else:
-            config = cls.read_credentials_from_ini(profile=profile)
-
+        try:
+            if json_path is not None:
+                config = cls.read_credentials_from_json(json_path=json_path)
+    
+            elif toml_path is not None:
+                config = cls.read_credentials_from_toml(
+                    toml_path=toml_path, profile=profile
+                )
+    
+            elif (
+                os.getenv("EDS_AUTH_URL")
+                and os.getenv("EDS_SECRET")
+                and os.getenv("EDS_CLIENT_ID")
+            ):
+                config = cls.read_credentials_from_environment()
+    
+            else:
+                config = cls.read_credentials_from_ini(profile=profile)
+        except:
+            raise NotImplementedError("Credentials weren't found.")
         return config
 
     @classmethod
