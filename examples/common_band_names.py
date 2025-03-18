@@ -8,9 +8,10 @@ For a better interoperability between sensors."""
 # Import librairies
 # -------------------------------------------
 
-from earthdaily.earthdatastore.cube_utils import asset_mapper
-from rich.table import Table
 from rich.console import Console
+from rich.table import Table
+
+from earthdaily.earthdatastore.cube_utils import asset_mapper
 
 console = Console(force_interactive=True)
 

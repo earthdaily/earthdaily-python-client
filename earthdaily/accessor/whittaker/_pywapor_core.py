@@ -3,7 +3,7 @@
 """
 
 import numpy as np
-from numba import types, guvectorize, njit, float64, int64
+from numba import float64, guvectorize, int64, njit, types
 
 
 def second_order_diff_matrix(x):

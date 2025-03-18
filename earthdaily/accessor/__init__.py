@@ -1,15 +1,12 @@
-import warnings
-import xarray as xr
-import rioxarray as rxr
-import numpy as np
-import pandas as pd
 import geopandas as gpd
-from shapely.geometry import Point
-from dask import array as da
+import numpy as np
 import spyndex
+import xarray as xr
+from dask import array as da
 from dask_image import ndfilters as dask_ndimage
 from scipy import ndimage
-from xarray.core.extensions import AccessorRegistrationWarning
+from shapely.geometry import Point
+
 from ..earthdatastore.cube_utils import GeometryManager
 
 
@@ -99,7 +96,7 @@ class __EarthDailyAccessorDataArray:
     def whittaker(
         self,
         beta: float = 10000.0,
-        weights: (np.ndarray, list) = None,
+        weights: np.ndarray | list | None = None,
         time="time",
     ):
         from . import whittaker
@@ -108,7 +105,7 @@ class __EarthDailyAccessorDataArray:
 
     def sel_nearest_dates(
         self,
-        target: (xr.Dataset, xr.DataArray),
+        target: xr.Dataset | xr.DataArray,
         max_delta: int = 0,
         method: str = "nearest",
         return_target: bool = False,
@@ -159,7 +156,7 @@ class __EarthDailyAccessorDataArray:
             With new dimension "zonal_statistics" and "geometry".
 
         """
-        from ..earthdatastore.cube_utils import zonal_stats, GeometryManager
+        from ..earthdatastore.cube_utils import GeometryManager, zonal_stats
 
         geometry = GeometryManager(geometry).to_geopandas()
         return zonal_stats(
@@ -181,7 +178,7 @@ class __EarthDailyAccessorDataArray:
             kwargs=dict(window_size=window_size),
         )
 
-    def centroid(self, to_wkt: str = False, to_4326: bool = True):
+    def centroid(self, to_wkt: bool = False, to_4326: bool = True):
         """Return the geographic center point in 4326/WKT of this dataset."""
         # we can use a cache on our accessor objects, because accessors
         # themselves are cached on instances that access them.

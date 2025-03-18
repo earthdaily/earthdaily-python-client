@@ -7,14 +7,14 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-# import re
-import os
-import sys
-import re
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
 
-from sphinx_gallery.sorting import ExampleTitleSortKey
 import os
-os.environ['PYDEVD_DISABLE_FILE_VALIDATION'] = "1"
+import re
+import sys
+
+os.environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 project = "earthdaily"
 copyright = "2024, EarthDailyAgro"
 author = "Geosys/EarthDailyAgro"
@@ -24,16 +24,16 @@ author = "Geosys/EarthDailyAgro"
 
 
 extensions = [
-    'sphinx.ext.autodoc',  # For automatic API documentation
-    'sphinx.ext.napoleon',  # For Google/NumPy style docstrings
-    'sphinx.ext.viewcode',  # To add links to source code
-    'sphinx_autodoc_typehints',  # For better type hint support
+    "sphinx.ext.autodoc",  # For automatic API documentation
+    "sphinx.ext.napoleon",  # For Google/NumPy style docstrings
+    "sphinx.ext.viewcode",  # To add links to source code
+    "sphinx_autodoc_typehints",  # For better type hint support
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
     "sphinx_gallery.gen_gallery",
     "sphinx_copybutton",
     "sphinx_automodapi.automodapi",
-    "sphinx_automodapi.smart_resolver",# for a page per function
+    "sphinx_automodapi.smart_resolver",  # for a page per function
     "myst_parser",
 ]
 #
