@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install "ruff>=0.9.6,<1.0.0" "mypy>=1.0.0,<2.0.0"
+          pip install "ruff>=0.9.6,<1.0.0" "mypy>=1.0.0,<2.0.0" "types-tqdm>=4.67,<5.0.0"
 
       - name: Run Ruff Check
         run: ruff check . --select I

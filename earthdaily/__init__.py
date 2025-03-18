@@ -52,6 +52,7 @@ def EarthDataStore(
         json_path=json_path,
         toml_path=toml_path,
         profile=profile,
+        client_version=__version__,
         presign_urls=presign_urls,
         asset_proxy_enabled=asset_proxy_enabled,
     )
