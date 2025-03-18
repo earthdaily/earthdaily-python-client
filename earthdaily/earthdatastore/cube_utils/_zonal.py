@@ -12,14 +12,12 @@ Example:
     >>> stats = zonal_stats(dataset, polygons, reducers=["mean", "max"])
 """
 
-from typing import Union, List, Optional, Tuple, Dict
+from typing import Union, List, Optional, Tuple
 import logging
 import time
-from pathlib import Path
 
 import numpy as np
 import xarray as xr
-import pandas as pd
 import geopandas as gpd
 from scipy.sparse import csr_matrix
 from scipy.stats import mode
