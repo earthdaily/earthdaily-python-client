@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import ANY, MagicMock, patch
 
 from earthdaily._api_requester import APIRequester
 from earthdaily._auth_client import Authentication
@@ -43,6 +43,8 @@ class TestPlatformService(unittest.TestCase):
                 "Accept": "application/json",
                 "Authorization": "Bearer mock_token",
                 "X-Signed-Asset-Urls": "True",
+                "User-Agent": ANY,
+                "X-EDA-Client-User-Agent": ANY,
             },
         )
 
