@@ -12,9 +12,9 @@ Example:
     >>> stats = zonal_stats(dataset, polygons, reducers=["mean", "max"])
 """
 
-from typing import Union, List, Optional, Tuple
 import logging
 import time
+from typing import List, Optional, Tuple, Union
 
 import geopandas as gpd
 import numpy as np
