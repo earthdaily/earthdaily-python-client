@@ -130,10 +130,7 @@ def datetime_split(
         return dt_range, freq
 
     # Generate date ranges
-    date_ranges = [
-        (chunk, min(chunk + freq, end))
-        for chunk in pd.date_range(start, end, freq=freq)[:-1]
-    ]
+    date_ranges = [(chunk, min(chunk + freq, end)) for chunk in pd.date_range(start, end, freq=freq)[:-1]]
 
     return date_ranges, freq
 
@@ -218,9 +215,7 @@ def parallel_search(func: Callable[..., T]) -> Callable[..., T]:
     return wrapper
 
 
-def _should_run_parallel(
-    dt_range: Optional[tuple[datetime, datetime]], batch_days: Any, n_jobs: int
-) -> bool:
+def _should_run_parallel(dt_range: Optional[tuple[datetime, datetime]], batch_days: Any, n_jobs: int) -> bool:
     """Check if parallel execution should be used based on input parameters.
     Parameters
     ----------
@@ -299,9 +294,7 @@ def _run_parallel_search(
     """
     date_ranges, freq = datetime_split(dt_range, batch_days)
 
-    logging.info(
-        f"Search parallel with {kwargs['n_jobs']} jobs, split every {freq.days} days."
-    )
+    logging.info(f"Search parallel with {kwargs['n_jobs']} jobs, split every {freq.days} days.")
 
     # Prepare kwargs for parallel execution
     parallel_kwargs = kwargs.copy()

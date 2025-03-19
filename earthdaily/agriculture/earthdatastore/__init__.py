@@ -40,9 +40,7 @@ class EarthDataStoreConfig:
     access_token: Optional[str] = None
 
 
-def apply_single_condition(
-    item_value, condition_op: str, condition_value: Any | list[Any]
-) -> bool:
+def apply_single_condition(item_value, condition_op: str, condition_value: Any | list[Any]) -> bool:
     """
     Apply a single comparison condition to an item's property value.
 
@@ -72,9 +70,7 @@ def apply_single_condition(
     return any(op_func(item_value, val) for val in values)
 
 
-def validate_property_condition(
-    item: Any, property_name: str, conditions: dict[str, Any]
-) -> bool:
+def validate_property_condition(item: Any, property_name: str, conditions: dict[str, Any]) -> bool:
     """
     Validate if an item meets all conditions for a specific property.
 
@@ -98,9 +94,7 @@ def validate_property_condition(
 
     # Check each condition for the property
     return all(
-        apply_single_condition(
-            item.properties.get(property_name), condition_op, condition_value
-        )
+        apply_single_condition(item.properties.get(property_name), condition_op, condition_value)
         for condition_op, condition_value in conditions.items()
     )
 
@@ -133,15 +127,12 @@ def filter_items(items: list[Any], query: dict[str, dict[str, Any]]) -> list[Any
         item
         for item in items
         if all(
-            validate_property_condition(item, property_name, conditions)
-            for property_name, conditions in query.items()
+            validate_property_condition(item, property_name, conditions) for property_name, conditions in query.items()
         )
     ]
 
 
-def post_query_items(
-    items: ItemCollection | list[Any], query: dict[str, dict[str, Any]]
-) -> ItemCollection:
+def post_query_items(items: ItemCollection | list[Any], query: dict[str, dict[str, Any]]) -> ItemCollection:
     """
     Apply a query filter to items fetched from a STAC catalog and return an ItemCollection.
 
@@ -166,9 +157,7 @@ def post_query_items(
     >>> filtered_items = post_query_items(catalog_items, query)
     """
     filtered_items = filter_items(items, query)
-    return ItemCollection(
-        filtered_items
-    )  # Assuming ItemCollection is imported/defined elsewhere
+    return ItemCollection(filtered_items)  # Assuming ItemCollection is imported/defined elsewhere
 
 
 def _select_last_common_occurrences(first, second):
@@ -263,12 +252,7 @@ def enhance_assets(
             for asset in keys:
                 # use the alternate href if it exists
                 if alternate:
-                    href = (
-                        item.assets[asset]
-                        .extra_fields.get("alternate", {})
-                        .get(alternate, {})
-                        .get("href")
-                    )
+                    href = item.assets[asset].extra_fields.get("alternate", {}).get(alternate, {}).get("href")
                     if href:
                         items[idx].assets[asset].href = href
                 # use HTTP URL instead of cloud path
@@ -277,35 +261,23 @@ def enhance_assets(
                     if href:
                         items[idx].assets[asset].href = _cloud_path_to_http(href)
                 if add_default_scale_factor:
-                    scale_factor_collection = (
-                        _scales_collections.scale_factor_collections.get(
-                            item.collection_id if item.collection_id else "", [{}]
-                        )
+                    scale_factor_collection = _scales_collections.scale_factor_collections.get(
+                        item.collection_id if item.collection_id else "", [{}]
                     )
                     for scales_collection in scale_factor_collection:
                         if asset in scales_collection.get("assets", []):
-                            if (
-                                "raster:bands"
-                                not in items[idx].assets[asset].extra_fields
-                            ):
-                                items[idx].assets[asset].extra_fields[
-                                    "raster:bands"
-                                ] = [{}]
-                            if (
-                                not items[idx]
-                                .assets[asset]
-                                .extra_fields["raster:bands"][0]
-                                .get("scale")
-                            ):
-                                items[idx].assets[asset].extra_fields["raster:bands"][
-                                    0
-                                ]["scale"] = scales_collection["scale"]
-                                items[idx].assets[asset].extra_fields["raster:bands"][
-                                    0
-                                ]["offset"] = scales_collection["offset"]
-                                items[idx].assets[asset].extra_fields["raster:bands"][
-                                    0
-                                ]["nodata"] = scales_collection["nodata"]
+                            if "raster:bands" not in items[idx].assets[asset].extra_fields:
+                                items[idx].assets[asset].extra_fields["raster:bands"] = [{}]
+                            if not items[idx].assets[asset].extra_fields["raster:bands"][0].get("scale"):
+                                items[idx].assets[asset].extra_fields["raster:bands"][0]["scale"] = scales_collection[
+                                    "scale"
+                                ]
+                                items[idx].assets[asset].extra_fields["raster:bands"][0]["offset"] = scales_collection[
+                                    "offset"
+                                ]
+                                items[idx].assets[asset].extra_fields["raster:bands"][0]["nodata"] = scales_collection[
+                                    "nodata"
+                                ]
 
     return items
 
@@ -512,15 +484,9 @@ class Auth:
                 config = cls.read_credentials_from_json(json_path=json_path)
 
             elif toml_path is not None:
-                config = cls.read_credentials_from_toml(
-                    toml_path=toml_path, profile=profile
-                )
+                config = cls.read_credentials_from_toml(toml_path=toml_path, profile=profile)
 
-            elif (
-                os.getenv("EDS_AUTH_URL")
-                and os.getenv("EDS_SECRET")
-                and os.getenv("EDS_CLIENT_ID")
-            ):
+            elif os.getenv("EDS_AUTH_URL") and os.getenv("EDS_SECRET") and os.getenv("EDS_CLIENT_ID"):
                 config = cls.read_credentials_from_environment()
 
             else:
@@ -598,9 +564,7 @@ class Auth:
         return config
 
     @classmethod
-    def read_credentials_from_toml(
-        cls, toml_path: Optional[Path] = None, profile: Optional[str] = None
-    ) -> dict:
+    def read_credentials_from_toml(cls, toml_path: Optional[Path] = None, profile: Optional[str] = None) -> dict:
         """
         Read Earth Data Store credentials from a TOML file
 
@@ -617,9 +581,7 @@ class Auth:
             Dictionary containing credentials
         """
         if toml_path is None or not toml_path.exists():
-            raise FileNotFoundError(
-                f"Credentials file {toml_path} not found. Make sure the path is valid"
-            )
+            raise FileNotFoundError(f"Credentials file {toml_path} not found. Make sure the path is valid")
 
         with toml_path.open() as f:
             config = toml.load(f)
@@ -652,9 +614,7 @@ class Auth:
         if not config:
             config = self._config_parser(self.__auth_config)
         if not config.auth_url or not config.client_id or not config.client_secret:
-            raise ValueError(
-                "Authentication credentials (auth_url, client_id, client_secret) must not be None"
-            )
+            raise ValueError("Authentication credentials (auth_url, client_id, client_secret) must not be None")
         response = requests.post(
             config.auth_url,
             data={"grant_type": "client_credentials"},
@@ -705,13 +665,9 @@ class Auth:
             auth_url = config("EDS_AUTH_URL")
             client_secret = config("EDS_SECRET")
             client_id = config("EDS_CLIENT_ID")
-            eds_url = config(
-                "EDS_API_URL", "https://api.earthdaily.com/platform/v1/stac"
-            )
+            eds_url = config("EDS_API_URL", "https://api.earthdaily.com/platform/v1/stac")
             if auth_url is None or client_secret is None or client_id is None:
-                raise AttributeError(
-                    "You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID"
-                )
+                raise AttributeError("You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID")
             return EarthDataStoreConfig(
                 auth_url=auth_url,
                 client_secret=client_secret,
@@ -800,9 +756,7 @@ class Auth:
         if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
             if t:
                 logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
-            self._client = self._get_client(
-                self.__auth_config, self.__presign_urls, self.__asset_proxy_enabled
-            )
+            self._client = self._get_client(self.__auth_config, self.__presign_urls, self.__asset_proxy_enabled)
             self.__time_eds_log = time.time()
 
         return self._client
@@ -930,9 +884,7 @@ class Auth:
         """
         if collection:
             if collection not in self._staccollectionexplorer.keys():
-                self._staccollectionexplorer[collection] = StacCollectionExplorer(
-                    self.client, collection
-                )
+                self._staccollectionexplorer[collection] = StacCollectionExplorer(self.client, collection)
             return self._staccollectionexplorer.get(collection)
         return sorted(c.id for c in self.client.get_all_collections())
 
@@ -1086,9 +1038,7 @@ class Auth:
 
         # Properties (per items) are not compatible with groupby_date.
         if properties not in (None, False) and groupby_date is not None:
-            raise NotImplementedError(
-                "You must set `groupby_date=None` to have properties per item."
-            )
+            raise NotImplementedError("You must set `groupby_date=None` to have properties per item.")
 
         # convert collections to list
         collections = [collections] if isinstance(collections, str) else collections
@@ -1151,26 +1101,19 @@ class Auth:
         )
 
         xcal_items = None
-        if (
-            isinstance(cross_calibration_collection, str)
-            and cross_calibration_collection != collections[0]
-        ):
+        if isinstance(cross_calibration_collection, str) and cross_calibration_collection != collections[0]:
             try:
                 xcal_items = self.search(
                     collections="eda-cross-calibration",
                     intersects=intersects,
                     query={
                         "eda_cross_cal:source_collection": {"eq": collections[0]},
-                        "eda_cross_cal:destination_collection": {
-                            "eq": cross_calibration_collection
-                        },
+                        "eda_cross_cal:destination_collection": {"eq": cross_calibration_collection},
                     },
                     deduplicate_items=False,
                 )
             except Warning:
-                raise Warning(
-                    "No cross calibration coefficient available for the specified collections."
-                )
+                raise Warning("No cross calibration coefficient available for the specified collections.")
 
         # Create datacube from items
         ds = datacube(
@@ -1201,9 +1144,7 @@ class Auth:
                     "ag_cloud_mask": {"agriculture-cloud-mask": "ag_cloud_mask"},
                     "cloud_mask": {"cloud-mask": "cloud_mask"},
                 }
-                items_mask = self.find_cloud_mask_items(
-                    items, cloudmask=mask_with, **cloud_search_kwargs
-                )
+                items_mask = self.find_cloud_mask_items(items, cloudmask=mask_with, **cloud_search_kwargs)
                 ds_mask = datacube(
                     items_mask,
                     intersects=intersects,
@@ -1225,9 +1166,7 @@ class Auth:
                 # mask_kwargs.update(ds_mask=ds_mask)
             else:
                 assets_mask = {
-                    mask._native_mask_asset_mapping[
-                        collections[0]
-                    ]: mask._native_mask_def_mapping[collections[0]]
+                    mask._native_mask_asset_mapping[collections[0]]: mask._native_mask_def_mapping[collections[0]]
                 }
 
                 ds_mask = datacube(
@@ -1426,17 +1365,11 @@ class Auth:
         if isinstance(collections, str):
             collections = [collections]
         if assets is not None:
-            assets = list(
-                asset_mapper.AssetMapper()
-                .map_collection_assets(collections[0], assets)
-                .keys()
-            )
+            assets = list(asset_mapper.AssetMapper().map_collection_assets(collections[0], assets).keys())
             kwargs["fields"] = self._update_search_for_assets(assets)
 
         if bbox is None and intersects is not None:
-            intersects = cube_utils.GeometryManager(intersects).to_intersects(
-                crs="4326"
-            )
+            intersects = cube_utils.GeometryManager(intersects).to_intersects(crs="4326")
         if bbox is not None and intersects is not None:
             bbox = None
 
@@ -1468,9 +1401,7 @@ class Auth:
             items_collection = filter_duplicate_items(items_collection)
         return items_collection
 
-    def find_cloud_mask_items(
-        self, items_collection, cloudmask="ag_cloud_mask", **kwargs
-    ):
+    def find_cloud_mask_items(self, items_collection, cloudmask="ag_cloud_mask", **kwargs):
         """
         Search the catalog for the ag_cloud_mask items matching the given items_collection.
         The ag_cloud_mask items are searched in the `ag_cloud_mask_collection_id` collection using the
@@ -1495,9 +1426,7 @@ class Auth:
                 collection = item.properties[f"eda:{cloudmask}_collection_id"]
                 if products.get(collection, None) is None:
                     products[collection] = []
-                products[collection].append(
-                    item.properties.get(f"eda:{cloudmask}_item_id")
-                )
+                products[collection].append(item.properties.get(f"eda:{cloudmask}_item_id"))
             return products
 
         items_id = ag_cloud_mask_from_items(items_collection)

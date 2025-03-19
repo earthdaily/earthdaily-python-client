@@ -17,9 +17,7 @@ class AssetMapper:
     def _collection_exists(self, collection, raise_warning=False):
         exists = True if collection in self.available_collections else False
         if raise_warning and not exists:
-            raise NotImplementedError(
-                f"Collection {collection} has not been implemented"
-            )
+            raise NotImplementedError(f"Collection {collection} has not been implemented")
         return exists
 
     def collection_spectral_assets(self, collection):
@@ -46,9 +44,7 @@ class AssetMapper:
             # No asset found with specified key (common asset name)
             else:
                 # Looking for asset matching the specified value (asset name)
-                matching_assets = [
-                    key for key, value in config[0].items() if value == asset
-                ]
+                matching_assets = [key for key, value in config[0].items() if value == asset]
 
                 if matching_assets:
                     output_assets[asset] = asset

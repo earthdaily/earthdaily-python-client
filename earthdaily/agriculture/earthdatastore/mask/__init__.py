@@ -73,9 +73,7 @@ class Mask:
         #
         self._obj = self._obj.where(self._obj["ag_cloud_mask"] == 1)
         if mask_statistics:
-            self.compute_clear_coverage(
-                self._obj["ag_cloud_mask"], "ag_cloud_mask", 1, labels_are_clouds=False
-            )
+            self.compute_clear_coverage(self._obj["ag_cloud_mask"], "ag_cloud_mask", 1, labels_are_clouds=False)
         return self._obj
 
     def cloudmask_from_asset(
@@ -94,17 +92,11 @@ class Mask:
 
         if fill_value:
             if labels_are_clouds:
-                self._obj = self._obj.where(
-                    ~self._obj[cloud_asset].isin(labels), fill_value
-                )
+                self._obj = self._obj.where(~self._obj[cloud_asset].isin(labels), fill_value)
             else:
-                self._obj = self._obj.where(
-                    self._obj[cloud_asset].isin(labels), fill_value
-                )
+                self._obj = self._obj.where(self._obj[cloud_asset].isin(labels), fill_value)
         if mask_statistics:
-            self.compute_clear_coverage(
-                cloud_layer, cloud_asset, labels, labels_are_clouds=labels_are_clouds
-            )
+            self.compute_clear_coverage(cloud_layer, cloud_asset, labels, labels_are_clouds=labels_are_clouds)
         return self._obj
 
     def scl(
@@ -127,9 +119,7 @@ class Mask:
             mask_statistics=mask_statistics,
         )
 
-    def compute_clear_coverage(
-        self, cloudmask_array, cloudmask_name, labels, labels_are_clouds=True
-    ):
+    def compute_clear_coverage(self, cloudmask_array, cloudmask_name, labels, labels_are_clouds=True):
         if self._obj.attrs.get("usable_pixels", None) is None:
             self.compute_available_pixels()
 
@@ -137,17 +127,14 @@ class Mask:
         if labels_are_clouds:
             n_pixels_as_labels = self._obj.attrs["usable_pixels"] - n_pixels_as_labels
 
-        self._obj = self._obj.assign_coords(
-            {"clear_pixels": ("time", n_pixels_as_labels.data)}
-        )
+        self._obj = self._obj.assign_coords({"clear_pixels": ("time", n_pixels_as_labels.data)})
 
         self._obj = self._obj.assign_coords(
             {
                 "clear_percent": (
                     "time",
                     np.multiply(
-                        self._obj["clear_pixels"].data
-                        / self._obj.attrs["usable_pixels"],
+                        self._obj["clear_pixels"].data / self._obj.attrs["usable_pixels"],
                         100,
                     ).astype(np.int8),
                 )
@@ -160,9 +147,7 @@ class Mask:
 
     def compute_available_pixels(self):
         if self.intersects is None:
-            raise ValueError(
-                "bbox or intersects must be defined for now to compute cloud statistics."
-            )
+            raise ValueError("bbox or intersects must be defined for now to compute cloud statistics.")
 
         clip_mask_arr = geometry_mask(
             geometries=self.intersects.geometry,

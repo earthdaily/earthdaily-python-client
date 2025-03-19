@@ -269,12 +269,8 @@ def _disable_known_datacube_warning():
             message="invalid value encountered in cast",
             module="dask.array.chunk",
         )
-        warnings.filterwarnings(
-            "ignore", category=RuntimeWarning, message="All-NaN slice encountered"
-        )
-        warnings.filterwarnings(
-            "ignore", category=RuntimeWarning, message="Mean of empty slice"
-        )
+        warnings.filterwarnings("ignore", category=RuntimeWarning, message="All-NaN slice encountered")
+        warnings.filterwarnings("ignore", category=RuntimeWarning, message="Mean of empty slice")
 
 
 def datacube(
@@ -313,9 +309,7 @@ def datacube(
     if engine == "odc" and intersects is not None:
         kwargs["geopolygon"] = GeometryManager(intersects).to_geopandas()
     if engine == "stackstac" and intersects is not None:
-        kwargs["bounds_latlon"] = list(
-            GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds
-        )
+        kwargs["bounds_latlon"] = list(GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds)
 
     # create datacube using the defined engine (default is odc stac)
     ds = engines[engine](
@@ -338,9 +332,7 @@ def datacube(
             asset = ds_asset
             if len(parts := ds_asset.split(".")) == 2:
                 index = parts[1][-1]
-                is_band = isinstance(index, int) or (
-                    isinstance(index, str) and index.isdigit()
-                )
+                is_band = isinstance(index, int) or (isinstance(index, str) and index.isdigit())
                 if is_band:
                     asset, band_idx = asset.split(".")
                     band_idx = int(band_idx)
@@ -348,11 +340,7 @@ def datacube(
                 empty_dict_list.append({})
             if asset not in item.assets.keys():
                 continue
-            nodata = (
-                item.assets[asset]
-                .extra_fields.get("raster:bands", empty_dict_list)[band_idx - 1]
-                .get("nodata")
-            )
+            nodata = item.assets[asset].extra_fields.get("raster:bands", empty_dict_list)[band_idx - 1].get("nodata")
             if nodata == 0 or nodata:
                 nodatas.update({ds_asset: nodata})
             break
@@ -393,10 +381,7 @@ def datacube(
         if ds.coords[coord].values.shape == ():
             continue
         if isinstance(ds.coords[coord].values[0], (list, dict)):
-            ds.coords[coord].values = [
-                json.dumps(ds.coords[coord].values[idx])
-                for idx in range(ds.coords[coord].size)
-            ]
+            ds.coords[coord].values = [json.dumps(ds.coords[coord].values[idx]) for idx in range(ds.coords[coord].size)]
     ds = ds.sortby(ds.time)
     return ds
 
@@ -444,13 +429,8 @@ def rescale_assets_with_items(
     items_collection_per_date = list(unique_items.values())
 
     # Validate items match dataset time
-    if (
-        len(items_collection_per_date) != ds.time.size
-        and len(items_collection) != ds.time.size
-    ):
-        raise ValueError(
-            "Mismatch between items and datacube time. Set rescale to False."
-        )
+    if len(items_collection_per_date) != ds.time.size and len(items_collection) != ds.time.size:
+        raise ValueError("Mismatch between items and datacube time. Set rescale to False.")
 
     # Prepare assets list
     assets = assets or list(ds.data_vars.keys())
@@ -462,14 +442,10 @@ def rescale_assets_with_items(
 
         # Date validation
         if pd.Timestamp(time).strftime("%Y%m%d") != item.datetime.strftime("%Y%m%d"):
-            raise ValueError(
-                "Mismatch between items and datacube dates. Set rescale to False."
-            )
+            raise ValueError("Mismatch between items and datacube dates. Set rescale to False.")
 
         # BOA offset handling for Sentinel-2 L2A
-        boa_offset_applied = item.properties.get(
-            "earthsearch:boa_offset_applied", False
-        )
+        boa_offset_applied = item.properties.get("earthsearch:boa_offset_applied", False)
         if boa_offset_applied_control and item.collection_id == "sentinel-2-l2a":
             if boa_offset_applied_force_by_date:
                 boa_offset_applied = pd.Timestamp(time) >= pd.Timestamp("2022-02-28")
@@ -513,9 +489,7 @@ def rescale_assets_with_items(
                 offset = 0
 
             # Track scaling parameters
-            scales.setdefault(ds_asset, {}).setdefault(scale, {}).setdefault(
-                offset, []
-            ).append(idx)
+            scales.setdefault(ds_asset, {}).setdefault(scale, {}).setdefault(offset, []).append(idx)
 
     # Apply rescaling
     if scales:
@@ -528,9 +502,7 @@ def rescale_assets_with_items(
             scaled_assets.append(xr.concat(asset_scaled, dim="time"))
 
         # Merge scaled assets
-        ds_scaled = xr.merge(scaled_assets, join="override", compat="override").sortby(
-            "time"
-        )
+        ds_scaled = xr.merge(scaled_assets, join="override", compat="override").sortby("time")
 
         # Preserve unscaled variables
         missing_vars = [var for var in ds.data_vars if var not in scales]
@@ -612,9 +584,7 @@ def metacube(*cubes, concat_dim="time", by="time.date", how="mean"):
             if data_var not in cube.data_vars:
                 cubes[idx][data_var] = cubes[idx][first_available_var]
                 # fill with nan
-                cubes[idx][data_var] = cubes[idx][data_var].where(
-                    cubes[idx][data_var] == np.nan, other=np.nan
-                )
+                cubes[idx][data_var] = cubes[idx][data_var].where(cubes[idx][data_var] == np.nan, other=np.nan)
     cube = xr.concat([_drop_unfrozen_coords(cube) for cube in cubes], dim=concat_dim)
     cube = _groupby(cube, by=by, how=how)
     cube = cube.sortby(cube.time)
