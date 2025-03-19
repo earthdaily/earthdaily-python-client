@@ -28,11 +28,16 @@ def xr_loop_func(
             return dataset_func
         else:
             return xr.concat(
-                [metafunc(dataset.isel({loop_dimension: i}), **kwargs) for i in range(dataset[loop_dimension].size)],
+                [
+                    metafunc(dataset.isel({loop_dimension: i}), **kwargs)
+                    for i in range(dataset[loop_dimension].size)
+                ],
                 dim=loop_dimension,
             )
 
-    return dataset.map(func=_xr_loop_func, metafunc=func, loop_dimension=loop_dimension, **kwargs)
+    return dataset.map(
+        func=_xr_loop_func, metafunc=func, loop_dimension=loop_dimension, **kwargs
+    )
 
 
 def _lee_filter(img, window_size: int):
@@ -41,7 +46,9 @@ def _lee_filter(img, window_size: int):
         ndimage_type = ndimage
     else:
         ndimage_type = dask_ndimage
-    binary_nan = ndimage_type.minimum_filter(xr.where(np.isnan(img), 0, 1), size=window_size)
+    binary_nan = ndimage_type.minimum_filter(
+        xr.where(np.isnan(img), 0, 1), size=window_size
+    )
     binary_nan = np.where(binary_nan == 0, np.nan, 1)
     img = xr.where(np.isnan(img), 0, img)
     window_size = da.from_array([window_size, window_size, 1])
@@ -89,7 +96,7 @@ class __EarthDailyAccessorDataArray:
     def whittaker(
         self,
         beta: float = 10000.0,
-        weights: (np.ndarray, list) = None,
+        weights: np.ndarray | list | None = None,
         time="time",
     ):
         from . import whittaker
@@ -98,7 +105,7 @@ class __EarthDailyAccessorDataArray:
 
     def sel_nearest_dates(
         self,
-        target: (xr.Dataset, xr.DataArray),
+        target: xr.Dataset | xr.DataArray,
         max_delta: int = 0,
         method: str = "nearest",
         return_target: bool = False,
@@ -106,11 +113,17 @@ class __EarthDailyAccessorDataArray:
         src_time = self._obj.sel(time=target.time.dt.date, method=method).time.dt.date
         target_time = target.time.dt.date
         pos = np.abs(src_time.data - target_time.data)
-        pos = [src_time.isel(time=i).time.values for i, j in enumerate(pos) if j.days <= max_delta]
+        pos = [
+            src_time.isel(time=i).time.values
+            for i, j in enumerate(pos)
+            if j.days <= max_delta
+        ]
         pos = np.unique(pos)
         if return_target:
             method_convert = {"bfill": "ffill", "ffill": "bfill", "nearest": "nearest"}
-            return self._obj.sel(time=pos), target.sel(time=pos, method=method_convert[method])
+            return self._obj.sel(time=pos), target.sel(
+                time=pos, method=method_convert[method]
+            )
         return self._obj.sel(time=pos)
 
     def zonal_stats(
@@ -165,7 +178,7 @@ class __EarthDailyAccessorDataArray:
             kwargs=dict(window_size=window_size),
         )
 
-    def centroid(self, to_wkt: str = False, to_4326: bool = True):
+    def centroid(self, to_wkt: bool = False, to_4326: bool = True):
         """Return the geographic center point in 4326/WKT of this dataset."""
         # we can use a cache on our accessor objects, because accessors
         # themselves are cached on instances that access them.
@@ -179,9 +192,15 @@ class __EarthDailyAccessorDataArray:
         return point
 
     def drop_unfrozen_coords(self, keep_spatial_ref=True):
-        unfrozen_coords = [coord for coord in self._obj.coords if coord not in list(self._obj.sizes.keys())]
+        unfrozen_coords = [
+            coord
+            for coord in self._obj.coords
+            if coord not in list(self._obj.sizes.keys())
+        ]
         if keep_spatial_ref and "spatial_ref" in unfrozen_coords:
-            unfrozen_coords.pop(np.argwhere(np.isin(unfrozen_coords, "spatial_ref"))[0][0])
+            unfrozen_coords.pop(
+                np.argwhere(np.isin(unfrozen_coords, "spatial_ref"))[0][0]
+            )
         return self._obj.drop(unfrozen_coords)
 
 
@@ -206,7 +225,9 @@ class __EarthDailyAccessorDataset(__EarthDailyAccessorDataArray):
         return (
             ds[[red, green, blue]]
             .to_array(dim="bands")
-            .plot.imshow(col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs)
+            .plot.imshow(
+                col=col, col_wrap=self._max_time_wrap(col_wrap, col=col), **kwargs
+            )
         )
 
     def plot_band(self, band, cmap="Greys", col="time", col_wrap=5, **kwargs):
@@ -244,7 +265,11 @@ class __EarthDailyAccessorDataset(__EarthDailyAccessorDataArray):
         }
 
         params = {}
-        data_vars = list(self._obj.rename({var: var.lower() for var in self._obj.data_vars}).data_vars)
+        data_vars = list(
+            self._obj.rename(
+                {var: var.lower() for var in self._obj.data_vars}
+            ).data_vars
+        )
         for v in data_vars:
             if v in _BAND_MAPPING.keys():
                 params[_BAND_MAPPING[v]] = self._obj[v]
@@ -291,7 +316,12 @@ class __EarthDailyAccessorDataset(__EarthDailyAccessorDataArray):
         # str is for spyndex
         indices_str = [index for index in indices if isinstance(index, str)]
         # dict is customized ones
-        custom_indices = {k: v for index in indices if isinstance(index, dict) for k, v in index.items()}
+        custom_indices = {
+            k: v
+            for index in indices
+            if isinstance(index, dict)
+            for k, v in index.items()
+        }
 
         if len(indices_str) >= 1:
             idx = spyndex.computeIndex(index=indices_str, params=params, **kwargs)
@@ -306,7 +336,9 @@ class __EarthDailyAccessorDataset(__EarthDailyAccessorDataArray):
             # custom indices
             def custom_index_to_eval(ds, custom_index):
                 for data_var in ds.data_vars:
-                    custom_index = custom_index.replace(data_var, f"self._obj['{data_var}']")
+                    custom_index = custom_index.replace(
+                        data_var, f"self._obj['{data_var}']"
+                    )
                 return custom_index
 
             for data_var, formula in custom_indices.items():

@@ -62,7 +62,9 @@ class GeometryManager:
         dict
             The geometry in GeoJSON intersects format.
         """
-        return json.loads(self._obj.to_crs(crs).dissolve().geometry.to_json())["features"][0]["geometry"]
+        return json.loads(self._obj.to_crs(crs).dissolve().geometry.to_json())[
+            "features"
+        ][0]["geometry"]
 
     def to_wkt(self, crs="EPSG:4326"):
         """
@@ -151,7 +153,9 @@ class GeometryManager:
         if isinstance(geometry, str):
             try:
                 self.input_type = "wkt"
-                return gpd.GeoDataFrame(geometry=[shapely.wkt.loads(geometry)], crs="EPSG:4326")
+                return gpd.GeoDataFrame(
+                    geometry=[shapely.wkt.loads(geometry)], crs="EPSG:4326"
+                )
             except Exception:
                 pass
         if isinstance(geometry, (dict, str)):
@@ -160,7 +164,9 @@ class GeometryManager:
                 return gpd.read_file(geometry, driver="GeoJson", crs="EPSG:4326")
             except Exception:
                 try:
-                    return gpd.read_file(json.dumps(geometry), driver="GeoJson", crs="EPSG:4326")
+                    return gpd.read_file(
+                        json.dumps(geometry), driver="GeoJson", crs="EPSG:4326"
+                    )
                 except Exception:
                     pass
 
@@ -168,7 +174,9 @@ class GeometryManager:
                 return gpd.GeoDataFrame.from_features(geometry, crs="EPSG:4326")
             except Exception:
                 if "type" in geometry:
-                    geom = shapely.__dict__[geometry["type"]]([geometry["coordinates"][0]])
+                    geom = shapely.__dict__[geometry["type"]](
+                        [geometry["coordinates"][0]]
+                    )
                     return gpd.GeoDataFrame(geometry=[geom], crs="EPSG:4326")
 
         elif isinstance(geometry, gpd.GeoSeries):
@@ -198,4 +206,9 @@ class GeometryManager:
         GeoSeries
             The buffered geometry in the original CRS.
         """
-        return self._obj.to_crs(crs=crs_meters).buffer(distance=distance, **kwargs).to_crs(crs=self._obj.crs).geometry
+        return (
+            self._obj.to_crs(crs=crs_meters)
+            .buffer(distance=distance, **kwargs)
+            .to_crs(crs=self._obj.crs)
+            .geometry
+        )

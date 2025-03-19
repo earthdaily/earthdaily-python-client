@@ -11,8 +11,12 @@ import earthdaily
 
 if __name__ == "__main__":
     eds = earthdaily.EarthDataStore()
-    asset_mapper_path = earthdaily.agriculture.earthdatastore.cube_utils.asset_mapper.__asset_mapper_config_path
-    asset_mapper_config = earthdaily.agriculture.earthdatastore.cube_utils.asset_mapper._asset_mapper_config
+    asset_mapper_path = (
+        earthdaily.earthdatastore.cube_utils.asset_mapper.__asset_mapper_config_path
+    )
+    asset_mapper_config = (
+        earthdaily.earthdatastore.cube_utils.asset_mapper._asset_mapper_config
+    )
 
     for collection in eds.explore():
         try:

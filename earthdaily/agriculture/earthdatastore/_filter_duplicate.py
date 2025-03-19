@@ -1,3 +1,6 @@
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -46,7 +49,10 @@ class StacGroup:
         bool
             True if the other datetime and bbox match within threshold
         """
-        return self.footprint == other_footprint and abs(self.datetime - other_dt) <= threshold
+        return (
+            self.footprint == other_footprint
+            and abs(self.datetime - other_dt) <= threshold
+        )
 
 
 @lru_cache(maxsize=1024)
@@ -67,7 +73,9 @@ def _parse_datetime(dt_str: str) -> datetime:
     return datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
 
 
-def _extract_item_metadata(item: Dict, method="proj:transform") -> Tuple[datetime, Optional[Tuple[float, ...]]]:
+def _extract_item_metadata(
+    item: Dict, method="proj:transform"
+) -> Tuple[datetime, Optional[Tuple[float, ...]]]:
     """
     Extract datetime and footprint from a STAC item.
 
@@ -84,14 +92,18 @@ def _extract_item_metadata(item: Dict, method="proj:transform") -> Tuple[datetim
     dt = _parse_datetime(item["properties"]["datetime"])
     any_asset = item.get("assets", {}) != {}
     if any_asset and method == "proj:transform":
-        _first_item = list(item["assets"].keys())[0]
-        footprint = tuple(item["assets"][_first_item].get("proj:transform", item["bbox"]))
+        _first_item = list(sorted(item["assets"].keys()))[0]
+        footprint = tuple(
+            item["assets"][_first_item].get("proj:transform", item["bbox"])
+        )
     else:
         footprint = tuple(round(bbox, 6) for bbox in item["bbox"])
     return dt, footprint
 
 
-def _group_items(items: Iterator[Dict], time_threshold: timedelta) -> Dict[StacGroup, List[Dict]]:
+def _group_items(
+    items: Iterator[Dict], time_threshold: timedelta
+) -> Dict[StacGroup, List[Dict]]:
     """
     Group STAC items by spatial and temporal proximity.
 
@@ -140,14 +152,20 @@ def _select_latest_items(items: List[Dict]) -> List[Dict]:
     if not items:
         return []
 
-    latest_timestamp = max(_parse_datetime(item["properties"]["updated"]) for item in items)
+    latest_timestamp = max(
+        _parse_datetime(item["properties"]["updated"]) for item in items
+    )
 
-    return [item for item in items if _parse_datetime(item["properties"]["updated"]) == latest_timestamp]
+    return [
+        item
+        for item in items
+        if _parse_datetime(item["properties"]["updated"]) == latest_timestamp
+    ]
 
 
 def filter_duplicate_items(
     items: ItemCollection,
-    time_threshold: timedelta = timedelta(minutes=5),
+    time_threshold: timedelta = timedelta(minutes=60),
     method="proj:transform",
 ) -> ItemCollection:
     """
@@ -214,7 +232,11 @@ def filter_duplicate_items(
     grouped_items = _group_items(items.to_dict()["features"], time_threshold)
 
     # Select latest items from each group and flatten
-    deduplicated = [item for group_items in grouped_items.values() for item in _select_latest_items(group_items)]
+    deduplicated = [
+        item
+        for group_items in grouped_items.values()
+        for item in _select_latest_items(group_items)
+    ]
     duplicates = len(items) - len(deduplicated)
     if duplicates:
         logging.info(f"Deduplication removes {duplicates} items.")

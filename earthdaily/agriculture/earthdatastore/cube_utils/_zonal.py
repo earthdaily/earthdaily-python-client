@@ -34,7 +34,9 @@ class MemoryManager:
     """Manages memory allocation for large dataset processing."""
 
     @staticmethod
-    def calculate_time_chunks(dataset: xr.Dataset, max_memory_mb: Optional[float] = None) -> int:
+    def calculate_time_chunks(
+        dataset: xr.Dataset, max_memory_mb: Optional[float] = None
+    ) -> int:
         """Calculate optimal time chunks based on available memory.
 
         Args:
@@ -50,12 +52,16 @@ class MemoryManager:
 
         bytes_per_date = (dataset.nbytes / 1e6) / dataset.time.size * 3
         max_chunks = int(np.arange(0, max_memory_mb, bytes_per_date + 0.1).size)
-        time_chunks = int(dataset.time.size / np.arange(0, dataset.time.size, max_chunks).size)
+        time_chunks = int(
+            dataset.time.size / np.arange(0, dataset.time.size, max_chunks).size
+        )
 
         logger.info(
-            f"Estimated memory per date: {bytes_per_date:.2f}MB. Total: {(bytes_per_date*dataset.time.size):.2f}MB"
+            f"Estimated memory per date: {bytes_per_date:.2f}MB. Total: {(bytes_per_date * dataset.time.size):.2f}MB"
         )
-        logger.info(f"Time chunks: {time_chunks} (total time steps: {dataset.time.size})")
+        logger.info(
+            f"Time chunks: {time_chunks} (total time steps: {dataset.time.size})"
+        )
 
         return time_chunks
 
@@ -74,7 +80,9 @@ class SpatialIndexer:
             scipy.sparse.csr_matrix: Computed sparse matrix
         """
         cols = np.arange(data.size)
-        return csr_matrix((cols, (data.ravel(), cols)), shape=(data.max() + 1, data.size))
+        return csr_matrix(
+            (cols, (data.ravel(), cols)), shape=(data.max() + 1, data.size)
+        )
 
     @staticmethod
     def get_sparse_indices(data: np.ndarray) -> List[Tuple[np.ndarray, ...]]:
@@ -112,7 +120,9 @@ class StatisticalOperations:
     """Handles statistical computations on spatial data."""
 
     @staticmethod
-    def zonal_stats(dataset: xr.Dataset, positions: List[np.ndarray], reducers: List[str]) -> xr.DataArray:
+    def zonal_stats(
+        dataset: xr.Dataset, positions: List[np.ndarray], reducers: List[str]
+    ) -> xr.DataArray:
         """Compute zonal statistics for given positions using specified reducers.
 
         Args:
@@ -137,7 +147,9 @@ class StatisticalOperations:
                     if reducer == "mode":
                         field_arr = mode(field_arr, axis=-1, nan_policy="omit").mode
                     else:
-                        func = f"nan{reducer}" if hasattr(np, f"nan{reducer}") else reducer
+                        func = (
+                            f"nan{reducer}" if hasattr(np, f"nan{reducer}") else reducer
+                        )
                         field_arr = getattr(np, func)(field_arr, axis=-1)
                     field_stats.append(field_arr)
                 field_stats = np.asarray(field_stats)
@@ -158,7 +170,9 @@ class StatisticalOperations:
             kwargs=dict(reducers=reducers, positions=positions),
             dask_gufunc_kwargs={
                 "allow_rechunk": True,
-                "output_sizes": dict(feature=len(positions), zonal_statistics=len(reducers)),
+                "output_sizes": dict(
+                    feature=len(positions), zonal_statistics=len(reducers)
+                ),
             },
         )
 
@@ -291,12 +305,16 @@ def zonal_stats(
             **kwargs,
         )
     elif method == "xvec":
-        return _compute_xvec_stats(dataset, geometries, reducers, all_touched, preserve_columns, **kwargs)
+        return _compute_xvec_stats(
+            dataset, geometries, reducers, all_touched, preserve_columns, **kwargs
+        )
     else:
         raise ValueError(f"Unsupported method: {method}")
 
 
-def _apply_buffer(geometries: gpd.GeoDataFrame, buffer_meters: Union[int, float]) -> gpd.GeoDataFrame:
+def _apply_buffer(
+    geometries: gpd.GeoDataFrame, buffer_meters: Union[int, float]
+) -> gpd.GeoDataFrame:
     """Apply buffer to geometries in meters."""
     original_crs = geometries.crs
     geometries = geometries.to_crs({"proj": "cea"})
@@ -317,14 +335,18 @@ def _compute_numpy_stats(
 ) -> xr.Dataset:
     """Compute zonal statistics using numpy method."""
     # Rasterize geometries
-    features, yx_positions = SpatialIndexer.rasterize_geometries(geometries.copy(), dataset, all_touched)
+    features, yx_positions = SpatialIndexer.rasterize_geometries(
+        geometries.copy(), dataset, all_touched
+    )
     positions = [np.asarray(pos) for pos in yx_positions[1:]]
     positions = [pos for pos in positions if pos.size > 0]
 
     # Process time series if present
     if "time" in dataset.dims and not lazy_load:
         time_chunks = MemoryManager.calculate_time_chunks(dataset, max_memory_mb)
-        stats = _process_time_chunks(dataset, positions, reducers, lazy_load, time_chunks)
+        stats = _process_time_chunks(
+            dataset, positions, reducers, lazy_load, time_chunks
+        )
     else:
         stats = StatisticalOperations.zonal_stats(dataset, positions, reducers)
 
@@ -348,11 +370,16 @@ def _process_time_chunks(
         if not lazy_load:
             load_start = time.time()
             ds_chunk = ds_chunk.load()
-            logger.debug(f"Loaded {ds_chunk.time.size} dates in " f"{(time.time()-load_start):.2f}s")
+            logger.debug(
+                f"Loaded {ds_chunk.time.size} dates in "
+                f"{(time.time() - load_start):.2f}s"
+            )
 
         compute_start = time.time()
         chunk_stats = StatisticalOperations.zonal_stats(ds_chunk, positions, reducers)
-        logger.debug(f"Computed chunk statistics in {(time.time()-compute_start):.2f}s")
+        logger.debug(
+            f"Computed chunk statistics in {(time.time() - compute_start):.2f}s"
+        )
 
         chunks.append(chunk_stats)
 
@@ -383,10 +410,15 @@ def _compute_xvec_stats(
     Raises:
         ImportError: If xvec package is not installed
     """
-    try:
+    from importlib.util import find_spec
+
+    if find_spec("xvec"):
         import xvec  # noqa: F401
-    except ImportError:
-        raise ImportError("The xvec method requires the xvec package. " "Please install it with: pip install xvec")
+    else:
+        ImportError(
+            "The xvec method requires the xvec package. "
+            "Please install it with: pip install xvec"
+        )
 
     # Compute statistics using xvec
     stats = dataset.xvec.zonal_stats(
@@ -401,7 +433,9 @@ def _compute_xvec_stats(
 
     # Drop geometry and add as coordinate
     stats = stats.drop("geometry")
-    stats = stats.assign_coords(geometry=("feature", geometries.geometry.to_wkt(rounding_precision=-1).values))
+    stats = stats.assign_coords(
+        geometry=("feature", geometries.geometry.to_wkt(rounding_precision=-1).values)
+    )
 
     # Add index coordinate
     stats = stats.assign_coords(index=("feature", geometries.index))
@@ -438,7 +472,11 @@ def _format_numpy_output(
     if geometries.crs.to_epsg() != 4326:
         geometries = geometries.to_crs("EPSG:4326")
 
-    geometry_wkt = geometries.geometry.iloc[feature_indices - 1].to_wkt(rounding_precision=-1).values
+    geometry_wkt = (
+        geometries.geometry.iloc[feature_indices - 1]
+        .to_wkt(rounding_precision=-1)
+        .values
+    )
 
     # Assign coordinates
     coords = {"index": ("feature", index), "geometry": ("feature", geometry_wkt)}
@@ -452,9 +490,13 @@ def _format_numpy_output(
     return stats
 
 
-def _preserve_geometry_columns(stats: xr.Dataset, geometries: gpd.GeoDataFrame) -> None:
+def _preserve_geometry_columns(
+    stats: xr.Dataset, geometries: gpd.GeoDataFrame
+) -> xr.Dataset:
     """Preserve geometry columns in output statistics."""
-    cols = [col for col in geometries.columns if col != geometries._geometry_column_name]
+    cols = [
+        col for col in geometries.columns if col != geometries._geometry_column_name
+    ]
     values = geometries.loc[stats.index.values][cols].values.T
 
     for col, val in zip(cols, values):

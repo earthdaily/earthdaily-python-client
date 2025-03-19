@@ -40,7 +40,11 @@ def iterator(Z, Y, a_, w, u, lmb, A, a):
     return Z_, rmse, a_
 
 
-@njit(types.Tuple((float64[:], float64[::1], float64[:], float64, int64, float64))(float64[:]))
+@njit(
+    types.Tuple((float64[:], float64[::1], float64[:], float64, int64, float64))(
+        float64[:]
+    )
+)
 def initiator(Y):
     w = np.isfinite(Y, np.zeros_like(Y))
     Y_ = np.where(w == 0, 0, Y)
@@ -65,7 +69,9 @@ def initiator(Y):
 def whittaker(Y, A, lmbda, u, a, min_drange, max_drange, max_iter):
     Z, Y_, w, a_, j, rmse = initiator(Y)
     relevant_idxs_size = n_peaks = 0
-    while j == 0 or ((not (a == 0.5 or rmse < 0.01) or (relevant_idxs_size > 0)) and (j < max_iter)):
+    while j == 0 or (
+        (not (a == 0.5 or rmse < 0.01) or (relevant_idxs_size > 0)) and (j < max_iter)
+    ):
         Z[:], rmse, a_ = iterator(Z, Y_, a_, w, u, lmbda, A, a)
         j += 1
 
@@ -82,10 +88,14 @@ def whittaker(Y, A, lmbda, u, a, min_drange, max_drange, max_iter):
             n_peaks = idxs.size
             m = 0
 
-        not_solved = np.take(Z, idxs[peak_valley_n]) * inequal_swap > peak_limit * inequal_swap
+        not_solved = (
+            np.take(Z, idxs[peak_valley_n]) * inequal_swap > peak_limit * inequal_swap
+        )
         m += 1
         relevant_idxs = peaks_valleys[not_solved]
-        Y_[relevant_idxs] = peak_limit[not_solved] - 0.2 * m * (orig_z[not_solved] - peak_limit[not_solved])
+        Y_[relevant_idxs] = peak_limit[not_solved] - 0.2 * m * (
+            orig_z[not_solved] - peak_limit[not_solved]
+        )
         w[relevant_idxs] = 1.0
         relevant_idxs_size = relevant_idxs.size
     return Z

@@ -1,3 +1,6 @@
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
 import operator
 from datetime import datetime
 
@@ -73,7 +76,9 @@ class Harmonizer:
                     bands_coefs = matching_xcal_item.properties["eda_cross_cal:bands"]
 
                     if ds_asset in bands_coefs:
-                        asset_xcal_coef = matching_xcal_item.properties["eda_cross_cal:bands"][ds_asset]
+                        asset_xcal_coef = matching_xcal_item.properties[
+                            "eda_cross_cal:bands"
+                        ][ds_asset]
                         # By default, we take the first item we have
                         scaled_asset = Harmonizer.apply_to_asset(
                             asset_xcal_coef[0][ds_asset],
@@ -82,7 +87,9 @@ class Harmonizer:
                         )
                         scaled_dataset[ds_asset].append(scaled_asset)
                     else:
-                        scaled_dataset[ds_asset].append(ds[ds_asset].loc[dict(time=time)])
+                        scaled_dataset[ds_asset].append(
+                            ds[ds_asset].loc[dict(time=time)]
+                        )
 
         ds_ = []
         for k, v in scaled_dataset.items():
@@ -101,15 +108,21 @@ class Harmonizer:
             coef_range = [function["range_start"], function["range_end"]]
             for idx_coef, coef_border in enumerate(coef_range):
                 for single_operator, threshold in coef_border.items():
-                    xr_condition = getattr(operator, single_operator)(dataarray, threshold)
+                    xr_condition = getattr(operator, single_operator)(
+                        dataarray, threshold
+                    )
                     if idx_coef == 0:
                         ops = xr_condition
                     else:
                         ops = np.logical_and(ops, xr_condition)
-            xscaled_dataarray.append(dict(condition=ops, scale=function["scale"], offset=function["offset"]))
+            xscaled_dataarray.append(
+                dict(condition=ops, scale=function["scale"], offset=function["offset"])
+            )
 
         for op in xscaled_dataarray:
-            dataarray = xr.where(op["condition"], dataarray * op["scale"] + op["offset"], dataarray)
+            dataarray = xr.where(
+                op["condition"], dataarray * op["scale"] + op["offset"], dataarray
+            )
         return dataarray
 
     def apply_to_asset(functions, dataarray: xr.DataArray, band_name):
@@ -123,7 +136,9 @@ class Harmonizer:
         return dataarray
 
     def check_timerange(xcal_item, item_datetime):
-        start_date = datetime.strptime(xcal_item.properties["published"], "%Y-%m-%dT%H:%M:%SZ")
+        start_date = datetime.strptime(
+            xcal_item.properties["published"], "%Y-%m-%dT%H:%M:%SZ"
+        )
         start_date = start_date.replace(tzinfo=pytz.UTC)
 
         if not isinstance(item_datetime, datetime):
@@ -131,7 +146,9 @@ class Harmonizer:
         item_datetime = item_datetime.replace(tzinfo=pytz.UTC)
 
         if "expires" in xcal_item.properties:
-            end_date = datetime.strptime(xcal_item.properties["expires"], "%Y-%m-%dT%H:%M:%SZ")
+            end_date = datetime.strptime(
+                xcal_item.properties["expires"], "%Y-%m-%dT%H:%M:%SZ"
+            )
             end_date = end_date.replace(tzinfo=pytz.UTC)
 
             return start_date <= item_datetime <= end_date
