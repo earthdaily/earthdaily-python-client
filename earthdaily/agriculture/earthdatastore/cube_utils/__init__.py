@@ -1,12 +1,9 @@
-# mypy: ignore-errors
-# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
-
 import json
 import logging
 import warnings
 from collections import defaultdict
 from functools import wraps
-from typing import Callable
+from typing import Any, Callable
 
 import geopandas as gpd
 import numpy as np
@@ -17,7 +14,7 @@ from rasterio.enums import Resampling
 from rasterio.errors import NotGeoreferencedWarning
 from shapely.geometry import box
 
-from earthdaily.core import options
+from earthdaily.agriculture.core import options
 
 from ._zonal import zonal_stats
 from .asset_mapper import AssetMapper
@@ -292,11 +289,9 @@ def datacube(
         np.datetime64(d.datetime.strftime("%Y-%m-%d %X.%f")).astype("datetime64[ns]")
         for d in items_collection
         if "datetime" in d.__dict__
-    ]
+    ] or None
 
-    if len(times) == 0:
-        times = None
-    engines = {"odc": _cube_odc, "stackstac": _cube_stackstac}
+    engines: dict[str, Callable[..., Any]] = {"odc": _cube_odc, "stackstac": _cube_stackstac}
     if engine not in engines:
         raise NotImplementedError(
             f"Engine '{engine}' not supported. Only {' and '.join(list(engines.keys()))} are currently supported."
@@ -347,7 +342,7 @@ def datacube(
     # apply nodata
     ds = _apply_nodata(ds, nodatas)
     if rescale:
-        ds = rescale_assets_with_items(items_collection, ds, assets=assets)
+        ds = rescale_assets_with_items(items_collection, ds, assets=assets)  # type: ignore[arg-type]
 
     # drop na dates
     ds = ds.isel(dict(time=np.where(~np.isnan(ds.time))[0]))
