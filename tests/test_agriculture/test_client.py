@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock, patch, ANY
+from unittest.mock import ANY, MagicMock, patch
 
 from earthdaily.agriculture import EarthDataStore
 from earthdaily.agriculture.earthdatastore import Auth
