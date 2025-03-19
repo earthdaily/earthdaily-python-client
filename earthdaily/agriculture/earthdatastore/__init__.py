@@ -652,6 +652,8 @@ class Auth:
         """
         if isinstance(config, tuple):  # token
             access_token, eds_url = config
+            if "/platform/v1/stac" not in eds_url:
+                eds_url = f"{eds_url}/platform/v1/stac"
             logging.log(level=logging.INFO, msg="Using token to reauth")
             return EarthDataStoreConfig(eds_url=eds_url, access_token=access_token)
         else:
@@ -666,6 +668,8 @@ class Auth:
             client_secret = config("EDS_SECRET")
             client_id = config("EDS_CLIENT_ID")
             eds_url = config("EDS_API_URL", "https://api.earthdaily.com/platform/v1/stac")
+            if "/platform/v1/stac" not in eds_url:
+                eds_url = f"{eds_url}/platform/v1/stac"
             if auth_url is None or client_secret is None or client_id is None:
                 raise AttributeError("You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID")
             return EarthDataStoreConfig(

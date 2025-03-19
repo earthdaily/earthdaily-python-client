@@ -72,7 +72,7 @@ class APIRequester:
         """
 
         try:
-            client_version = version("earthdaily-python-client")
+            client_version = version("earthdaily")
         except PackageNotFoundError:
             client_version = "0.0.0"
 
