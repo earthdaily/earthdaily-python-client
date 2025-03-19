@@ -8,7 +8,10 @@ Created on Fri Dec 15 09:03:08 2023
 import json
 
 from earthdaily.agriculture import EarthDataStore
-from earthdaily.earthdatastore.cube_utils.asset_mapper import __asset_mapper_config_path, _asset_mapper_config
+from earthdaily.agriculture.earthdatastore.cube_utils.asset_mapper import (
+    __asset_mapper_config_path,
+    _asset_mapper_config,
+)
 
 if __name__ == "__main__":
     eds = EarthDataStore()

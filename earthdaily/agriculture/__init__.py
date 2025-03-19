@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from earthdaily.core import options
+from earthdaily.agriculture.core import options
 
 from . import datasets, earthdatastore  # noqa: F401
 from .accessor import (  # noqa: F401

@@ -92,7 +92,7 @@ class SpatialIndexer:
     @staticmethod
     def rasterize_geometries(
         gdf: gpd.GeoDataFrame, dataset: xr.Dataset, all_touched: bool = False
-    ) -> Tuple[np.ndarray, List[np.ndarray]]:
+    ) -> Tuple[np.ndarray, List[Tuple[np.ndarray, ...]]]:
         """Rasterize geometries to match dataset resolution.
 
         Args:

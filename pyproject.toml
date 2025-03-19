@@ -69,3 +69,35 @@ ignore = []
 [tool.pytest.ini_options]
 addopts = "--cov=earthdaily --cov-report=term-missing"
 testpaths = ["tests"]
+
+[tool.mypy]
+ignore_missing_imports = false
+
+[[tool.mypy.overrides]]
+module = [
+    "setuptools.*",
+    "geopandas.*",
+    "pandas.*",
+    "xarray.*",
+    "scipy.*",
+    "shapely.*",
+    "rioxarray.*",
+    "odc.*",
+    "stackstac.*",
+    "dask.*",
+    "dask_image.*",
+    "numba.*",
+    "rich.*",
+    "xvec.*",
+    "spyndex.*",
+    "joblib.*",
+    "matplotlib.*",
+    "toml.*",
+    "psutil.*",
+    "pytz.*",
+    "rasterio.*",
+    "pystac.*",
+    "numpy.*",
+    "click.*"
+]
+ignore_missing_imports = true
