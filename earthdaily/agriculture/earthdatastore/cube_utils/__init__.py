@@ -3,7 +3,7 @@ import logging
 import warnings
 from collections import defaultdict
 from functools import wraps
-from typing import Callable
+from typing import Any, Callable
 
 import geopandas as gpd
 import numpy as np
@@ -274,13 +274,13 @@ def datacube(
     items_collection=None,
     bbox=None,
     intersects=None,
-    assets: list | dict = None,
+    assets: list | dict | None = None,
     engine="odc",
     rescale=True,
     groupby_date="mean",
     common_band_names=True,
     cross_calibration_items: list | None = None,
-    properties: (bool | str | list) = False,
+    properties: bool | str | list = False,
     **kwargs,
 ):
     _disable_known_datacube_warning()
@@ -289,11 +289,9 @@ def datacube(
         np.datetime64(d.datetime.strftime("%Y-%m-%d %X.%f")).astype("datetime64[ns]")
         for d in items_collection
         if "datetime" in d.__dict__
-    ]
+    ] or None
 
-    if len(times) == 0:
-        times = None
-    engines = {"odc": _cube_odc, "stackstac": _cube_stackstac}
+    engines: dict[str, Callable[..., Any]] = {"odc": _cube_odc, "stackstac": _cube_stackstac}
     if engine not in engines:
         raise NotImplementedError(
             f"Engine '{engine}' not supported. Only {' and '.join(list(engines.keys()))} are currently supported."
@@ -324,7 +322,7 @@ def datacube(
     nodatas = {}
     for ds_asset in ds.data_vars:
         for item in items_collection:
-            empty_dict_list = []
+            empty_dict_list: list = []
             band_idx = 1
             asset = ds_asset
             if len(parts := ds_asset.split(".")) == 2:
@@ -344,7 +342,7 @@ def datacube(
     # apply nodata
     ds = _apply_nodata(ds, nodatas)
     if rescale:
-        ds = rescale_assets_with_items(items_collection, ds, assets=assets)
+        ds = rescale_assets_with_items(items_collection, ds, assets=assets)  # type: ignore[arg-type]
 
     # drop na dates
     ds = ds.isel(dict(time=np.where(~np.isnan(ds.time))[0]))
@@ -419,7 +417,7 @@ def rescale_assets_with_items(
     logging.info("Rescaling dataset")
 
     # Deduplicate items by datetime
-    unique_items = {}
+    unique_items: dict = {}
     for item in items_collection:
         unique_items.setdefault(item.datetime, item)
 
@@ -499,7 +497,7 @@ def rescale_assets_with_items(
             scaled_assets.append(xr.concat(asset_scaled, dim="time"))
 
         # Merge scaled assets
-        ds_scaled = xr.merge(scaled_assets).sortby("time")
+        ds_scaled = xr.merge(scaled_assets, join="override", compat="override").sortby("time")
 
         # Preserve unscaled variables
         missing_vars = [var for var in ds.data_vars if var not in scales]

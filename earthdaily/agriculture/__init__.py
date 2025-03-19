@@ -1,13 +1,17 @@
 from pathlib import Path
 from typing import Optional
 
-from earthdaily.agriculture import datasets  # noqa: F401
 from earthdaily.agriculture.core import options
-from earthdaily.agriculture.earthdatastore import Auth
 
-from .accessor import __EarthDailyAccessorDataArray, __EarthDailyAccessorDataset  # noqa: F401
+from . import datasets, earthdatastore  # noqa: F401
+from .accessor import (  # noqa: F401
+    __EarthDailyAccessorDataArray,
+    __EarthDailyAccessorDataset,
+)
 
 __all__ = ["options"]
+
+__version__ = "0.5.5"
 
 
 def EarthDataStore(
@@ -16,7 +20,7 @@ def EarthDataStore(
     profile: Optional[str] = None,
     presign_urls: bool = True,
     asset_proxy_enabled: bool = False,
-) -> Auth:
+) -> earthdatastore.Auth:
     """
     Open earth data store connection to allow for datacube requests.
     Try to read Earth Data Store credentials from multiple sources, in the following order:
@@ -44,10 +48,11 @@ def EarthDataStore(
     Auth
         A :class:`earthdatastore.Auth` instance
     """
-    return Auth.from_credentials(
+    return earthdatastore.Auth.from_credentials(
         json_path=json_path,
         toml_path=toml_path,
         profile=profile,
+        client_version=__version__,
         presign_urls=presign_urls,
         asset_proxy_enabled=asset_proxy_enabled,
     )

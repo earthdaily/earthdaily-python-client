@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import ANY, MagicMock, patch
 
 from earthdaily.agriculture import EarthDataStore
 from earthdaily.agriculture.earthdatastore import Auth
@@ -20,6 +20,7 @@ class TestEarthDataStore(unittest.TestCase):
             json_path=None,
             toml_path=None,
             profile=None,
+            client_version=ANY,
             presign_urls=True,
             asset_proxy_enabled=True,
         )

@@ -1,3 +1,6 @@
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -84,7 +87,7 @@ def _extract_item_metadata(item: Dict, method="proj:transform") -> Tuple[datetim
     dt = _parse_datetime(item["properties"]["datetime"])
     any_asset = item.get("assets", {}) != {}
     if any_asset and method == "proj:transform":
-        _first_item = list(item["assets"].keys())[0]
+        _first_item = list(sorted(item["assets"].keys()))[0]
         footprint = tuple(item["assets"][_first_item].get("proj:transform", item["bbox"]))
     else:
         footprint = tuple(round(bbox, 6) for bbox in item["bbox"])
@@ -147,7 +150,7 @@ def _select_latest_items(items: List[Dict]) -> List[Dict]:
 
 def filter_duplicate_items(
     items: ItemCollection,
-    time_threshold: timedelta = timedelta(minutes=5),
+    time_threshold: timedelta = timedelta(minutes=60),
     method="proj:transform",
 ) -> ItemCollection:
     """

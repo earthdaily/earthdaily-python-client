@@ -50,11 +50,11 @@ class OptionDef:
         if self.validator is not None:
             if not self.validator(value):
                 raise ValueError(
-                    f"Invalid value: {value}. " f"Must satisfy validator: {self.validator.__doc__ or 'no description'}"
+                    f"Invalid value: {value}. Must satisfy validator: {self.validator.__doc__ or 'no description'}"
                 )
         if self.valid_values is not None:
             if value not in self.valid_values:
-                raise ValueError(f"Invalid value: {value}. " f"Must be one of: {self.valid_values}")
+                raise ValueError(f"Invalid value: {value}. Must be one of: {self.valid_values}")
         return True
 
 

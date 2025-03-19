@@ -7,12 +7,16 @@ Created on Fri Dec 15 09:03:08 2023
 
 import json
 
-import earthdaily
+from earthdaily.agriculture import EarthDataStore
+from earthdaily.agriculture.earthdatastore.cube_utils.asset_mapper import (
+    __asset_mapper_config_path,
+    _asset_mapper_config,
+)
 
 if __name__ == "__main__":
-    eds = earthdaily.EarthDataStore()
-    asset_mapper_path = earthdaily.agriculture.earthdatastore.cube_utils.asset_mapper.__asset_mapper_config_path
-    asset_mapper_config = earthdaily.agriculture.earthdatastore.cube_utils.asset_mapper._asset_mapper_config
+    eds = EarthDataStore()
+    asset_mapper_path = __asset_mapper_config_path
+    asset_mapper_config = _asset_mapper_config
 
     for collection in eds.explore():
         try:

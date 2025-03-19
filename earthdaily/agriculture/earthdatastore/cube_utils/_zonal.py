@@ -53,7 +53,7 @@ class MemoryManager:
         time_chunks = int(dataset.time.size / np.arange(0, dataset.time.size, max_chunks).size)
 
         logger.info(
-            f"Estimated memory per date: {bytes_per_date:.2f}MB. Total: {(bytes_per_date*dataset.time.size):.2f}MB"
+            f"Estimated memory per date: {bytes_per_date:.2f}MB. Total: {(bytes_per_date * dataset.time.size):.2f}MB"
         )
         logger.info(f"Time chunks: {time_chunks} (total time steps: {dataset.time.size})")
 
@@ -92,7 +92,7 @@ class SpatialIndexer:
     @staticmethod
     def rasterize_geometries(
         gdf: gpd.GeoDataFrame, dataset: xr.Dataset, all_touched: bool = False
-    ) -> Tuple[np.ndarray, List[np.ndarray]]:
+    ) -> Tuple[np.ndarray, List[Tuple[np.ndarray, ...]]]:
         """Rasterize geometries to match dataset resolution.
 
         Args:
@@ -348,11 +348,11 @@ def _process_time_chunks(
         if not lazy_load:
             load_start = time.time()
             ds_chunk = ds_chunk.load()
-            logger.debug(f"Loaded {ds_chunk.time.size} dates in " f"{(time.time()-load_start):.2f}s")
+            logger.debug(f"Loaded {ds_chunk.time.size} dates in {(time.time() - load_start):.2f}s")
 
         compute_start = time.time()
         chunk_stats = StatisticalOperations.zonal_stats(ds_chunk, positions, reducers)
-        logger.debug(f"Computed chunk statistics in {(time.time()-compute_start):.2f}s")
+        logger.debug(f"Computed chunk statistics in {(time.time() - compute_start):.2f}s")
 
         chunks.append(chunk_stats)
 
@@ -383,10 +383,12 @@ def _compute_xvec_stats(
     Raises:
         ImportError: If xvec package is not installed
     """
-    try:
+    from importlib.util import find_spec
+
+    if find_spec("xvec"):
         import xvec  # noqa: F401
-    except ImportError:
-        raise ImportError("The xvec method requires the xvec package. " "Please install it with: pip install xvec")
+    else:
+        ImportError("The xvec method requires the xvec package. Please install it with: pip install xvec")
 
     # Compute statistics using xvec
     stats = dataset.xvec.zonal_stats(
@@ -452,7 +454,7 @@ def _format_numpy_output(
     return stats
 
 
-def _preserve_geometry_columns(stats: xr.Dataset, geometries: gpd.GeoDataFrame) -> None:
+def _preserve_geometry_columns(stats: xr.Dataset, geometries: gpd.GeoDataFrame) -> xr.Dataset:
     """Preserve geometry columns in output statistics."""
     cols = [col for col in geometries.columns if col != geometries._geometry_column_name]
     values = geometries.loc[stats.index.values][cols].values.T
