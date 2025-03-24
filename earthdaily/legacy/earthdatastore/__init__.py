@@ -1,4 +1,3 @@
-# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
 import logging
 import operator
 from typing import Any, Optional
@@ -82,7 +81,7 @@ def validate_property_condition(item: Any, property_name: str, conditions: dict[
     )
 
 
-def filter_items(items: list[Any], query: dict[str, dict[str, Any]]) -> list[Any]:
+def filter_items(items: ItemCollection | list[Any], query: dict[str, dict[str, Any]]) -> list[Any]:
     """
     Filter items based on a complex query dictionary.
 
@@ -248,7 +247,8 @@ def enhance_assets(
                         item.collection_id if item.collection_id else "", [{}]
                     )
                     for scales_collection in scale_factor_collection:
-                        if asset in scales_collection.get("assets", []):
+                        assets_list = scales_collection.get("assets", [])
+                        if isinstance(assets_list, list) and asset in assets_list:
                             if "raster:bands" not in items[idx].assets[asset].extra_fields:
                                 items[idx].assets[asset].extra_fields["raster:bands"] = [{}]
                             if not items[idx].assets[asset].extra_fields["raster:bands"][0].get("scale"):
@@ -362,7 +362,7 @@ class Auth:
         self.__presign_urls = presign_urls
         self.__asset_proxy_enabled = asset_proxy_enabled
         self._first_items_: dict = {}
-        self._staccollectionexplorer = {}
+        self._staccollectionexplorer: dict = {}
         self.client = self._get_client()
 
     def _get_client(self):
@@ -692,7 +692,7 @@ class Auth:
                     intersects=intersects,
                     bbox=bbox,
                     groupby_date=None,
-                    assets=mask_asset_mapping[mask_with],
+                    assets=mask_asset_mapping[mask_with] if isinstance(mask_with, str) else None,
                     **kwargs,
                 )
                 ds["time"] = ds.time.astype("M8[ns]")
