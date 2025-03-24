@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0b1] - 2025-02-19
 
 ### Added
-- New Modular Architecture: Introduced a structured repository layout to support multiple services (platform, ordering, agriculture, etc.).
+- New Modular Architecture: Introduced a structured repository layout to support multiple services (platform, ordering, legacy, etc.).
 - Versioning & Tagging: Adopted PEP 440 standards for beta releases.
 - New Client API: Introduced `EDSClient` and `EDSConfig` for managing configurations and requests within `v1`.
 - Deployment Workflow: Set up deployment automation to push pre-releases to PyPi.

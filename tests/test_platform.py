@@ -26,7 +26,7 @@ class TestPlatformService(unittest.TestCase):
         config = EDSConfig(
             client_id="client_id",
             client_secret="client_secret",
-            token_url="https://token_url",  # Fake URL but will be mocked
+            token_url="https://token_url",
             base_url="https://example.com",
             pre_sign_urls=True,
         )

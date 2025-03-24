@@ -5,7 +5,7 @@ import numpy as np
 import xarray as xr
 from shapely.geometry import Polygon
 
-from earthdaily.agriculture.earthdatastore.cube_utils import zonal_stats
+from earthdaily.legacy.earthdatastore.cube_utils import zonal_stats
 
 
 class TestZonalStats(unittest.TestCase):

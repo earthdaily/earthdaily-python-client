@@ -1,6 +1,6 @@
 import unittest
 
-from earthdaily.agriculture.earthdatastore.cube_utils.asset_mapper import AssetMapper
+from earthdaily.legacy.earthdatastore.cube_utils.asset_mapper import AssetMapper
 
 
 class TestAssetMapper(unittest.TestCase):

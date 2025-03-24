@@ -7,8 +7,8 @@ Created on Fri Dec 15 09:03:08 2023
 
 import json
 
-from earthdaily.agriculture import EarthDataStore
-from earthdaily.agriculture.earthdatastore.cube_utils.asset_mapper import (
+from earthdaily.legacy import EarthDataStore
+from earthdaily.legacy.earthdatastore.cube_utils.asset_mapper import (
     __asset_mapper_config_path,
     _asset_mapper_config,
 )

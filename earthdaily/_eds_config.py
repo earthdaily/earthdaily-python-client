@@ -1,5 +1,10 @@
+import json
 import os
+from configparser import ConfigParser
 from dataclasses import dataclass, field
+from pathlib import Path
+
+import toml
 
 
 @dataclass
@@ -35,6 +40,12 @@ class EDSConfig:
         If not provided, it defaults to `EDS_AUTH_URL` from environment variables.
     base_url: str, optional
         The base URL for the Earth Data Store API. Defaults to "https://api.earthdaily.com".
+    json_path: str, optional
+        The path to a JSON file containing configuration settings.
+    toml_path: str, optional
+        The path to a TOML file containing configuration settings.
+    ini_path: str, optional
+        The path to an INI file containing configuration settings.
     pre_sign_urls: bool, optional
         A flag indicating whether to use pre-signed URLs for asset access. Defaults to True.
 
@@ -45,16 +56,32 @@ class EDSConfig:
         or environment variables.
     """
 
-    client_id: str = field(default_factory=lambda: os.getenv("EDS_CLIENT_ID", ""))
-    client_secret: str = field(default_factory=lambda: os.getenv("EDS_SECRET", ""))
-    token_url: str = field(default_factory=lambda: os.getenv("EDS_AUTH_URL", ""))
-    base_url: str = field(default_factory=lambda: os.getenv("EDS_API_URL", "https://api.earthdaily.com"))
+    client_id: str = ""
+    client_secret: str = ""
+    token_url: str = ""
+    base_url: str = ""
+    json_path: str = field(default_factory=lambda: os.getenv("EDS_JSON_PATH", ""))
+    toml_path: str = field(default_factory=lambda: os.getenv("EDS_TOML_PATH", ""))
+    ini_path: str = field(default_factory=lambda: os.getenv("EDS_INI_PATH", ""))
+    ini_profile: str = field(default_factory=lambda: os.getenv("EDS_INI_PROFILE", "default"))
 
     # Platform specific configurations
     pre_sign_urls: bool = True
 
     def __post_init__(self):
         """Validate that required fields are provided and raise errors if not."""
+        if self.json_path:
+            config = self.load_config_from_file(self.json_path)
+        elif self.toml_path:
+            config = self.load_config_from_file(self.toml_path)
+        elif self.ini_path:
+            config = self.load_config_from_file(self.ini_path)
+        else:
+            config = dict(os.environ)
+        self.client_id = self.client_id or config.get("EDS_CLIENT_ID")
+        self.client_secret = self.client_secret or config.get("EDS_SECRET")
+        self.token_url = self.token_url or config.get("EDS_AUTH_URL")
+        self.base_url = self.base_url or config.get("EDS_API_URL", "https://api.earthdaily.com")
         missing_fields = []
 
         if not self.client_id:
@@ -66,3 +93,65 @@ class EDSConfig:
 
         if missing_fields:
             raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")
+    
+    def load_config_from_file(self, file_path: str) -> dict:
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"Configuration file '{file_path}' does not exist.")
+        
+        _, ext = os.path.splitext(file_path)
+        ext = ext.lower()
+        
+        with open(file_path, 'r') as f:
+            if ext == ".json":
+                return json.load(f)
+            elif ext == ".toml":
+                return toml.load(f)
+            elif ext == ".ini":
+                return self.read_credentials_from_ini(file_path, self.ini_profile)
+            else:
+                raise ValueError(f"Unsupported config file type: '{ext}'. Use .json or .toml")
+    
+    @staticmethod
+    def read_credentials_from_ini(ini_path: str, profile: str = "default") -> dict[str, str]:
+        """
+        Read credentials from an INI file.
+
+        Parameters
+        ----------
+        ini_path : str
+            The path to the INI file containing credentials.
+        profile : str, optional
+            The profile section name to read from. Defaults to 'default'.
+
+        Returns
+        -------
+        dict
+            Dictionary containing credentials with upper-cased keys.
+
+        Raises
+        ------
+        FileNotFoundError
+            If the INI file does not exist.
+        ValueError
+            If the specified profile is not found in the INI file.
+        """
+        ini_file = Path(ini_path).expanduser().resolve()
+
+        if not ini_file.exists():
+            raise FileNotFoundError(f"INI config file not found at: {ini_file}")
+
+        config_parser = ConfigParser()
+        config_parser.read(ini_file)
+
+        if profile not in config_parser:
+            available = ', '.join(config_parser.sections()) or "no profiles"
+            raise ValueError(f"Profile '{profile}' not found in INI file. Available profiles: {available}")
+
+        credentials = {
+            key.upper(): value
+            for key, value in config_parser[profile].items()
+        }
+
+        return credentials
+    
+

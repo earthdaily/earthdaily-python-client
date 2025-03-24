@@ -1,7 +1,7 @@
 from earthdaily._api_requester import APIRequester
 from earthdaily._auth_client import Authentication
 from earthdaily._eds_config import EDSConfig
-from earthdaily.agriculture import EarthDataStore
+from earthdaily.legacy import EarthDataStore
 from earthdaily.platform import PlatformService
 
 
@@ -66,15 +66,15 @@ class EDSClient:
         return self._platform_service
 
     @property
-    def agriculture(self):
+    def legacy(self):
         """
-        TBD
+        Lazily initializes and returns the LegacyService for interacting with v0.5.x earthdaily-python-client methods.
 
         Returns:
         -------
-        AgricultureService:
-            TBD
+        LegacyService:
+            The service that interacts with legacy API operations.
         """
-        if not hasattr(self, "_agriculture_service"):
-            self._agriculture_service = EarthDataStore()
-        return self._agriculture_service
+        if not hasattr(self, "_legacy_service"):
+            self._legacy_service = EarthDataStore(self.api_requester)
+        return self._legacy_service

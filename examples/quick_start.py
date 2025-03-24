@@ -6,7 +6,7 @@ This example demonstrates how to use the EarthDaily Python client
 to fetch and process STAC items.
 
 - Initializes an EDS client.
-- Queries the agriculture API.
+- Queries the legacy API.
 - Searches the platform for STAC items.
 - Handles API errors gracefully.
 
