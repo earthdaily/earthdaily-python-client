@@ -1,6 +1,6 @@
 [project]
 name = "earthdaily"
-version = "1.0.0b5"
+version = "1.0.0b6"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
@@ -11,12 +11,7 @@ requires-python = ">=3.10,<4.0"
 
 dependencies = [
     "requests>=2.32.3",
-    "tqdm>=4.66.5"
-]
-
-[project.optional-dependencies]
-platform = ["pystac-client>=0.8.6"]
-agriculture = [
+    "tqdm>=4.66.5",
     "joblib>=1.4.2",
     "numpy>=2.2.2",
     "pystac>=1.12.1",
@@ -37,6 +32,10 @@ agriculture = [
     "dask-image>=2024.5.3",
     "flox (>=0.10.0,<0.11.0)"
 ]
+
+[project.optional-dependencies]
+platform = []
+legacy = []
 
 [tool.poetry.group.tests.dependencies]
 ruff = "^0.11.0"

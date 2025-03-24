@@ -5,7 +5,7 @@ import numpy as np
 import xarray as xr
 from pystac import Item
 
-from earthdaily.agriculture.earthdatastore.cube_utils.harmonizer import Harmonizer
+from earthdaily.legacy.earthdatastore.cube_utils.harmonizer import Harmonizer
 
 
 class TestHarmonizer(unittest.TestCase):

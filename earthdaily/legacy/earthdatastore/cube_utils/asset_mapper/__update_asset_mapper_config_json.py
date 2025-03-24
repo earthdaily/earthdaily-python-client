@@ -7,20 +7,20 @@ Created on Fri Dec 15 09:03:08 2023
 
 import json
 
-from earthdaily.agriculture import EarthDataStore
-from earthdaily.agriculture.earthdatastore.cube_utils.asset_mapper import (
+from earthdaily import EDSClient, EDSConfig
+from earthdaily.legacy.earthdatastore.cube_utils.asset_mapper import (
     __asset_mapper_config_path,
     _asset_mapper_config,
 )
 
 if __name__ == "__main__":
-    eds = EarthDataStore()
+    eds = EDSClient(EDSConfig())
     asset_mapper_path = __asset_mapper_config_path
     asset_mapper_config = _asset_mapper_config
 
-    for collection in eds.explore():
+    for collection in eds.legacy.explore():
         try:
-            assets_name = list(eds.explore(collection).item.assets.keys())
+            assets_name = list(eds.legacy.explore(collection).item.assets.keys())
         except AttributeError:
             print(f"collection {collection} has no items")
             continue

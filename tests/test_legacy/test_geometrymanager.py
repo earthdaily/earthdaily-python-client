@@ -4,10 +4,10 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from pystac import ItemCollection  # Import ItemCollection for proper mocking
+from pystac import ItemCollection
 
-from earthdaily.agriculture import EarthDataStore
-from earthdaily.agriculture.earthdatastore.cube_utils import geometry_manager
+from earthdaily import EDSClient, EDSConfig
+from earthdaily.legacy.earthdatastore.cube_utils import geometry_manager
 
 
 class TestGeometryManager(unittest.TestCase):
@@ -21,14 +21,14 @@ class TestGeometryManager(unittest.TestCase):
         os.environ.update(self.original_env)
         os.environ["EDS_CLIENT_ID"] = "env_client_id"
         os.environ["EDS_SECRET"] = "env_client_secret"
-        os.environ["EDS_AUTH_URL"] = "env_token_url"
+        os.environ["EDS_AUTH_URL"] = "https://env_token_url.com"
         os.environ["EDS_API_URL"] = "https://EDS_API_URL.com"
 
-        self.patcher_requests_post = patch("requests.post")
+        self.patcher_requests_post = patch("earthdaily._auth_client.requests.Session.post")
         self.mock_post = self.patcher_requests_post.start()
 
         self.mock_post_response = MagicMock()
-        self.mock_post_response.json.return_value = {"access_token": "mocked_token"}
+        self.mock_post_response.json.return_value = {"access_token": "mock_token", "expires_in": 3600}
         self.mock_post_response.raise_for_status = MagicMock()
         self.mock_post.return_value = self.mock_post_response
 
@@ -126,10 +126,10 @@ class TestGeometryManager(unittest.TestCase):
         }
 
         gM = geometry_manager.GeometryManager(geom)
-        eds = EarthDataStore()
+        eds = EDSClient(EDSConfig())
 
         # Call datacube, which internally calls search().item_collection()
-        items = eds.datacube(
+        items = eds.legacy.datacube(
             "sentinel-2-l2a", assets=["blue", "green", "red"], datetime="2022-08", intersects=gM.to_geopandas()
         )
         self.mock_client_instance.search.assert_called_once()

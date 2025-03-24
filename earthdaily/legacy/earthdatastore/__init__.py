@@ -1,26 +1,17 @@
-# mypy: ignore-errors
-# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
-import json
 import logging
 import operator
-import os
-import platform
-import time
-import warnings
-from dataclasses import dataclass
-from pathlib import Path
 from typing import Any, Optional
 
 import geopandas as gpd
 import numpy as np
-import requests
-import toml
 import xarray as xr
 from odc import stac
 from pystac.item_collection import ItemCollection
 from pystac_client import Client
 from pystac_client.stac_api_io import StacApiIO
 from urllib3 import Retry
+
+from earthdaily._api_requester import APIRequester
 
 from . import _scales_collections, cube_utils, mask
 from .cube_utils import _datacubes, asset_mapper, datacube, metacube
@@ -29,15 +20,6 @@ from .parallel_search import NoItemsFoundError, parallel_search
 __all__ = ["datacube", "metacube", "xr", "stac"]
 
 logging.getLogger("earthdaily-earthdatastore")
-
-
-@dataclass
-class EarthDataStoreConfig:
-    auth_url: Optional[str] = None
-    client_secret: Optional[str] = None
-    client_id: Optional[str] = None
-    eds_url: str = "https://api.earthdaily.com/platform/v1/stac"
-    access_token: Optional[str] = None
 
 
 def apply_single_condition(item_value, condition_op: str, condition_value: Any | list[Any]) -> bool:
@@ -99,7 +81,7 @@ def validate_property_condition(item: Any, property_name: str, conditions: dict[
     )
 
 
-def filter_items(items: list[Any], query: dict[str, dict[str, Any]]) -> list[Any]:
+def filter_items(items: ItemCollection | list[Any], query: dict[str, dict[str, Any]]) -> list[Any]:
     """
     Filter items based on a complex query dictionary.
 
@@ -265,7 +247,8 @@ def enhance_assets(
                         item.collection_id if item.collection_id else "", [{}]
                     )
                     for scales_collection in scale_factor_collection:
-                        if asset in scales_collection.get("assets", []):
+                        assets_list = scales_collection.get("assets", [])
+                        if isinstance(assets_list, list) and asset in assets_list:
                             if "raster:bands" not in items[idx].assets[asset].extra_fields:
                                 items[idx].assets[asset].extra_fields["raster:bands"] = [{}]
                             if not items[idx].assets[asset].extra_fields["raster:bands"][0].get("scale"):
@@ -342,10 +325,9 @@ class StacCollectionExplorer:
 class Auth:
     def __init__(
         self,
-        config: str | dict = None,
+        api_requester: APIRequester,
         presign_urls=True,
         asset_proxy_enabled=False,
-        client_version: str = "0.0.0",
     ):
         """
         A client for interacting with the Earth Data Store API.
@@ -359,9 +341,6 @@ class Auth:
             or a dict with those credentials.
         asset_proxy_enabled : bool, optional
             Use asset proxy URLs, by default False
-        client_version : str, optional
-            The version of the client.
-            Uses the current version by default.
 
         Returns
         -------
@@ -378,321 +357,16 @@ class Auth:
         >>> print(len(items))
         132
         """
-        if not isinstance(config, dict):
-            warnings.warn(
-                "Using directly the Auth class to load credentials is deprecated. "
-                "Please use earthdaily.EarthDataStore() instead",
-                FutureWarning,
-            )
 
-        self._client_version = client_version
-        self._client = None
-        self.__auth_config = config
+        self.api_requester = api_requester
         self.__presign_urls = presign_urls
         self.__asset_proxy_enabled = asset_proxy_enabled
         self._first_items_: dict = {}
-        self._staccollectionexplorer = {}
-        self.__time_eds_log = time.time()
-        self._client = self.client
+        self._staccollectionexplorer: dict = {}
+        self.client = self._get_client()
 
-    @classmethod
-    def from_credentials(
-        cls,
-        json_path: Optional[Path] = None,
-        toml_path: Optional[Path] = None,
-        profile: Optional[str] = None,
-        client_version: str = "0.0.0",
-        presign_urls: bool = True,
-        asset_proxy_enabled: bool = False,
-    ) -> "Auth":
-        """
-        Secondary Constructor.
-        Try to read Earth Data Store credentials from multiple sources, in the following order:
-            - from input credentials stored in a given JSON file
-            - from input credentials stored in a given TOML file
-            - from environement variables
-            - from the $HOME/.earthdaily/credentials TOML file and a given profile
-            - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
-
-        Parameters
-        ----------
-        path : Path, optional
-            The path to the TOML file containing the Earth Data Store credentials.
-            Uses "$HOME/.earthdaily/credentials" by default.
-        profile : profile, optional
-            Name of the profile to use in the TOML file.
-            Uses "default" by default.
-        client_version : str, optional
-            The version of the client.
-            Uses the current version by default.
-        asset_proxy_enabled : bool, optional
-            Use asset proxy URLs, by default False
-
-        Returns
-        -------
-        Auth
-            A :class:`Auth` instance
-        """
-        config = cls.read_credentials(
-            json_path=json_path,
-            toml_path=toml_path,
-            profile=profile,
-        )
-
-        for item, value in config.items():
-            if not value:
-                raise ValueError(f"Missing value for {item}")
-
-        return cls(
-            config=config,
-            presign_urls=presign_urls,
-            asset_proxy_enabled=asset_proxy_enabled,
-            client_version=client_version,
-        )
-
-    @classmethod
-    def read_credentials(
-        cls,
-        json_path: Optional[Path] = None,
-        toml_path: Optional[Path] = None,
-        profile: Optional[str] = None,
-    ) -> dict:
-        """
-        Try to read Earth Data Store credentials from multiple sources, in the following order:
-            - from input credentials stored in a given JSON file
-            - from input credentials stored in a given TOML file
-            - from environement variables
-            - from the $HOME/.earthdaily/credentials TOML file and a given profile
-            - from the $HOME/.earthdaily/credentials TOML file and the "default" profile
-
-        Parameters
-        ----------
-        path : Path, optional
-            The path to the TOML file containing the Earth Data Store credentials.
-            Uses "$HOME/.earthdaily/credentials" by default.
-        profile : profile, optional
-            Name of the profile to use in the TOML file.
-            Uses "default" by default.
-
-        Returns
-        -------
-        dict
-            Dictionary containing credentials
-        """
-        try:
-            if json_path is not None:
-                config = cls.read_credentials_from_json(json_path=json_path)
-
-            elif toml_path is not None:
-                config = cls.read_credentials_from_toml(toml_path=toml_path, profile=profile)
-
-            elif os.getenv("EDS_AUTH_URL") and os.getenv("EDS_SECRET") and os.getenv("EDS_CLIENT_ID"):
-                config = cls.read_credentials_from_environment()
-
-            else:
-                config = cls.read_credentials_from_ini(profile=profile)
-        except Exception:
-            raise NotImplementedError("Credentials weren't found.")
-        return config
-
-    @classmethod
-    def read_credentials_from_ini(cls, profile: str = "default") -> dict:
-        """
-        Read Earth Data Store credentials from a ini file.
-
-        Parameters
-        ----------
-        ini_path : Path
-            The path to the INI file containing the Earth Data Store credentials.
-        Returns
-        -------
-        dict
-           Dictionary containing credentials
-        """
-
-        from configparser import ConfigParser
-
-        if profile is None:
-            profile = "default"
-        ini_path = Path.home() / ".earthdaily/credentials"
-        ini_config = ConfigParser()
-        ini_config.read(ini_path)
-        ini_config = ini_config[profile]
-        config = {key.upper(): value for key, value in ini_config.items()}
-        return config
-
-    @classmethod
-    def read_credentials_from_json(cls, json_path: Path) -> dict:
-        """
-        Read Earth Data Store credentials from a JSON file.
-
-        Parameters
-        ----------
-        json_path : Path
-            The path to the JSON file containing the Earth Data Store credentials.
-        Returns
-        -------
-        dict
-           Dictionary containing credentials
-        """
-        if isinstance(json_path, dict):
-            return json_path
-        with json_path.open() as file_object:
-            config = json.load(file_object)
-        return config
-
-    @classmethod
-    def read_credentials_from_environment(cls) -> dict:
-        """
-        Read Earth Data Store credentials from environment variables.
-
-        Returns
-        -------
-        dict
-            Dictionary containing credentials
-        """
-        config = {
-            "EDS_AUTH_URL": os.getenv("EDS_AUTH_URL"),
-            "EDS_SECRET": os.getenv("EDS_SECRET"),
-            "EDS_CLIENT_ID": os.getenv("EDS_CLIENT_ID"),
-        }
-
-        # Optional
-        if "EDS_API_URL" in os.environ:
-            config["EDS_API_URL"] = os.getenv("EDS_API_URL")
-
-        return config
-
-    @classmethod
-    def read_credentials_from_toml(cls, toml_path: Optional[Path] = None, profile: Optional[str] = None) -> dict:
-        """
-        Read Earth Data Store credentials from a TOML file
-
-        Parameters
-        ----------
-        toml_path : Path, optional
-            The path to the TOML file containing the Earth Data Store credentials.
-        profile : profile, optional
-            Name of the profile to use in the TOML file
-
-        Returns
-        -------
-        dict
-            Dictionary containing credentials
-        """
-        if toml_path is None or not toml_path.exists():
-            raise FileNotFoundError(f"Credentials file {toml_path} not found. Make sure the path is valid")
-
-        with toml_path.open() as f:
-            config = toml.load(f)
-
-        if profile not in config:
-            raise ValueError(f"Credentials profile {profile} not found in {toml_path}")
-
-        config = config[profile]
-
-        return config
-
-    def get_access_token(self, config: Optional[EarthDataStoreConfig] = None):
-        """
-        Retrieve an access token for interacting with the EarthDataStore API.
-
-        By default, the method will look for environment variables:
-        EDS_AUTH_URL, EDS_SECRET, and EDS_CLIENT_ID. Alternatively, a configuration
-        object or dictionary can be passed to override these values.
-
-        Parameters
-        ----------
-        config : EarthDataStoreConfig, optional
-            A configuration object containing the Earth Data Store credentials.
-
-        Returns
-        -------
-        str
-            The access token for authenticating with the Earth Data Store API.
-        """
-        if not config:
-            config = self._config_parser(self.__auth_config)
-        if not config.auth_url or not config.client_id or not config.client_secret:
-            raise ValueError("Authentication credentials (auth_url, client_id, client_secret) must not be None")
-        response = requests.post(
-            config.auth_url,
-            data={"grant_type": "client_credentials"},
-            allow_redirects=False,
-            auth=(config.client_id, config.client_secret),
-        )
-        response.raise_for_status()
-        return response.json()["access_token"]
-
-    def _config_parser(self, config=None) -> EarthDataStoreConfig:
-        """
-        Parse and construct the EarthDataStoreConfig object from various input formats.
-
-        The method supports configuration as a dictionary, JSON file path, tuple,
-        or environment variables.
-
-        Parameters
-        ----------
-        config : dict or str or tuple, optional
-            Configuration source. It can be:
-            - A dictionary containing the required API credentials.
-            - A string path to a JSON file containing these credentials.
-            - A tuple of (access_token, eds_url).
-            - None, in which case environment variables will be used.
-
-        Returns
-        -------
-        EarthDataStoreConfig
-            A configuration object containing the required API credentials.
-
-        Raises
-        ------
-        AttributeError
-            If required credentials are missing in the provided input or environment variables.
-        """
-        if isinstance(config, tuple):  # token
-            access_token, eds_url = config
-            if "/platform/v1/stac" not in eds_url:
-                eds_url = f"{eds_url}/platform/v1/stac"
-            logging.log(level=logging.INFO, msg="Using token to reauth")
-            return EarthDataStoreConfig(eds_url=eds_url, access_token=access_token)
-        else:
-            if isinstance(config, dict):
-                config = config.get
-            elif isinstance(config, str) and config.endswith(".json"):
-                config = json.load(open(config, "rb")).get
-
-            if config is None:
-                config = os.getenv
-            auth_url = config("EDS_AUTH_URL")
-            client_secret = config("EDS_SECRET")
-            client_id = config("EDS_CLIENT_ID")
-            eds_url = config("EDS_API_URL", "https://api.earthdaily.com/platform/v1/stac")
-            if "/platform/v1/stac" not in eds_url:
-                eds_url = f"{eds_url}/platform/v1/stac"
-            if auth_url is None or client_secret is None or client_id is None:
-                raise AttributeError("You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID")
-            return EarthDataStoreConfig(
-                auth_url=auth_url,
-                client_secret=client_secret,
-                client_id=client_id,
-                eds_url=eds_url,
-            )
-
-    def _get_client(self, config=None, presign_urls=True, asset_proxy_enabled=False):
+    def _get_client(self):
         """Get client for interacting with the EarthDataStore API.
-
-        By default, Earth Data Store will look for environment variables called
-        EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
-
-        Parameters
-        ----------
-        config : str | dict, optional
-            A JSON string or a dictionary with the credentials for the Earth Data Store.
-        presign_urls : bool, optional
-            Use presigned URLs, by default True
-        asset_proxy_enabled : bool, optional
-            Use asset proxy URLs, by default False
 
         Returns
         -------
@@ -701,42 +375,14 @@ class Auth:
 
         """
 
-        config = self._config_parser(config)
-
-        if config.access_token:
-            access_token = config.access_token
-        else:
-            access_token = self.get_access_token(config)
-
-        headers = {"Authorization": f"bearer {access_token}"}
-        if asset_proxy_enabled:
-            headers["X-Proxy-Asset-Urls"] = "True"
-        elif presign_urls:
-            headers["X-Signed-Asset-Urls"] = "True"
-
-        try:
-            python_version = platform.python_version()
-            system_platform = platform.platform()
-            uname_info = " ".join(platform.uname())
-        except Exception:
-            python_version = "(unknown)"
-            system_platform = "(unknown)"
-            uname_info = "(unknown)"
-
-        user_agent = f"EarthDaily-Python-Client/{self._client_version} (Python/{python_version}; {system_platform})"
-
-        client_metadata = {
-            "client_version": self._client_version,
-            "language": "Python",
-            "publisher": "EarthDaily",
-            "http_library": "requests",
-            "python_version": python_version,
-            "platform": system_platform,
-            "system_info": uname_info,
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            **self.api_requester.headers,
+            "Authorization": f"Bearer {self.api_requester.auth.get_token()}",
+            "X-Signed-Asset-Urls": str(self.__presign_urls),
+            "X-Proxy-Asset-Urls": str(self.__asset_proxy_enabled),
         }
-
-        headers["User-Agent"] = user_agent
-        headers["X-EDA-Client-User-Agent"] = json.dumps(client_metadata)
 
         retry = Retry(
             total=5,
@@ -746,24 +392,7 @@ class Auth:
         )
         stac_api_io = StacApiIO(max_retries=retry)
 
-        return Client.open(config.eds_url, headers=headers, stac_io=stac_api_io)
-
-    @property
-    def client(self) -> Client:
-        """
-        Create an instance of pystac client from EarthDataSTore
-
-        Returns
-        -------
-            A :class:`Client` instance for this Catalog.
-        """
-        if t := (time.time() - self.__time_eds_log) > 3600 or self._client is None:
-            if t:
-                logging.log(level=logging.INFO, msg="Reauth to EarthDataStore")
-            self._client = self._get_client(self.__auth_config, self.__presign_urls, self.__asset_proxy_enabled)
-            self.__time_eds_log = time.time()
-
-        return self._client
+        return Client.open(f"{self.api_requester.base_url}/platform/v1/stac", headers=headers, stac_io=stac_api_io)
 
     def explore(self, collection: Optional[str] = None):
         """
@@ -791,100 +420,8 @@ class Auth:
          'datetime': '2023-06-07T11:23:18.000000Z',
          'description': '',
          'eda:geometry_tags': ['RESOLVED_CLOCKWISE_POLYGON'],
-         'eda:loose_validation_status': 'VALID',
-         'eda:num_cols': 9106,
-         'eda:num_rows': 11001,
-         'eda:original_geometry': {'type': 'Polygon',
-          'coordinates': [[[-16.684545516968, 16.109294891357],
-            [-16.344039916992, 16.111709594727],
-            [-16.341398239136, 15.714001655579],
-            [-16.68123626709, 15.711649894714],
-            [-16.684545516968, 16.109294891357]]]},
-         'eda:product_type': 'REFLECTANCE',
-         'eda:sensor_type': 'OPTICAL',
-         'eda:source_created': '2023-06-13T18:47:27.000000Z',
-         'eda:source_updated': '2023-06-13T20:22:35.000000Z',
-         'eda:status': 'PUBLISHED',
-         'eda:tracking_id': 'MutZbYe54RY7eP3iuAbtKb',
-         'eda:unusable_cover': 0.0,
-         'eda:water_cover': 0.0,
-         'end_datetime': '2023-06-07T11:23:18.000000Z',
-         'eo:bands': [{'name': 'B1',
-           'common_name': 'coastal',
-           'description': 'B1',
-           'center_wavelength': 0.424},
-          {'name': 'B2',
-           'common_name': 'coastal',
-           'description': 'B2',
-           'center_wavelength': 0.447},
-          {'name': 'B3',
-           'common_name': 'blue',
-           'description': 'B3',
-           'center_wavelength': 0.492},
-          {'name': 'B4',
-           'common_name': 'green',
-           'description': 'B4',
-           'center_wavelength': 0.555},
-          {'name': 'B5',
-           'common_name': 'yellow',
-           'description': 'B5',
-           'center_wavelength': 0.62},
-          {'name': 'B6',
-           'common_name': 'yellow',
-           'description': 'B6',
-           'center_wavelength': 0.62},
-          {'name': 'B7',
-           'common_name': 'red',
-           'description': 'B7',
-           'center_wavelength': 0.666},
-          {'name': 'B8',
-           'common_name': 'rededge',
-           'description': 'B8',
-           'center_wavelength': 0.702},
-          {'name': 'B9',
-           'common_name': 'rededge',
-           'description': 'B9',
-           'center_wavelength': 0.741},
-          {'name': 'B10',
-           'common_name': 'rededge',
-           'description': 'B10',
-           'center_wavelength': 0.782},
-          {'name': 'B11',
-           'common_name': 'nir08',
-           'description': 'B11',
-           'center_wavelength': 0.861},
-          {'name': 'B12',
-           'common_name': 'nir09',
-           'description': 'B12',
-           'center_wavelength': 0.909}],
-         'eo:cloud_cover': 0.0,
-         'gsd': 4.0,
-         'instruments': ['VENUS'],
-         'license': 'CC-BY-NC-4.0',
-         'mission': 'venus',
-         'platform': 'VENUS',
-         'processing:level': 'L2A',
-         'proj:epsg': 32628,
-         'providers': [{'name': 'Theia',
-           'roles': ['licensor', 'producer', 'processor']},
-          {'url': 'https://earthdaily.com',
-           'name': 'EarthDaily Analytics',
-           'roles': ['processor', 'host']}],
-         'sat:absolute_orbit': 31453,
-         'start_datetime': '2023-06-07T11:23:18.000000Z',
-         'theia:location': 'STLOUIS',
-         'theia:product_id': 'VENUS-XS_20230607-112318-000_L2A_STLOUIS_C_V3-1',
-         'theia:product_version': '3.1',
-         'theia:publication_date': '2023-06-13T18:08:10.205000Z',
-         'theia:sensor_mode': 'XS',
-         'theia:source_uuid': 'a29bfc89-8372-5e91-841c-b11cdb40bb14',
-         'title': 'VENUS-XS_20230607-112318-000_L2A_STLOUIS_D',
-         'updated': '2023-06-14T00:42:17.898993Z',
-         'view:azimuth': 33.293623499999995,
-         'view:incidence_angle': 14.6423245,
-         'view:sun_azimuth': 69.8849963957,
-         'view:sun_elevation': 65.0159541684}
-
+         ...
+        }
         """
         if collection:
             if collection not in self._staccollectionexplorer.keys():
@@ -1155,7 +692,7 @@ class Auth:
                     intersects=intersects,
                     bbox=bbox,
                     groupby_date=None,
-                    assets=mask_asset_mapping[mask_with],
+                    assets=mask_asset_mapping[mask_with] if isinstance(mask_with, str) else None,
                     **kwargs,
                 )
                 ds["time"] = ds.time.astype("M8[ns]")
@@ -1294,73 +831,14 @@ class Auth:
         >>> print(items[0].id)
         S2A_31TCH_20170126_0_L2A
         >>> print(items[0].assets.keys())
-        dict_keys(['aot', 'nir', 'red', 'scl', 'wvp', 'blue', 'green', 'nir08', 'nir09',
-                   'swir16', 'swir22', 'visual', 'aot-jp2', 'coastal', 'nir-jp2',
-                   'red-jp2', 'scl-jp2', 'wvp-jp2', 'blue-jp2', 'rededge1', 'rededge2',
-                   'rededge3', 'green-jp2', 'nir08-jp2', 'nir09-jp2', 'thumbnail',
-                   'swir16-jp2', 'swir22-jp2', 'visual-jp2', 'coastal-jp2',
-                   'rededge1-jp2', 'rededge2-jp2', 'rededge3-jp2', 'granule_metadata',
-                   'tileinfo_metadata'])
+        dict_keys(['aot', 'nir', 'red', ... , 'tileinfo_metadata'])
         >>> print(items[0].properties)
         {
             "created": "2020-09-01T04:59:33.629000Z",
             "updated": "2022-11-08T13:08:57.661605Z",
             "platform": "sentinel-2a",
             "grid:code": "MGRS-31TCH",
-            "proj:epsg": 32631,
-            "instruments": ["msi"],
-            "s2:sequence": "0",
-            "constellation": "sentinel-2",
-            "mgrs:utm_zone": 31,
-            "s2:granule_id": "S2A_OPER_MSI_L2A_TL_SHIT_20190506T054613_A008342_T31TCH_N00.01",
-            "eo:cloud_cover": 26.518754,
-            "s2:datatake_id": "GS2A_20170126T105321_008342_N00.01",
-            "s2:product_uri": "S2A_MSIL2A_20170126T105321_N0001_R051_T31TCH_20190506T054611.SAFE",
-            "s2:datastrip_id": "S2A_OPER_MSI_L2A_DS_SHIT_20190506T054613_S20170126T105612_N00.01",
-            "s2:product_type": "S2MSI2A",
-            "mgrs:grid_square": "CH",
-            "s2:datatake_type": "INS-NOBS",
-            "view:sun_azimuth": 161.807489888479,
-            "eda:geometry_tags": ["RESOLVED_CLOCKWISE_POLYGON"],
-            "mgrs:latitude_band": "T",
-            "s2:generation_time": "2019-05-06T05:46:11.879Z",
-            "view:sun_elevation": 26.561907592092602,
-            "earthsearch:s3_path": "s3://sentinel-cogs/sentinel-s2-l2a-cogs/31/T/CH/2017/1/S2A_31TCH_20170126_0_L2A",
-            "processing:software": {"sentinel2-to-stac": "0.1.0"},
-            "s2:water_percentage": 0.697285,
-            "eda:original_geometry": {
-                "type": "Polygon",
-                "coordinates": [
-                    [
-                        [0.5332306381710475, 43.32623760511659],
-                        [1.887065663431107, 43.347431265475954],
-                        [1.9046784554725638, 42.35884880571144],
-                        [0.5722310999779479, 42.3383710796791],
-                        [0.5332306381710475, 43.32623760511659],
-                    ]
-                ],
-            },
-            "earthsearch:payload_id": "roda-sentinel2/workflow-sentinel2-to-stac/80f56ba6349cf8e21c1424491f1589c2",
-            "s2:processing_baseline": "00.01",
-            "s2:snow_ice_percentage": 23.041981,
-            "s2:vegetation_percentage": 15.52531,
-            "s2:thin_cirrus_percentage": 0.563798,
-            "s2:cloud_shadow_percentage": 4.039595,
-            "s2:nodata_pixel_percentage": 0.000723,
-            "s2:unclassified_percentage": 9.891956,
-            "s2:dark_features_percentage": 15.112966,
-            "s2:not_vegetated_percentage": 5.172154,
-            "earthsearch:boa_offset_applied": False,
-            "s2:degraded_msi_data_percentage": 0.0,
-            "s2:high_proba_clouds_percentage": 18.044451,
-            "s2:reflectance_conversion_factor": 1.03230935243016,
-            "s2:medium_proba_clouds_percentage": 7.910506,
-            "s2:saturated_defective_pixel_percentage": 0.0,
-            "eda:tracking_id": "eZbRVxsbEGdWLKXDK2i9Ve",
-            "eda:status": "PUBLISHED",
-            "datetime": "2017-01-26T10:56:12.238000Z",
-            "eda:loose_validation_status": "VALID",
-            "eda:ag_cloud_mask_available": False,
+            ...
         }
 
         """

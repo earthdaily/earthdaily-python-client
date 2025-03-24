@@ -14,7 +14,7 @@ from rasterio.enums import Resampling
 from rasterio.errors import NotGeoreferencedWarning
 from shapely.geometry import box
 
-from earthdaily.agriculture.core import options
+from earthdaily.legacy.core import options
 
 from ._zonal import zonal_stats
 from .asset_mapper import AssetMapper

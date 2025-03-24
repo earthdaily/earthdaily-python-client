@@ -7,8 +7,8 @@ from unittest.mock import MagicMock, patch
 import xarray as xr
 from pystac import ItemCollection
 
-from earthdaily.agriculture import EarthDataStore
-from earthdaily.agriculture.datasets import load_pivot, load_pivot_corumba
+from earthdaily import EDSClient, EDSConfig
+from earthdaily.legacy.datasets import load_pivot, load_pivot_corumba
 
 
 class TestEarthDataStore(unittest.TestCase):
@@ -26,11 +26,11 @@ class TestEarthDataStore(unittest.TestCase):
         os.environ["EDS_AUTH_URL"] = "env_token_url"
         os.environ["EDS_API_URL"] = "https://EDS_API_URL.com"
 
-        self.patcher_requests_post = patch("requests.post")
+        self.patcher_requests_post = patch("earthdaily._auth_client.requests.Session.post")
         self.mock_post = self.patcher_requests_post.start()
 
         self.mock_post_response = MagicMock()
-        self.mock_post_response.json.return_value = {"access_token": "mocked_token"}
+        self.mock_post_response.json.return_value = {"access_token": "mock_token", "expires_in": 3600}
         self.mock_post_response.raise_for_status = MagicMock()
         self.mock_post.return_value = self.mock_post_response
         self.patcher_client_open = patch("pystac_client.Client.open")
@@ -62,7 +62,7 @@ class TestEarthDataStore(unittest.TestCase):
 
         self.mock_client_instance.search.side_effect = mock_search
 
-        self.eds = EarthDataStore()
+        self.eds = EDSClient(EDSConfig())
         self.pivot = load_pivot()
         self.pivot_corumba = load_pivot_corumba()
 
@@ -73,7 +73,7 @@ class TestEarthDataStore(unittest.TestCase):
     def test_sentinel1(self):
         """Ensure Sentinel-1 RTC datacube correctly loads mocked data"""
         collection = "sentinel-1-rtc"
-        datacube = self.eds.datacube(
+        datacube = self.eds.legacy.datacube(
             collection,
             assets=["vh", "vv"],
             intersects=self.pivot,
@@ -88,7 +88,7 @@ class TestEarthDataStore(unittest.TestCase):
     def test_sentinel2(self):
         """Ensure Sentinel-2 datacube correctly loads mocked data"""
         collection = "sentinel-2-l2a"
-        datacube = self.eds.datacube(
+        datacube = self.eds.legacy.datacube(
             collection,
             assets=["blue", "green", "red"],
             intersects=self.pivot,
