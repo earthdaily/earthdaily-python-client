@@ -93,15 +93,15 @@ class EDSConfig:
 
         if missing_fields:
             raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")
-    
+
     def load_config_from_file(self, file_path: str) -> dict:
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"Configuration file '{file_path}' does not exist.")
-        
+
         _, ext = os.path.splitext(file_path)
         ext = ext.lower()
-        
-        with open(file_path, 'r') as f:
+
+        with open(file_path, "r") as f:
             if ext == ".json":
                 return json.load(f)
             elif ext == ".toml":
@@ -110,7 +110,7 @@ class EDSConfig:
                 return self.read_credentials_from_ini(file_path, self.ini_profile)
             else:
                 raise ValueError(f"Unsupported config file type: '{ext}'. Use .json or .toml")
-    
+
     @staticmethod
     def read_credentials_from_ini(ini_path: str, profile: str = "default") -> dict[str, str]:
         """
@@ -144,14 +144,9 @@ class EDSConfig:
         config_parser.read(ini_file)
 
         if profile not in config_parser:
-            available = ', '.join(config_parser.sections()) or "no profiles"
+            available = ", ".join(config_parser.sections()) or "no profiles"
             raise ValueError(f"Profile '{profile}' not found in INI file. Available profiles: {available}")
 
-        credentials = {
-            key.upper(): value
-            for key, value in config_parser[profile].items()
-        }
+        credentials = {key.upper(): value for key, value in config_parser[profile].items()}
 
         return credentials
-    
-
