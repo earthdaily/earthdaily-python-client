@@ -54,6 +54,7 @@ sphinx-autodoc-typehints = "^3.0.1"
 sphinx-gallery = "^0.18.0"
 sphinx-copybutton = "^0.5.2"
 sphinx-automodapi = "^0.18.0"
+sphinx-multiversion = "^0.2.4"
 
 [build-system]
 requires = ["poetry-core"]
