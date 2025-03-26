@@ -1,6 +1,6 @@
 [project]
 name = "earthdaily"
-version = "1.0.0b6"
+version = "1.0.0b7"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
