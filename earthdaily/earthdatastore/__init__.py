@@ -1,16 +1,20 @@
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
 import json
 import logging
 import operator
 import os
+import platform
 import time
 import warnings
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import geopandas as gpd
 import numpy as np
 import requests
+import toml
 import xarray as xr
 from odc import stac
 from pystac.item_collection import ItemCollection
@@ -37,7 +41,7 @@ class EarthDataStoreConfig:
 
 
 def apply_single_condition(
-    item_value, condition_op: str, condition_value: [any, list[any]]
+    item_value, condition_op: str, condition_value: Any | list[Any]
 ) -> bool:
     """
     Apply a single comparison condition to an item's property value.
@@ -69,7 +73,7 @@ def apply_single_condition(
 
 
 def validate_property_condition(
-    item: any, property_name: str, conditions: dict[str, any]
+    item: Any, property_name: str, conditions: dict[str, Any]
 ) -> bool:
     """
     Validate if an item meets all conditions for a specific property.
@@ -101,7 +105,7 @@ def validate_property_condition(
     )
 
 
-def filter_items(items: list[any], query: dict[str, dict[str, any]]) -> list[any]:
+def filter_items(items: list[Any], query: dict[str, dict[str, Any]]) -> list[Any]:
     """
     Filter items based on a complex query dictionary.
 
@@ -136,7 +140,7 @@ def filter_items(items: list[any], query: dict[str, dict[str, any]]) -> list[any
 
 
 def post_query_items(
-    items: list[any], query: dict[str, dict[str, any]]
+    items: ItemCollection | list[Any], query: dict[str, dict[str, Any]]
 ) -> ItemCollection:
     """
     Apply a query filter to items fetched from a STAC catalog and return an ItemCollection.
@@ -275,7 +279,7 @@ def enhance_assets(
                 if add_default_scale_factor:
                     scale_factor_collection = (
                         _scales_collections.scale_factor_collections.get(
-                            item.collection_id, [{}]
+                            item.collection_id if item.collection_id else "", [{}]
                         )
                     )
                     for scales_collection in scale_factor_collection:
@@ -365,7 +369,11 @@ class StacCollectionExplorer:
 
 class Auth:
     def __init__(
-        self, config: str | dict = None, presign_urls=True, asset_proxy_enabled=False
+        self,
+        config: str | dict = None,
+        presign_urls=True,
+        asset_proxy_enabled=False,
+        client_version: str = "0.0.0",
     ):
         """
         A client for interacting with the Earth Data Store API.
@@ -379,6 +387,9 @@ class Auth:
             or a dict with those credentials.
         asset_proxy_enabled : bool, optional
             Use asset proxy URLs, by default False
+        client_version : str, optional
+            The version of the client.
+            Uses the current version by default.
 
         Returns
         -------
@@ -402,11 +413,12 @@ class Auth:
                 FutureWarning,
             )
 
+        self._client_version = client_version
         self._client = None
         self.__auth_config = config
         self.__presign_urls = presign_urls
         self.__asset_proxy_enabled = asset_proxy_enabled
-        self._first_items_ = {}
+        self._first_items_: dict = {}
         self._staccollectionexplorer = {}
         self.__time_eds_log = time.time()
         self._client = self.client
@@ -417,6 +429,7 @@ class Auth:
         json_path: Optional[Path] = None,
         toml_path: Optional[Path] = None,
         profile: Optional[str] = None,
+        client_version: str = "0.0.0",
         presign_urls: bool = True,
         asset_proxy_enabled: bool = False,
     ) -> "Auth":
@@ -437,6 +450,9 @@ class Auth:
         profile : profile, optional
             Name of the profile to use in the TOML file.
             Uses "default" by default.
+        client_version : str, optional
+            The version of the client.
+            Uses the current version by default.
         asset_proxy_enabled : bool, optional
             Use asset proxy URLs, by default False
 
@@ -459,6 +475,7 @@ class Auth:
             config=config,
             presign_urls=presign_urls,
             asset_proxy_enabled=asset_proxy_enabled,
+            client_version=client_version,
         )
 
     @classmethod
@@ -467,7 +484,7 @@ class Auth:
         json_path: Optional[Path] = None,
         toml_path: Optional[Path] = None,
         profile: Optional[str] = None,
-    ) -> "Auth":
+    ) -> dict:
         """
         Try to read Earth Data Store credentials from multiple sources, in the following order:
             - from input credentials stored in a given JSON file
@@ -490,24 +507,26 @@ class Auth:
         dict
             Dictionary containing credentials
         """
-        if json_path is not None:
-            config = cls.read_credentials_from_json(json_path=json_path)
+        try:
+            if json_path is not None:
+                config = cls.read_credentials_from_json(json_path=json_path)
 
-        elif toml_path is not None:
-            config = cls.read_credentials_from_toml(
-                toml_path=toml_path, profile=profile
-            )
+            elif toml_path is not None:
+                config = cls.read_credentials_from_toml(
+                    toml_path=toml_path, profile=profile
+                )
 
-        elif (
-            os.getenv("EDS_AUTH_URL")
-            and os.getenv("EDS_SECRET")
-            and os.getenv("EDS_CLIENT_ID")
-        ):
-            config = cls.read_credentials_from_environment()
+            elif (
+                os.getenv("EDS_AUTH_URL")
+                and os.getenv("EDS_SECRET")
+                and os.getenv("EDS_CLIENT_ID")
+            ):
+                config = cls.read_credentials_from_environment()
 
-        else:
-            config = cls.read_credentials_from_ini(profile=profile)
-
+            else:
+                config = cls.read_credentials_from_ini(profile=profile)
+        except Exception:
+            raise NotImplementedError("Credentials weren't found.")
         return config
 
     @classmethod
@@ -580,7 +599,7 @@ class Auth:
 
     @classmethod
     def read_credentials_from_toml(
-        cls, toml_path: Path = None, profile: str = None
+        cls, toml_path: Optional[Path] = None, profile: Optional[str] = None
     ) -> dict:
         """
         Read Earth Data Store credentials from a TOML file
@@ -597,9 +616,7 @@ class Auth:
         dict
             Dictionary containing credentials
         """
-        import toml
-
-        if not toml_path.exists():
+        if toml_path is None or not toml_path.exists():
             raise FileNotFoundError(
                 f"Credentials file {toml_path} not found. Make sure the path is valid"
             )
@@ -634,6 +651,10 @@ class Auth:
         """
         if not config:
             config = self._config_parser(self.__auth_config)
+        if not config.auth_url or not config.client_id or not config.client_secret:
+            raise ValueError(
+                "Authentication credentials (auth_url, client_id, client_secret) must not be None"
+            )
         response = requests.post(
             config.auth_url,
             data={"grant_type": "client_credentials"},
@@ -643,7 +664,7 @@ class Auth:
         response.raise_for_status()
         return response.json()["access_token"]
 
-    def _config_parser(self, config=None):
+    def _config_parser(self, config=None) -> EarthDataStoreConfig:
         """
         Parse and construct the EarthDataStoreConfig object from various input formats.
 
@@ -733,6 +754,30 @@ class Auth:
         elif presign_urls:
             headers["X-Signed-Asset-Urls"] = "True"
 
+        try:
+            python_version = platform.python_version()
+            system_platform = platform.platform()
+            uname_info = " ".join(platform.uname())
+        except Exception:
+            python_version = "(unknown)"
+            system_platform = "(unknown)"
+            uname_info = "(unknown)"
+
+        user_agent = f"EarthDaily-Python-Client/{self._client_version} (Python/{python_version}; {system_platform})"
+
+        client_metadata = {
+            "client_version": self._client_version,
+            "language": "Python",
+            "publisher": "EarthDaily",
+            "http_library": "requests",
+            "python_version": python_version,
+            "platform": system_platform,
+            "system_info": uname_info,
+        }
+
+        headers["User-Agent"] = user_agent
+        headers["X-EDA-Client-User-Agent"] = json.dumps(client_metadata)
+
         retry = Retry(
             total=5,
             backoff_factor=1,
@@ -762,7 +807,7 @@ class Auth:
 
         return self._client
 
-    def explore(self, collection: str = None):
+    def explore(self, collection: Optional[str] = None):
         """
         Explore a collection, its properties and assets. If not collection specified,
         returns the list of collections.
@@ -935,17 +980,17 @@ class Auth:
         collections: str | list,
         datetime=None,
         assets: None | list | dict = None,
-        intersects: (gpd.GeoDataFrame | str | dict) = None,
+        intersects: gpd.GeoDataFrame | str | dict | None = None,
         bbox=None,
-        mask_with: (None | str | list) = None,
+        mask_with: None | str | list = None,
         mask_statistics: bool | int = False,
-        clear_cover: (int | float) = None,
-        prefer_alternate: (str | bool) = "download",
+        clear_cover: int | float | None = None,
+        prefer_alternate: str | bool = "download",
         search_kwargs: dict = {},
         add_default_scale_factor: bool = True,
         common_band_names=True,
-        cross_calibration_collection: (None | str) = None,
-        properties: (bool | str | list) = False,
+        cross_calibration_collection: None | str = None,
+        properties: bool | str | list = False,
         groupby_date: str = "mean",
         cloud_search_kwargs={},
         **kwargs,
@@ -1152,7 +1197,7 @@ class Auth:
                 mask_statistics = True
             mask_kwargs = dict(mask_statistics=False)
             if mask_with == "ag_cloud_mask" or mask_with == "cloud_mask":
-                mask_asset_mapping = {
+                mask_asset_mapping: dict[str, dict[str, str]] = {
                     "ag_cloud_mask": {"agriculture-cloud-mask": "ag_cloud_mask"},
                     "cloud_mask": {"cloud-mask": "cloud_mask"},
                 }
@@ -1199,6 +1244,9 @@ class Auth:
                 ds = xr.merge((ds, ds_mask), compat="override")
 
             Mask = mask.Mask(ds, intersects=intersects, bbox=bbox)
+
+            if not isinstance(mask_with, str):
+                raise TypeError("mask_with must be a string")
             ds = getattr(Mask, mask_with)(**mask_kwargs)
 
         # keep only one value per pixel per day
@@ -1392,7 +1440,7 @@ class Auth:
         if bbox is not None and intersects is not None:
             bbox = None
 
-        items_collection = self.client.search(
+        items_search = self.client.search(
             collections=collections,
             bbox=bbox,
             intersects=intersects,
@@ -1401,7 +1449,7 @@ class Auth:
         )
 
         # Downloading the items
-        items_collection = items_collection.item_collection()
+        items_collection = items_search.item_collection()
 
         # prefer_alternate means to prefer alternate url (to replace default href)
         if any((prefer_alternate, add_default_scale_factor)):

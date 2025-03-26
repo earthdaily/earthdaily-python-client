@@ -1,6 +1,7 @@
-import shapely
 import json
+
 import geopandas as gpd
+import shapely
 
 
 class GeometryManager:

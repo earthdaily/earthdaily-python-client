@@ -10,7 +10,7 @@
 * Add description of your changes
 * Add and ensure tests are passing
 * Ensure branch is mergeable
-* If possible, ruff check your code :)
+* Use Ruff to format and lint your code
 
 ## Testing
 

@@ -9,9 +9,9 @@ With Sentinel-2 and Landsat, using Sentinel-2 spatial resolution."""
 # Import librairies
 # -------------------------------------------
 
-import geopandas as gpd
 from matplotlib import pyplot as plt
-from earthdaily import datasets, EarthDataStore
+
+from earthdaily import EarthDataStore, datasets
 
 ##############################################################################
 # Set parameters
@@ -47,7 +47,7 @@ datacube = eds.datacube(
 )
 
 # Add the NDVI
-datacube = datacube.ed.add_indices(['NDVI'])
+datacube = datacube.ed.add_indices(["NDVI"])
 
 # Load in memory
 datacube = datacube.load()

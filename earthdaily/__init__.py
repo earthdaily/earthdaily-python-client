@@ -1,12 +1,17 @@
-from typing import Optional
 from pathlib import Path
-from . import earthdatastore, datasets
-from .accessor import __EarthDailyAccessorDataArray, __EarthDailyAccessorDataset
+from typing import Optional
+
 from earthdaily.core import options
+
+from . import datasets, earthdatastore  # noqa: F401
+from .accessor import (  # noqa: F401
+    __EarthDailyAccessorDataArray,
+    __EarthDailyAccessorDataset,
+)
 
 __all__ = ["options"]
 
-__version__ = "0.5.5"
+__version__ = "0.5.6"
 
 
 def EarthDataStore(
@@ -47,6 +52,7 @@ def EarthDataStore(
         json_path=json_path,
         toml_path=toml_path,
         profile=profile,
+        client_version=__version__,
         presign_urls=presign_urls,
         asset_proxy_enabled=asset_proxy_enabled,
     )

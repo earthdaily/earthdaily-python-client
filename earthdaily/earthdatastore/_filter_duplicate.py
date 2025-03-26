@@ -1,9 +1,13 @@
-from typing import List, Dict, Tuple, Optional, Iterator
-from datetime import datetime, timedelta
-from dataclasses import dataclass
-from pystac import ItemCollection
-from functools import lru_cache
+# mypy: ignore-errors
+# TODO (v1): Fix type issues and remove 'mypy: ignore-errors' after verifying non-breaking changes
+
 import logging
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from functools import lru_cache
+from typing import Dict, Iterator, List, Optional, Tuple
+
+from pystac import ItemCollection
 
 
 @dataclass(frozen=True)
