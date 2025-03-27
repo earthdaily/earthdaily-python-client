@@ -8,13 +8,14 @@ EarthDaily Python Client Documentation
     | **Bug tracker**: `Git issues <https://github.com/earthdaily/earthdaily-python-client/issues>`_
     | **Generated**: |today|
     | **License**: MIT
+    | **Version**: |smv_current_version|
 
 .. include:: ../README.md
    :parser: myst_parser.sphinx_
 
 .. toctree::
    :maxdepth: 3
-
+   
    self
 
 .. include:: ../CONTRIBUTING.md
