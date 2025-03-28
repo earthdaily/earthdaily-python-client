@@ -992,7 +992,7 @@ class Auth:
         cross_calibration_collection: None | str = None,
         properties: bool | str | list = False,
         groupby_date: str = "mean",
-        drop_duplicates: str = 'first',
+        drop_duplicates: str = "first",
         cloud_search_kwargs={},
         **kwargs,
     ) -> xr.Dataset:
@@ -1228,7 +1228,6 @@ class Auth:
 
                 # mask_kwargs.update(ds_mask=ds_mask)
             else:
-                
                 assets_mask = {
                     mask._native_mask_asset_mapping[
                         collections[0]
@@ -1255,7 +1254,7 @@ class Auth:
                 raise TypeError("mask_with must be a string")
 
             ds = getattr(Mask, mask_with)(**mask_kwargs)
-            
+
         # keep only one value per pixel per day
         if groupby_date:
             ds = cube_utils._groupby_date(ds, groupby_date)
@@ -1286,13 +1285,11 @@ class Auth:
 
             ds["clear_pixels"] = ds["clear_pixels"].load()
             ds["clear_percent"] = ds["clear_percent"].load()
-        
+
         if mask_with:
             if clear_cover:
                 ds = mask.filter_clear_cover(ds, clear_cover)
-            ds = ds.drop_vars(mask_with) 
-  
-
+            ds = ds.drop_vars(mask_with)
 
         return ds
 
@@ -1326,7 +1323,7 @@ class Auth:
         raise_no_items=True,
         batch_days="auto",
         n_jobs=-1,
-        drop_duplicates:str=False,
+        drop_duplicates: str = False,
         **kwargs,
     ):
         """
@@ -1477,7 +1474,9 @@ class Auth:
         if drop_duplicates:
             from ._filter_duplicate import filter_duplicate_items
 
-            items_collection = filter_duplicate_items(items_collection, keep=drop_duplicates)
+            items_collection = filter_duplicate_items(
+                items_collection, keep=drop_duplicates
+            )
         return items_collection
 
     def find_cloud_mask_items(
