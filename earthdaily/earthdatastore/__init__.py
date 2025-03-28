@@ -1228,6 +1228,7 @@ class Auth:
 
                 # mask_kwargs.update(ds_mask=ds_mask)
             else:
+                
                 assets_mask = {
                     mask._native_mask_asset_mapping[
                         collections[0]
@@ -1245,12 +1246,16 @@ class Auth:
                 ds_mask = cube_utils._match_xy_dims(ds_mask, ds)
                 if intersects is not None:
                     ds_mask = ds_mask.ed.clip(intersects)
+                asset_mask_str = mask._native_mask_asset_mapping[collections[0]]
+                if asset_mask_str in ds.data_vars:
+                    ds = ds.drop_vars(asset_mask_str)
                 ds = xr.merge((ds, ds_mask), compat="override")
             Mask = mask.Mask(ds, intersects=intersects, bbox=bbox)
             if not isinstance(mask_with, str):
                 raise TypeError("mask_with must be a string")
 
             ds = getattr(Mask, mask_with)(**mask_kwargs)
+            
         # keep only one value per pixel per day
         if groupby_date:
             ds = cube_utils._groupby_date(ds, groupby_date)
