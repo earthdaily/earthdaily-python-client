@@ -1,0 +1,32 @@
+earthdaily.earthdatastore.mask.Mask
+===================================
+
+.. currentmodule:: earthdaily.earthdatastore.mask
+
+.. autoclass:: Mask
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~Mask.ag_cloud_mask
+      ~Mask.cloud_mask
+      ~Mask.cloudmask_from_asset
+      ~Mask.compute_available_pixels
+      ~Mask.compute_clear_coverage
+      ~Mask.landsat_qa_pixel
+      ~Mask.scl
+      ~Mask.venus_detailed_cloud_mask
+   
+   
+
+   
+   
+   

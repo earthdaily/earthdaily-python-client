@@ -1,0 +1,43 @@
+earthdaily.datasets
+===================
+
+.. automodule:: earthdaily.datasets
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      load_pivot
+      load_pivot_corumba
+   .. automodule:: earthdaily.datasets
+      :members:
+      :exclude-members: 
+      :undoc-members:
+      :noindex:
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   data
+

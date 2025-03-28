@@ -1,0 +1,25 @@
+tests package
+=============
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   tests.test_assetmapper
+   tests.test_auth
+   tests.test_client
+   tests.test_eds_auth
+   tests.test_geometrymanager
+   tests.test_harmonizer
+   tests.test_simple_datacube
+   tests.test_zonalstats
+
+Module contents
+---------------
+
+.. automodule:: tests
+   :members:
+   :undoc-members:
+   :show-inheritance:
