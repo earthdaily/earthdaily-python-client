@@ -1,14 +1,10 @@
-# Configuration file for the Sphinx documentation builder.
-
 import os
-import sys
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as get_version
 
-os.environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
-project = "earthdaily"
-copyright = "2024, EarthDailyAgro"
-author = "Geosys/EarthDailyAgro"
+project = "EarthDaily Python Client"
+copyright = "2025, EarthDaily"
+author = "EarthDaily"
 
 
 extensions = [
@@ -17,64 +13,56 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
     "sphinx.ext.autosummary",
-    "sphinx.ext.viewcode",
     "sphinx_gallery.gen_gallery",
     "sphinx_copybutton",
     "sphinx_automodapi.automodapi",
     "sphinx_automodapi.smart_resolver",
     "myst_parser",
+    "sphinx_multiversion",
 ]
 
 automodapi_writereprocessed = True
 automodsumm_inherited_members = True
 numpydoc_show_class_members = False
-sys.path.insert(0, os.path.abspath("."))
-sys.path.insert(0, os.path.abspath(".."))
-
 
 try:
     __version__ = get_version("earthdaily")
 except PackageNotFoundError:
     __version__ = "0.0.0"
 
-source_suffix = [".rst"]
-version = str(__version__)
-release = str(__version__)
+version = release = str(__version__)
 
 sphinx_gallery_conf = {
     "backreferences_dir": os.path.join("_modules", "backreferences"),
     "doc_module": "earthdaily",
-    # path to your examples scripts
     "examples_dirs": "../examples",
     "filename_pattern": "",
-    # path where to save gallery generated examples
     "ignore_pattern": "__",
     "gallery_dirs": ["_auto_examples"],
-    # avoid generating too many cross links
     "inspect_global_variables": False,
     "remove_config_comments": True,
     "plot_gallery": "True",
 }
+
 pygments_style = "sphinx"
 nbsphinx_allow_errors = True
 autosummary_generate = True
-
 imported_members = True
 
+# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autoclass_content
 autoclass_content = "both"
 
 templates_path = ["templates"]
-
 language = "en"
-
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", ".DS_Store"]
 
 html_theme = "sphinx_rtd_theme"
 
-source_suffix = [".rst", ".md"]
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
 
-pdf_documents = [
-    ("index", "earthdaily_documentation", "earthdaily doc", "EarthDaily Agro"),
-]
-
-todo_include_todos = False
+smv_tag_whitelist = r"^1\.0\.0b.*$"
+smv_branch_whitelist = r"^(main|beta/1\.x|lts/0\.x)$"
+smv_prefer_remote_refs = True
