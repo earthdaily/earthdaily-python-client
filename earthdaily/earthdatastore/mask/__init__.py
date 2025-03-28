@@ -90,7 +90,6 @@ class Mask:
             raise ValueError(f"Asset '{cloud_asset}' needed to compute cloudmask.")
         else:
             cloud_layer = self._obj[cloud_asset].copy()
-        _assets = [a for a in self._obj.data_vars if a != cloud_asset]
 
         if fill_value:
             if labels_are_clouds:

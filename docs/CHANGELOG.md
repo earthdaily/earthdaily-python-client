@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.7] - 2025-03-28
+
+### Added
+
+- `datacube` drop duplicated items and keep first item per default.
+
+### Changed
+
+- `deduplicate_items` renamed to `drop_duplicates` in search,
+now supports "first" or "last". Default is `False` (means don't drop anything).
+
+### Fixed
+
+- Requirement forces `dask<2025.3.0` due to odc-stac wrong import of `quote`.
+- Issue when `resampling` and non-native cloudmask in datacube.
+- Issue with `rescale` when different scale/offset over time.
+
 ## [0.5.6] - 2025-03-26
 
 ### Added

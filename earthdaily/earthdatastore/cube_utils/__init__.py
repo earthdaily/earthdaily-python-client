@@ -525,8 +525,7 @@ def rescale_assets_with_items(
             for scale, offset_data in scale_data.items():
                 for offset, times in offset_data.items():
                     asset_scaled.append(ds[[asset]].isel(time=times) * scale + offset)
-            scaled_assets.append(xr.concat(asset_scaled, dim="time"))
-
+            scaled_assets.append(xr.concat(asset_scaled, dim="time").sortby("time"))
         # Merge scaled assets
         ds_scaled = xr.merge(scaled_assets, join="override", compat="override").sortby(
             "time"

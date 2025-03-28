@@ -135,7 +135,7 @@ def _group_items(
     return groups
 
 
-def _select_latest_items(items: List[Dict]) -> List[Dict]:
+def _deduplicate_items(items: List[Dict], keep="first") -> List[Dict]:
     """
     Select items with the most recent update timestamp.
 
@@ -144,6 +144,9 @@ def _select_latest_items(items: List[Dict]) -> List[Dict]:
     items : list[dict]
         List of STAC items
 
+    keep : str
+        "first" or "last".
+
     Returns
     -------
     list[dict]
@@ -151,22 +154,19 @@ def _select_latest_items(items: List[Dict]) -> List[Dict]:
     """
     if not items:
         return []
+    if len(items) == 1:
+        return items
 
-    latest_timestamp = max(
-        _parse_datetime(item["properties"]["updated"]) for item in items
-    )
-
-    return [
-        item
-        for item in items
-        if _parse_datetime(item["properties"]["updated"]) == latest_timestamp
-    ]
+    keep_idx = {"first": 0, "last": -1}
+    item = [sorted(items, key=lambda x: x["id"])[keep_idx[keep]]]
+    return item
 
 
 def filter_duplicate_items(
     items: ItemCollection,
     time_threshold: timedelta = timedelta(minutes=60),
     method="proj:transform",
+    keep="first",
 ) -> ItemCollection:
     """
     Deduplicate STAC items based on spatial and temporal proximity.
@@ -235,7 +235,7 @@ def filter_duplicate_items(
     deduplicated = [
         item
         for group_items in grouped_items.values()
-        for item in _select_latest_items(group_items)
+        for item in _deduplicate_items(group_items, keep=keep)
     ]
     duplicates = len(items) - len(deduplicated)
     if duplicates:

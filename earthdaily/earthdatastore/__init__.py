@@ -992,6 +992,7 @@ class Auth:
         cross_calibration_collection: None | str = None,
         properties: bool | str | list = False,
         groupby_date: str = "mean",
+        drop_duplicates: str = "first",
         cloud_search_kwargs={},
         **kwargs,
     ) -> xr.Dataset:
@@ -1093,7 +1094,7 @@ class Auth:
         # convert collections to list
         collections = [collections] if isinstance(collections, str) else collections
 
-        # if intersects a geometry, create a GeoDataFRame
+        # if intersects a geometry, create a GeoDataFrame
         if intersects is not None:
             intersects = cube_utils.GeometryManager(intersects).to_geopandas()
             self.intersects = intersects
@@ -1147,6 +1148,7 @@ class Auth:
             assets=assets,
             prefer_alternate=prefer_alternate,
             add_default_scale_factor=add_default_scale_factor,
+            drop_duplicates=drop_duplicates,
             **search_kwargs,
         )
 
@@ -1165,7 +1167,7 @@ class Auth:
                             "eq": cross_calibration_collection
                         },
                     },
-                    deduplicate_items=False,
+                    drop_duplicates=False,
                 )
             except Warning:
                 raise Warning(
@@ -1193,6 +1195,9 @@ class Auth:
             kwargs.pop("crs", "")
             kwargs.pop("resolution", "")
             kwargs["dtype"] = "int8"
+            kwargs["rescale"] = True
+            kwargs["resampling"] = 0
+
             if clear_cover and mask_statistics is False:
                 mask_statistics = True
             mask_kwargs = dict(mask_statistics=False)
@@ -1207,7 +1212,6 @@ class Auth:
                 ds_mask = datacube(
                     items_mask,
                     intersects=intersects,
-                    bbox=bbox,
                     groupby_date=None,
                     assets=mask_asset_mapping[mask_with],
                     **kwargs,
@@ -1229,24 +1233,26 @@ class Auth:
                         collections[0]
                     ]: mask._native_mask_def_mapping[collections[0]]
                 }
-
+                # force resampling at nearest as qualitative value.
                 ds_mask = datacube(
                     items,
+                    intersects=intersects,
                     groupby_date=None,
                     bbox=list(cube_utils.GeometryManager(intersects).to_bbox()),
                     assets=assets_mask,
-                    resampling=0,
                     **kwargs,
                 )
                 ds_mask = cube_utils._match_xy_dims(ds_mask, ds)
                 if intersects is not None:
                     ds_mask = ds_mask.ed.clip(intersects)
+                asset_mask_str = mask._native_mask_asset_mapping[collections[0]]
+                if asset_mask_str in ds.data_vars:
+                    ds = ds.drop_vars(asset_mask_str)
                 ds = xr.merge((ds, ds_mask), compat="override")
-
             Mask = mask.Mask(ds, intersects=intersects, bbox=bbox)
-
             if not isinstance(mask_with, str):
                 raise TypeError("mask_with must be a string")
+
             ds = getattr(Mask, mask_with)(**mask_kwargs)
 
         # keep only one value per pixel per day
@@ -1279,10 +1285,11 @@ class Auth:
 
             ds["clear_pixels"] = ds["clear_pixels"].load()
             ds["clear_percent"] = ds["clear_percent"].load()
+
         if mask_with:
+            if clear_cover:
+                ds = mask.filter_clear_cover(ds, clear_cover)
             ds = ds.drop_vars(mask_with)
-        if clear_cover:
-            ds = mask.filter_clear_cover(ds, clear_cover)
 
         return ds
 
@@ -1316,7 +1323,7 @@ class Auth:
         raise_no_items=True,
         batch_days="auto",
         n_jobs=-1,
-        deduplicate_items=True,
+        drop_duplicates: str = False,
         **kwargs,
     ):
         """
@@ -1334,6 +1341,8 @@ class Auth:
             STAC-like filters applied on retrieved items. The default is None.
         prefer_alternate : TYPE, optional
             Prefer alternate links when available. The default is None.
+        drop_duplicates : bool, str, Optional
+            Drop duplicates. Available : "first" or "last". The default is False.
         **kwargs : TYPE
             Keyword arguments passed to the pystac client search method.
 
@@ -1462,10 +1471,12 @@ class Auth:
             items_collection = post_query_items(items_collection, post_query)
         if len(items_collection) == 0 and raise_no_items:
             raise NoItemsFoundError("No items found.")
-        if deduplicate_items:
+        if drop_duplicates:
             from ._filter_duplicate import filter_duplicate_items
 
-            items_collection = filter_duplicate_items(items_collection)
+            items_collection = filter_duplicate_items(
+                items_collection, keep=drop_duplicates
+            )
         return items_collection
 
     def find_cloud_mask_items(
@@ -1514,7 +1525,7 @@ class Auth:
                 collections=collections,
                 ids=ids_[items_start_idx : items_start_idx + step],
                 limit=step,
-                deduplicate_items=False,
+                drop_duplicates=False,
                 **kwargs,
             )
             items_list.extend(list(items))
