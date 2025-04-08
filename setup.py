@@ -45,6 +45,7 @@ setup(
         "urllib3",
         "click",
         "toml",
+        "polars"
     ],
     extras_require={
         "dev": [
