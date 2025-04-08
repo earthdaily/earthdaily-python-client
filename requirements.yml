@@ -28,3 +28,4 @@ dependencies:
 - toml
 - click
 - urllib3
+- polars

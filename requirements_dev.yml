@@ -57,4 +57,5 @@ dependencies:
   - spyndex
   - sphinx-rtd-theme
   - toml
+  - polars
   - click
