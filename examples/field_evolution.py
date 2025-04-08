@@ -53,13 +53,11 @@ datacube.ed.plot_rgb(col_wrap=4, vmin=0, vmax=0.3)
 plt.title("Pivot evolution masked with native cloudmasks")
 plt.show()
 
-
 ##############################################################################
 # Compute zonal stats for the pivot
 # ----------------------------------------------------
 
 zonal_stats = datacube.ed.zonal_stats(pivot, ["mean", "max", "min"])
-
 zonal_stats.isel(feature=0).to_array(dim="band").plot.line(
     x="time", col="band", hue="zonal_statistics", col_wrap=3
 )
