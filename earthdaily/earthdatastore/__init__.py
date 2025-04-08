@@ -1307,6 +1307,9 @@ class Auth:
                 "properties",
             ]
         }
+        for idx, asset in enumerate(assets):
+            assets[idx] = f"'{asset}'" if '.' in asset else asset
+            
         fields["include"].extend([f"assets.{asset}" for asset in assets])
         return fields
 
