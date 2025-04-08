@@ -14,10 +14,15 @@ Example:
 
 import logging
 import time
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union, cast
 
 import geopandas as gpd
 import numpy as np
+
+try:
+    import polars as pl  # type: ignore
+except ImportError:
+    pl = None  # type: ignore
 import psutil
 import xarray as xr
 from scipy.sparse import csr_matrix
@@ -99,21 +104,28 @@ class SpatialIndexer:
 
     @staticmethod
     def rasterize_geometries(
-        gdf: gpd.GeoDataFrame, dataset: xr.Dataset, all_touched: bool = False
-    ) -> Tuple[np.ndarray, List[np.ndarray]]:
+        gdf: gpd.GeoDataFrame,
+        dataset: xr.Dataset,
+        all_touched: bool = False,
+        positions: bool = True,
+    ) -> Union[np.ndarray, Tuple[np.ndarray, List[Tuple[np.ndarray, ...]]]]:
         """Rasterize geometries to match dataset resolution.
 
         Args:
             gdf: Input GeoDataFrame
             dataset: Reference dataset for rasterization
             all_touched: Whether to include all touched pixels
+            positions: Whether to compute position indices
 
         Returns:
-            Tuple containing features array and positions list
+            If positions=True, returns Tuple containing features array and positions list
+            Otherwise, returns only the features array
         """
         features = rasterize(gdf, dataset, all_touched=all_touched)
-        positions = SpatialIndexer.get_sparse_indices(features)
-        return features, positions
+        if positions:
+            position_indices = SpatialIndexer.get_sparse_indices(features)
+            return features, position_indices
+        return features
 
 
 class StatisticalOperations:
@@ -121,17 +133,21 @@ class StatisticalOperations:
 
     @staticmethod
     def zonal_stats(
-        dataset: xr.Dataset, positions: List[np.ndarray], reducers: List[str]
-    ) -> xr.DataArray:
+        dataset: xr.Dataset,
+        positions: np.ndarray,
+        reducers: List[str],
+        method: str = "numpy",
+    ) -> xr.Dataset:
         """Compute zonal statistics for given positions using specified reducers.
 
         Args:
             dataset: Input dataset
-            positions: List of position arrays
+            positions: Array of position indices
             reducers: List of statistical operations to perform
+            method: Computation method to use
 
         Returns:
-            xarray.DataArray: Computed statistics
+            xarray.Dataset: Computed statistics
 
         Notes:
             Uses xarray's apply_ufunc for parallel processing and efficient computation
@@ -140,10 +156,13 @@ class StatisticalOperations:
         def _zonal_stats_ufunc(data, positions, reducers):
             """Inner function for parallel computation of zonal statistics."""
             zs = []
-            for idx in range(len(positions)):
+            tf = positions != 0
+
+            for idx in np.unique(positions[tf]):
                 field_stats = []
                 for reducer in reducers:
-                    field_arr = data[(...,) + tuple(positions[idx])]
+                    mask = positions == idx
+                    field_arr = data[:, mask]
                     if reducer == "mode":
                         field_arr = mode(field_arr, axis=-1, nan_policy="omit").mode
                     else:
@@ -157,9 +176,79 @@ class StatisticalOperations:
             zs = np.asarray(zs)
             return zs.swapaxes(-1, 0).swapaxes(-1, -2)
 
+        def _zonal_stats_polars_ufunc(data, positions, reducers):
+            """Inner function for parallel computation of zonal statistics using polars."""
+            zs = []
+            tf = positions != 0
+            pol_positions = positions[tf]
+
+            n_dims = data.shape[0]
+
+            original_idx = np.arange(np.unique(pol_positions).size) + 1
+
+            # Process each dimension separately
+            for dim in range(n_dims):
+                # Create DataFrame for dimension
+                df = pl.DataFrame(
+                    {"polygon_id": pol_positions, f"dim_{dim}": data[dim, ...][tf]}
+                )
+
+                # Compute statistics using Polars groupby
+                stats = (
+                    df.lazy()
+                    .drop_nans()
+                    .group_by("polygon_id")
+                    .agg(
+                        [
+                            getattr(pl.col(f"dim_{dim}"), reducer)().alias(reducer)
+                            for reducer in reducers
+                            if reducer != "mode"
+                        ]
+                    )
+                )
+
+                # Handle mode separately if needed
+                if "mode" in reducers:
+                    raise NotImplementedError("mode is not yet implemented")
+                # =============================================================================
+                #                     stats_mode = (
+                #                         df.lazy()
+                #                         .drop_nans()
+                #                         .group_by("polygon_id")
+                #                         .agg(
+                #                             getattr(pl.col(f"dim_{dim}"), "mode")()
+                #                             .alias("mode")
+                #                             .first()
+                #                         )
+                #                     )
+                #                     stats = stats.collect().join(stats_mode.collect(), on="polygon_id")
+                #                     stats_array = stats.sort("polygon_id").select(reducers).to_numpy()
+                # =============================================================================
+                else:
+                    stats_array = stats.collect().sort("polygon_id").to_numpy()
+                    idx = stats_array[:, 0].astype(np.int64)
+                    stats_array = stats_array[:, 1:]
+                    missing_idx = np.setdiff1d(original_idx, idx)
+                    if missing_idx.size:
+                        # Create a mask for the final array
+                        result = np.full((len(original_idx), len(reducers)), np.nan)
+
+                        # Find positions of idx in original_idx for mapping
+                        idx_positions = np.searchsorted(original_idx, idx)
+
+                        # Insert the actual data values at the correct positions
+                        result[idx_positions - 1, :] = stats_array
+                        stats_array = result
+
+                zs.append(stats_array)
+
+            return np.asarray(zs)
+
+        methods = {"numpy": _zonal_stats_ufunc, "polars": _zonal_stats_polars_ufunc}
+
         # Apply the function using xarray's parallel processing capabilities
         return xr.apply_ufunc(
-            _zonal_stats_ufunc,
+            methods.get(method, _zonal_stats_ufunc),
             dataset,
             vectorize=False,
             dask="parallelized",
@@ -171,7 +260,8 @@ class StatisticalOperations:
             dask_gufunc_kwargs={
                 "allow_rechunk": True,
                 "output_sizes": dict(
-                    feature=len(positions), zonal_statistics=len(reducers)
+                    feature=np.unique(positions[positions > 0]).size,
+                    zonal_statistics=len(reducers),
                 ),
             },
         )
@@ -198,16 +288,17 @@ def zonal_stats(
     ----------
     dataset : xarray.Dataset
         Input dataset containing variables for statistics computation.
-    geoms : Union[geopandas.GeoDataFrame, geopandas.GeoSeries]
+    geometries : Union[geopandas.GeoDataFrame, geopandas.GeoSeries]
         Geometries defining the zones for statistics calculation.
     method : str, optional
         Method for computation. Options:
             - 'numpy': Uses numpy functions with parallel processing
+            - 'polars': Uses polars for data manipulation
             - 'xvec': Uses xvec library (must be installed)
         Default is 'numpy'.
     lazy_load : bool, optional
         If True, optimizes memory usage by loading chunks of data for 'numpy' method.
-        Default is False.
+        Default is True.
     max_memory_mb : float, optional
         Maximum memory to use in megabytes. If None, uses maximum available memory.
         Default is None.
@@ -293,7 +384,23 @@ def zonal_stats(
     if buffer_meters is not None:
         geometries = _apply_buffer(geometries, buffer_meters)
 
-    if method == "numpy":
+    if method == "polars":
+        if pl is None:
+            raise ImportError(
+                "The polars method requires the polars package. "
+                "Please install it with: pip install polars"
+            )
+        return _compute_polars_stats(
+            dataset,
+            geometries,
+            lazy_load,
+            max_memory_mb,
+            reducers,
+            all_touched,
+            preserve_columns,
+            **kwargs,
+        )
+    elif method == "numpy":
         return _compute_numpy_stats(
             dataset,
             geometries,
@@ -323,6 +430,49 @@ def _apply_buffer(
     return geometries.to_crs(original_crs)
 
 
+def _compute_polars_stats(
+    dataset: xr.Dataset,
+    geometries: gpd.GeoDataFrame,
+    lazy_load: bool,
+    max_memory_mb: Optional[float],
+    reducers: List[str],
+    all_touched: bool,
+    preserve_columns: bool,
+    **kwargs,
+) -> xr.Dataset:
+    """Compute zonal statistics using polars method.
+
+    Args:
+        dataset: Input dataset
+        geometries: Input geometries
+        lazy_load: Whether to optimize memory usage
+        max_memory_mb: Maximum memory to use
+        reducers: List of statistical operations
+        all_touched: Whether to include all touched pixels
+        preserve_columns: Whether to preserve geometry columns
+        **kwargs: Additional keyword arguments
+
+    Returns:
+        xarray.Dataset: Computed statistics
+    """
+    # Rasterize geometries
+    positions = cast(
+        np.ndarray,
+        SpatialIndexer.rasterize_geometries(
+            geometries.copy(), dataset, all_touched, positions=False
+        ),
+    )
+
+    stats = StatisticalOperations.zonal_stats(
+        dataset=dataset, positions=positions, reducers=reducers, method="polars"
+    )
+
+    # Format output
+    return _format_numpy_output(
+        stats, positions, geometries, reducers, preserve_columns
+    )
+
+
 def _compute_numpy_stats(
     dataset: xr.Dataset,
     geometries: gpd.GeoDataFrame,
@@ -333,13 +483,28 @@ def _compute_numpy_stats(
     preserve_columns: bool,
     **kwargs,
 ) -> xr.Dataset:
-    """Compute zonal statistics using numpy method."""
+    """Compute zonal statistics using numpy method.
+
+    Args:
+        dataset: Input dataset
+        geometries: Input geometries
+        lazy_load: Whether to optimize memory usage
+        max_memory_mb: Maximum memory to use
+        reducers: List of statistical operations
+        all_touched: Whether to include all touched pixels
+        preserve_columns: Whether to preserve geometry columns
+        **kwargs: Additional keyword arguments
+
+    Returns:
+        xarray.Dataset: Computed statistics
+    """
     # Rasterize geometries
-    features, yx_positions = SpatialIndexer.rasterize_geometries(
-        geometries.copy(), dataset, all_touched
+    positions = cast(
+        np.ndarray,
+        SpatialIndexer.rasterize_geometries(
+            geometries.copy(), dataset, all_touched, positions=False
+        ),
     )
-    positions = [np.asarray(pos) for pos in yx_positions[1:]]
-    positions = [pos for pos in positions if pos.size > 0]
 
     # Process time series if present
     if "time" in dataset.dims and not lazy_load:
@@ -348,20 +513,35 @@ def _compute_numpy_stats(
             dataset, positions, reducers, lazy_load, time_chunks
         )
     else:
-        stats = StatisticalOperations.zonal_stats(dataset, positions, reducers)
+        stats = StatisticalOperations.zonal_stats(
+            dataset=dataset, positions=positions, reducers=reducers, method="numpy"
+        )
 
     # Format output
-    return _format_numpy_output(stats, features, geometries, reducers, preserve_columns)
+    return _format_numpy_output(
+        stats, positions, geometries, reducers, preserve_columns
+    )
 
 
 def _process_time_chunks(
     dataset: xr.Dataset,
-    positions: List[np.ndarray],
+    positions: np.ndarray,
     reducers: List[str],
     lazy_load: bool,
     time_chunks: int,
 ) -> xr.Dataset:
-    """Process dataset in time chunks to optimize memory usage."""
+    """Process dataset in time chunks to optimize memory usage.
+
+    Args:
+        dataset: Input dataset
+        positions: Position indices
+        reducers: List of statistical operations
+        lazy_load: Whether to optimize memory usage
+        time_chunks: Number of time chunks
+
+    Returns:
+        xarray.Dataset: Computed statistics
+    """
     chunks = []
     for time_idx in trange(0, dataset.time.size, time_chunks):
         end_idx = min(time_idx + time_chunks, dataset.time.size)
@@ -410,12 +590,10 @@ def _compute_xvec_stats(
     Raises:
         ImportError: If xvec package is not installed
     """
-    from importlib.util import find_spec
-
-    if find_spec("xvec"):
-        import xvec  # noqa: F401
-    else:
-        ImportError(
+    try:
+        import xvec  # noqa
+    except ImportError:
+        raise ImportError(
             "The xvec method requires the xvec package. "
             "Please install it with: pip install xvec"
         )
@@ -458,7 +636,18 @@ def _format_numpy_output(
     reducers: List[str],
     preserve_columns: bool,
 ) -> xr.Dataset:
-    """Format numpy statistics output."""
+    """Format numpy statistics output.
+
+    Args:
+        stats: Computed statistics
+        features: Features array
+        geometries: Input geometries
+        reducers: List of statistical operations
+        preserve_columns: Whether to preserve geometry columns
+
+    Returns:
+        xarray.Dataset: Formatted statistics
+    """
     # Set coordinates and metadata
     stats = stats.assign_coords(zonal_statistics=reducers)
     stats = stats.rio.write_crs("EPSG:4326")
@@ -479,8 +668,9 @@ def _format_numpy_output(
     )
 
     # Assign coordinates
-    coords = {"index": ("feature", index), "geometry": ("feature", geometry_wkt)}
-    stats = stats.assign_coords(**coords)
+    coords = {"index": (["feature"], index), "geometry": (["feature"], geometry_wkt)}
+    stats = stats.assign_coords(coords)
+
     stats = stats.set_index(feature=list(coords.keys()))
 
     # Preserve additional columns if requested
@@ -493,7 +683,15 @@ def _format_numpy_output(
 def _preserve_geometry_columns(
     stats: xr.Dataset, geometries: gpd.GeoDataFrame
 ) -> xr.Dataset:
-    """Preserve geometry columns in output statistics."""
+    """Preserve geometry columns in output statistics.
+
+    Args:
+        stats: Computed statistics
+        geometries: Input geometries
+
+    Returns:
+        xarray.Dataset: Statistics with preserved columns
+    """
     cols = [
         col for col in geometries.columns if col != geometries._geometry_column_name
     ]

@@ -1101,6 +1101,7 @@ class Auth:
 
         # if mask_with, need to add assets or to get mask item id
         if mask_with:
+            sensor_mask = mask_with
             if mask_with not in mask._available_masks:
                 raise NotImplementedError(
                     f"Specified mask '{mask_with}' is not available. Available masks providers are : {mask._available_masks}"
@@ -1231,7 +1232,7 @@ class Auth:
                 assets_mask = {
                     mask._native_mask_asset_mapping[
                         collections[0]
-                    ]: mask._native_mask_def_mapping[collections[0]]
+                    ]: mask._native_mask_asset_mapping[collections[0]]
                 }
                 # force resampling at nearest as qualitative value.
                 ds_mask = datacube(
@@ -1261,9 +1262,9 @@ class Auth:
 
         # To filter by cloud_cover / clear_cover, we need to compute clear pixels as field level
         if clear_cover or mask_statistics:
-            xy = ds[mask_with].isel(time=0).size
+            xy = ds[sensor_mask].isel(time=0).size
 
-            null_pixels = ds[mask_with].isnull().sum(dim=("x", "y"))
+            null_pixels = ds[sensor_mask].isnull().sum(dim=("x", "y"))
             n_pixels_as_labels = xy - null_pixels
 
             ds = ds.assign_coords({"clear_pixels": ("time", n_pixels_as_labels.data)})
@@ -1289,7 +1290,7 @@ class Auth:
         if mask_with:
             if clear_cover:
                 ds = mask.filter_clear_cover(ds, clear_cover)
-            ds = ds.drop_vars(mask_with)
+            ds = ds.drop_vars(sensor_mask)
 
         return ds
 
@@ -1307,6 +1308,9 @@ class Auth:
                 "properties",
             ]
         }
+        for idx, asset in enumerate(assets):
+            assets[idx] = f"'{asset}'" if "." in asset else asset
+
         fields["include"].extend([f"assets.{asset}" for asset in assets])
         return fields
 

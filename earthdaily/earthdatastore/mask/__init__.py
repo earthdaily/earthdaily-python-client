@@ -23,19 +23,19 @@ _available_masks = [
     "cloudmask",
     "scl",
 ]
-_native_mask_def_mapping = {
-    "sentinel-2-l2a": "scl",
-    "sentinel-2-c1-l2a": "scl",
-    "venus-l2a": "venus_detailed_cloud_mask",
-    "landsat-c2l2-sr": "landsat_qa_pixel",
-    "landsat-c2l2-st": "landsat_qa_pixel",
-}
 _native_mask_asset_mapping = {
     "sentinel-2-l2a": "scl",
     "sentinel-2-c1-l2a": "scl",
     "venus-l2a": "detailed_cloud_mask",
     "landsat-c2l2-sr": "qa_pixel",
     "landsat-c2l2-st": "qa_pixel",
+}
+_native_mask_def_mapping = {
+    "sentinel-2-l2a": "scl",
+    "sentinel-2-c1-l2a": "scl",
+    "venus-l2a": "detailed_cloud_mask",
+    "landsat-c2l2-sr": "landsat_qa_pixel",
+    "landsat-c2l2-st": "landsat_qa_pixel",
 }
 
 
