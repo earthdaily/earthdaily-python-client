@@ -1084,7 +1084,7 @@ class Auth:
             DESCRIPTION.
 
         """
-        
+
         # Properties (per items) are not compatible with groupby_date.
         if properties not in (None, False) and groupby_date is not None:
             raise NotImplementedError(
@@ -1232,9 +1232,7 @@ class Auth:
                 assets_mask = {
                     mask._native_mask_asset_mapping[
                         collections[0]
-                    ]:mask._native_mask_asset_mapping[
-                        collections[0]
-                    ]
+                    ]: mask._native_mask_asset_mapping[collections[0]]
                 }
                 # force resampling at nearest as qualitative value.
                 ds_mask = datacube(
@@ -1311,8 +1309,8 @@ class Auth:
             ]
         }
         for idx, asset in enumerate(assets):
-            assets[idx] = f"'{asset}'" if '.' in asset else asset
-            
+            assets[idx] = f"'{asset}'" if "." in asset else asset
+
         fields["include"].extend([f"assets.{asset}" for asset in assets])
         return fields
 

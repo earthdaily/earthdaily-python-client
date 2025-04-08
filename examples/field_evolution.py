@@ -58,7 +58,7 @@ plt.show()
 # Compute zonal stats for the pivot
 # ----------------------------------------------------
 
-zonal_stats = datacube.ed.zonal_stats(pivot, ["mean", "max", "min"], method="polars")
+zonal_stats = datacube.ed.zonal_stats(pivot, ["mean", "max", "min"])
 
 zonal_stats.isel(feature=0).to_array(dim="band").plot.line(
     x="time", col="band", hue="zonal_statistics", col_wrap=3

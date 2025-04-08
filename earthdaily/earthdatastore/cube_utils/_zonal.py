@@ -12,15 +12,13 @@ Example:
     >>> stats = zonal_stats(dataset, polygons, reducers=["mean", "max"])
 """
 
-from typing import Union, List, Optional, Tuple, Dict
+from typing import Union, List, Optional, Tuple
 import logging
 import time
-from pathlib import Path
 
 import numpy as np
 import xarray as xr
 import polars as pl
-import pandas as pd
 import geopandas as gpd
 from scipy.sparse import csr_matrix
 from scipy.stats import mode
@@ -60,7 +58,7 @@ class MemoryManager:
         )
 
         logger.info(
-            f"Estimated memory per date: {bytes_per_date:.2f}MB. Total: {(bytes_per_date*dataset.time.size):.2f}MB"
+            f"Estimated memory per date: {bytes_per_date:.2f}MB. Total: {(bytes_per_date * dataset.time.size):.2f}MB"
         )
         logger.info(
             f"Time chunks: {time_chunks} (total time steps: {dataset.time.size})"
@@ -177,9 +175,8 @@ class StatisticalOperations:
             pol_positions = positions[tf]
 
             n_dims = data.shape[0]
-            
-            original_idx = np.arange(np.unique(pol_positions).size)+1
 
+            original_idx = np.arange(np.unique(pol_positions).size) + 1
 
             # idx = aa.sort(by='polygon_id')['polygon_id'].to_numpy()
             # all_idx = np.arange(1,100001)
@@ -222,25 +219,23 @@ class StatisticalOperations:
                     stats = stats.collect().join(stats_mode.collect(), on="polygon_id")
 
                     stats_array = stats.sort("polygon_id").select(reducers).to_numpy()
-                    
+
                 else:
-                    stats_array  = (
-                        stats.collect().sort("polygon_id").to_numpy()
-                    )
-                    idx = stats_array[:,0].astype(np.int64)
-                    stats_array = stats_array[:,1:]
+                    stats_array = stats.collect().sort("polygon_id").to_numpy()
+                    idx = stats_array[:, 0].astype(np.int64)
+                    stats_array = stats_array[:, 1:]
                     missing_idx = np.setdiff1d(original_idx, idx)
                     if missing_idx.size:
                         # Create a mask for the final array
                         result = np.full((len(original_idx), len(reducers)), np.nan)
-                        
+
                         # Find positions of idx in original_idx for mapping
                         idx_positions = np.searchsorted(original_idx, idx)
-                        
+
                         # Insert the actual data values at the correct positions
-                        result[idx_positions-1,:] = stats_array
+                        result[idx_positions - 1, :] = stats_array
                         stats_array = result
-        
+
                 zs.append(stats_array)
             # end_time = time.time()
             return np.asarray(zs)
@@ -262,7 +257,8 @@ class StatisticalOperations:
                 "allow_rechunk": True,
                 "output_sizes": dict(
                     feature=np.unique(positions[positions > 0]).size,
-                    zonal_statistics=len(reducers))  
+                    zonal_statistics=len(reducers),
+                ),
             },
         )
 
@@ -503,12 +499,14 @@ def _process_time_chunks(
             ds_chunk = ds_chunk.load()
             logger.debug(
                 f"Loaded {ds_chunk.time.size} dates in "
-                f"{(time.time()-load_start):.2f}s"
+                f"{(time.time() - load_start):.2f}s"
             )
 
         compute_start = time.time()
         chunk_stats = StatisticalOperations.zonal_stats(ds_chunk, positions, reducers)
-        logger.debug(f"Computed chunk statistics in {(time.time()-compute_start):.2f}s")
+        logger.debug(
+            f"Computed chunk statistics in {(time.time() - compute_start):.2f}s"
+        )
 
         chunks.append(chunk_stats)
 
@@ -540,7 +538,7 @@ def _compute_xvec_stats(
         ImportError: If xvec package is not installed
     """
     try:
-        import xvec
+        import xvec  # noqa
     except ImportError:
         raise ImportError(
             "The xvec method requires the xvec package. "

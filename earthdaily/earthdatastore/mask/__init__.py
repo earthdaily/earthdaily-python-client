@@ -30,7 +30,7 @@ _native_mask_asset_mapping = {
     "landsat-c2l2-sr": "qa_pixel",
     "landsat-c2l2-st": "qa_pixel",
 }
-_native_mask_def_mapping  = {
+_native_mask_def_mapping = {
     "sentinel-2-l2a": "scl",
     "sentinel-2-c1-l2a": "scl",
     "venus-l2a": "detailed_cloud_mask",
