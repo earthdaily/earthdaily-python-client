@@ -12,18 +12,18 @@ Example:
     >>> stats = zonal_stats(dataset, polygons, reducers=["mean", "max"])
 """
 
-from typing import Union, List, Optional, Tuple
 import logging
 import time
+from typing import List, Optional, Tuple, Union
 
-import numpy as np
-import xarray as xr
-import polars as pl
 import geopandas as gpd
+import numpy as np
+import polars as pl
+import psutil
+import xarray as xr
 from scipy.sparse import csr_matrix
 from scipy.stats import mode
 from tqdm.auto import trange
-import psutil
 
 from .preprocessing import rasterize
 
