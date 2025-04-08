@@ -14,10 +14,11 @@ Example:
 
 import logging
 import time
-from typing import Any, List, Optional, Tuple, Union, cast
+from typing import List, Optional, Tuple, Union, cast
 
 import geopandas as gpd
 import numpy as np
+
 try:
     import polars as pl  # type: ignore
 except ImportError:
