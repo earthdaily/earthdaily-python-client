@@ -206,24 +206,24 @@ class StatisticalOperations:
                         ]
                     )
                 )
-                
+
                 # Handle mode separately if needed
                 if "mode" in reducers:
-                    raise NotImplementedError('mode is not yet implemented')
-# =============================================================================
-#                     stats_mode = (
-#                         df.lazy()
-#                         .drop_nans()
-#                         .group_by("polygon_id")
-#                         .agg(
-#                             getattr(pl.col(f"dim_{dim}"), "mode")()
-#                             .alias("mode")
-#                             .first()
-#                         )
-#                     )  
-#                     stats = stats.collect().join(stats_mode.collect(), on="polygon_id")
-#                     stats_array = stats.sort("polygon_id").select(reducers).to_numpy()
-# =============================================================================
+                    raise NotImplementedError("mode is not yet implemented")
+                # =============================================================================
+                #                     stats_mode = (
+                #                         df.lazy()
+                #                         .drop_nans()
+                #                         .group_by("polygon_id")
+                #                         .agg(
+                #                             getattr(pl.col(f"dim_{dim}"), "mode")()
+                #                             .alias("mode")
+                #                             .first()
+                #                         )
+                #                     )
+                #                     stats = stats.collect().join(stats_mode.collect(), on="polygon_id")
+                #                     stats_array = stats.sort("polygon_id").select(reducers).to_numpy()
+                # =============================================================================
                 else:
                     stats_array = stats.collect().sort("polygon_id").to_numpy()
                     idx = stats_array[:, 0].astype(np.int64)
@@ -241,7 +241,7 @@ class StatisticalOperations:
                         stats_array = result
 
                 zs.append(stats_array)
-                
+
             return np.asarray(zs)
 
         methods = {"numpy": _zonal_stats_ufunc, "polars": _zonal_stats_polars_ufunc}
@@ -456,9 +456,12 @@ def _compute_polars_stats(
         xarray.Dataset: Computed statistics
     """
     # Rasterize geometries
-    positions = cast(np.ndarray, SpatialIndexer.rasterize_geometries(
-        geometries.copy(), dataset, all_touched, positions=False
-    ))
+    positions = cast(
+        np.ndarray,
+        SpatialIndexer.rasterize_geometries(
+            geometries.copy(), dataset, all_touched, positions=False
+        ),
+    )
 
     stats = StatisticalOperations.zonal_stats(
         dataset=dataset, positions=positions, reducers=reducers, method="polars"
@@ -496,9 +499,12 @@ def _compute_numpy_stats(
         xarray.Dataset: Computed statistics
     """
     # Rasterize geometries
-    positions = cast(np.ndarray, SpatialIndexer.rasterize_geometries(
-        geometries.copy(), dataset, all_touched, positions=False
-    ))
+    positions = cast(
+        np.ndarray,
+        SpatialIndexer.rasterize_geometries(
+            geometries.copy(), dataset, all_touched, positions=False
+        ),
+    )
 
     # Process time series if present
     if "time" in dataset.dims and not lazy_load:
@@ -631,14 +637,14 @@ def _format_numpy_output(
     preserve_columns: bool,
 ) -> xr.Dataset:
     """Format numpy statistics output.
-    
+
     Args:
         stats: Computed statistics
         features: Features array
         geometries: Input geometries
         reducers: List of statistical operations
         preserve_columns: Whether to preserve geometry columns
-        
+
     Returns:
         xarray.Dataset: Formatted statistics
     """
@@ -674,13 +680,15 @@ def _format_numpy_output(
     return stats
 
 
-def _preserve_geometry_columns(stats: xr.Dataset, geometries: gpd.GeoDataFrame) -> xr.Dataset:
+def _preserve_geometry_columns(
+    stats: xr.Dataset, geometries: gpd.GeoDataFrame
+) -> xr.Dataset:
     """Preserve geometry columns in output statistics.
-    
+
     Args:
         stats: Computed statistics
         geometries: Input geometries
-        
+
     Returns:
         xarray.Dataset: Statistics with preserved columns
     """
