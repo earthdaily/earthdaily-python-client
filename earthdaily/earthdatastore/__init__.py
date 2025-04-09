@@ -1125,6 +1125,7 @@ class Auth:
                 )
 
                 mask_with = "cloud_mask"
+                sensor_mask = mask_with
 
             else:
                 mask_with = mask._native_mask_def_mapping.get(collections[0], None)
