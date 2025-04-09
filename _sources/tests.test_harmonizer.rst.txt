@@ -1,0 +1,7 @@
+tests.test\_harmonizer module
+=============================
+
+.. automodule:: tests.test_harmonizer
+   :members:
+   :undoc-members:
+   :show-inheritance:

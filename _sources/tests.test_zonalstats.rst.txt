@@ -1,0 +1,7 @@
+tests.test\_zonalstats module
+=============================
+
+.. automodule:: tests.test_zonalstats
+   :members:
+   :undoc-members:
+   :show-inheritance:

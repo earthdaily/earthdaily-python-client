@@ -1,0 +1,18 @@
+earthdaily.datasets package
+===========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   earthdaily.datasets.data
+
+Module contents
+---------------
+
+.. automodule:: earthdaily.datasets
+   :members:
+   :undoc-members:
+   :show-inheritance:

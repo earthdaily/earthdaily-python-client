@@ -1,0 +1,7 @@
+tests.test\_eds\_auth module
+============================
+
+.. automodule:: tests.test_eds_auth
+   :members:
+   :undoc-members:
+   :show-inheritance:

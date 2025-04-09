@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.earthdatastore.cube_utils.harmonizer &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="../../earthdatastore.html">earthdaily.earthdatastore</a></li>
+          <li class="breadcrumb-item"><a href="../cube_utils.html">earthdaily.earthdatastore.cube_utils</a></li>
+      <li class="breadcrumb-item active">earthdaily.earthdatastore.cube_utils.harmonizer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for earthdaily.earthdatastore.cube_utils.harmonizer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># mypy: ignore-errors</span>
+<span class="c1"># TODO (v1): Fix type issues and remove &#39;mypy: ignore-errors&#39; after verifying non-breaking changes</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">operator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytz</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+
+
+<div class="viewcode-block" id="Harmonizer">
+<a class="viewcode-back" href="../../../../earthdaily.earthdatastore.cube_utils.harmonizer.html#earthdaily.earthdatastore.cube_utils.harmonizer.Harmonizer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Harmonizer</span><span class="p">:</span>
+<div class="viewcode-block" id="Harmonizer.harmonize">
+<a class="viewcode-back" href="../../../../earthdaily.earthdatastore.cube_utils.harmonizer.html#earthdaily.earthdatastore.cube_utils.harmonizer.Harmonizer.harmonize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">harmonize</span><span class="p">(</span><span class="n">items_collection</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">cross_cal_items</span><span class="p">,</span> <span class="n">assets</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Harmonize a dataset using cross_cal items from EarthDaily collection.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        items_collection : TYPE</span>
+<span class="sd">            DESCRIPTION.</span>
+<span class="sd">        ds : TYPE</span>
+<span class="sd">            DESCRIPTION.</span>
+<span class="sd">        cross_cal_items : TYPE</span>
+<span class="sd">            DESCRIPTION.</span>
+<span class="sd">        assets : TYPE</span>
+<span class="sd">            DESCRIPTION.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ds_ : TYPE</span>
+<span class="sd">            DESCRIPTION.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">assets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">assets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="n">scaled_dataset</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Initializing asset list</span>
+        <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">assets</span><span class="p">:</span>
+            <span class="n">scaled_dataset</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># For each item in the datacube</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">current_item</span> <span class="o">=</span> <span class="n">items_collection</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+            <span class="n">platform</span> <span class="o">=</span> <span class="n">current_item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;platform&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Looking for platform/camera specific xcal coef</span>
+            <span class="n">platform_xcal_items</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">item</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cross_cal_items</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;eda_cross_cal:source_platform&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">platform</span>
+                <span class="ow">and</span> <span class="n">Harmonizer</span><span class="o">.</span><span class="n">check_timerange</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">current_item</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="c1"># at least one match</span>
+            <span class="n">matching_xcal_item</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">platform_xcal_items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">matching_xcal_item</span> <span class="o">=</span> <span class="n">platform_xcal_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Looking for global xcal coef</span>
+                <span class="n">global_xcal_items</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">item</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cross_cal_items</span>
+                    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;eda_cross_cal:source_platform&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
+                    <span class="ow">and</span> <span class="n">Harmonizer</span><span class="o">.</span><span class="n">check_timerange</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">current_item</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
+                <span class="p">]</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">global_xcal_items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">matching_xcal_item</span> <span class="o">=</span> <span class="n">cross_cal_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">matching_xcal_item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ds_asset</span> <span class="ow">in</span> <span class="n">assets</span><span class="p">:</span>
+                    <span class="c1"># Loading Xcal coef for the specific band</span>
+                    <span class="n">bands_coefs</span> <span class="o">=</span> <span class="n">matching_xcal_item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;eda_cross_cal:bands&quot;</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="n">ds_asset</span> <span class="ow">in</span> <span class="n">bands_coefs</span><span class="p">:</span>
+                        <span class="n">asset_xcal_coef</span> <span class="o">=</span> <span class="n">matching_xcal_item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span>
+                            <span class="s2">&quot;eda_cross_cal:bands&quot;</span>
+                        <span class="p">][</span><span class="n">ds_asset</span><span class="p">]</span>
+                        <span class="c1"># By default, we take the first item we have</span>
+                        <span class="n">scaled_asset</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="o">.</span><span class="n">apply_to_asset</span><span class="p">(</span>
+                            <span class="n">asset_xcal_coef</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ds_asset</span><span class="p">],</span>
+                            <span class="n">ds</span><span class="p">[</span><span class="n">ds_asset</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)],</span>
+                            <span class="n">ds_asset</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">scaled_dataset</span><span class="p">[</span><span class="n">ds_asset</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scaled_asset</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">scaled_dataset</span><span class="p">[</span><span class="n">ds_asset</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">ds</span><span class="p">[</span><span class="n">ds_asset</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)]</span>
+                        <span class="p">)</span>
+
+        <span class="n">ds_</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">scaled_dataset</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ds_k</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                <span class="n">ds_k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">ds_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">ds_k</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">))</span>
+        <span class="n">ds_</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ds_</span><span class="p">)</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        <span class="n">ds_</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span>
+
+        <span class="k">return</span> <span class="n">ds_</span></div>
+
+
+<div class="viewcode-block" id="Harmonizer.xcal_functions_parser">
+<a class="viewcode-back" href="../../../../earthdaily.earthdatastore.cube_utils.harmonizer.html#earthdaily.earthdatastore.cube_utils.harmonizer.Harmonizer.xcal_functions_parser">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">xcal_functions_parser</span><span class="p">(</span><span class="n">functions</span><span class="p">,</span> <span class="n">dataarray</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">):</span>
+        <span class="n">xscaled_dataarray</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx_function</span><span class="p">,</span> <span class="n">function</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">functions</span><span class="p">):</span>
+            <span class="n">coef_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">function</span><span class="p">[</span><span class="s2">&quot;range_start&quot;</span><span class="p">],</span> <span class="n">function</span><span class="p">[</span><span class="s2">&quot;range_end&quot;</span><span class="p">]]</span>
+            <span class="k">for</span> <span class="n">idx_coef</span><span class="p">,</span> <span class="n">coef_border</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coef_range</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">single_operator</span><span class="p">,</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">coef_border</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">xr_condition</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">operator</span><span class="p">,</span> <span class="n">single_operator</span><span class="p">)(</span>
+                        <span class="n">dataarray</span><span class="p">,</span> <span class="n">threshold</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">idx_coef</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">ops</span> <span class="o">=</span> <span class="n">xr_condition</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ops</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">ops</span><span class="p">,</span> <span class="n">xr_condition</span><span class="p">)</span>
+            <span class="n">xscaled_dataarray</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="nb">dict</span><span class="p">(</span><span class="n">condition</span><span class="o">=</span><span class="n">ops</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">function</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">],</span> <span class="n">offset</span><span class="o">=</span><span class="n">function</span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">])</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">xscaled_dataarray</span><span class="p">:</span>
+            <span class="n">dataarray</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">op</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">],</span> <span class="n">dataarray</span> <span class="o">*</span> <span class="n">op</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">op</span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">],</span> <span class="n">dataarray</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">dataarray</span></div>
+
+
+<div class="viewcode-block" id="Harmonizer.apply_to_asset">
+<a class="viewcode-back" href="../../../../earthdaily.earthdatastore.cube_utils.harmonizer.html#earthdaily.earthdatastore.cube_utils.harmonizer.Harmonizer.apply_to_asset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_to_asset</span><span class="p">(</span><span class="n">functions</span><span class="p">,</span> <span class="n">dataarray</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span> <span class="n">band_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">functions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Single function</span>
+            <span class="n">dataarray</span> <span class="o">=</span> <span class="n">dataarray</span> <span class="o">*</span> <span class="n">functions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">functions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;offset&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Multiple functions</span>
+            <span class="c1"># TO DO : Replace x variable and the eval(xr_where_string) by a native function</span>
+            <span class="n">dataarray</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="o">.</span><span class="n">xcal_functions_parser</span><span class="p">(</span><span class="n">functions</span><span class="p">,</span> <span class="n">dataarray</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dataarray</span></div>
+
+
+<div class="viewcode-block" id="Harmonizer.check_timerange">
+<a class="viewcode-back" href="../../../../earthdaily.earthdatastore.cube_utils.harmonizer.html#earthdaily.earthdatastore.cube_utils.harmonizer.Harmonizer.check_timerange">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_timerange</span><span class="p">(</span><span class="n">xcal_item</span><span class="p">,</span> <span class="n">item_datetime</span><span class="p">):</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+            <span class="n">xcal_item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;published&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
+        <span class="p">)</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item_datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+            <span class="n">item_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">item_datetime</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span><span class="p">)</span>
+        <span class="n">item_datetime</span> <span class="o">=</span> <span class="n">item_datetime</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;expires&quot;</span> <span class="ow">in</span> <span class="n">xcal_item</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                <span class="n">xcal_item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;expires&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
+            <span class="p">)</span>
+            <span class="n">end_date</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">start_date</span> <span class="o">&lt;=</span> <span class="n">item_datetime</span> <span class="o">&lt;=</span> <span class="n">end_date</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">start_date</span> <span class="o">&lt;=</span> <span class="n">item_datetime</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

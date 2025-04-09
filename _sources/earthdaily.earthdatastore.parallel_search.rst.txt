@@ -1,0 +1,7 @@
+earthdaily.earthdatastore.parallel\_search module
+=================================================
+
+.. automodule:: earthdaily.earthdatastore.parallel_search
+   :members:
+   :undoc-members:
+   :show-inheritance:

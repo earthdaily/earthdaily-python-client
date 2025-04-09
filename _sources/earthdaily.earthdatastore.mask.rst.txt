@@ -1,0 +1,10 @@
+earthdaily.earthdatastore.mask package
+======================================
+
+Module contents
+---------------
+
+.. automodule:: earthdaily.earthdatastore.mask
+   :members:
+   :undoc-members:
+   :show-inheritance:

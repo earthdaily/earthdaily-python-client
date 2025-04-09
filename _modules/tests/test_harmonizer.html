@@ -1,0 +1,407 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.test_harmonizer &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tests.test_harmonizer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tests.test_harmonizer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">unittest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.earthdatastore.cube_utils.harmonizer</span><span class="w"> </span><span class="kn">import</span> <span class="n">Harmonizer</span>
+
+
+<div class="viewcode-block" id="TestHarmonizer">
+<a class="viewcode-back" href="../../tests.test_harmonizer.html#tests.test_harmonizer.TestHarmonizer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestHarmonizer</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestHarmonizer.setUp">
+<a class="viewcode-back" href="../../tests.test_harmonizer.html#tests.test_harmonizer.TestHarmonizer.setUp">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1987-04-22&quot;</span><span class="p">,</span> <span class="s2">&quot;1998-07-29&quot;</span><span class="p">]</span>
+
+        <span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">y_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="n">data_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">data_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">data_values</span><span class="p">,</span> <span class="n">data_values</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fake_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;first_var&quot;</span><span class="p">:</span> <span class="p">((</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">),</span> <span class="n">data_values</span><span class="p">),</span>
+            <span class="p">},</span>
+            <span class="n">coords</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y_values</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x_values</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">times</span><span class="p">},</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestHarmonizer.generate_fake_xcal_item">
+<a class="viewcode-back" href="../../tests.test_harmonizer.html#tests.test_harmonizer.TestHarmonizer.generate_fake_xcal_item">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_fake_xcal_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">published</span><span class="p">,</span> <span class="n">expires</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span> <span class="n">source_platform</span><span class="p">):</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;published&quot;</span><span class="p">:</span> <span class="n">published</span><span class="p">,</span>
+            <span class="s2">&quot;eda_cross_cal:bands&quot;</span><span class="p">:</span> <span class="n">bands</span><span class="p">,</span>
+            <span class="s2">&quot;eda_cross_cal:source_platform&quot;</span><span class="p">:</span> <span class="n">source_platform</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">expires</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">props</span><span class="p">[</span><span class="s2">&quot;expires&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">expires</span>
+
+        <span class="k">return</span> <span class="n">Item</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">=</span><span class="n">props</span><span class="p">,</span>
+            <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">90.0</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">],</span>
+            <span class="n">datetime</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">,</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">[</span>
+                        <span class="p">[</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">90.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">180.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">90.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">],</span>
+                    <span class="p">]</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestHarmonizer.generate_fake_collection_item">
+<a class="viewcode-back" href="../../tests.test_harmonizer.html#tests.test_harmonizer.TestHarmonizer.generate_fake_collection_item">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_fake_collection_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">datetime</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Item</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+            <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">90.0</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">],</span>
+            <span class="n">datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;platform&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">},</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">[</span>
+                        <span class="p">[</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">90.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">180.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">90.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">],</span>
+                    <span class="p">]</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestHarmonizer.test_check_timerange">
+<a class="viewcode-back" href="../../tests.test_harmonizer.html#tests.test_harmonizer.TestHarmonizer.test_check_timerange">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_check_timerange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">xcal_item_from_20230901_to_20230915</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_fake_xcal_item</span><span class="p">(</span>
+            <span class="s2">&quot;fake_xcal_item&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-09-01T00:00:00Z&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-09-15T23:59:59Z&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">valid_item_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+            <span class="s2">&quot;2023-09-12T15:10:07Z&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">invalid_item_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+            <span class="s2">&quot;2024-09-27T05:40:02Z&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+            <span class="n">Harmonizer</span><span class="o">.</span><span class="n">check_timerange</span><span class="p">(</span>
+                <span class="n">xcal_item_from_20230901_to_20230915</span><span class="p">,</span> <span class="n">valid_item_date</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span>
+            <span class="n">Harmonizer</span><span class="o">.</span><span class="n">check_timerange</span><span class="p">(</span>
+                <span class="n">xcal_item_from_20230901_to_20230915</span><span class="p">,</span> <span class="n">invalid_item_date</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestHarmonizer.test_apply_to_asset_single_function">
+<a class="viewcode-back" href="../../tests.test_harmonizer.html#tests.test_harmonizer.TestHarmonizer.test_apply_to_asset_single_function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_apply_to_asset_single_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">single_function_xcal</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;single_func&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;single_func&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">}]}]</span>
+        <span class="p">}</span>
+
+        <span class="n">fake_ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fake_ds</span>
+
+        <span class="n">scaled_dataset</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">scaled_dataset</span><span class="p">[</span><span class="s2">&quot;single_func&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fake_ds</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">scaled_asset</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="o">.</span><span class="n">apply_to_asset</span><span class="p">(</span>
+                <span class="n">single_function_xcal</span><span class="p">[</span><span class="s2">&quot;single_func&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;single_func&quot;</span><span class="p">],</span>
+                <span class="n">fake_ds</span><span class="p">[[</span><span class="s2">&quot;first_var&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)],</span>
+                <span class="s2">&quot;single_func&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">scaled_dataset</span><span class="p">[</span><span class="s2">&quot;single_func&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scaled_asset</span><span class="p">)</span>
+
+        <span class="n">ds_</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">scaled_dataset</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ds_k</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                <span class="n">ds_k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">ds_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">ds_k</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">))</span>
+        <span class="n">ds_</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ds_</span><span class="p">)</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        <span class="n">ds_</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">fake_ds</span><span class="o">.</span><span class="n">attrs</span>
+
+        <span class="n">expected_array</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">6.5</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">8.5</span><span class="p">,</span> <span class="mf">10.5</span><span class="p">,</span> <span class="mf">12.5</span><span class="p">,</span> <span class="mf">14.5</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">16.5</span><span class="p">,</span> <span class="mf">18.5</span><span class="p">,</span> <span class="mf">20.5</span><span class="p">,</span> <span class="mf">22.5</span><span class="p">],</span>
+        <span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_equal</span><span class="p">(</span>
+                <span class="n">ds_</span><span class="p">[</span><span class="s2">&quot;first_var&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;1987-04-22&quot;</span><span class="p">)],</span> <span class="n">expected_array</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Single Function xcal is not applied correctly&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestHarmonizer.test_apply_to_asset_multiple_functions">
+<a class="viewcode-back" href="../../tests.test_harmonizer.html#tests.test_harmonizer.TestHarmonizer.test_apply_to_asset_multiple_functions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_apply_to_asset_multiple_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">multiple_function_xcal</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;first_var&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;first_var&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+                            <span class="s2">&quot;range_start&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;ge&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                            <span class="s2">&quot;range_end&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;le&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                            <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s2">&quot;range_start&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;gt&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+                            <span class="s2">&quot;range_end&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;le&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+                        <span class="p">},</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Creating simple dataset</span>
+        <span class="n">fake_ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fake_ds</span>
+
+        <span class="n">scaled_dataset</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">scaled_dataset</span><span class="p">[</span><span class="s2">&quot;first_var&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fake_ds</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">scaled_asset</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="o">.</span><span class="n">apply_to_asset</span><span class="p">(</span>
+                <span class="n">multiple_function_xcal</span><span class="p">[</span><span class="s2">&quot;first_var&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;first_var&quot;</span><span class="p">],</span>
+                <span class="n">fake_ds</span><span class="p">[</span><span class="s2">&quot;first_var&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)],</span>
+                <span class="s2">&quot;first_var&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">scaled_dataset</span><span class="p">[</span><span class="s2">&quot;first_var&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scaled_asset</span><span class="p">)</span>
+
+        <span class="n">ds_</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">scaled_dataset</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ds_k</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                <span class="n">ds_k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">ds_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">ds_k</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">))</span>
+        <span class="n">ds_</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ds_</span><span class="p">)</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        <span class="n">ds_</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">fake_ds</span><span class="o">.</span><span class="n">attrs</span>
+
+        <span class="n">expected_array</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="mf">6.5</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span>
+        <span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_equal</span><span class="p">(</span>
+                <span class="n">ds_</span><span class="p">[</span><span class="s2">&quot;first_var&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;1987-04-22&quot;</span><span class="p">)],</span> <span class="n">expected_array</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Single Function xcal is not applied correctly&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestHarmonizer.test_different_xcal_by_date">
+<a class="viewcode-back" href="../../tests.test_harmonizer.html#tests.test_harmonizer.TestHarmonizer.test_different_xcal_by_date">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_different_xcal_by_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fake_ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fake_ds</span>
+
+        <span class="c1"># Creating fake xcal items</span>
+        <span class="n">xcal_item_from_1980_to_1990</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_fake_xcal_item</span><span class="p">(</span>
+            <span class="s2">&quot;1980_1990&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;1980-01-01T00:00:00Z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;1989-12-31T23:59:59Z&quot;</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;first_var&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;first_var&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}]}]},</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">xcal_item_from_1990</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_fake_xcal_item</span><span class="p">(</span>
+            <span class="s2">&quot;1990_and_beyond&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;1990-01-01T00:00:00Z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;first_var&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;first_var&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">}]}]},</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">fake_xcal_item</span> <span class="o">=</span> <span class="p">[</span><span class="n">xcal_item_from_1980_to_1990</span><span class="p">,</span> <span class="n">xcal_item_from_1990</span><span class="p">]</span>
+
+        <span class="c1"># Creating fake item</span>
+        <span class="n">item_1987</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_fake_collection_item</span><span class="p">(</span>
+            <span class="s2">&quot;item_1987&quot;</span><span class="p">,</span> <span class="s2">&quot;1987-04-22T12:18:59Z&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">item_1998</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_fake_collection_item</span><span class="p">(</span>
+            <span class="s2">&quot;item_1998&quot;</span><span class="p">,</span> <span class="s2">&quot;1998-07-29T12:18:59Z&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">fake_items</span> <span class="o">=</span> <span class="p">[</span><span class="n">item_1987</span><span class="p">,</span> <span class="n">item_1998</span><span class="p">]</span>
+
+        <span class="n">harmonized_fake_ds</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="o">.</span><span class="n">harmonize</span><span class="p">(</span>
+            <span class="n">fake_items</span><span class="p">,</span> <span class="n">fake_ds</span><span class="p">,</span> <span class="n">fake_xcal_item</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;first_var&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">expected_array_1987</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="p">[</span><span class="mi">18</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">24</span><span class="p">],</span> <span class="p">[</span><span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">32</span><span class="p">]]</span>
+        <span class="n">expected_array_1998</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="mf">6.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">8.5</span><span class="p">,</span> <span class="mf">9.5</span><span class="p">,</span> <span class="mf">10.5</span><span class="p">,</span> <span class="mf">11.5</span><span class="p">],</span>
+        <span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_equal</span><span class="p">(</span>
+                <span class="n">harmonized_fake_ds</span><span class="p">[</span><span class="s2">&quot;first_var&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;1987-04-22&quot;</span><span class="p">)],</span>
+                <span class="n">expected_array_1987</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Incorrect xcal application for 1987-04-22&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_array_equal</span><span class="p">(</span>
+                <span class="n">harmonized_fake_ds</span><span class="p">[</span><span class="s2">&quot;first_var&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="s2">&quot;1998-07-29&quot;</span><span class="p">)],</span>
+                <span class="n">expected_array_1998</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Incorrect xcal application for 1998-07-29&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

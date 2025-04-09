@@ -1,0 +1,18 @@
+earthdaily.utils package
+========================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   earthdaily.utils.copy_credentials_template
+
+Module contents
+---------------
+
+.. automodule:: earthdaily.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

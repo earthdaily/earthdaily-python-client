@@ -1,0 +1,10 @@
+earthdaily.accessor.whittaker package
+=====================================
+
+Module contents
+---------------
+
+.. automodule:: earthdaily.accessor.whittaker
+   :members:
+   :undoc-members:
+   :show-inheritance:

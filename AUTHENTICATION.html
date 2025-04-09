@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authentication &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="CONTRIBUTING.html" />
+    <link rel="prev" title="First steps to create a datacube" href="_auto_examples/first_steps_create_datacube.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Authentication</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#authentication-from-the-default-credentials-file">Authentication from the default credentials file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authentication-from-a-json-file">Authentication from a JSON file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authentication-from-a-toml-file">Authentication from a TOML file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authentication-from-environment-variables">Authentication from Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Authentication</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/AUTHENTICATION.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="authentication">
+<h1>Authentication<a class="headerlink" href="#authentication" title="Link to this heading"></a></h1>
+<p>Advanced users can use the <code class="docutils literal notranslate"><span class="pre">earthdaily/utils/copy_credentials_template.py</span></code> script to generate credentials file as JSON, TOML or .env. Alternatively use one of the approaches listed below.</p>
+<section id="authentication-from-the-default-credentials-file">
+<h2>Authentication from the default credentials file<a class="headerlink" href="#authentication-from-the-default-credentials-file" title="Link to this heading"></a></h2>
+<p>Using a TOML file for authentication has the advantage that the authentication is handled seamlessly by the client and it is not necessary to point to the authentication file.
+A TOML credentials file will be created in the following locations:</p>
+<ul class="simple">
+<li><p>“$HOME/.earthdaily/credentials” on linux</p></li>
+<li><p>“$USERPROFILE/.earthdaily/credentials” on Windows</p></li>
+</ul>
+<p>Run from the root of the repository:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">copy-earthdaily-credentials-template --default</span>
+</pre></div>
+</div>
+<p>Edit it to insert your credentials.
+The following code will automatically find and use the credentials for authentification.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily</span><span class="w"> </span><span class="kn">import</span> <span class="n">EarthDataStore</span>
+<span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="authentication-from-a-json-file">
+<h2>Authentication from a JSON file<a class="headerlink" href="#authentication-from-a-json-file" title="Link to this heading"></a></h2>
+<p>Authentication credentials can be given as an input JSON file.
+You can generate a JSON credentials file with the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">copy-earthdaily-credentials-template --json &quot;/path/to/the/credentials_file.json&quot;</span>
+</pre></div>
+</div>
+<p>Edit it to insert your credentials.
+Then use it as input for authentification:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily</span><span class="w"> </span><span class="kn">import</span> <span class="n">EarthDataStore</span>
+<span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">(</span><span class="n">json_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/path/to/the/credentials_file.json&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="authentication-from-a-toml-file">
+<h2>Authentication from a TOML file<a class="headerlink" href="#authentication-from-a-toml-file" title="Link to this heading"></a></h2>
+<p>Authentication credentials can be given as input with a TOML file.
+You can generate a TOML credentials file with the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">copy-earthdaily-credentials-template --toml &quot;/path/to/the/credentials_file&quot;</span>
+</pre></div>
+</div>
+<p>Edit it to insert your credentials.
+Then use it as input for authentification:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily</span><span class="w"> </span><span class="kn">import</span> <span class="n">EarthDataStore</span>
+<span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">(</span><span class="n">toml_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/path/to/the/credentials_file&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="authentication-from-environment-variables">
+<h2>Authentication from Environment Variables<a class="headerlink" href="#authentication-from-environment-variables" title="Link to this heading"></a></h2>
+<p>Authentication credentials can be automatically parsed from environment variables.
+The <a class="reference external" href="https://github.com/theskumar/python-dotenv">python-dotenv</a> package is supported for convenience.</p>
+<p>Rename the <code class="docutils literal notranslate"><span class="pre">.env.sample</span></code> file in this repository to <code class="docutils literal notranslate"><span class="pre">.env</span></code> and enter your Earth Data Store authentication credentials.
+Note this file is gitingored and will not be committed.</p>
+<p>In your script or notebook, add:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+
+<span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;.env&quot;</span><span class="p">)</span>  <span class="c1"># Load environment variables from .env file</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="_auto_examples/first_steps_create_datacube.html" class="btn btn-neutral float-left" title="First steps to create a datacube" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CONTRIBUTING.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

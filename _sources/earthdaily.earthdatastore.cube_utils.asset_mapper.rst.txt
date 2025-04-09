@@ -1,0 +1,10 @@
+earthdaily.earthdatastore.cube\_utils.asset\_mapper package
+===========================================================
+
+Module contents
+---------------
+
+.. automodule:: earthdaily.earthdatastore.cube_utils.asset_mapper
+   :members:
+   :undoc-members:
+   :show-inheritance:

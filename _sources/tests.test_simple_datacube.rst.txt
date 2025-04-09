@@ -1,0 +1,7 @@
+tests.test\_simple\_datacube module
+===================================
+
+.. automodule:: tests.test_simple_datacube
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,1716 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.earthdatastore &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../earthdaily.html">earthdaily</a></li>
+      <li class="breadcrumb-item active">earthdaily.earthdatastore</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for earthdaily.earthdatastore</h1><div class="highlight"><pre>
+<span></span><span class="c1"># mypy: ignore-errors</span>
+<span class="c1"># TODO (v1): Fix type issues and remove &#39;mypy: ignore-errors&#39; after verifying non-breaking changes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">operator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">toml</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">odc</span><span class="w"> </span><span class="kn">import</span> <span class="n">stac</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.item_collection</span><span class="w"> </span><span class="kn">import</span> <span class="n">ItemCollection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac_client.stac_api_io</span><span class="w"> </span><span class="kn">import</span> <span class="n">StacApiIO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Retry</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_scales_collections</span><span class="p">,</span> <span class="n">cube_utils</span><span class="p">,</span> <span class="n">mask</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.cube_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_datacubes</span><span class="p">,</span> <span class="n">asset_mapper</span><span class="p">,</span> <span class="n">datacube</span><span class="p">,</span> <span class="n">metacube</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.parallel_search</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoItemsFoundError</span><span class="p">,</span> <span class="n">parallel_search</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;datacube&quot;</span><span class="p">,</span> <span class="s2">&quot;metacube&quot;</span><span class="p">,</span> <span class="s2">&quot;xr&quot;</span><span class="p">,</span> <span class="s2">&quot;stac&quot;</span><span class="p">]</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;earthdaily-earthdatastore&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="EarthDataStoreConfig">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.EarthDataStoreConfig.html#earthdaily.earthdatastore.EarthDataStoreConfig">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EarthDataStoreConfig</span><span class="p">:</span>
+    <span class="n">auth_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">client_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">client_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">eds_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://api.earthdaily.com/platform/v1/stac&quot;</span>
+    <span class="n">access_token</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="apply_single_condition">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.apply_single_condition.html#earthdaily.earthdatastore.apply_single_condition">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_single_condition</span><span class="p">(</span>
+    <span class="n">item_value</span><span class="p">,</span> <span class="n">condition_op</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">condition_value</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a single comparison condition to an item&#39;s property value.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    item_value : any</span>
+<span class="sd">        The value of the property in the item.</span>
+<span class="sd">    condition_op : str</span>
+<span class="sd">        The comparison operator (e.g., &#39;lt&#39;, &#39;gt&#39;, &#39;eq&#39;).</span>
+<span class="sd">    condition_value : [any, list[any]]</span>
+<span class="sd">        The value or list of values to compare against.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the condition is met, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Ensure condition_value is always a list</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">condition_value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">condition_value</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">condition_value</span><span class="p">]</span>
+
+    <span class="c1"># Get the comparison function from the operator module</span>
+    <span class="n">op_func</span> <span class="o">=</span> <span class="n">operator</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">condition_op</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">op_func</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported operator: </span><span class="si">{</span><span class="n">condition_op</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check if any value meets the condition</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">op_func</span><span class="p">(</span><span class="n">item_value</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">values</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="validate_property_condition">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.validate_property_condition.html#earthdaily.earthdatastore.validate_property_condition">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_property_condition</span><span class="p">(</span>
+    <span class="n">item</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">property_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">conditions</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate if an item meets all conditions for a specific property.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    item : any</span>
+<span class="sd">        The STAC item to check.</span>
+<span class="sd">    property_name : str</span>
+<span class="sd">        The name of the property to validate.</span>
+<span class="sd">    conditions : dict[str, any]</span>
+<span class="sd">        Dictionary of conditions to apply to the property.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if all conditions are met, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if the property exists in the item</span>
+    <span class="k">if</span> <span class="n">property_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Check each condition for the property</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="n">apply_single_condition</span><span class="p">(</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">property_name</span><span class="p">),</span> <span class="n">condition_op</span><span class="p">,</span> <span class="n">condition_value</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">condition_op</span><span class="p">,</span> <span class="n">condition_value</span> <span class="ow">in</span> <span class="n">conditions</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="filter_items">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.filter_items.html#earthdaily.earthdatastore.filter_items">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">filter_items</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">query</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filter items based on a complex query dictionary.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    items : list[any]</span>
+<span class="sd">        List of STAC items to filter.</span>
+<span class="sd">    query : dict[str, dict[str, any]]</span>
+<span class="sd">        Query filter with operations to apply to item properties.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[any]</span>
+<span class="sd">        Filtered list of items matching the query.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; query = {</span>
+<span class="sd">    ...     &#39;eo:cloud_cover&#39;: {&#39;lt&#39;: [10], &#39;gt&#39;: [0]},</span>
+<span class="sd">    ...     &#39;datetime&#39;: {&#39;eq&#39;: &#39;2023-01-01&#39;}</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; filtered_items = filter_items(catalog_items, query)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">item</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="n">validate_property_condition</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">property_name</span><span class="p">,</span> <span class="n">conditions</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">property_name</span><span class="p">,</span> <span class="n">conditions</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="post_query_items">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.post_query_items.html#earthdaily.earthdatastore.post_query_items">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">post_query_items</span><span class="p">(</span>
+    <span class="n">items</span><span class="p">:</span> <span class="n">ItemCollection</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">query</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemCollection</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a query filter to items fetched from a STAC catalog and return an ItemCollection.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    items : list[any]</span>
+<span class="sd">        List of STAC items to filter.</span>
+<span class="sd">    query : dict[str, dict[str, any]]</span>
+<span class="sd">        Query filter with operations to apply to item properties.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ItemCollection</span>
+<span class="sd">        Filtered collection of items matching the query.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; query = {</span>
+<span class="sd">    ...     &#39;eo:cloud_cover&#39;: {&#39;lt&#39;: [10], &#39;gt&#39;: [0]},</span>
+<span class="sd">    ...     &#39;datetime&#39;: {&#39;eq&#39;: &#39;2023-01-01&#39;}</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; filtered_items = post_query_items(catalog_items, query)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filtered_items</span> <span class="o">=</span> <span class="n">filter_items</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ItemCollection</span><span class="p">(</span>
+        <span class="n">filtered_items</span>
+    <span class="p">)</span>  <span class="c1"># Assuming ItemCollection is imported/defined elsewhere</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_select_last_common_occurrences</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For each date in second dataset, select the last N occurrences of that date from first dataset,</span>
+<span class="sd">    where N is the count of that date in second dataset.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    first (xarray.Dataset): Source dataset</span>
+<span class="sd">    second (xarray.Dataset): Dataset containing the dates to match and their counts</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    xarray.Dataset: Subset of first dataset with selected time indices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert times to datetime64[ns] if they aren&#39;t already</span>
+    <span class="n">first_times</span> <span class="o">=</span> <span class="n">first</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;datetime64[ns]&quot;</span><span class="p">)</span>
+    <span class="n">second_times</span> <span class="o">=</span> <span class="n">second</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;datetime64[ns]&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get unique dates and their counts from second dataset</span>
+    <span class="n">unique_dates</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">second_times</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Initialize list to store selected indices</span>
+    <span class="n">selected_indices</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># For each unique date in second</span>
+    <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">unique_dates</span><span class="p">,</span> <span class="n">counts</span><span class="p">):</span>
+        <span class="c1"># Find all indices where this date appears in first</span>
+        <span class="n">date_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">first_times</span> <span class="o">==</span> <span class="n">date</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Take the last &#39;count&#39; number of indices</span>
+        <span class="n">selected_indices</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">date_indices</span><span class="p">[</span><span class="o">-</span><span class="n">count</span><span class="p">:])</span>
+
+    <span class="c1"># Sort indices to maintain temporal order (or reverse them if needed)</span>
+    <span class="n">selected_indices</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">selected_indices</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Select these indices from the first dataset</span>
+    <span class="k">return</span> <span class="n">first</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">selected_indices</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cloud_path_to_http</span><span class="p">(</span><span class="n">cloud_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a cloud path to HTTP URL.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cloud_path : str</span>
+<span class="sd">        Cloud path</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    url : str</span>
+<span class="sd">        HTTP URL</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">endpoints</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">s3</span><span class="o">=</span><span class="s2">&quot;s3.amazonaws.com&quot;</span><span class="p">)</span>
+    <span class="n">cloud_provider</span> <span class="o">=</span> <span class="n">cloud_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;://&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">container</span> <span class="o">=</span> <span class="n">cloud_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cloud_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">3</span><span class="p">:])</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoints</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cloud_provider</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">endpoint</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">container</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">cloud_path</span>
+    <span class="k">return</span> <span class="n">url</span>
+
+
+<div class="viewcode-block" id="enhance_assets">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.enhance_assets.html#earthdaily.earthdatastore.enhance_assets">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">enhance_assets</span><span class="p">(</span>
+    <span class="n">items</span><span class="p">:</span> <span class="n">ItemCollection</span><span class="p">,</span>
+    <span class="n">alternate</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;download&quot;</span><span class="p">,</span>
+    <span class="n">use_http_url</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">add_default_scale_factor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemCollection</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enhance STAC item assets with additional metadata and URL transformations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    items : ItemCollection</span>
+<span class="sd">        Collection of STAC items to enhance</span>
+<span class="sd">    alternate : Optional[str], optional</span>
+<span class="sd">        Alternate asset href to use, by default &quot;download&quot;</span>
+<span class="sd">    use_http_url : bool, optional</span>
+<span class="sd">        Convert cloud URLs to HTTP URLs, by default False</span>
+<span class="sd">    add_default_scale_factor : bool, optional</span>
+<span class="sd">        Add default scale, offset, nodata to raster bands, by default False</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ItemCollection</span>
+<span class="sd">        Enhanced collection of STAC items</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="n">alternate</span><span class="p">,</span> <span class="n">use_http_url</span><span class="p">,</span> <span class="n">add_default_scale_factor</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="c1"># use the alternate href if it exists</span>
+                <span class="k">if</span> <span class="n">alternate</span><span class="p">:</span>
+                    <span class="n">href</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span>
+                        <span class="o">.</span><span class="n">extra_fields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alternate&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">alternate</span><span class="p">,</span> <span class="p">{})</span>
+                        <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">href</span><span class="p">:</span>
+                        <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span><span class="o">.</span><span class="n">href</span> <span class="o">=</span> <span class="n">href</span>
+                <span class="c1"># use HTTP URL instead of cloud path</span>
+                <span class="k">if</span> <span class="n">use_http_url</span><span class="p">:</span>
+                    <span class="n">href</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                    <span class="k">if</span> <span class="n">href</span><span class="p">:</span>
+                        <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span><span class="o">.</span><span class="n">href</span> <span class="o">=</span> <span class="n">_cloud_path_to_http</span><span class="p">(</span><span class="n">href</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">add_default_scale_factor</span><span class="p">:</span>
+                    <span class="n">scale_factor_collection</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">_scales_collections</span><span class="o">.</span><span class="n">scale_factor_collections</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                            <span class="n">item</span><span class="o">.</span><span class="n">collection_id</span> <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">collection_id</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">[{}]</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">scales_collection</span> <span class="ow">in</span> <span class="n">scale_factor_collection</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">scales_collection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;assets&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                            <span class="k">if</span> <span class="p">(</span>
+                                <span class="s2">&quot;raster:bands&quot;</span>
+                                <span class="ow">not</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span><span class="o">.</span><span class="n">extra_fields</span>
+                            <span class="p">):</span>
+                                <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span><span class="o">.</span><span class="n">extra_fields</span><span class="p">[</span>
+                                    <span class="s2">&quot;raster:bands&quot;</span>
+                                <span class="p">]</span> <span class="o">=</span> <span class="p">[{}]</span>
+                            <span class="k">if</span> <span class="p">(</span>
+                                <span class="ow">not</span> <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                                <span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span>
+                                <span class="o">.</span><span class="n">extra_fields</span><span class="p">[</span><span class="s2">&quot;raster:bands&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scale&quot;</span><span class="p">)</span>
+                            <span class="p">):</span>
+                                <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span><span class="o">.</span><span class="n">extra_fields</span><span class="p">[</span><span class="s2">&quot;raster:bands&quot;</span><span class="p">][</span>
+                                    <span class="mi">0</span>
+                                <span class="p">][</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scales_collection</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span>
+                                <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span><span class="o">.</span><span class="n">extra_fields</span><span class="p">[</span><span class="s2">&quot;raster:bands&quot;</span><span class="p">][</span>
+                                    <span class="mi">0</span>
+                                <span class="p">][</span><span class="s2">&quot;offset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scales_collection</span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">]</span>
+                                <span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span><span class="o">.</span><span class="n">extra_fields</span><span class="p">[</span><span class="s2">&quot;raster:bands&quot;</span><span class="p">][</span>
+                                    <span class="mi">0</span>
+                                <span class="p">][</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scales_collection</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">items</span></div>
+
+
+
+<div class="viewcode-block" id="StacCollectionExplorer">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.StacCollectionExplorer.html#earthdaily.earthdatastore.StacCollectionExplorer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StacCollectionExplorer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class to explore a STAC collection.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client : Client</span>
+<span class="sd">        A PySTAC client for interacting with the Earth Data Store STAC API.</span>
+<span class="sd">    collection : str</span>
+<span class="sd">        The name of the collection to explore.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="n">collection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_collection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__first_item</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_collection</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__first_item</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the first item of the STAC collection as an overview of the items content.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        item : Item</span>
+<span class="sd">            The first item of the collection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_collection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">)</span><span class="o">.</span><span class="n">get_items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="k">break</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">item_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">asset_name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">asset_metadata</span><span class="p">(</span><span class="n">asset_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">assets_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">asset_name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">asset_metadata</span><span class="p">(</span><span class="n">asset_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">asset_metadata</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">()}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">asset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Exploring collection &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="si">}</span><span class="s1">&quot;&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="Auth">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Auth</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">presign_urls</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">asset_proxy_enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">client_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;0.0.0&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A client for interacting with the Earth Data Store API.</span>
+<span class="sd">        By default, Earth Data Store will look for environment variables called</span>
+<span class="sd">        EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : str | dict, optional</span>
+<span class="sd">            The path to the json file containing the Earth Data Store credentials,</span>
+<span class="sd">            or a dict with those credentials.</span>
+<span class="sd">        asset_proxy_enabled : bool, optional</span>
+<span class="sd">            Use asset proxy URLs, by default False</span>
+<span class="sd">        client_version : str, optional</span>
+<span class="sd">            The version of the client.</span>
+<span class="sd">            Uses the current version by default.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; eds = earthdaily.earthdatastore()</span>
+<span class="sd">        &gt;&gt;&gt; collection = &quot;venus-l2a&quot;</span>
+<span class="sd">        &gt;&gt;&gt; theia_location = &quot;MEAD&quot;</span>
+<span class="sd">        &gt;&gt;&gt; max_cloud_cover = 20</span>
+<span class="sd">        &gt;&gt;&gt; query = { &quot;theia:location&quot;: {&quot;eq&quot;: theia_location}, &quot;eo:cloud_cover&quot;: {&quot;lt&quot;: max_cloud_cover} }</span>
+<span class="sd">        &gt;&gt;&gt; items = eds.search(collections=collection, query=query)</span>
+<span class="sd">        &gt;&gt;&gt; print(len(items))</span>
+<span class="sd">        132</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Using directly the Auth class to load credentials is deprecated. &quot;</span>
+                <span class="s2">&quot;Please use earthdaily.EarthDataStore() instead&quot;</span><span class="p">,</span>
+                <span class="ne">FutureWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client_version</span> <span class="o">=</span> <span class="n">client_version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__auth_config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__presign_urls</span> <span class="o">=</span> <span class="n">presign_urls</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__asset_proxy_enabled</span> <span class="o">=</span> <span class="n">asset_proxy_enabled</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_first_items_</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_staccollectionexplorer</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__time_eds_log</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span>
+
+<div class="viewcode-block" id="Auth.from_credentials">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.from_credentials">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_credentials</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">json_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">toml_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">profile</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;0.0.0&quot;</span><span class="p">,</span>
+        <span class="n">presign_urls</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">asset_proxy_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Auth&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Secondary Constructor.</span>
+<span class="sd">        Try to read Earth Data Store credentials from multiple sources, in the following order:</span>
+<span class="sd">            - from input credentials stored in a given JSON file</span>
+<span class="sd">            - from input credentials stored in a given TOML file</span>
+<span class="sd">            - from environement variables</span>
+<span class="sd">            - from the $HOME/.earthdaily/credentials TOML file and a given profile</span>
+<span class="sd">            - from the $HOME/.earthdaily/credentials TOML file and the &quot;default&quot; profile</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : Path, optional</span>
+<span class="sd">            The path to the TOML file containing the Earth Data Store credentials.</span>
+<span class="sd">            Uses &quot;$HOME/.earthdaily/credentials&quot; by default.</span>
+<span class="sd">        profile : profile, optional</span>
+<span class="sd">            Name of the profile to use in the TOML file.</span>
+<span class="sd">            Uses &quot;default&quot; by default.</span>
+<span class="sd">        client_version : str, optional</span>
+<span class="sd">            The version of the client.</span>
+<span class="sd">            Uses the current version by default.</span>
+<span class="sd">        asset_proxy_enabled : bool, optional</span>
+<span class="sd">            Use asset proxy URLs, by default False</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Auth</span>
+<span class="sd">            A :class:`Auth` instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_credentials</span><span class="p">(</span>
+            <span class="n">json_path</span><span class="o">=</span><span class="n">json_path</span><span class="p">,</span>
+            <span class="n">toml_path</span><span class="o">=</span><span class="n">toml_path</span><span class="p">,</span>
+            <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">item</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing value for </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+            <span class="n">presign_urls</span><span class="o">=</span><span class="n">presign_urls</span><span class="p">,</span>
+            <span class="n">asset_proxy_enabled</span><span class="o">=</span><span class="n">asset_proxy_enabled</span><span class="p">,</span>
+            <span class="n">client_version</span><span class="o">=</span><span class="n">client_version</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Auth.read_credentials">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.read_credentials">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_credentials</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">json_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">toml_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">profile</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to read Earth Data Store credentials from multiple sources, in the following order:</span>
+<span class="sd">            - from input credentials stored in a given JSON file</span>
+<span class="sd">            - from input credentials stored in a given TOML file</span>
+<span class="sd">            - from environement variables</span>
+<span class="sd">            - from the $HOME/.earthdaily/credentials TOML file and a given profile</span>
+<span class="sd">            - from the $HOME/.earthdaily/credentials TOML file and the &quot;default&quot; profile</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : Path, optional</span>
+<span class="sd">            The path to the TOML file containing the Earth Data Store credentials.</span>
+<span class="sd">            Uses &quot;$HOME/.earthdaily/credentials&quot; by default.</span>
+<span class="sd">        profile : profile, optional</span>
+<span class="sd">            Name of the profile to use in the TOML file.</span>
+<span class="sd">            Uses &quot;default&quot; by default.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary containing credentials</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">json_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_credentials_from_json</span><span class="p">(</span><span class="n">json_path</span><span class="o">=</span><span class="n">json_path</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">toml_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_credentials_from_toml</span><span class="p">(</span>
+                    <span class="n">toml_path</span><span class="o">=</span><span class="n">toml_path</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">profile</span>
+                <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_AUTH_URL&quot;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_SECRET&quot;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_CLIENT_ID&quot;</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_credentials_from_environment</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_credentials_from_ini</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Credentials weren&#39;t found.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="Auth.read_credentials_from_ini">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.read_credentials_from_ini">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_credentials_from_ini</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">profile</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read Earth Data Store credentials from a ini file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ini_path : Path</span>
+<span class="sd">            The path to the INI file containing the Earth Data Store credentials.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">           Dictionary containing credentials</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="kn">from</span><span class="w"> </span><span class="nn">configparser</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigParser</span>
+
+        <span class="k">if</span> <span class="n">profile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">profile</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+        <span class="n">ini_path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.earthdaily/credentials&quot;</span>
+        <span class="n">ini_config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">ini_config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ini_path</span><span class="p">)</span>
+        <span class="n">ini_config</span> <span class="o">=</span> <span class="n">ini_config</span><span class="p">[</span><span class="n">profile</span><span class="p">]</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ini_config</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="Auth.read_credentials_from_json">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.read_credentials_from_json">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_credentials_from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">json_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read Earth Data Store credentials from a JSON file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        json_path : Path</span>
+<span class="sd">            The path to the JSON file containing the Earth Data Store credentials.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">           Dictionary containing credentials</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">json_path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">json_path</span>
+        <span class="k">with</span> <span class="n">json_path</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">file_object</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_object</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="Auth.read_credentials_from_environment">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.read_credentials_from_environment">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_credentials_from_environment</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read Earth Data Store credentials from environment variables.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary containing credentials</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;EDS_AUTH_URL&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_AUTH_URL&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;EDS_SECRET&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_SECRET&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;EDS_CLIENT_ID&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_CLIENT_ID&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Optional</span>
+        <span class="k">if</span> <span class="s2">&quot;EDS_API_URL&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;EDS_API_URL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_API_URL&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="Auth.read_credentials_from_toml">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.read_credentials_from_toml">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_credentials_from_toml</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">toml_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">profile</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read Earth Data Store credentials from a TOML file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        toml_path : Path, optional</span>
+<span class="sd">            The path to the TOML file containing the Earth Data Store credentials.</span>
+<span class="sd">        profile : profile, optional</span>
+<span class="sd">            Name of the profile to use in the TOML file</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary containing credentials</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">toml_path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">toml_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Credentials file </span><span class="si">{</span><span class="n">toml_path</span><span class="si">}</span><span class="s2"> not found. Make sure the path is valid&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">toml_path</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">toml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">profile</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Credentials profile </span><span class="si">{</span><span class="n">profile</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="n">toml_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">profile</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="Auth.get_access_token">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.get_access_token">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_access_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EarthDataStoreConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve an access token for interacting with the EarthDataStore API.</span>
+
+<span class="sd">        By default, the method will look for environment variables:</span>
+<span class="sd">        EDS_AUTH_URL, EDS_SECRET, and EDS_CLIENT_ID. Alternatively, a configuration</span>
+<span class="sd">        object or dictionary can be passed to override these values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : EarthDataStoreConfig, optional</span>
+<span class="sd">            A configuration object containing the Earth Data Store credentials.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The access token for authenticating with the Earth Data Store API.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_parser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__auth_config</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">auth_url</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">client_id</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">client_secret</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Authentication credentials (auth_url, client_id, client_secret) must not be None&quot;</span>
+            <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">auth_url</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;client_credentials&quot;</span><span class="p">},</span>
+            <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">client_id</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">client_secret</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_config_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EarthDataStoreConfig</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse and construct the EarthDataStoreConfig object from various input formats.</span>
+
+<span class="sd">        The method supports configuration as a dictionary, JSON file path, tuple,</span>
+<span class="sd">        or environment variables.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : dict or str or tuple, optional</span>
+<span class="sd">            Configuration source. It can be:</span>
+<span class="sd">            - A dictionary containing the required API credentials.</span>
+<span class="sd">            - A string path to a JSON file containing these credentials.</span>
+<span class="sd">            - A tuple of (access_token, eds_url).</span>
+<span class="sd">            - None, in which case environment variables will be used.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EarthDataStoreConfig</span>
+<span class="sd">            A configuration object containing the required API credentials.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            If required credentials are missing in the provided input or environment variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>  <span class="c1"># token</span>
+            <span class="n">access_token</span><span class="p">,</span> <span class="n">eds_url</span> <span class="o">=</span> <span class="n">config</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Using token to reauth&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">EarthDataStoreConfig</span><span class="p">(</span><span class="n">eds_url</span><span class="o">=</span><span class="n">eds_url</span><span class="p">,</span> <span class="n">access_token</span><span class="o">=</span><span class="n">access_token</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">config</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">):</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">get</span>
+
+            <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span>
+            <span class="n">auth_url</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s2">&quot;EDS_AUTH_URL&quot;</span><span class="p">)</span>
+            <span class="n">client_secret</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s2">&quot;EDS_SECRET&quot;</span><span class="p">)</span>
+            <span class="n">client_id</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s2">&quot;EDS_CLIENT_ID&quot;</span><span class="p">)</span>
+            <span class="n">eds_url</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span>
+                <span class="s2">&quot;EDS_API_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;https://api.earthdaily.com/platform/v1/stac&quot;</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">auth_url</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">client_secret</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">client_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                    <span class="s2">&quot;You need to have env : EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">EarthDataStoreConfig</span><span class="p">(</span>
+                <span class="n">auth_url</span><span class="o">=</span><span class="n">auth_url</span><span class="p">,</span>
+                <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span><span class="p">,</span>
+                <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
+                <span class="n">eds_url</span><span class="o">=</span><span class="n">eds_url</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">presign_urls</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">asset_proxy_enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get client for interacting with the EarthDataStore API.</span>
+
+<span class="sd">        By default, Earth Data Store will look for environment variables called</span>
+<span class="sd">        EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : str | dict, optional</span>
+<span class="sd">            A JSON string or a dictionary with the credentials for the Earth Data Store.</span>
+<span class="sd">        presign_urls : bool, optional</span>
+<span class="sd">            Use presigned URLs, by default True</span>
+<span class="sd">        asset_proxy_enabled : bool, optional</span>
+<span class="sd">            Use asset proxy URLs, by default False</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        client : Client</span>
+<span class="sd">            A PySTAC client for interacting with the Earth Data Store STAC API.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_parser</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">access_token</span><span class="p">:</span>
+            <span class="n">access_token</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">access_token</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">access_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_access_token</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;bearer </span><span class="si">{</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">asset_proxy_enabled</span><span class="p">:</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;X-Proxy-Asset-Urls&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span>
+        <span class="k">elif</span> <span class="n">presign_urls</span><span class="p">:</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;X-Signed-Asset-Urls&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">python_version</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_version</span><span class="p">()</span>
+            <span class="n">system_platform</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span>
+            <span class="n">uname_info</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">platform</span><span class="o">.</span><span class="n">uname</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">python_version</span> <span class="o">=</span> <span class="s2">&quot;(unknown)&quot;</span>
+            <span class="n">system_platform</span> <span class="o">=</span> <span class="s2">&quot;(unknown)&quot;</span>
+            <span class="n">uname_info</span> <span class="o">=</span> <span class="s2">&quot;(unknown)&quot;</span>
+
+        <span class="n">user_agent</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;EarthDaily-Python-Client/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_client_version</span><span class="si">}</span><span class="s2"> (Python/</span><span class="si">{</span><span class="n">python_version</span><span class="si">}</span><span class="s2">; </span><span class="si">{</span><span class="n">system_platform</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+        <span class="n">client_metadata</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;client_version&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_version</span><span class="p">,</span>
+            <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="s2">&quot;Python&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;publisher&quot;</span><span class="p">:</span> <span class="s2">&quot;EarthDaily&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;http_library&quot;</span><span class="p">:</span> <span class="s2">&quot;requests&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;python_version&quot;</span><span class="p">:</span> <span class="n">python_version</span><span class="p">,</span>
+            <span class="s2">&quot;platform&quot;</span><span class="p">:</span> <span class="n">system_platform</span><span class="p">,</span>
+            <span class="s2">&quot;system_info&quot;</span><span class="p">:</span> <span class="n">uname_info</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;User-Agent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_agent</span>
+        <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;X-EDA-Client-User-Agent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">client_metadata</span><span class="p">)</span>
+
+        <span class="n">retry</span> <span class="o">=</span> <span class="n">Retry</span><span class="p">(</span>
+            <span class="n">total</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">backoff_factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">status_forcelist</span><span class="o">=</span><span class="p">[</span><span class="mi">502</span><span class="p">,</span> <span class="mi">503</span><span class="p">,</span> <span class="mi">504</span><span class="p">],</span>
+            <span class="n">allowed_methods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">stac_api_io</span> <span class="o">=</span> <span class="n">StacApiIO</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="n">retry</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Client</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">eds_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">stac_io</span><span class="o">=</span><span class="n">stac_api_io</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Client</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an instance of pystac client from EarthDataSTore</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            A :class:`Client` instance for this Catalog.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">:=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__time_eds_log</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3600</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">t</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Reauth to EarthDataStore&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_client</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__auth_config</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__presign_urls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__asset_proxy_enabled</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__time_eds_log</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span>
+
+<div class="viewcode-block" id="Auth.explore">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.explore">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">explore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Explore a collection, its properties and assets. If not collection specified,</span>
+<span class="sd">        returns the list of collections.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        collection : str, optional.</span>
+<span class="sd">            Collection name. The default is None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str|StacCollectionExplorer</span>
+<span class="sd">            The list of collections, or a collection to explore using module</span>
+<span class="sd">            StacCollectionExplorer.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; eds = earthdaily.earthdatastore()</span>
+<span class="sd">        &gt;&gt;&gt; collection = &quot;venus-l2a&quot;</span>
+<span class="sd">        &gt;&gt;&gt; eds.explore(collection).item_properties</span>
+<span class="sd">        {&#39;constellation&#39;: &#39;VENUS&#39;,</span>
+<span class="sd">         &#39;created&#39;: &#39;2023-06-14T00:14:10.167450Z&#39;,</span>
+<span class="sd">         &#39;datetime&#39;: &#39;2023-06-07T11:23:18.000000Z&#39;,</span>
+<span class="sd">         &#39;description&#39;: &#39;&#39;,</span>
+<span class="sd">         &#39;eda:geometry_tags&#39;: [&#39;RESOLVED_CLOCKWISE_POLYGON&#39;],</span>
+<span class="sd">         &#39;eda:loose_validation_status&#39;: &#39;VALID&#39;,</span>
+<span class="sd">         &#39;eda:num_cols&#39;: 9106,</span>
+<span class="sd">         &#39;eda:num_rows&#39;: 11001,</span>
+<span class="sd">         &#39;eda:original_geometry&#39;: {&#39;type&#39;: &#39;Polygon&#39;,</span>
+<span class="sd">          &#39;coordinates&#39;: [[[-16.684545516968, 16.109294891357],</span>
+<span class="sd">            [-16.344039916992, 16.111709594727],</span>
+<span class="sd">            [-16.341398239136, 15.714001655579],</span>
+<span class="sd">            [-16.68123626709, 15.711649894714],</span>
+<span class="sd">            [-16.684545516968, 16.109294891357]]]},</span>
+<span class="sd">         &#39;eda:product_type&#39;: &#39;REFLECTANCE&#39;,</span>
+<span class="sd">         &#39;eda:sensor_type&#39;: &#39;OPTICAL&#39;,</span>
+<span class="sd">         &#39;eda:source_created&#39;: &#39;2023-06-13T18:47:27.000000Z&#39;,</span>
+<span class="sd">         &#39;eda:source_updated&#39;: &#39;2023-06-13T20:22:35.000000Z&#39;,</span>
+<span class="sd">         &#39;eda:status&#39;: &#39;PUBLISHED&#39;,</span>
+<span class="sd">         &#39;eda:tracking_id&#39;: &#39;MutZbYe54RY7eP3iuAbtKb&#39;,</span>
+<span class="sd">         &#39;eda:unusable_cover&#39;: 0.0,</span>
+<span class="sd">         &#39;eda:water_cover&#39;: 0.0,</span>
+<span class="sd">         &#39;end_datetime&#39;: &#39;2023-06-07T11:23:18.000000Z&#39;,</span>
+<span class="sd">         &#39;eo:bands&#39;: [{&#39;name&#39;: &#39;B1&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;coastal&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B1&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.424},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B2&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;coastal&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B2&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.447},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B3&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;blue&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B3&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.492},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B4&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;green&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B4&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.555},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B5&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;yellow&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B5&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.62},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B6&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;yellow&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B6&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.62},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B7&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;red&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B7&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.666},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B8&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;rededge&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B8&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.702},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B9&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;rededge&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B9&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.741},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B10&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;rededge&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B10&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.782},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B11&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;nir08&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B11&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.861},</span>
+<span class="sd">          {&#39;name&#39;: &#39;B12&#39;,</span>
+<span class="sd">           &#39;common_name&#39;: &#39;nir09&#39;,</span>
+<span class="sd">           &#39;description&#39;: &#39;B12&#39;,</span>
+<span class="sd">           &#39;center_wavelength&#39;: 0.909}],</span>
+<span class="sd">         &#39;eo:cloud_cover&#39;: 0.0,</span>
+<span class="sd">         &#39;gsd&#39;: 4.0,</span>
+<span class="sd">         &#39;instruments&#39;: [&#39;VENUS&#39;],</span>
+<span class="sd">         &#39;license&#39;: &#39;CC-BY-NC-4.0&#39;,</span>
+<span class="sd">         &#39;mission&#39;: &#39;venus&#39;,</span>
+<span class="sd">         &#39;platform&#39;: &#39;VENUS&#39;,</span>
+<span class="sd">         &#39;processing:level&#39;: &#39;L2A&#39;,</span>
+<span class="sd">         &#39;proj:epsg&#39;: 32628,</span>
+<span class="sd">         &#39;providers&#39;: [{&#39;name&#39;: &#39;Theia&#39;,</span>
+<span class="sd">           &#39;roles&#39;: [&#39;licensor&#39;, &#39;producer&#39;, &#39;processor&#39;]},</span>
+<span class="sd">          {&#39;url&#39;: &#39;https://earthdaily.com&#39;,</span>
+<span class="sd">           &#39;name&#39;: &#39;EarthDaily Analytics&#39;,</span>
+<span class="sd">           &#39;roles&#39;: [&#39;processor&#39;, &#39;host&#39;]}],</span>
+<span class="sd">         &#39;sat:absolute_orbit&#39;: 31453,</span>
+<span class="sd">         &#39;start_datetime&#39;: &#39;2023-06-07T11:23:18.000000Z&#39;,</span>
+<span class="sd">         &#39;theia:location&#39;: &#39;STLOUIS&#39;,</span>
+<span class="sd">         &#39;theia:product_id&#39;: &#39;VENUS-XS_20230607-112318-000_L2A_STLOUIS_C_V3-1&#39;,</span>
+<span class="sd">         &#39;theia:product_version&#39;: &#39;3.1&#39;,</span>
+<span class="sd">         &#39;theia:publication_date&#39;: &#39;2023-06-13T18:08:10.205000Z&#39;,</span>
+<span class="sd">         &#39;theia:sensor_mode&#39;: &#39;XS&#39;,</span>
+<span class="sd">         &#39;theia:source_uuid&#39;: &#39;a29bfc89-8372-5e91-841c-b11cdb40bb14&#39;,</span>
+<span class="sd">         &#39;title&#39;: &#39;VENUS-XS_20230607-112318-000_L2A_STLOUIS_D&#39;,</span>
+<span class="sd">         &#39;updated&#39;: &#39;2023-06-14T00:42:17.898993Z&#39;,</span>
+<span class="sd">         &#39;view:azimuth&#39;: 33.293623499999995,</span>
+<span class="sd">         &#39;view:incidence_angle&#39;: 14.6423245,</span>
+<span class="sd">         &#39;view:sun_azimuth&#39;: 69.8849963957,</span>
+<span class="sd">         &#39;view:sun_elevation&#39;: 65.0159541684}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">collection</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">collection</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_staccollectionexplorer</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_staccollectionexplorer</span><span class="p">[</span><span class="n">collection</span><span class="p">]</span> <span class="o">=</span> <span class="n">StacCollectionExplorer</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="n">collection</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_staccollectionexplorer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_all_collections</span><span class="p">())</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_search_kwargs_for_ag_cloud_mask</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">search_kwargs</span><span class="p">,</span>
+        <span class="n">collections</span><span class="p">,</span>
+        <span class="n">key</span><span class="o">=</span><span class="s2">&quot;eda:ag_cloud_mask_available&quot;</span><span class="p">,</span>
+        <span class="n">target_param</span><span class="o">=</span><span class="s2">&quot;query&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the STAC search kwargs to only get items that have an available agricultural cloud mask.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            search_kwargs (dict): The search kwargs to be updated.</span>
+<span class="sd">            collections (str | list): The collection(s) to search.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: The updated search kwargs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">search_kwargs</span> <span class="o">=</span> <span class="n">search_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="c1"># to get only items that have a ag_cloud_mask</span>
+        <span class="n">ag_query</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;eq&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}}</span>
+
+        <span class="c1"># to check if field is queryable</span>
+        <span class="c1"># =============================================================================</span>
+        <span class="c1">#         queryables = self.client._stac_io.request(</span>
+        <span class="c1">#             self.client.get_root_link().href</span>
+        <span class="c1">#             + f&quot;/queryables?collections={collections[0] if isinstance(collections,list) else collections}&quot;</span>
+        <span class="c1">#         )</span>
+        <span class="c1">#         queryables = json.loads(queryables)</span>
+        <span class="c1">#         queryables = queryables[&quot;properties&quot;]</span>
+        <span class="c1">#         if &quot;eda:ag_cloud_mask_available&quot; not in queryables.keys():</span>
+        <span class="c1">#             target_param = &quot;post_query&quot;</span>
+        <span class="c1">#         else:</span>
+        <span class="c1">#             target_param = &quot;query&quot;</span>
+        <span class="c1"># =============================================================================</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">search_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;target_param&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">query</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ag_query</span><span class="p">)</span>
+        <span class="n">search_kwargs</span><span class="p">[</span><span class="n">target_param</span><span class="p">]</span> <span class="o">=</span> <span class="n">query</span>
+        <span class="k">return</span> <span class="n">search_kwargs</span>
+
+<div class="viewcode-block" id="Auth.datacube">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.datacube">[docs]</a>
+    <span class="nd">@_datacubes</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">datacube</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">collections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">datetime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">assets</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">intersects</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">bbox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">mask_with</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">mask_statistics</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">clear_cover</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prefer_alternate</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">=</span> <span class="s2">&quot;download&quot;</span><span class="p">,</span>
+        <span class="n">search_kwargs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">add_default_scale_factor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">common_band_names</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">cross_calibration_collection</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">groupby_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+        <span class="n">drop_duplicates</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+        <span class="n">cloud_search_kwargs</span><span class="o">=</span><span class="p">{},</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a datacube.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        collections : str | list</span>
+<span class="sd">            If several collections, the first collection will be the reference collection (for spatial resolution).</span>
+<span class="sd">        datetime: Either a single datetime or datetime range used to filter results.</span>
+<span class="sd">            You may express a single datetime using a :class:`datetime.datetime`</span>
+<span class="sd">            instance, a `RFC 3339-compliant &lt;https://tools.ietf.org/html/rfc3339&gt;`__</span>
+<span class="sd">            timestamp, or a simple date string (see below). Instances of</span>
+<span class="sd">            :class:`datetime.datetime` may be either</span>
+<span class="sd">            timezone aware or unaware. Timezone aware instances will be converted to</span>
+<span class="sd">            a UTC timestamp before being passed</span>
+<span class="sd">            to the endpoint. Timezone unaware instances are assumed to represent UTC</span>
+<span class="sd">            timestamps. You may represent a</span>
+<span class="sd">            datetime range using a ``&quot;/&quot;`` separated string as described in the</span>
+<span class="sd">            spec, or a list, tuple, or iterator</span>
+<span class="sd">            of 2 timestamps or datetime instances. For open-ended ranges, use either</span>
+<span class="sd">            ``&quot;..&quot;`` (``&#39;2020-01-01:00:00:00Z/..&#39;``,</span>
+<span class="sd">            ``[&#39;2020-01-01:00:00:00Z&#39;, &#39;..&#39;]``) or a value of ``None``</span>
+<span class="sd">            (``[&#39;2020-01-01:00:00:00Z&#39;, None]``).</span>
+
+<span class="sd">            If using a simple date string, the datetime can be specified in</span>
+<span class="sd">            ``YYYY-mm-dd`` format, optionally truncating</span>
+<span class="sd">            to ``YYYY-mm`` or just ``YYYY``. Simple date strings will be expanded to</span>
+<span class="sd">            include the entire time period, for example:</span>
+
+<span class="sd">            - ``2017`` expands to ``2017-01-01T00:00:00Z/2017-12-31T23:59:59Z``</span>
+<span class="sd">            - ``2017-06`` expands to ``2017-06-01T00:00:00Z/2017-06-30T23:59:59Z``</span>
+<span class="sd">            - ``2017-06-10`` expands to</span>
+<span class="sd">              ``2017-06-10T00:00:00Z/2017-06-10T23:59:59Z``</span>
+
+<span class="sd">            If used in a range, the end of the range expands to the end of that</span>
+<span class="sd">            day/month/year, for example:</span>
+
+<span class="sd">            - ``2017/2018`` expands to</span>
+<span class="sd">              ``2017-01-01T00:00:00Z/2018-12-31T23:59:59Z``</span>
+<span class="sd">            - ``2017-06/2017-07`` expands to</span>
+<span class="sd">              ``2017-06-01T00:00:00Z/2017-07-31T23:59:59Z``</span>
+<span class="sd">            - ``2017-06-10/2017-06-11`` expands to</span>
+<span class="sd">              ``2017-06-10T00:00:00Z/2017-06-11T23:59:59Z``</span>
+<span class="sd">        assets : None | list | dict, optional</span>
+<span class="sd">            DESCRIPTION. The default is None.</span>
+<span class="sd">        intersects : (gpd.GeoDataFrame, str(wkt), dict(json)), optional</span>
+<span class="sd">            DESCRIPTION. The default is None.</span>
+<span class="sd">        bbox : TYPE, optional</span>
+<span class="sd">            DESCRIPTION. The default is None.</span>
+<span class="sd">        mask_with : (None, str, list), optional</span>
+<span class="sd">            &quot;native&quot; mask, or &quot;ag_cloud_mask&quot;, or [&quot;ag_cloud_mask&quot;,&quot;native&quot;],</span>
+<span class="sd">            and so if ag_cloud_mask is not available, will switch to native.</span>
+<span class="sd">            The default is None.</span>
+<span class="sd">        mask_statistics : bool | int, optional</span>
+<span class="sd">            DESCRIPTION. The default is False.</span>
+<span class="sd">        clear_cover : (int, float), optional</span>
+<span class="sd">            Percent of clear data above a field (from 0 to 100).</span>
+<span class="sd">            The default is None.</span>
+<span class="sd">        prefer_alternate : (str, False), optional</span>
+<span class="sd">            Uses the alternate/download href instead of the default href.</span>
+<span class="sd">            The default is &quot;download&quot;.</span>
+<span class="sd">        search_kwargs : dict, optional</span>
+<span class="sd">            DESCRIPTION. The default is {}.</span>
+<span class="sd">        add_default_scale_factor : bool, optional</span>
+<span class="sd">            DESCRIPTION. The default is True.</span>
+<span class="sd">        common_band_names : TYPE, optional</span>
+<span class="sd">            DESCRIPTION. The default is True.</span>
+<span class="sd">        cross_calibration_collection : (None | str), optional</span>
+<span class="sd">            DESCRIPTION. The default is None.</span>
+<span class="sd">        properties : (bool | str | list), optional</span>
+<span class="sd">            Retrieve properties per item. The default is False.</span>
+<span class="sd">        **kwargs : TYPE</span>
+<span class="sd">            DESCRIPTION.</span>
+<span class="sd">         : TYPE</span>
+<span class="sd">            DESCRIPTION.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            DESCRIPTION.</span>
+<span class="sd">        Warning</span>
+<span class="sd">            DESCRIPTION.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ds : TYPE</span>
+<span class="sd">            DESCRIPTION.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Properties (per items) are not compatible with groupby_date.</span>
+        <span class="k">if</span> <span class="n">properties</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="n">groupby_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;You must set `groupby_date=None` to have properties per item.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># convert collections to list</span>
+        <span class="n">collections</span> <span class="o">=</span> <span class="p">[</span><span class="n">collections</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">collections</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">collections</span>
+
+        <span class="c1"># if intersects a geometry, create a GeoDataFrame</span>
+        <span class="k">if</span> <span class="n">intersects</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">intersects</span> <span class="o">=</span> <span class="n">cube_utils</span><span class="o">.</span><span class="n">GeometryManager</span><span class="p">(</span><span class="n">intersects</span><span class="p">)</span><span class="o">.</span><span class="n">to_geopandas</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">intersects</span> <span class="o">=</span> <span class="n">intersects</span>
+
+        <span class="c1"># if mask_with, need to add assets or to get mask item id</span>
+        <span class="k">if</span> <span class="n">mask_with</span><span class="p">:</span>
+            <span class="n">sensor_mask</span> <span class="o">=</span> <span class="n">mask_with</span>
+            <span class="k">if</span> <span class="n">mask_with</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mask</span><span class="o">.</span><span class="n">_available_masks</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Specified mask &#39;</span><span class="si">{</span><span class="n">mask_with</span><span class="si">}</span><span class="s2">&#39; is not available. Available masks providers are : </span><span class="si">{</span><span class="n">mask</span><span class="o">.</span><span class="n">_available_masks</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">mask_with</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">,</span> <span class="s2">&quot;agriculture-cloud-mask&quot;</span><span class="p">]:</span>
+                <span class="n">search_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_search_kwargs_for_ag_cloud_mask</span><span class="p">(</span>
+                    <span class="n">search_kwargs</span><span class="p">,</span> <span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;eda:ag_cloud_mask_available&quot;</span>
+                <span class="p">)</span>
+                <span class="n">mask_with</span> <span class="o">=</span> <span class="s2">&quot;ag_cloud_mask&quot;</span>
+            <span class="k">elif</span> <span class="n">mask_with</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="s2">&quot;cloud_mask&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;cloudmask&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;cloud_mask_ag_version&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;cloudmask_ag_version&quot;</span><span class="p">,</span>
+            <span class="p">]:</span>
+                <span class="n">search_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_search_kwargs_for_ag_cloud_mask</span><span class="p">(</span>
+                    <span class="n">search_kwargs</span><span class="p">,</span>
+                    <span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">key</span><span class="o">=</span><span class="s2">&quot;eda:cloud_mask_available&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="n">mask_with</span> <span class="o">=</span> <span class="s2">&quot;cloud_mask&quot;</span>
+                <span class="n">sensor_mask</span> <span class="o">=</span> <span class="n">mask_with</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mask_with</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">_native_mask_def_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">sensor_mask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">_native_mask_asset_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">assets</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sensor_mask</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">assets</span><span class="p">:</span>
+                    <span class="n">assets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sensor_mask</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">assets</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">assets</span><span class="p">[</span><span class="n">sensor_mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">sensor_mask</span>
+        <span class="n">bbox_query</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">intersects</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bbox_query</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cube_utils</span><span class="o">.</span><span class="n">GeometryManager</span><span class="p">(</span><span class="n">intersects</span><span class="p">)</span><span class="o">.</span><span class="n">to_bbox</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">intersects</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bbox_query</span> <span class="o">=</span> <span class="n">bbox</span>
+
+        <span class="c1"># query the items</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="n">collections</span><span class="o">=</span><span class="n">collections</span><span class="p">,</span>
+            <span class="n">bbox</span><span class="o">=</span><span class="n">bbox_query</span><span class="p">,</span>
+            <span class="n">datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">,</span>
+            <span class="n">assets</span><span class="o">=</span><span class="n">assets</span><span class="p">,</span>
+            <span class="n">prefer_alternate</span><span class="o">=</span><span class="n">prefer_alternate</span><span class="p">,</span>
+            <span class="n">add_default_scale_factor</span><span class="o">=</span><span class="n">add_default_scale_factor</span><span class="p">,</span>
+            <span class="n">drop_duplicates</span><span class="o">=</span><span class="n">drop_duplicates</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">search_kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">xcal_items</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">cross_calibration_collection</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">cross_calibration_collection</span> <span class="o">!=</span> <span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">xcal_items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                    <span class="n">collections</span><span class="o">=</span><span class="s2">&quot;eda-cross-calibration&quot;</span><span class="p">,</span>
+                    <span class="n">intersects</span><span class="o">=</span><span class="n">intersects</span><span class="p">,</span>
+                    <span class="n">query</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;eda_cross_cal:source_collection&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;eq&quot;</span><span class="p">:</span> <span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">]},</span>
+                        <span class="s2">&quot;eda_cross_cal:destination_collection&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;eq&quot;</span><span class="p">:</span> <span class="n">cross_calibration_collection</span>
+                        <span class="p">},</span>
+                    <span class="p">},</span>
+                    <span class="n">drop_duplicates</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Warning</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span>
+                    <span class="s2">&quot;No cross calibration coefficient available for the specified collections.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Create datacube from items</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">datacube</span><span class="p">(</span>
+            <span class="n">items</span><span class="p">,</span>
+            <span class="n">intersects</span><span class="o">=</span><span class="n">intersects</span><span class="p">,</span>
+            <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+            <span class="n">assets</span><span class="o">=</span><span class="n">assets</span><span class="p">,</span>
+            <span class="n">common_band_names</span><span class="o">=</span><span class="n">common_band_names</span><span class="p">,</span>
+            <span class="n">cross_calibration_items</span><span class="o">=</span><span class="n">xcal_items</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span>
+            <span class="n">groupby_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">intersects</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">intersects</span><span class="p">)</span>
+        <span class="c1"># Create mask datacube and apply it to ds</span>
+        <span class="k">if</span> <span class="n">mask_with</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;geobox&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;geobox&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">odc</span><span class="o">.</span><span class="n">geobox</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;crs&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;resolution&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;dtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int8&quot;</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;rescale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;resampling&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">if</span> <span class="n">clear_cover</span> <span class="ow">and</span> <span class="n">mask_statistics</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">mask_statistics</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">mask_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">mask_statistics</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mask_with</span> <span class="o">==</span> <span class="s2">&quot;ag_cloud_mask&quot;</span> <span class="ow">or</span> <span class="n">mask_with</span> <span class="o">==</span> <span class="s2">&quot;cloud_mask&quot;</span><span class="p">:</span>
+                <span class="n">mask_asset_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;agriculture-cloud-mask&quot;</span><span class="p">:</span> <span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">},</span>
+                    <span class="s2">&quot;cloud_mask&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;cloud-mask&quot;</span><span class="p">:</span> <span class="s2">&quot;cloud_mask&quot;</span><span class="p">},</span>
+                <span class="p">}</span>
+                <span class="n">items_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_cloud_mask_items</span><span class="p">(</span>
+                    <span class="n">items</span><span class="p">,</span> <span class="n">cloudmask</span><span class="o">=</span><span class="n">mask_with</span><span class="p">,</span> <span class="o">**</span><span class="n">cloud_search_kwargs</span>
+                <span class="p">)</span>
+                <span class="n">ds_mask</span> <span class="o">=</span> <span class="n">datacube</span><span class="p">(</span>
+                    <span class="n">items_mask</span><span class="p">,</span>
+                    <span class="n">intersects</span><span class="o">=</span><span class="n">intersects</span><span class="p">,</span>
+                    <span class="n">groupby_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">assets</span><span class="o">=</span><span class="n">mask_asset_mapping</span><span class="p">[</span><span class="n">mask_with</span><span class="p">],</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;M8[ns]&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">ds_mask</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                        <span class="s2">&quot;Sensor and cloudmask don&#39;t havethe same time.</span><span class="se">\</span>
+<span class="s2">                                              </span><span class="si">{ds.time.size}</span><span class="s2"> for sensor and </span><span class="si">{ds_mask.time.size}</span><span class="s2"> for cloudmask.&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">ds_mask</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">time</span>
+                <span class="n">ds_mask</span> <span class="o">=</span> <span class="n">cube_utils</span><span class="o">.</span><span class="n">_match_xy_dims</span><span class="p">(</span><span class="n">ds_mask</span><span class="p">,</span> <span class="n">ds</span><span class="p">)</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">((</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds_mask</span><span class="p">),</span> <span class="n">compat</span><span class="o">=</span><span class="s2">&quot;override&quot;</span><span class="p">)</span>
+
+                <span class="c1"># mask_kwargs.update(ds_mask=ds_mask)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">assets_mask</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">mask</span><span class="o">.</span><span class="n">_native_mask_asset_mapping</span><span class="p">[</span>
+                        <span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="p">]:</span> <span class="n">mask</span><span class="o">.</span><span class="n">_native_mask_asset_mapping</span><span class="p">[</span><span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="p">}</span>
+                <span class="c1"># force resampling at nearest as qualitative value.</span>
+                <span class="n">ds_mask</span> <span class="o">=</span> <span class="n">datacube</span><span class="p">(</span>
+                    <span class="n">items</span><span class="p">,</span>
+                    <span class="n">intersects</span><span class="o">=</span><span class="n">intersects</span><span class="p">,</span>
+                    <span class="n">groupby_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">bbox</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">cube_utils</span><span class="o">.</span><span class="n">GeometryManager</span><span class="p">(</span><span class="n">intersects</span><span class="p">)</span><span class="o">.</span><span class="n">to_bbox</span><span class="p">()),</span>
+                    <span class="n">assets</span><span class="o">=</span><span class="n">assets_mask</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">ds_mask</span> <span class="o">=</span> <span class="n">cube_utils</span><span class="o">.</span><span class="n">_match_xy_dims</span><span class="p">(</span><span class="n">ds_mask</span><span class="p">,</span> <span class="n">ds</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">intersects</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">ds_mask</span> <span class="o">=</span> <span class="n">ds_mask</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">intersects</span><span class="p">)</span>
+                <span class="n">asset_mask_str</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">_native_mask_asset_mapping</span><span class="p">[</span><span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="n">asset_mask_str</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
+                    <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="n">asset_mask_str</span><span class="p">)</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">((</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds_mask</span><span class="p">),</span> <span class="n">compat</span><span class="o">=</span><span class="s2">&quot;override&quot;</span><span class="p">)</span>
+            <span class="n">Mask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">Mask</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">intersects</span><span class="o">=</span><span class="n">intersects</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mask_with</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;mask_with must be a string&quot;</span><span class="p">)</span>
+
+            <span class="n">ds</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Mask</span><span class="p">,</span> <span class="n">mask_with</span><span class="p">)(</span><span class="o">**</span><span class="n">mask_kwargs</span><span class="p">)</span>
+
+        <span class="c1"># keep only one value per pixel per day</span>
+        <span class="k">if</span> <span class="n">groupby_date</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">cube_utils</span><span class="o">.</span><span class="n">_groupby_date</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">groupby_date</span><span class="p">)</span>
+
+        <span class="c1"># To filter by cloud_cover / clear_cover, we need to compute clear pixels as field level</span>
+        <span class="k">if</span> <span class="n">clear_cover</span> <span class="ow">or</span> <span class="n">mask_statistics</span><span class="p">:</span>
+            <span class="n">xy</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">sensor_mask</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
+
+            <span class="n">null_pixels</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">sensor_mask</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">))</span>
+            <span class="n">n_pixels_as_labels</span> <span class="o">=</span> <span class="n">xy</span> <span class="o">-</span> <span class="n">null_pixels</span>
+
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">({</span><span class="s2">&quot;clear_pixels&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">n_pixels_as_labels</span><span class="o">.</span><span class="n">data</span><span class="p">)})</span>
+
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;clear_percent&quot;</span><span class="p">:</span> <span class="p">(</span>
+                        <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+                                <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;clear_pixels&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                                <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;usable_pixels&quot;</span><span class="p">],</span>
+                            <span class="p">),</span>
+                            <span class="mi">100</span><span class="p">,</span>
+                        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">),</span>
+                    <span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+            <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;clear_pixels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;clear_pixels&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+            <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;clear_percent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;clear_percent&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">mask_with</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">clear_cover</span><span class="p">:</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">filter_clear_cover</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">clear_cover</span><span class="p">)</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">drop_vars</span><span class="p">(</span><span class="n">sensor_mask</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ds</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_search_for_assets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assets</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;include&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;collection&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;stac_version&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;stac_extensions&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;collection&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;geometry&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;bbox&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">asset</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">assets</span><span class="p">):</span>
+            <span class="n">assets</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">asset</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">asset</span> <span class="k">else</span> <span class="n">asset</span>
+
+        <span class="n">fields</span><span class="p">[</span><span class="s2">&quot;include&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;assets.</span><span class="si">{</span><span class="n">asset</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">assets</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">fields</span>
+
+<div class="viewcode-block" id="Auth.search">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.search">[docs]</a>
+    <span class="nd">@parallel_search</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">collections</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">intersects</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">bbox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">post_query</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">prefer_alternate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">add_default_scale_factor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">assets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_no_items</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">batch_days</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">drop_duplicates</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A wrapper around the pystac client search method. Add some features to enhance experience.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        collections : str | list</span>
+<span class="sd">            Collection(s) to search. It is recommended to only search one collection at a time.</span>
+<span class="sd">        intersects : gpd.GeoDataFrame, optional</span>
+<span class="sd">            If provided, the results will contain only intersecting items. The default is None.</span>
+<span class="sd">        bbox : TYPE, optional</span>
+<span class="sd">            If provided, the results will contain only intersecting items. The default is None.</span>
+<span class="sd">        post_query : TYPE, optional</span>
+<span class="sd">            STAC-like filters applied on retrieved items. The default is None.</span>
+<span class="sd">        prefer_alternate : TYPE, optional</span>
+<span class="sd">            Prefer alternate links when available. The default is None.</span>
+<span class="sd">        drop_duplicates : bool, str, Optional</span>
+<span class="sd">            Drop duplicates. Available : &quot;first&quot; or &quot;last&quot;. The default is False.</span>
+<span class="sd">        **kwargs : TYPE</span>
+<span class="sd">            Keyword arguments passed to the pystac client search method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        items_collection : ItemCollection</span>
+<span class="sd">            The filtered STAC items.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        &gt;&gt;&gt; items = eds.search(collections=&#39;sentinel-2-l2a&#39;,bbox=[1,43,1,43],datetime=&#39;2017&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; len(items)</span>
+<span class="sd">        27</span>
+<span class="sd">        &gt;&gt;&gt; print(items[0].id)</span>
+<span class="sd">        S2A_31TCH_20170126_0_L2A</span>
+<span class="sd">        &gt;&gt;&gt; print(items[0].assets.keys())</span>
+<span class="sd">        dict_keys([&#39;aot&#39;, &#39;nir&#39;, &#39;red&#39;, &#39;scl&#39;, &#39;wvp&#39;, &#39;blue&#39;, &#39;green&#39;, &#39;nir08&#39;, &#39;nir09&#39;,</span>
+<span class="sd">                   &#39;swir16&#39;, &#39;swir22&#39;, &#39;visual&#39;, &#39;aot-jp2&#39;, &#39;coastal&#39;, &#39;nir-jp2&#39;,</span>
+<span class="sd">                   &#39;red-jp2&#39;, &#39;scl-jp2&#39;, &#39;wvp-jp2&#39;, &#39;blue-jp2&#39;, &#39;rededge1&#39;, &#39;rededge2&#39;,</span>
+<span class="sd">                   &#39;rededge3&#39;, &#39;green-jp2&#39;, &#39;nir08-jp2&#39;, &#39;nir09-jp2&#39;, &#39;thumbnail&#39;,</span>
+<span class="sd">                   &#39;swir16-jp2&#39;, &#39;swir22-jp2&#39;, &#39;visual-jp2&#39;, &#39;coastal-jp2&#39;,</span>
+<span class="sd">                   &#39;rededge1-jp2&#39;, &#39;rededge2-jp2&#39;, &#39;rededge3-jp2&#39;, &#39;granule_metadata&#39;,</span>
+<span class="sd">                   &#39;tileinfo_metadata&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; print(items[0].properties)</span>
+<span class="sd">        {</span>
+<span class="sd">            &quot;created&quot;: &quot;2020-09-01T04:59:33.629000Z&quot;,</span>
+<span class="sd">            &quot;updated&quot;: &quot;2022-11-08T13:08:57.661605Z&quot;,</span>
+<span class="sd">            &quot;platform&quot;: &quot;sentinel-2a&quot;,</span>
+<span class="sd">            &quot;grid:code&quot;: &quot;MGRS-31TCH&quot;,</span>
+<span class="sd">            &quot;proj:epsg&quot;: 32631,</span>
+<span class="sd">            &quot;instruments&quot;: [&quot;msi&quot;],</span>
+<span class="sd">            &quot;s2:sequence&quot;: &quot;0&quot;,</span>
+<span class="sd">            &quot;constellation&quot;: &quot;sentinel-2&quot;,</span>
+<span class="sd">            &quot;mgrs:utm_zone&quot;: 31,</span>
+<span class="sd">            &quot;s2:granule_id&quot;: &quot;S2A_OPER_MSI_L2A_TL_SHIT_20190506T054613_A008342_T31TCH_N00.01&quot;,</span>
+<span class="sd">            &quot;eo:cloud_cover&quot;: 26.518754,</span>
+<span class="sd">            &quot;s2:datatake_id&quot;: &quot;GS2A_20170126T105321_008342_N00.01&quot;,</span>
+<span class="sd">            &quot;s2:product_uri&quot;: &quot;S2A_MSIL2A_20170126T105321_N0001_R051_T31TCH_20190506T054611.SAFE&quot;,</span>
+<span class="sd">            &quot;s2:datastrip_id&quot;: &quot;S2A_OPER_MSI_L2A_DS_SHIT_20190506T054613_S20170126T105612_N00.01&quot;,</span>
+<span class="sd">            &quot;s2:product_type&quot;: &quot;S2MSI2A&quot;,</span>
+<span class="sd">            &quot;mgrs:grid_square&quot;: &quot;CH&quot;,</span>
+<span class="sd">            &quot;s2:datatake_type&quot;: &quot;INS-NOBS&quot;,</span>
+<span class="sd">            &quot;view:sun_azimuth&quot;: 161.807489888479,</span>
+<span class="sd">            &quot;eda:geometry_tags&quot;: [&quot;RESOLVED_CLOCKWISE_POLYGON&quot;],</span>
+<span class="sd">            &quot;mgrs:latitude_band&quot;: &quot;T&quot;,</span>
+<span class="sd">            &quot;s2:generation_time&quot;: &quot;2019-05-06T05:46:11.879Z&quot;,</span>
+<span class="sd">            &quot;view:sun_elevation&quot;: 26.561907592092602,</span>
+<span class="sd">            &quot;earthsearch:s3_path&quot;: &quot;s3://sentinel-cogs/sentinel-s2-l2a-cogs/31/T/CH/2017/1/S2A_31TCH_20170126_0_L2A&quot;,</span>
+<span class="sd">            &quot;processing:software&quot;: {&quot;sentinel2-to-stac&quot;: &quot;0.1.0&quot;},</span>
+<span class="sd">            &quot;s2:water_percentage&quot;: 0.697285,</span>
+<span class="sd">            &quot;eda:original_geometry&quot;: {</span>
+<span class="sd">                &quot;type&quot;: &quot;Polygon&quot;,</span>
+<span class="sd">                &quot;coordinates&quot;: [</span>
+<span class="sd">                    [</span>
+<span class="sd">                        [0.5332306381710475, 43.32623760511659],</span>
+<span class="sd">                        [1.887065663431107, 43.347431265475954],</span>
+<span class="sd">                        [1.9046784554725638, 42.35884880571144],</span>
+<span class="sd">                        [0.5722310999779479, 42.3383710796791],</span>
+<span class="sd">                        [0.5332306381710475, 43.32623760511659],</span>
+<span class="sd">                    ]</span>
+<span class="sd">                ],</span>
+<span class="sd">            },</span>
+<span class="sd">            &quot;earthsearch:payload_id&quot;: &quot;roda-sentinel2/workflow-sentinel2-to-stac/80f56ba6349cf8e21c1424491f1589c2&quot;,</span>
+<span class="sd">            &quot;s2:processing_baseline&quot;: &quot;00.01&quot;,</span>
+<span class="sd">            &quot;s2:snow_ice_percentage&quot;: 23.041981,</span>
+<span class="sd">            &quot;s2:vegetation_percentage&quot;: 15.52531,</span>
+<span class="sd">            &quot;s2:thin_cirrus_percentage&quot;: 0.563798,</span>
+<span class="sd">            &quot;s2:cloud_shadow_percentage&quot;: 4.039595,</span>
+<span class="sd">            &quot;s2:nodata_pixel_percentage&quot;: 0.000723,</span>
+<span class="sd">            &quot;s2:unclassified_percentage&quot;: 9.891956,</span>
+<span class="sd">            &quot;s2:dark_features_percentage&quot;: 15.112966,</span>
+<span class="sd">            &quot;s2:not_vegetated_percentage&quot;: 5.172154,</span>
+<span class="sd">            &quot;earthsearch:boa_offset_applied&quot;: False,</span>
+<span class="sd">            &quot;s2:degraded_msi_data_percentage&quot;: 0.0,</span>
+<span class="sd">            &quot;s2:high_proba_clouds_percentage&quot;: 18.044451,</span>
+<span class="sd">            &quot;s2:reflectance_conversion_factor&quot;: 1.03230935243016,</span>
+<span class="sd">            &quot;s2:medium_proba_clouds_percentage&quot;: 7.910506,</span>
+<span class="sd">            &quot;s2:saturated_defective_pixel_percentage&quot;: 0.0,</span>
+<span class="sd">            &quot;eda:tracking_id&quot;: &quot;eZbRVxsbEGdWLKXDK2i9Ve&quot;,</span>
+<span class="sd">            &quot;eda:status&quot;: &quot;PUBLISHED&quot;,</span>
+<span class="sd">            &quot;datetime&quot;: &quot;2017-01-26T10:56:12.238000Z&quot;,</span>
+<span class="sd">            &quot;eda:loose_validation_status&quot;: &quot;VALID&quot;,</span>
+<span class="sd">            &quot;eda:ag_cloud_mask_available&quot;: False,</span>
+<span class="sd">        }</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Find available assets for a collection</span>
+        <span class="c1"># And query only these assets to avoid requesting unused data</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">collections</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">collections</span> <span class="o">=</span> <span class="p">[</span><span class="n">collections</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">assets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">assets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">asset_mapper</span><span class="o">.</span><span class="n">AssetMapper</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">map_collection_assets</span><span class="p">(</span><span class="n">collections</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">assets</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_search_for_assets</span><span class="p">(</span><span class="n">assets</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">intersects</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">intersects</span> <span class="o">=</span> <span class="n">cube_utils</span><span class="o">.</span><span class="n">GeometryManager</span><span class="p">(</span><span class="n">intersects</span><span class="p">)</span><span class="o">.</span><span class="n">to_intersects</span><span class="p">(</span>
+                <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;4326&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">intersects</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bbox</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">items_search</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="n">collections</span><span class="o">=</span><span class="n">collections</span><span class="p">,</span>
+            <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+            <span class="n">intersects</span><span class="o">=</span><span class="n">intersects</span><span class="p">,</span>
+            <span class="n">sortby</span><span class="o">=</span><span class="s2">&quot;properties.datetime&quot;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Downloading the items</span>
+        <span class="n">items_collection</span> <span class="o">=</span> <span class="n">items_search</span><span class="o">.</span><span class="n">item_collection</span><span class="p">()</span>
+
+        <span class="c1"># prefer_alternate means to prefer alternate url (to replace default href)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="n">prefer_alternate</span><span class="p">,</span> <span class="n">add_default_scale_factor</span><span class="p">)):</span>
+            <span class="n">items_collection</span> <span class="o">=</span> <span class="n">enhance_assets</span><span class="p">(</span>
+                <span class="n">items_collection</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span>
+                <span class="n">alternate</span><span class="o">=</span><span class="n">prefer_alternate</span><span class="p">,</span>
+                <span class="n">add_default_scale_factor</span><span class="o">=</span><span class="n">add_default_scale_factor</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">post_query</span><span class="p">:</span>
+            <span class="n">items_collection</span> <span class="o">=</span> <span class="n">post_query_items</span><span class="p">(</span><span class="n">items_collection</span><span class="p">,</span> <span class="n">post_query</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items_collection</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">raise_no_items</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoItemsFoundError</span><span class="p">(</span><span class="s2">&quot;No items found.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">drop_duplicates</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">._filter_duplicate</span><span class="w"> </span><span class="kn">import</span> <span class="n">filter_duplicate_items</span>
+
+            <span class="n">items_collection</span> <span class="o">=</span> <span class="n">filter_duplicate_items</span><span class="p">(</span>
+                <span class="n">items_collection</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="n">drop_duplicates</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">items_collection</span></div>
+
+
+<div class="viewcode-block" id="Auth.find_cloud_mask_items">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.Auth.html#earthdaily.earthdatastore.Auth.find_cloud_mask_items">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_cloud_mask_items</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">items_collection</span><span class="p">,</span> <span class="n">cloudmask</span><span class="o">=</span><span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search the catalog for the ag_cloud_mask items matching the given items_collection.</span>
+<span class="sd">        The ag_cloud_mask items are searched in the `ag_cloud_mask_collection_id` collection using the</span>
+<span class="sd">        `ag_cloud_mask_item_id` properties of the items.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        items_collection : pystac.ItemCollection</span>
+<span class="sd">            The items to find corresponding ag cloud mask items for.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pystac.ItemCollection</span>
+<span class="sd">            The filtered item collection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">ag_cloud_mask_from_items</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+            <span class="n">products</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;eda:</span><span class="si">{</span><span class="n">cloudmask</span><span class="si">}</span><span class="s2">_available&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">collection</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;eda:</span><span class="si">{</span><span class="n">cloudmask</span><span class="si">}</span><span class="s2">_collection_id&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">products</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">products</span><span class="p">[</span><span class="n">collection</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">products</span><span class="p">[</span><span class="n">collection</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;eda:</span><span class="si">{</span><span class="n">cloudmask</span><span class="si">}</span><span class="s2">_item_id&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">products</span>
+
+        <span class="n">items_id</span> <span class="o">=</span> <span class="n">ag_cloud_mask_from_items</span><span class="p">(</span><span class="n">items_collection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Sorry, no ag_cloud_mask available.&quot;</span><span class="p">)</span>
+        <span class="n">collections</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items_id</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">ids_</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">(</span><span class="n">items_id</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">n</span><span class="p">]</span>
+        <span class="n">items_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;prefer_alternate&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">items_start_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ids_</span><span class="p">),</span> <span class="n">step</span><span class="p">):</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">collections</span><span class="o">=</span><span class="n">collections</span><span class="p">,</span>
+                <span class="n">ids</span><span class="o">=</span><span class="n">ids_</span><span class="p">[</span><span class="n">items_start_idx</span> <span class="p">:</span> <span class="n">items_start_idx</span> <span class="o">+</span> <span class="n">step</span><span class="p">],</span>
+                <span class="n">limit</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
+                <span class="n">drop_duplicates</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">items_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ItemCollection</span><span class="p">(</span><span class="n">items_list</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.earthdatastore.mask &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="../earthdatastore.html">earthdaily.earthdatastore</a></li>
+      <li class="breadcrumb-item active">earthdaily.earthdatastore.mask</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for earthdaily.earthdatastore.mask</h1><div class="highlight"><pre>
+<span></span><span class="c1"># mypy: ignore-errors</span>
+<span class="c1"># TODO (v1): Fix type issues and remove &#39;mypy: ignore-errors&#39; after verifying non-breaking changes</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">dask</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.features</span><span class="w"> </span><span class="kn">import</span> <span class="n">geometry_mask</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.earthdatastore.cube_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_bbox_to_intersects</span>
+
+<span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;array.slicing.split_large_chunks&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+
+<span class="n">_available_masks</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;native&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;venus_detailed_cloud_mask&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cloud_mask&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ag-cloud-mask&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cloud_mask_ag_version&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cloudmask_ag_version&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cloudmask&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;scl&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">_native_mask_asset_mapping</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">:</span> <span class="s2">&quot;scl&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sentinel-2-c1-l2a&quot;</span><span class="p">:</span> <span class="s2">&quot;scl&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;venus-l2a&quot;</span><span class="p">:</span> <span class="s2">&quot;detailed_cloud_mask&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;landsat-c2l2-sr&quot;</span><span class="p">:</span> <span class="s2">&quot;qa_pixel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;landsat-c2l2-st&quot;</span><span class="p">:</span> <span class="s2">&quot;qa_pixel&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">_native_mask_def_mapping</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">:</span> <span class="s2">&quot;scl&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sentinel-2-c1-l2a&quot;</span><span class="p">:</span> <span class="s2">&quot;scl&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;venus-l2a&quot;</span><span class="p">:</span> <span class="s2">&quot;detailed_cloud_mask&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;landsat-c2l2-sr&quot;</span><span class="p">:</span> <span class="s2">&quot;landsat_qa_pixel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;landsat-c2l2-st&quot;</span><span class="p">:</span> <span class="s2">&quot;landsat_qa_pixel&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="Mask">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.Mask">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Mask</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">intersects</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="n">dataset</span>
+        <span class="k">if</span> <span class="n">bbox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">intersects</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">intersects</span> <span class="o">=</span> <span class="n">_bbox_to_intersects</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intersects</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
+            <span class="n">intersects</span> <span class="o">=</span> <span class="n">intersects</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intersects</span> <span class="o">=</span> <span class="n">intersects</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_available_pixels</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Mask.cloud_mask">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.Mask.cloud_mask">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cloud_mask</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mask_statistics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>  <span class="c1"># rm nano second</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;cloud_mask&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mask_statistics</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_clear_coverage</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">,</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="n">labels_are_clouds</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span></div>
+
+
+<div class="viewcode-block" id="Mask.ag_cloud_mask">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.Mask.ag_cloud_mask">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ag_cloud_mask</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mask_statistics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>  <span class="c1"># rm nano second</span>
+        <span class="c1">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mask_statistics</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_clear_coverage</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">],</span> <span class="s2">&quot;ag_cloud_mask&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">labels_are_clouds</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span></div>
+
+
+<div class="viewcode-block" id="Mask.cloudmask_from_asset">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.Mask.cloudmask_from_asset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cloudmask_from_asset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cloud_asset</span><span class="p">,</span>
+        <span class="n">labels</span><span class="p">,</span>
+        <span class="n">labels_are_clouds</span><span class="p">,</span>
+        <span class="n">mask_statistics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">cloud_asset</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Asset &#39;</span><span class="si">{</span><span class="n">cloud_asset</span><span class="si">}</span><span class="s2">&#39; needed to compute cloudmask.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cloud_layer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="n">cloud_asset</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">fill_value</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">labels_are_clouds</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                    <span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="n">cloud_asset</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">labels</span><span class="p">),</span> <span class="n">fill_value</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="n">cloud_asset</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">labels</span><span class="p">),</span> <span class="n">fill_value</span>
+                <span class="p">)</span>
+        <span class="k">if</span> <span class="n">mask_statistics</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_clear_coverage</span><span class="p">(</span>
+                <span class="n">cloud_layer</span><span class="p">,</span> <span class="n">cloud_asset</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">labels_are_clouds</span><span class="o">=</span><span class="n">labels_are_clouds</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span></div>
+
+
+<div class="viewcode-block" id="Mask.scl">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.Mask.scl">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">scl</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">clouds_labels</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
+        <span class="n">mask_statistics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cloudmask_from_asset</span><span class="p">(</span>
+            <span class="n">cloud_asset</span><span class="o">=</span><span class="s2">&quot;scl&quot;</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">clouds_labels</span><span class="p">,</span>
+            <span class="n">labels_are_clouds</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">mask_statistics</span><span class="o">=</span><span class="n">mask_statistics</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Mask.venus_detailed_cloud_mask">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.Mask.venus_detailed_cloud_mask">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">venus_detailed_cloud_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_statistics</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cloudmask_from_asset</span><span class="p">(</span>
+            <span class="s2">&quot;detailed_cloud_mask&quot;</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="n">labels_are_clouds</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">mask_statistics</span><span class="o">=</span><span class="n">mask_statistics</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Mask.compute_clear_coverage">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.Mask.compute_clear_coverage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_clear_coverage</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">cloudmask_array</span><span class="p">,</span> <span class="n">cloudmask_name</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">labels_are_clouds</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;usable_pixels&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_available_pixels</span><span class="p">()</span>
+
+        <span class="n">n_pixels_as_labels</span> <span class="o">=</span> <span class="n">cloudmask_array</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">labels_are_clouds</span><span class="p">:</span>
+            <span class="n">n_pixels_as_labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;usable_pixels&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">n_pixels_as_labels</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;clear_pixels&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">n_pixels_as_labels</span><span class="o">.</span><span class="n">data</span><span class="p">)}</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">assign_coords</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;clear_percent&quot;</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;clear_pixels&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                        <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;usable_pixels&quot;</span><span class="p">],</span>
+                        <span class="mi">100</span><span class="p">,</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;clear_pixels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;clear_pixels&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;clear_percent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;clear_percent&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span></div>
+
+
+<div class="viewcode-block" id="Mask.compute_available_pixels">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.Mask.compute_available_pixels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_available_pixels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">intersects</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;bbox or intersects must be defined for now to compute cloud statistics.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">clip_mask_arr</span> <span class="o">=</span> <span class="n">geometry_mask</span><span class="p">(</span>
+            <span class="n">geometries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">intersects</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+            <span class="n">out_shape</span><span class="o">=</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">height</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">width</span><span class="p">)),</span>
+            <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">recalc</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">all_touched</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clip_mask_arr</span> <span class="o">=</span> <span class="n">clip_mask_arr</span>
+        <span class="n">usable_pixels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">clip_mask_arr</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;usable_pixels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">usable_pixels</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span></div>
+
+
+<div class="viewcode-block" id="Mask.landsat_qa_pixel">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.Mask.landsat_qa_pixel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">landsat_qa_pixel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_statistics</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_landsat_qa_pixel_convert</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cloudmask_from_asset</span><span class="p">(</span>
+            <span class="s2">&quot;qa_pixel&quot;</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span>
+            <span class="n">labels_are_clouds</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">mask_statistics</span><span class="o">=</span><span class="n">mask_statistics</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_landsat_qa_pixel_convert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># load all time series to fasten next step</span>
+        <span class="k">if</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">available</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;qa_pixel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nbytes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;qa_pixel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;qa_pixel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">time</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;qa_pixel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)]</span><span class="o">.</span><span class="n">load</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">data_f</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="n">clm</span> <span class="o">=</span> <span class="n">QA_PIXEL_cloud_detection</span><span class="p">(</span><span class="n">data_f</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data_f</span><span class="p">)])</span>
+            <span class="n">clm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">clm</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">clm</span><span class="p">)</span>
+            <span class="n">data_f</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data_f</span><span class="p">)]</span> <span class="o">=</span> <span class="n">clm</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data_f</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="s2">&quot;qa_pixel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)]</span> <span class="o">=</span> <span class="n">data</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_QA_PIXEL_cloud_detection</span><span class="p">(</span><span class="n">pixel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return 1 if cloudfree, 0 is cloud pixel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">px_bin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="n">pixel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">px_bin</span><span class="p">)</span> <span class="o">==</span> <span class="mi">15</span><span class="p">:</span>
+        <span class="n">reversed_bin</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span> <span class="o">+</span> <span class="n">px_bin</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">px_bin</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">15</span><span class="p">:</span>
+        <span class="n">reversed_bin</span> <span class="o">=</span> <span class="s2">&quot;0000000000000000&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">reversed_bin</span> <span class="o">=</span> <span class="n">px_bin</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">reversed_bin</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+
+<div class="viewcode-block" id="QA_PIXEL_cloud_detection">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.QA_PIXEL_cloud_detection">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">QA_PIXEL_cloud_detection</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return 1 if cloudfree, 0 is cloud pixel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">uniques</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+    <span class="n">has_cloud</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">_QA_PIXEL_cloud_detection</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">uniques</span><span class="p">])</span>
+    <span class="n">cloudfree</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">has_cloud</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">uniques</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">cloudfree_pixels</span> <span class="o">=</span> <span class="n">cloudfree</span><span class="p">[</span><span class="n">cloudfree</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">cloudmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">cloudfree_pixels</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cloudmask</span></div>
+
+
+
+<div class="viewcode-block" id="filter_clear_cover">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.mask.html#earthdaily.earthdatastore.mask.filter_clear_cover">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">filter_clear_cover</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">clear_cover</span><span class="p">,</span> <span class="n">coordinate</span><span class="o">=</span><span class="s2">&quot;clear_percent&quot;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">dataset</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="n">coordinate</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">clear_cover</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

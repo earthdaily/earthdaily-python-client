@@ -1,0 +1,18 @@
+earthdaily.accessor package
+===========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   earthdaily.accessor.whittaker
+
+Module contents
+---------------
+
+.. automodule:: earthdaily.accessor
+   :members:
+   :undoc-members:
+   :show-inheritance:

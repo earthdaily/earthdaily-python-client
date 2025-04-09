@@ -1,0 +1,6 @@
+earthdaily.earthdatastore.validate\_property\_condition
+=======================================================
+
+.. currentmodule:: earthdaily.earthdatastore
+
+.. autofunction:: validate_property_condition

@@ -1,0 +1,194 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.test_eds_auth module &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">tests.test_eds_auth module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tests.test_eds_auth.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-tests.test_eds_auth">
+<span id="tests-test-eds-auth-module"></span><h1>tests.test_eds_auth module<a class="headerlink" href="#module-tests.test_eds_auth" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.test_eds_auth.</span></span><span class="sig-name descname"><span class="pre">TestEdsAuth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.setUp" title="Link to this definition"></a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_from_credentials">
+<span class="sig-name descname"><span class="pre">test_from_credentials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_read_credentials</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_get_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_from_credentials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_from_credentials" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_get_access_token">
+<span class="sig-name descname"><span class="pre">test_get_access_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_post</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_get_access_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_get_access_token" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_missing_credentials">
+<span class="sig-name descname"><span class="pre">test_missing_credentials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_missing_credentials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_missing_credentials" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_parse_dict">
+<span class="sig-name descname"><span class="pre">test_parse_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_parse_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_parse_dict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_parse_from_environment">
+<span class="sig-name descname"><span class="pre">test_parse_from_environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_getenv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_parse_from_environment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_parse_from_environment" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_parse_json_file">
+<span class="sig-name descname"><span class="pre">test_parse_json_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_open_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_parse_json_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_parse_json_file" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_parse_tuple">
+<span class="sig-name descname"><span class="pre">test_parse_tuple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_parse_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_parse_tuple" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_read_credentials_from_environment">
+<span class="sig-name descname"><span class="pre">test_read_credentials_from_environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_getenv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_read_credentials_from_environment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_read_credentials_from_environment" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_read_credentials_from_ini">
+<span class="sig-name descname"><span class="pre">test_read_credentials_from_ini</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_exists</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_open</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_read_credentials_from_ini"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_read_credentials_from_ini" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_read_credentials_from_json">
+<span class="sig-name descname"><span class="pre">test_read_credentials_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_read_json</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_read_credentials_from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_read_credentials_from_json" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_eds_auth.TestEdsAuth.test_read_credentials_from_toml">
+<span class="sig-name descname"><span class="pre">test_read_credentials_from_toml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_read_toml</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_eds_auth.html#TestEdsAuth.test_read_credentials_from_toml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_eds_auth.TestEdsAuth.test_read_credentials_from_toml" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

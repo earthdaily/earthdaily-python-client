@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.accessor &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../earthdaily.html">earthdaily</a></li>
+      <li class="breadcrumb-item active">earthdaily.accessor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for earthdaily.accessor</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spyndex</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dask</span><span class="w"> </span><span class="kn">import</span> <span class="n">array</span> <span class="k">as</span> <span class="n">da</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dask_image</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndfilters</span> <span class="k">as</span> <span class="n">dask_ndimage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndimage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..earthdatastore.cube_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeometryManager</span>
+
+
+<div class="viewcode-block" id="xr_loop_func">
+<a class="viewcode-back" href="../../earthdaily.accessor.html#earthdaily.accessor.xr_loop_func">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">xr_loop_func</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">func</span><span class="p">,</span>
+    <span class="n">to_numpy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">loop_dimension</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_xr_loop_func</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">metafunc</span><span class="p">,</span> <span class="n">loop_dimension</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">to_numpy</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">dataset_func</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">looped</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">metafunc</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">isel</span><span class="p">({</span><span class="n">loop_dimension</span><span class="p">:</span> <span class="n">i</span><span class="p">})</span><span class="o">.</span><span class="n">load</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">loop_dimension</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">dataset_func</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">looped</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">dataset_func</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">metafunc</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">isel</span><span class="p">({</span><span class="n">loop_dimension</span><span class="p">:</span> <span class="n">i</span><span class="p">}),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">loop_dimension</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">dim</span><span class="o">=</span><span class="n">loop_dimension</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="n">func</span><span class="o">=</span><span class="n">_xr_loop_func</span><span class="p">,</span> <span class="n">metafunc</span><span class="o">=</span><span class="n">func</span><span class="p">,</span> <span class="n">loop_dimension</span><span class="o">=</span><span class="n">loop_dimension</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_lee_filter</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">img_</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">ndimage_type</span> <span class="o">=</span> <span class="n">ndimage</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ndimage_type</span> <span class="o">=</span> <span class="n">dask_ndimage</span>
+    <span class="n">binary_nan</span> <span class="o">=</span> <span class="n">ndimage_type</span><span class="o">.</span><span class="n">minimum_filter</span><span class="p">(</span>
+        <span class="n">xr</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="n">window_size</span>
+    <span class="p">)</span>
+    <span class="n">binary_nan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">binary_nan</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+    <span class="n">window_size</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">([</span><span class="n">window_size</span><span class="p">,</span> <span class="n">window_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">img_mean</span> <span class="o">=</span> <span class="n">ndimage_type</span><span class="o">.</span><span class="n">uniform_filter</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">window_size</span><span class="p">)</span>
+    <span class="n">img_sqr_mean</span> <span class="o">=</span> <span class="n">ndimage_type</span><span class="o">.</span><span class="n">uniform_filter</span><span class="p">(</span><span class="n">img</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">window_size</span><span class="p">)</span>
+    <span class="n">img_variance</span> <span class="o">=</span> <span class="n">img_sqr_mean</span> <span class="o">-</span> <span class="n">img_mean</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="n">overall_variance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">img_weights</span> <span class="o">=</span> <span class="n">img_variance</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">img_variance</span><span class="p">,</span> <span class="n">overall_variance</span><span class="p">))</span>
+
+    <span class="n">img_output</span> <span class="o">=</span> <span class="n">img_mean</span> <span class="o">+</span> <span class="n">img_weights</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">img_mean</span><span class="p">))</span>
+    <span class="n">img_output</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">binary_nan</span><span class="p">),</span> <span class="n">img_</span><span class="p">,</span> <span class="n">img_output</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">img_output</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_xr_rio_clip</span><span class="p">(</span><span class="n">datacube</span><span class="p">,</span> <span class="n">geom</span><span class="p">):</span>
+    <span class="n">geom_</span> <span class="o">=</span> <span class="n">GeometryManager</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+    <span class="n">geom</span> <span class="o">=</span> <span class="n">geom_</span><span class="o">.</span><span class="n">to_geopandas</span><span class="p">()</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">datacube</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+    <span class="n">datacube</span> <span class="o">=</span> <span class="n">datacube</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">clip_box</span><span class="p">(</span><span class="o">*</span><span class="n">geom</span><span class="o">.</span><span class="n">total_bounds</span><span class="p">)</span>
+    <span class="n">datacube</span> <span class="o">=</span> <span class="n">datacube</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">datacube</span>
+
+
+<span class="nd">@xr</span><span class="o">.</span><span class="n">register_dataarray_accessor</span><span class="p">(</span><span class="s2">&quot;ed&quot;</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">__EarthDailyAccessorDataArray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xarray_obj</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="n">xarray_obj</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geom</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_xr_rio_clip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">,</span> <span class="n">geom</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_max_time_wrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wish</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">((</span><span class="n">wish</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_band</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys&quot;</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">col_wrap</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span>
+            <span class="n">col_wrap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_time_wrap</span><span class="p">(</span><span class="n">col_wrap</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">whittaker</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10000.0</span><span class="p">,</span>
+        <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">time</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">whittaker</span>
+
+        <span class="k">return</span> <span class="n">whittaker</span><span class="o">.</span><span class="n">whittaker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sel_nearest_dates</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span> <span class="o">|</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span>
+        <span class="n">max_delta</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
+        <span class="n">return_target</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">src_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+        <span class="n">target_time</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">src_time</span><span class="o">.</span><span class="n">data</span> <span class="o">-</span> <span class="n">target_time</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">src_time</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">j</span><span class="o">.</span><span class="n">days</span> <span class="o">&lt;=</span> <span class="n">max_delta</span>
+        <span class="p">]</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_target</span><span class="p">:</span>
+            <span class="n">method_convert</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;bfill&quot;</span><span class="p">:</span> <span class="s2">&quot;ffill&quot;</span><span class="p">,</span> <span class="s2">&quot;ffill&quot;</span><span class="p">:</span> <span class="s2">&quot;bfill&quot;</span><span class="p">,</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span> <span class="s2">&quot;nearest&quot;</span><span class="p">}</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">pos</span><span class="p">),</span> <span class="n">target</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method_convert</span><span class="p">[</span><span class="n">method</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">pos</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">zonal_stats</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">geometry</span><span class="p">,</span>
+        <span class="n">reducers</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+        <span class="n">preserve_columns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">lazy_load</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zonal stats from dtacube</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        geometry : str,gpd.GeoDataFrame</span>
+<span class="sd">            A geometry (wkt, geopandas...)</span>
+<span class="sd">        stats : list, optional</span>
+<span class="sd">            The default is [&quot;mean&quot;].</span>
+<span class="sd">        preserve_columns : bool, optional</span>
+<span class="sd">            The default is True.</span>
+<span class="sd">        raise_missing_geometry : bool, optional</span>
+<span class="sd">            DESCRIPTION. The default is False.</span>
+<span class="sd">        **kwargs : dict</span>
+<span class="sd">            Any kwargs for xvec.zonal_stats.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        xr.dataset</span>
+<span class="sd">            With new dimension &quot;zonal_statistics&quot; and &quot;geometry&quot;.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..earthdatastore.cube_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeometryManager</span><span class="p">,</span> <span class="n">zonal_stats</span>
+
+        <span class="n">geometry</span> <span class="o">=</span> <span class="n">GeometryManager</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span><span class="o">.</span><span class="n">to_geopandas</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">zonal_stats</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">,</span>
+            <span class="n">geometry</span><span class="p">,</span>
+            <span class="n">reducers</span><span class="o">=</span><span class="n">reducers</span><span class="p">,</span>
+            <span class="n">lazy_load</span><span class="o">=</span><span class="n">lazy_load</span><span class="p">,</span>
+            <span class="n">preserve_columns</span><span class="o">=</span><span class="n">preserve_columns</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">lee_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">apply_ufunc</span><span class="p">(</span>
+            <span class="n">_lee_filter</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">,</span>
+            <span class="n">input_core_dims</span><span class="o">=</span><span class="p">[[</span><span class="s2">&quot;time&quot;</span><span class="p">]],</span>
+            <span class="n">dask</span><span class="o">=</span><span class="s2">&quot;allowed&quot;</span><span class="p">,</span>
+            <span class="n">output_core_dims</span><span class="o">=</span><span class="p">[[</span><span class="s2">&quot;time&quot;</span><span class="p">]],</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">window_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">centroid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_wkt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">to_4326</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the geographic center point in 4326/WKT of this dataset.&quot;&quot;&quot;</span>
+        <span class="c1"># we can use a cache on our accessor objects, because accessors</span>
+        <span class="c1"># themselves are cached on instances that access them.</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)])</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)])</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">([</span><span class="n">Point</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)],</span> <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">to_4326</span><span class="p">:</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">point</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="s2">&quot;4326&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">to_wkt</span><span class="p">:</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">point</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">wkt</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">point</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">drop_unfrozen_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keep_spatial_ref</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">unfrozen_coords</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">coord</span>
+            <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">coords</span>
+            <span class="k">if</span> <span class="n">coord</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">sizes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">keep_spatial_ref</span> <span class="ow">and</span> <span class="s2">&quot;spatial_ref&quot;</span> <span class="ow">in</span> <span class="n">unfrozen_coords</span><span class="p">:</span>
+            <span class="n">unfrozen_coords</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">unfrozen_coords</span><span class="p">,</span> <span class="s2">&quot;spatial_ref&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">unfrozen_coords</span><span class="p">)</span>
+
+
+<span class="nd">@xr</span><span class="o">.</span><span class="n">register_dataset_accessor</span><span class="p">(</span><span class="s2">&quot;ed&quot;</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">__EarthDailyAccessorDataset</span><span class="p">(</span><span class="n">__EarthDailyAccessorDataArray</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xarray_obj</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="n">xarray_obj</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_rgb</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">red</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+        <span class="n">green</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+        <span class="n">blue</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+        <span class="n">col</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span>
+        <span class="n">col_wrap</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">background</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">background</span><span class="p">,</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">blue</span><span class="p">]),</span> <span class="n">background</span><span class="p">,</span> <span class="n">ds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">ds</span><span class="p">[[</span><span class="n">red</span><span class="p">,</span> <span class="n">green</span><span class="p">,</span> <span class="n">blue</span><span class="p">]]</span>
+            <span class="o">.</span><span class="n">to_array</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;bands&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+                <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">col_wrap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_time_wrap</span><span class="p">(</span><span class="n">col_wrap</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_band</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys&quot;</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">col_wrap</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="n">band</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span>
+            <span class="n">col_wrap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_time_wrap</span><span class="p">(</span><span class="n">col_wrap</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_auto_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_BAND_MAPPING</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;coastal&quot;</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;blue&quot;</span><span class="p">:</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;green&quot;</span><span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;yellow&quot;</span><span class="p">:</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;red&quot;</span><span class="p">:</span> <span class="s2">&quot;R&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rededge1&quot;</span><span class="p">:</span> <span class="s2">&quot;RE1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rededge2&quot;</span><span class="p">:</span> <span class="s2">&quot;RE2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rededge3&quot;</span><span class="p">:</span> <span class="s2">&quot;RE3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rededge70&quot;</span><span class="p">:</span> <span class="s2">&quot;RE1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rededge74&quot;</span><span class="p">:</span> <span class="s2">&quot;RE2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;rededge78&quot;</span><span class="p">:</span> <span class="s2">&quot;RE3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;nir&quot;</span><span class="p">:</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;nir08&quot;</span><span class="p">:</span> <span class="s2">&quot;N2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;watervapor&quot;</span><span class="p">:</span> <span class="s2">&quot;WV&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;swir16&quot;</span><span class="p">:</span> <span class="s2">&quot;S1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;swir22&quot;</span><span class="p">:</span> <span class="s2">&quot;S2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lwir&quot;</span><span class="p">:</span> <span class="s2">&quot;T1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lwir11&quot;</span><span class="p">:</span> <span class="s2">&quot;T2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vv&quot;</span><span class="p">:</span> <span class="s2">&quot;VV&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vh&quot;</span><span class="p">:</span> <span class="s2">&quot;VH&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;hh&quot;</span><span class="p">:</span> <span class="s2">&quot;HH&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;hv&quot;</span><span class="p">:</span> <span class="s2">&quot;HV&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">data_vars</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                <span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="n">var</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="o">.</span><span class="n">data_vars</span><span class="p">}</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">data_vars</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data_vars</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">_BAND_MAPPING</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">params</span><span class="p">[</span><span class="n">_BAND_MAPPING</span><span class="p">[</span><span class="n">v</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">params</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">available_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">details</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">mapper</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_auto_mapper</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">spyndex</span><span class="o">.</span><span class="n">indices</span>
+        <span class="n">available_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">indices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">needed_bands</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">bands</span>
+            <span class="n">missing_bands</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">needed_band</span> <span class="ow">in</span> <span class="n">needed_bands</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">needed_band</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mapper</span><span class="p">:</span>
+                    <span class="n">missing_bands</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">missing_bands</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">available_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spyndex</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">if</span> <span class="n">details</span> <span class="k">else</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">available_indices</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Uses spyndex to compute and add index.</span>
+
+<span class="sd">        For list of indices, see https://github.com/awesome-spectral-indices/awesome-spectral-indices.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices : list[str|dict]</span>
+<span class="sd">            [&#39;NDVI&#39;,{&#39;NDVI2&#39;:&#39;(red-nir)/(red+nir)&#39;}].</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        xr.Dataset</span>
+<span class="sd">            The input xr.Dataset with new data_vars of indices.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_mapper</span><span class="p">()</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># str is for spyndex</span>
+        <span class="n">indices_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">index</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
+        <span class="c1"># dict is customized ones</span>
+        <span class="n">custom_indices</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_str</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">spyndex</span><span class="o">.</span><span class="n">computeIndex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">indices_str</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_str</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">indices_str</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">,</span> <span class="n">idx</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">custom_indices</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># custom indices</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">custom_index_to_eval</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">custom_index</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">data_var</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
+                    <span class="n">custom_index</span> <span class="o">=</span> <span class="n">custom_index</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                        <span class="n">data_var</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;self._obj[&#39;</span><span class="si">{</span><span class="n">data_var</span><span class="si">}</span><span class="s2">&#39;]&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">return</span> <span class="n">custom_index</span>
+
+            <span class="k">for</span> <span class="n">data_var</span><span class="p">,</span> <span class="n">formula</span> <span class="ow">in</span> <span class="n">custom_indices</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">index_eval</span> <span class="o">=</span> <span class="n">custom_index_to_eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">,</span> <span class="n">formula</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span><span class="p">[</span><span class="n">data_var</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">index_eval</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

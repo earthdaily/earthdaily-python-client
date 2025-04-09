@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.earthdatastore.cube_utils &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="earthdaily.earthdatastore.cube_utils.datacube" href="earthdaily.earthdatastore.cube_utils.datacube.html" />
+    <link rel="prev" title="earthdaily.earthdatastore.StacCollectionExplorer" href="earthdaily.earthdatastore.StacCollectionExplorer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.EarthDataStore.html">earthdaily.EarthDataStore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.accessor.html">earthdaily.accessor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.core.html">earthdaily.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.datasets.html">earthdaily.datasets</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="earthdaily.earthdatastore.html">earthdaily.earthdatastore</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.apply_single_condition.html">earthdaily.earthdatastore.apply_single_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.enhance_assets.html">earthdaily.earthdatastore.enhance_assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.filter_items.html">earthdaily.earthdatastore.filter_items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.post_query_items.html">earthdaily.earthdatastore.post_query_items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.validate_property_condition.html">earthdaily.earthdatastore.validate_property_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Auth.html">earthdaily.earthdatastore.Auth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.EarthDataStoreConfig.html">earthdaily.earthdatastore.EarthDataStoreConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacCollectionExplorer.html">earthdaily.earthdatastore.StacCollectionExplorer</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">earthdaily.earthdatastore.cube_utils</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.datacube.html">earthdaily.earthdatastore.cube_utils.datacube</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.metacube.html">earthdaily.earthdatastore.cube_utils.metacube</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.rescale_assets_with_items.html">earthdaily.earthdatastore.cube_utils.rescale_assets_with_items</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.asset_mapper.html">earthdaily.earthdatastore.cube_utils.asset_mapper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.geometry_manager.html">earthdaily.earthdatastore.cube_utils.geometry_manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.harmonizer.html">earthdaily.earthdatastore.cube_utils.harmonizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.preprocessing.html">earthdaily.earthdatastore.cube_utils.preprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.mask.html">earthdaily.earthdatastore.mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.parallel_search.html">earthdaily.earthdatastore.parallel_search</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.utils.html">earthdaily.utils</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.earthdatastore.html">earthdaily.earthdatastore</a></li>
+      <li class="breadcrumb-item active">earthdaily.earthdatastore.cube_utils</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/earthdaily.earthdatastore.cube_utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-earthdaily.earthdatastore.cube_utils">
+<span id="earthdaily-earthdatastore-cube-utils"></span><h1>earthdaily.earthdatastore.cube_utils<a class="headerlink" href="#module-earthdaily.earthdatastore.cube_utils" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.datacube.html#earthdaily.earthdatastore.cube_utils.datacube" title="earthdaily.earthdatastore.cube_utils.datacube"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datacube</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.metacube.html#earthdaily.earthdatastore.cube_utils.metacube" title="earthdaily.earthdatastore.cube_utils.metacube"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metacube</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.rescale_assets_with_items.html#earthdaily.earthdatastore.cube_utils.rescale_assets_with_items" title="earthdaily.earthdatastore.cube_utils.rescale_assets_with_items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rescale_assets_with_items</span></code></a></p></td>
+<td><p>Rescale assets in a dataset based on collection items' metadata.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">earthdaily.earthdatastore.cube_utils.</span></span><span class="sig-name descname"><span class="pre">GeometryManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geometry</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/cube_utils/geometry_manager.html#GeometryManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>A class to manage and convert various types of geometries into different formats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>geometry</strong> (<em>various types</em>) – Input geometry, can be GeoDataFrame, GeoSeries, WKT string, or GeoJSON.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">geometry</span></span></dt>
+<dd><p>The input geometry provided by the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>various types</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">_obj</span></span></dt>
+<dd><p>The geometry converted into a GeoDataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">input_type</span></span></dt>
+<dd><p>Type of input geometry inferred during processing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__call__():</span></span></dt>
+<dd><p>Returns the stored GeoDataFrame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_intersects(crs='EPSG:4326'):</span></span></dt>
+<dd><p>Converts geometry to GeoJSON intersects format with a specified CRS.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_wkt(crs='EPSG:4326'):</span></span></dt>
+<dd><p>Converts geometry to WKT format with a specified CRS.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_json(crs='EPSG:4326'):</span></span></dt>
+<dd><p>Converts geometry to GeoJSON format with a specified CRS.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_geopandas():</span></span></dt>
+<dd><p>Returns the GeoDataFrame of the input geometry.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_bbox(crs='EPSG:4326'):</span></span></dt>
+<dd><p>Returns the bounding box of the geometry with a specified CRS.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">buffer_in_meter(distance,</span> <span class="pre">crs_meters='EPSG:3857',</span> <span class="pre">\*\*kwargs):</span></span></dt>
+<dd><p>Applies a buffer in meters to the geometry and returns it with the original CRS.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">buffer_in_meter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crs_meters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:3857'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/cube_utils/geometry_manager.html#GeometryManager.buffer_in_meter"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Applies a buffer in meters to the geometry and returns it with the original CRS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>int</em>) – The buffer distance in meters.</p></li>
+<li><p><strong>crs_meters</strong> (<em>str</em><em>, </em><em>optional</em>) – The CRS to use for calculating the buffer (default is EPSG:3857).</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Additional keyword arguments to pass to the buffer method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The buffered geometry in the original CRS.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>GeoSeries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_bbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:4326'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/cube_utils/geometry_manager.html#GeometryManager.to_bbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Returns the bounding box of the geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>crs</strong> (<em>str</em><em>, </em><em>optional</em>) – The CRS to convert to (default is EPSG:4326).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The bounding box as an array [minx, miny, maxx, maxy].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_geopandas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/cube_utils/geometry_manager.html#GeometryManager.to_geopandas"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Converts the input geometry to a GeoDataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The input geometry as a GeoDataFrame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_intersects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:4326'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/cube_utils/geometry_manager.html#GeometryManager.to_intersects"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Converts the geometry to GeoJSON intersects format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>crs</strong> (<em>str</em><em>, </em><em>optional</em>) – The coordinate reference system (CRS) to convert to (default is EPSG:4326).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The geometry in GeoJSON intersects format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:4326'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/cube_utils/geometry_manager.html#GeometryManager.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Converts the geometry to GeoJSON format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>crs</strong> (<em>str</em><em>, </em><em>optional</em>) – The CRS to convert to (default is EPSG:4326).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The geometry in GeoJSON format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to_wkt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'EPSG:4326'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/cube_utils/geometry_manager.html#GeometryManager.to_wkt"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Converts the geometry to WKT format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>crs</strong> (<em>str</em><em>, </em><em>optional</em>) – The CRS to convert to (default is EPSG:4326).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The geometry in WKT format. If there is only one geometry, a single WKT
+string is returned; otherwise, a list of WKT strings.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str or list of str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">earthdaily.earthdatastore.cube_utils.</span></span><span class="sig-name descname"><span class="pre">zonal_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'numpy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lazy_load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_memory_mb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reducers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['mean']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_touched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_meters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/cube_utils/_zonal.html#zonal_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculate zonal statistics for xarray Dataset based on geometric boundaries.</p>
+<p>This function computes statistical summaries of Dataset values within each geometry’s zone,
+supporting parallel processing through xarray’s apply_ufunc and multiple computation methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>xarray.Dataset</em>) – Input dataset containing variables for statistics computation.</p></li>
+<li><p><strong>geometries</strong> (<em>Union</em><em>[</em><em>geopandas.GeoDataFrame</em><em>, </em><em>geopandas.GeoSeries</em><em>]</em>) – Geometries defining the zones for statistics calculation.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
+<dt>Method for computation. Options:</dt><dd><ul>
+<li><p>’numpy’: Uses numpy functions with parallel processing</p></li>
+<li><p>’polars’: Uses polars for data manipulation</p></li>
+<li><p>’xvec’: Uses xvec library (must be installed)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Default is ‘numpy’.</p>
+</p></li>
+<li><p><strong>lazy_load</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, optimizes memory usage by loading chunks of data for ‘numpy’ method.
+Default is True.</p></li>
+<li><p><strong>max_memory_mb</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum memory to use in megabytes. If None, uses maximum available memory.
+Default is None.</p></li>
+<li><p><strong>reducers</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – List of statistical operations to perform. Functions should be numpy nan-functions
+(e.g., ‘mean’ uses np.nanmean). Default is [‘mean’].</p></li>
+<li><p><strong>all_touched</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, includes all pixels touched by geometries in computation.
+Default is True.</p></li>
+<li><p><strong>preserve_columns</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, preserves all columns from input geometries in output.
+Default is True.</p></li>
+<li><p><strong>buffer_meters</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>, </em><em>None</em><em>]</em><em>, </em><em>optional</em>) – Buffer distance in meters to apply to geometries before computation.
+Default is None.</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – Additional keyword arguments passed to underlying computation functions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Dataset containing computed statistics with dimensions:</dt><dd><ul class="simple">
+<li><p>time (if present in input)</p></li>
+<li><p>feature (number of geometries)</p></li>
+<li><p>zonal_statistics (number of reducers)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Additional coordinates include geometry WKT and preserved columns if requested.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.Dataset</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">xarray.apply_ufunc</span></code></dt><dd><p>Function used for parallel computation</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasterio.features</span></code></dt><dd><p>Used for geometry rasterization</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>Memory usage is optimized for time series data when lazy_load=True by processing
+in chunks determined by available system memory.</p>
+<p>The ‘xvec’ method requires the xvec package to be installed separately.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s2">&quot;temperature.nc&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">polygons</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;zones.geojson&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">compute_zonal_stats</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">dataset</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">polygons</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">reducers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">lazy_load</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ImportError</strong> – If ‘xvec’ method is selected but xvec package is not installed.</p></li>
+<li><p><strong>ValueError</strong> – If invalid method or reducer is specified.</p></li>
+<li><p><strong>DeprecationWarning</strong> – If deprecated parameters are used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../earthdaily.earthdatastore.cube_utils.asset_mapper.html#module-earthdaily.earthdatastore.cube_utils.asset_mapper" title="earthdaily.earthdatastore.cube_utils.asset_mapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">asset_mapper</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../earthdaily.earthdatastore.cube_utils.geometry_manager.html#module-earthdaily.earthdatastore.cube_utils.geometry_manager" title="earthdaily.earthdatastore.cube_utils.geometry_manager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geometry_manager</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../earthdaily.earthdatastore.cube_utils.harmonizer.html#module-earthdaily.earthdatastore.cube_utils.harmonizer" title="earthdaily.earthdatastore.cube_utils.harmonizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">harmonizer</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../earthdaily.earthdatastore.cube_utils.preprocessing.html#module-earthdaily.earthdatastore.cube_utils.preprocessing" title="earthdaily.earthdatastore.cube_utils.preprocessing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">preprocessing</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="earthdaily.earthdatastore.StacCollectionExplorer.html" class="btn btn-neutral float-left" title="earthdaily.earthdatastore.StacCollectionExplorer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.earthdatastore.cube_utils.datacube.html" class="btn btn-neutral float-right" title="earthdaily.earthdatastore.cube_utils.datacube" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create a multisensor cube &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="First steps to create a datacube" href="first_steps_create_datacube.html" />
+    <link rel="prev" title="Explore collection metadata using earthdaily" href="summary_stack.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="common_band_names.html">EarthDaily unique common band names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compare_scale_s2.html">Compare Sentinel-2 scale/offset evolution during time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="field_evolution.html">Field evolution and zonal stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summary_stack.html">Explore collection metadata using earthdaily</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Create a multisensor cube</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-librairies">Import librairies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-parameters">Set parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#init-earthdatastore-with-environment-variables-or-default-credentials">Init earthdatastore with environment variables or default credentials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-multisensors-datacube">Create the multisensors datacube</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#see-the-evolution-in-rgb">See the evolution in RGB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#see-the-ndvi-evolution">See the NDVI evolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#see-the-ndvi-mean-evolution">See the NDVI mean evolution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="first_steps_create_datacube.html">First steps to create a datacube</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Gallery</a></li>
+      <li class="breadcrumb-item active">Create a multisensor cube</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_auto_examples/multisensors_cube.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-multisensors-cube-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="create-a-multisensor-cube">
+<span id="sphx-glr-auto-examples-multisensors-cube-py"></span><h1>Create a multisensor cube<a class="headerlink" href="#create-a-multisensor-cube" title="Link to this heading"></a></h1>
+<p>With Sentinel-2 and Landsat, using Sentinel-2 spatial resolution.</p>
+<section id="import-librairies">
+<h2>Import librairies<a class="headerlink" href="#import-librairies" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily</span><span class="w"> </span><span class="kn">import</span> <span class="n">EarthDataStore</span><span class="p">,</span> <span class="n">datasets</span>
+</pre></div>
+</div>
+</section>
+<section id="set-parameters">
+<h2>Set parameters<a class="headerlink" href="#set-parameters" title="Link to this heading"></a></h2>
+</section>
+<section id="init-earthdatastore-with-environment-variables-or-default-credentials">
+<h2>Init earthdatastore with environment variables or default credentials<a class="headerlink" href="#init-earthdatastore-with-environment-variables-or-default-credentials" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">()</span>
+
+<span class="n">collections</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span> <span class="s2">&quot;landsat-c2l2-sr&quot;</span><span class="p">]</span>
+<span class="n">datetime</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;2022-07-20&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-09-01&quot;</span><span class="p">]</span>
+<span class="n">intersects</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_pivot_corumba</span><span class="p">()</span>
+<span class="n">assets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;nir&quot;</span><span class="p">]</span>
+<span class="n">mask_with</span> <span class="o">=</span> <span class="s2">&quot;native&quot;</span>
+<span class="n">clear_cover</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">resampling</span> <span class="o">=</span> <span class="s2">&quot;cubic&quot;</span>
+<span class="n">cross_calibration_collection</span> <span class="o">=</span> <span class="s2">&quot;sentinel-2-l2a&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="create-the-multisensors-datacube">
+<h2>Create the multisensors datacube<a class="headerlink" href="#create-the-multisensors-datacube" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">datacube</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
+    <span class="n">collections</span><span class="p">,</span>
+    <span class="n">assets</span><span class="o">=</span><span class="n">assets</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="n">datetime</span><span class="p">,</span>
+    <span class="n">intersects</span><span class="o">=</span><span class="n">intersects</span><span class="p">,</span>
+    <span class="n">mask_with</span><span class="o">=</span><span class="n">mask_with</span><span class="p">,</span>
+    <span class="n">clear_cover</span><span class="o">=</span><span class="n">clear_cover</span><span class="p">,</span>
+    <span class="n">cross_calibration_collection</span><span class="o">=</span><span class="n">cross_calibration_collection</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Add the NDVI</span>
+<span class="n">datacube</span> <span class="o">=</span> <span class="n">datacube</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">add_indices</span><span class="p">([</span><span class="s2">&quot;NDVI&quot;</span><span class="p">])</span>
+
+<span class="c1"># Load in memory</span>
+<span class="n">datacube</span> <span class="o">=</span> <span class="n">datacube</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="see-the-evolution-in-rgb">
+<h2>See the evolution in RGB<a class="headerlink" href="#see-the-evolution-in-rgb" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">datacube</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">plot_rgb</span><span class="p">(</span><span class="n">col_wrap</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_multisensors_cube_001.png" srcset="../_images/sphx_glr_multisensors_cube_001.png" alt="time = 2022-07-21, time = 2022-07-26, time = 2022-07-31, time = 2022-08-05, time = 2022-08-15, time = 2022-08-20, time = 2022-08-25, time = 2022-08-30" class = "sphx-glr-single-img"/></section>
+<section id="see-the-ndvi-evolution">
+<h2>See the NDVI evolution<a class="headerlink" href="#see-the-ndvi-evolution" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">datacube</span><span class="p">[</span><span class="s2">&quot;NDVI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">plot_band</span><span class="p">(</span><span class="n">col_wrap</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greens&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_multisensors_cube_002.png" srcset="../_images/sphx_glr_multisensors_cube_002.png" alt="time = 2022-07-21, time = 2022-07-26, time = 2022-07-31, time = 2022-08-05, time = 2022-08-15, time = 2022-08-20, time = 2022-08-25, time = 2022-08-30" class = "sphx-glr-single-img"/></section>
+<section id="see-the-ndvi-mean-evolution">
+<h2>See the NDVI mean evolution<a class="headerlink" href="#see-the-ndvi-mean-evolution" title="Link to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">datacube</span><span class="p">[</span><span class="s2">&quot;NDVI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;NDVI evolution&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_multisensors_cube_003.png" srcset="../_images/sphx_glr_multisensors_cube_003.png" alt="NDVI evolution" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 16.545 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-multisensors-cube-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/a21b8d749ac018e8bf8e9d0fd32610a9/multisensors_cube.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">multisensors_cube.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/2dfa944b7801c410fcc9ce7b946efbc5/multisensors_cube.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">multisensors_cube.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/11e2207d7c79c0831864a8be9c6017c5/multisensors_cube.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">multisensors_cube.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="summary_stack.html" class="btn btn-neutral float-left" title="Explore collection metadata using earthdaily" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="first_steps_create_datacube.html" class="btn btn-neutral float-right" title="First steps to create a datacube" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

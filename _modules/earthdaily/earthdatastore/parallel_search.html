@@ -1,0 +1,460 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.earthdatastore.parallel_search &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="../earthdatastore.html">earthdaily.earthdatastore</a></li>
+      <li class="breadcrumb-item active">earthdaily.earthdatastore.parallel_search</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for earthdaily.earthdatastore.parallel_search</h1><div class="highlight"><pre>
+<span></span><span class="c1"># mypy: ignore-errors</span>
+<span class="c1"># TODO (v1): Fix type issues and remove &#39;mypy: ignore-errors&#39; after verifying non-breaking changes</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">chain</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">Timedelta</span><span class="p">,</span> <span class="n">Timestamp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.item_collection</span><span class="w"> </span><span class="kn">import</span> <span class="n">ItemCollection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac_client.item_search</span><span class="w"> </span><span class="kn">import</span> <span class="n">ItemSearch</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+
+<span class="n">DatetimeRange</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="n">Timestamp</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="n">Timestamp</span><span class="p">]]</span>
+<span class="n">DateRangeList</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">DatetimeRange</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="NoItemsFoundError">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.parallel_search.html#earthdaily.earthdatastore.parallel_search.NoItemsFoundError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoItemsFoundError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exception raised when no items are found during search operation.</span>
+
+<span class="sd">    This exception is raised when a parallel search operation yields no results,</span>
+<span class="sd">    indicating that the search criteria did not match any items in the dataset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="datetime_to_str">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.parallel_search.html#earthdaily.earthdatastore.parallel_search.datetime_to_str">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">datetime_to_str</span><span class="p">(</span><span class="n">dt_range</span><span class="p">:</span> <span class="n">DatetimeRange</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a datetime range to a tuple of formatted strings.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dt_range : tuple of (datetime or Timestamp)</span>
+<span class="sd">        A tuple containing start and end datetimes to be converted.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple of str</span>
+<span class="sd">        A tuple containing two strings representing the formatted start and end dates.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This function relies on ItemSearch._format_datetime internally to perform the</span>
+<span class="sd">    actual formatting. The returned strings are split from a forward-slash separated</span>
+<span class="sd">    string format.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; start = pd.Timestamp(&#39;2023-01-01&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; end = pd.Timestamp(&#39;2023-12-31&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; datetime_to_str((start, end))</span>
+<span class="sd">    (&#39;2023-01-01&#39;, &#39;2023-12-31&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">formatted</span> <span class="o">=</span> <span class="n">ItemSearch</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">_format_datetime</span><span class="p">(</span><span class="n">dt_range</span><span class="p">)</span>
+    <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">formatted</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span></div>
+
+
+
+<div class="viewcode-block" id="datetime_split">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.parallel_search.html#earthdaily.earthdatastore.parallel_search.datetime_split">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">datetime_split</span><span class="p">(</span>
+    <span class="n">dt_range</span><span class="p">:</span> <span class="n">DatetimeRange</span><span class="p">,</span> <span class="n">freq</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Timedelta</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">DatetimeRange</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">DateRangeList</span><span class="p">,</span> <span class="n">Timedelta</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split a datetime range into smaller chunks based on specified frequency.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dt_range : tuple of (datetime or Timestamp)</span>
+<span class="sd">        A tuple containing the start and end datetimes to split.</span>
+<span class="sd">    freq : str or int or Timedelta, default=&quot;auto&quot;</span>
+<span class="sd">        The frequency to use for splitting the datetime range.</span>
+<span class="sd">        If &quot;auto&quot;, frequency is calculated based on the total date range:</span>
+<span class="sd">        It increases by 5 days for every 6 months in the range.</span>
+<span class="sd">        If int, interpreted as number of days.</span>
+<span class="sd">        If Timedelta, used directly as the splitting frequency.</span>
+<span class="sd">    n_jobs : int, default=10</span>
+<span class="sd">        Number of jobs for parallel processing (currently unused in the function</span>
+<span class="sd">        but maintained for API compatibility).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[DatetimeRange, tuple[list[DatetimeRange], Timedelta]]</span>
+<span class="sd">        If the date range is smaller than the frequency:</span>
+<span class="sd">            Returns the original datetime range tuple.</span>
+<span class="sd">        Otherwise:</span>
+<span class="sd">            Returns a tuple containing:</span>
+<span class="sd">            - List of datetime range tuples split by the frequency</span>
+<span class="sd">            - The Timedelta frequency used for splitting</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The automatic frequency calculation uses the formula:</span>
+<span class="sd">    freq = total_days // (5 + 5 * (total_days // 183))</span>
+
+<span class="sd">    This ensures that the frequency increases by 5 days for every 6-month period</span>
+<span class="sd">    in the total date range.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; start = pd.Timestamp(&#39;2023-01-01&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; end = pd.Timestamp(&#39;2023-12-31&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; splits, freq = datetime_split((start, end))</span>
+<span class="sd">    &gt;&gt;&gt; len(splits)  # Number of chunks</span>
+<span class="sd">    12</span>
+
+<span class="sd">    &gt;&gt;&gt; # Using fixed frequency</span>
+<span class="sd">    &gt;&gt;&gt; splits, freq = datetime_split((start, end), freq=30)  # 30 days</span>
+<span class="sd">    &gt;&gt;&gt; freq</span>
+<span class="sd">    Timedelta(&#39;30 days&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert input dates to pandas Timestamps</span>
+    <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">datetime_to_str</span><span class="p">(</span><span class="n">dt_range</span><span class="p">)]</span>
+    <span class="n">date_diff</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
+
+    <span class="c1"># Calculate or convert frequency</span>
+    <span class="k">if</span> <span class="n">freq</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+        <span class="c1"># Calculate automatic frequency, 1 process per month</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">date_diff</span><span class="o">.</span><span class="n">days</span> <span class="o">/</span> <span class="mi">30</span><span class="p">)</span> <span class="o">*</span> <span class="mi">31</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">freq</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">Timedelta</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;freq must be &#39;auto&#39;, int, or Timedelta&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Return original range if smaller than frequency</span>
+    <span class="k">if</span> <span class="n">date_diff</span><span class="o">.</span><span class="n">days</span> <span class="o">&lt;</span> <span class="n">freq</span><span class="o">.</span><span class="n">days</span> <span class="ow">or</span> <span class="n">freq</span><span class="o">.</span><span class="n">days</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dt_range</span><span class="p">,</span> <span class="n">freq</span>
+
+    <span class="c1"># Generate date ranges</span>
+    <span class="n">date_ranges</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">chunk</span> <span class="o">+</span> <span class="n">freq</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">date_ranges</span><span class="p">,</span> <span class="n">freq</span></div>
+
+
+
+<div class="viewcode-block" id="parallel_search">
+<a class="viewcode-back" href="../../../earthdaily.earthdatastore.parallel_search.html#earthdaily.earthdatastore.parallel_search.parallel_search">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">parallel_search</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator for parallelizing search operations across datetime ranges.</span>
+
+<span class="sd">    This decorator enables parallel processing of search operations by splitting the</span>
+<span class="sd">    datetime range into batches. It automatically handles parallel execution when</span>
+<span class="sd">    conditions are met (multiple batches or large date range) and falls back to</span>
+<span class="sd">    sequential processing otherwise.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : callable</span>
+<span class="sd">        The search function to be parallelized. Should accept the following kwargs:</span>
+<span class="sd">        - datetime : tuple of datetime</span>
+<span class="sd">            Range of dates to search</span>
+<span class="sd">        - batch_days : int or &quot;auto&quot;, optional</span>
+<span class="sd">            Number of days per batch for splitting</span>
+<span class="sd">        - n_jobs : int, optional</span>
+<span class="sd">            Number of parallel jobs. Use -1 or &gt;10 for maximum of 10 jobs</span>
+<span class="sd">        - raise_no_items : bool, optional</span>
+<span class="sd">            Whether to raise exception when no items found</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    callable</span>
+<span class="sd">        Wrapped function that handles parallel execution of the search operation.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The wrapped function preserves the same interface as the original function</span>
+<span class="sd">    but adds parallel processing capabilities based on the following parameters</span>
+<span class="sd">    in kwargs:</span>
+<span class="sd">    - batch_days : Controls the size of datetime batches</span>
+<span class="sd">    - n_jobs : Controls the number of parallel jobs (max 10)</span>
+<span class="sd">    - datetime : Required for parallel execution</span>
+
+<span class="sd">    The parallel execution uses threading backend from joblib.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    joblib.Parallel : Used for parallel execution</span>
+<span class="sd">    datetime_split : Helper function for splitting datetime ranges</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; @parallel_search</span>
+<span class="sd">    ... def search_items(query, datetime=None, batch_days=&quot;auto&quot;, n_jobs=1):</span>
+<span class="sd">    ...     # Search implementation</span>
+<span class="sd">    ...     return items</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; # Will execute in parallel if conditions are met</span>
+<span class="sd">    &gt;&gt;&gt; items = search_items(&quot;query&quot;,</span>
+<span class="sd">    ...                     datetime=(start_date, end_date),</span>
+<span class="sd">    ...                     batch_days=30,</span>
+<span class="sd">    ...                     n_jobs=4)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># Set default parameters</span>
+        <span class="n">batch_days</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;batch_days&quot;</span><span class="p">,</span> <span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+        <span class="n">n_jobs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dt_range</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;datetime&quot;</span><span class="p">)</span>
+
+        <span class="n">should_parallelize</span> <span class="o">=</span> <span class="n">_should_run_parallel</span><span class="p">(</span><span class="n">dt_range</span><span class="p">,</span> <span class="n">batch_days</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">should_parallelize</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">_run_parallel_search</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">dt_range</span><span class="p">,</span> <span class="n">batch_days</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">execution_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Search/load items: </span><span class="si">{</span><span class="n">execution_time</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">items</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_should_run_parallel</span><span class="p">(</span>
+    <span class="n">dt_range</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="p">]],</span> <span class="n">batch_days</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if parallel execution should be used based on input parameters.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dt_range : tuple of datetime or None</span>
+<span class="sd">        The start and end datetime for the search range</span>
+<span class="sd">    batch_days : int or &quot;auto&quot; or None</span>
+<span class="sd">        Number of days per batch for splitting the datetime range</span>
+<span class="sd">    n_jobs : int</span>
+<span class="sd">        Number of parallel jobs requested</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if parallel execution should be used, False otherwise</span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Parallel execution is used when all of the following conditions are met:</span>
+<span class="sd">    - dt_range is provided and not None</span>
+<span class="sd">    - batch_days is not None</span>
+<span class="sd">    - n_jobs &gt; 1</span>
+<span class="sd">    - Either multiple date ranges exist or the total days exceed batch_days</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check for basic conditions that prevent parallel execution</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dt_range</span> <span class="ow">or</span> <span class="n">batch_days</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="n">n_jobs</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">n_jobs</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="c1"># Split the datetime range</span>
+    <span class="n">date_ranges</span><span class="p">,</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">datetime_split</span><span class="p">(</span><span class="n">dt_range</span><span class="p">,</span> <span class="n">batch_days</span><span class="p">)</span>
+    <span class="c1"># if str, means single date</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">date_ranges</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">date_ranges</span> <span class="o">==</span> <span class="n">dt_range</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="c1"># Check if splitting provides meaningful parallelization</span>
+    <span class="n">delta_days</span> <span class="o">=</span> <span class="p">(</span><span class="n">date_ranges</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">date_ranges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">days</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">date_ranges</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">delta_days</span> <span class="o">&gt;</span> <span class="n">batch_days</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_parallel_search</span><span class="p">(</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">args</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+    <span class="n">dt_range</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="p">],</span>
+    <span class="n">batch_days</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute the search function in parallel across datetime batches.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : callable</span>
+<span class="sd">        The search function to be executed in parallel</span>
+<span class="sd">    args : tuple</span>
+<span class="sd">        Positional arguments to pass to the search function</span>
+<span class="sd">    kwargs : dict</span>
+<span class="sd">        Keyword arguments to pass to the search function</span>
+<span class="sd">    dt_range : tuple of datetime</span>
+<span class="sd">        The start and end datetime for the search range</span>
+<span class="sd">    batch_days : int or &quot;auto&quot;</span>
+<span class="sd">        Number of days per batch for splitting the datetime range</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    T</span>
+<span class="sd">        Combined results from all parallel executions</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    NoItemsFoundError</span>
+<span class="sd">        If no items are found across all parallel executions</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This function:</span>
+<span class="sd">    1. Splits the datetime range into batches</span>
+<span class="sd">    2. Configures parallel execution parameters</span>
+<span class="sd">    3. Runs the search function in parallel using joblib</span>
+<span class="sd">    4. Combines results from all parallel executions</span>
+
+<span class="sd">    The maximum number of parallel jobs is capped at 10, and -1 is converted to 10.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">date_ranges</span><span class="p">,</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">datetime_split</span><span class="p">(</span><span class="n">dt_range</span><span class="p">,</span> <span class="n">batch_days</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Search parallel with </span><span class="si">{</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;n_jobs&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> jobs, split every </span><span class="si">{</span><span class="n">freq</span><span class="o">.</span><span class="n">days</span><span class="si">}</span><span class="s2"> days.&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Prepare kwargs for parallel execution</span>
+    <span class="n">parallel_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">parallel_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;datetime&quot;</span><span class="p">)</span>
+    <span class="n">parallel_kwargs</span><span class="p">[</span><span class="s2">&quot;raise_no_items&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Handle n_jobs special case: -1 should become 10</span>
+    <span class="n">n_jobs</span> <span class="o">=</span> <span class="n">parallel_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">parallel_kwargs</span><span class="p">[</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span> <span class="k">if</span> <span class="p">(</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">n_jobs</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="k">else</span> <span class="n">n_jobs</span>
+
+    <span class="c1"># Execute parallel search</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">parallel_kwargs</span><span class="p">[</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">],</span> <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;threading&quot;</span><span class="p">)(</span>
+        <span class="n">delayed</span><span class="p">(</span><span class="n">func</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">datetime</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="o">**</span><span class="n">parallel_kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">date_ranges</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Combine results</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">ItemCollection</span><span class="p">(</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NoItemsFoundError</span><span class="p">(</span><span class="s2">&quot;No items found in parallel search&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">items</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

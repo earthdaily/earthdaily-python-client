@@ -1,0 +1,1395 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="earthdaily" href="_autosummary/earthdaily.html" />
+    <link rel="prev" title="Contributing" href="CONTRIBUTING.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">[0.5.9] - 2025-04-09</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">[0.5.8] - 2025-04-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">[0.5.7] - 2025-03-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">[0.5.6] - 2025-03-26</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">[0.5.5] - 2025-03-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">[0.5.4] - 2025-03-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">[0.5.3] - 2025-02-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id17">[0.5.2] - 2025-02-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id18">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id20">[0.5.1] - 2025-02-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id23">[0.5.0] - 2025-02-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id24">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id25">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id26">[0.4.2] - 2025-02-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id27">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id28">[0.4.1] - 2025-02-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id29">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id30">[0.4.0] - 2025-02-03</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id31">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id32">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id33">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id34">[0.3.4] - 2024-12-17</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id35">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id36">[0.3.3] - 2024-12-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id37">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id38">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id39">[0.3.2] - 2024-12-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id40">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id41">[0.3.1] - 2024-11-22</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id42">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id43">[0.3.0] - 2024-11-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id44">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id45">[0.2.15] - 2024-11-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id46">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id47">[0.2.14] - 2024-11-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id48">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id49">[0.2.13] - 2024-11-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id50">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id51">[0.2.12] - 2024-10-31</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id52">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id53">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id54">[0.2.11] - 2024-10-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id55">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id56">[0.2.10] - 2024-10-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id57">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id58">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id59">[0.2.9] - 2024-09-24</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id60">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id61">[0.2.8] - 2024-09-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id62">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id63">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id64">[0.2.7] - 2024-08-29</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id65">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id66">[0.2.6] - 2024-08-29</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id67">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id68">[0.2.5] - 2024-08-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id69">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id70">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id71">[0.2.4] - 2024-08-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id72">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id73">[0.2.3] - 2024-07-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id74">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id75">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id76">[0.2.2] - 2024-07-03</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id77">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id78">[0.2.1] - 2024-06-24</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id79">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id80">[0.2.0] - 2024-06-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id81">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id82">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id83">[0.1.7] - 2024-06-14</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id84">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id85">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id86">[0.1.6] - 2024-06-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id87">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id88">[0.1.5] - 2024-06-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id89">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id90">[0.1.4] - 2024-05-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id91">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id92">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id93">[0.1.3] - 2024-05-22</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id94">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id95">[0.1.2] - 2024-05-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id96">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id97">[0.1.1] - 2024-05-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id98">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id99">[0.1.0] - 2024-04-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id100">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id101">[0.0.17] - 2024-04-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id102">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id103">[0.0.16] - 2024-04-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id104">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id105">[0.0.15] - 2024-04-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id106">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id107">[0.0.14] - 2024-04-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id108">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id109">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id110">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removed">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id111">[0.0.13] - 2024-03-06</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id112">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id113">[0.0.12] - 2024-03-06</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id114">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id115">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id116">[0.0.11] - 2024-03-06</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id117">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id118">[0.0.10] - 2024-03-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id119">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id120">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id121">Removed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id122">[0.0.9] - 2024-02-29</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id123">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id124">[0.0.8] - 2024-02-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id125">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id126">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id127">[0.0.7] - 2024-02-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id128">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id129">[0.0.6] - 2024-02-23</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id130">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id131">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id132">[0.0.5] - 2024-02-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id133">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id134">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id135">[0.0.4] - 2024-01-24</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id136">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id137">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id138">[0.0.3] - 2023-12-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id139">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id140">[0.0.2] - 2023-12-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id141">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id142">[0.0.1] - 2023-12-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id143">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id144">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rc9-2023-12-12">[0.0.1-rc9] - 2023-12-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id145">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id146">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id147">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rc8-2023-07-12">[0.0.1-rc8] - 2023-07-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id148">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id149">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rc7-2023-11-22">[0.0.1-rc7] - 2023-11-22</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id150">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rc6-2023-11-10">[0.0.1-rc6] - 2023-11-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id151">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rc5-2023-11-10">[0.0.1-rc5] - 2023-11-10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id152">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id153">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id154">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rc4-2023-10-19">[0.0.1-rc4] 2023-10-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id155">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rc3-2023-10-18">[0.0.1-rc3] 2023-10-18</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id156">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id157">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id158">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rc2-2023-10-12">[0.0.1-rc2] 2023-10-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id159">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id160">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rc1-2023-10-12">[0.0.1-rc1] 2023-10-12</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id161">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id162">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#beta-2023-09-20">[0.0.1-beta] 2023-09-20</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id163">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changelog</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/CHANGELOG.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
+<p>All notable changes to this project will be documented in this file.</p>
+<p>The format is based on <a class="reference external" href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
+and this project adheres to <a class="reference external" href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<section id="id1">
+<h2>[0.5.9] - 2025-04-09<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="added">
+<h3>Added<a class="headerlink" href="#added" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">iw-vv</span></code> and <code class="docutils literal notranslate"><span class="pre">iw-vh</span></code> short asset name for <code class="docutils literal notranslate"><span class="pre">sentinel-1-grd</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ew-vv</span></code> and <code class="docutils literal notranslate"><span class="pre">ew-vh</span></code> short asset name for <code class="docutils literal notranslate"><span class="pre">sentinel-1-grd</span></code>.</p></li>
+</ul>
+</section>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cloud_mask</span></code> asset name in auto masking.</p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>[0.5.8] - 2025-04-08<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Added<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">polars</span></code>  method in <code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code>.</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>Fixed<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Naming of landsat native cloudmask.</p></li>
+<li><p>Supports “.” in asset name for asset query.</p></li>
+</ul>
+</section>
+</section>
+<section id="id5">
+<h2>[0.5.7] - 2025-03-28<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<section id="id6">
+<h3>Added<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">datacube</span></code> drop duplicated items and keep first item per default.</p></li>
+</ul>
+</section>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">deduplicate_items</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">drop_duplicates</span></code> in search,
+now supports “first” or “last”. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code> (means don’t drop anything).</p></li>
+</ul>
+</section>
+<section id="id7">
+<h3>Fixed<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Requirement forces <code class="docutils literal notranslate"><span class="pre">dask&lt;2025.3.0</span></code> due to odc-stac wrong import of <code class="docutils literal notranslate"><span class="pre">quote</span></code>.</p></li>
+<li><p>Issue when <code class="docutils literal notranslate"><span class="pre">resampling</span></code> and non-native cloudmask in datacube.</p></li>
+<li><p>Issue with <code class="docutils literal notranslate"><span class="pre">rescale</span></code> when different scale/offset over time.</p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h2>[0.5.6] - 2025-03-26<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<section id="id9">
+<h3>Added<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>platform and python version information to User-Agent headers.</p></li>
+</ul>
+</section>
+</section>
+<section id="id10">
+<h2>[0.5.5] - 2025-03-11<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3>Fixed<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>better stability of the deduplicate items algorithm.</p></li>
+<li><p>rescale dataset now supports same datetime in dataset.</p></li>
+</ul>
+</section>
+</section>
+<section id="id12">
+<h2>[0.5.4] - 2025-03-10<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<section id="id13">
+<h3>Added<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ini</span></code> credentials from <code class="docutils literal notranslate"><span class="pre">~/.earthdaily/credentials</span></code> now supports profile.</p></li>
+</ul>
+</section>
+<section id="id14">
+<h3>Changed<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">filter_duplicate_items</span></code> has a time delta of 60 minutes
+(due to issues with <code class="docutils literal notranslate"><span class="pre">sentinel-2-l2a</span></code> duplicates).</p></li>
+</ul>
+</section>
+</section>
+<section id="id15">
+<h2>[0.5.3] - 2025-02-13<a class="headerlink" href="#id15" title="Link to this heading"></a></h2>
+<section id="id16">
+<h3>Fixed<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">preserve_columns</span></code> in <code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="id17">
+<h2>[0.5.2] - 2025-02-13<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<section id="id18">
+<h3>Added<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>New default method for duplicates detection using <code class="docutils literal notranslate"><span class="pre">proj:transform</span></code> instead
+of bbox (huge gap). Change can be done using
+<code class="docutils literal notranslate"><span class="pre">filter_duplicate_items(...,method='bbox')</span></code>.</p></li>
+</ul>
+</section>
+<section id="id19">
+<h3>Fixed<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Issues with rescale when same datetime between products.</p></li>
+</ul>
+</section>
+</section>
+<section id="id20">
+<h2>[0.5.1] - 2025-02-12<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<section id="id21">
+<h3>Added<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">deduplicate_items</span></code> for search in order to avoid several reprocessed items.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">disable_known_warning</span></code> earthdaily global option that disables known
+dependencies warnings.</p></li>
+</ul>
+</section>
+<section id="id22">
+<h3>Fixed<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal-stats</span></code> supports even if <code class="docutils literal notranslate"><span class="pre">flox</span></code> is not available.</p></li>
+</ul>
+</section>
+</section>
+<section id="id23">
+<h2>[0.5.0] - 2025-02-11<a class="headerlink" href="#id23" title="Link to this heading"></a></h2>
+<section id="id24">
+<h3>Added<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> now preserves GeoDataFrame columns (<code class="docutils literal notranslate"><span class="pre">preserve_columns=True</span></code>).</p></li>
+</ul>
+</section>
+<section id="id25">
+<h3>Changed<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">label</span></code> arg has been deprecated from <code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> has same output between <code class="docutils literal notranslate"><span class="pre">xvec</span></code> and <code class="docutils literal notranslate"><span class="pre">numpy</span></code> method.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">smart_load</span></code> is becoming <code class="docutils literal notranslate"><span class="pre">lazy_load</span></code> (<code class="docutils literal notranslate"><span class="pre">smart_load=True</span></code> is <code class="docutils literal notranslate"><span class="pre">lazy_load=False</span></code>)</p></li>
+<li><p>Required <code class="docutils literal notranslate"><span class="pre">pystac-client&gt;=0.7</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">groupby_date</span></code> engine is fixed to <code class="docutils literal notranslate"><span class="pre">numpy</span></code>. Change is available via
+<code class="docutils literal notranslate"><span class="pre">earthdaily.option.set_option('groupby_date_engine','numba')</span></code> for example.</p></li>
+</ul>
+</section>
+</section>
+<section id="id26">
+<h2>[0.4.2] - 2025-02-05<a class="headerlink" href="#id26" title="Link to this heading"></a></h2>
+<section id="id27">
+<h3>Fixed<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Parallel search issue when less than 10 days in datetime.</p></li>
+</ul>
+</section>
+</section>
+<section id="id28">
+<h2>[0.4.1] - 2025-02-05<a class="headerlink" href="#id28" title="Link to this heading"></a></h2>
+<section id="id29">
+<h3>Fixed<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Parallel search issue solved when <code class="docutils literal notranslate"><span class="pre">n_jobs=-1</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="id30">
+<h2>[0.4.0] - 2025-02-03<a class="headerlink" href="#id30" title="Link to this heading"></a></h2>
+<section id="id31">
+<h3>Added<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">native</span></code> cloudmask is now supported for <code class="docutils literal notranslate"><span class="pre">sentinel-2-c1-l2a</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">asset_proxy</span></code> has been implemented by &#64;imanshafiei540, see https://github.com/earthdaily/earthdaily-python-client/issues/142</p></li>
+</ul>
+</section>
+<section id="id32">
+<h3>Changed<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>After benchmark, default <code class="docutils literal notranslate"><span class="pre">chunks</span></code> size is <code class="docutils literal notranslate"><span class="pre">dict(x=512,y=512,</span> <span class="pre">time=1)</span></code> and
+not “auto” for x and y anymore.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">odc-stac</span></code> newest version is now supported (and fix for odc-stac has
+been submitted).</p></li>
+</ul>
+</section>
+<section id="id33">
+<h3>Fixed<a class="headerlink" href="#id33" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Issue in rescale when several datetime were identical #146.</p></li>
+<li><p>Bring back the API section for the documentation #140.</p></li>
+</ul>
+</section>
+</section>
+<section id="id34">
+<h2>[0.3.4] - 2024-12-17<a class="headerlink" href="#id34" title="Link to this heading"></a></h2>
+<section id="id35">
+<h3>Fixed<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">odc</span></code> stac 0.3.9 max version</p></li>
+<li><p>zonal_stats <code class="docutils literal notranslate"><span class="pre">wkt</span></code> has original geometry precision.</p></li>
+<li><p>only <code class="docutils literal notranslate"><span class="pre">bbox</span></code> in datacube search is now supported</p></li>
+</ul>
+</section>
+</section>
+<section id="id36">
+<h2>[0.3.3] - 2024-12-13<a class="headerlink" href="#id36" title="Link to this heading"></a></h2>
+<section id="id37">
+<h3>Fixed<a class="headerlink" href="#id37" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mode</span></code> in <code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code></p></li>
+<li><p>missing support for <code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> when dataset had no time dimension</p></li>
+</ul>
+</section>
+<section id="id38">
+<h3>Changed<a class="headerlink" href="#id38" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>xarray accessor classes are now privates to avoid having them in
+autocomplementation.</p></li>
+</ul>
+</section>
+</section>
+<section id="id39">
+<h2>[0.3.2] - 2024-12-10<a class="headerlink" href="#id39" title="Link to this heading"></a></h2>
+<section id="id40">
+<h3>Added<a class="headerlink" href="#id40" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">~/.earthdaily/credentials</span></code> ini file support.</p></li>
+</ul>
+</section>
+</section>
+<section id="id41">
+<h2>[0.3.1] - 2024-11-22<a class="headerlink" href="#id41" title="Link to this heading"></a></h2>
+<section id="id42">
+<h3>Fixed<a class="headerlink" href="#id42" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>wkt geometries have now the full precision when storing it in zonal stats.</p></li>
+</ul>
+</section>
+</section>
+<section id="id43">
+<h2>[0.3.0] - 2024-11-19<a class="headerlink" href="#id43" title="Link to this heading"></a></h2>
+<section id="id44">
+<h3>Added<a class="headerlink" href="#id44" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ed.add_indices</span></code> accessor now supports list of strings and dict for custom
+indices. For example : <code class="docutils literal notranslate"><span class="pre">['NDVI',{'NDVI2':'(nir-red)/(nir+red)'}]</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="id45">
+<h2>[0.2.15] - 2024-11-13<a class="headerlink" href="#id45" title="Link to this heading"></a></h2>
+<section id="id46">
+<h3>Fixed<a class="headerlink" href="#id46" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mask_with</span></code> list priority fixed due to new missing items warning.</p></li>
+</ul>
+</section>
+</section>
+<section id="id47">
+<h2>[0.2.14] - 2024-11-08<a class="headerlink" href="#id47" title="Link to this heading"></a></h2>
+<section id="id48">
+<h3>Fixed<a class="headerlink" href="#id48" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>parallel search import</p></li>
+</ul>
+</section>
+</section>
+<section id="id49">
+<h2>[0.2.13] - 2024-11-05<a class="headerlink" href="#id49" title="Link to this heading"></a></h2>
+<section id="id50">
+<h3>Fixed<a class="headerlink" href="#id50" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Manage when several products have same cloudmask</p></li>
+</ul>
+</section>
+</section>
+<section id="id51">
+<h2>[0.2.12] - 2024-10-31<a class="headerlink" href="#id51" title="Link to this heading"></a></h2>
+<section id="id52">
+<h3>Added<a class="headerlink" href="#id52" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> in search, default -1 (or 10).</p></li>
+</ul>
+</section>
+<section id="id53">
+<h3>Fixed<a class="headerlink" href="#id53" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>parallel search</p></li>
+<li><p>latitude and longitude are switched to y,x when EPSG:4326 in CRS.</p></li>
+</ul>
+</section>
+</section>
+<section id="id54">
+<h2>[0.2.11] - 2024-10-10<a class="headerlink" href="#id54" title="Link to this heading"></a></h2>
+<section id="id55">
+<h3>Fixed<a class="headerlink" href="#id55" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> now supported for python 3.10.</p></li>
+</ul>
+</section>
+</section>
+<section id="id56">
+<h2>[0.2.10] - 2024-10-10<a class="headerlink" href="#id56" title="Link to this heading"></a></h2>
+<section id="id57">
+<h3>Added<a class="headerlink" href="#id57" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add a retry strategy for the EarthDaily client.</p></li>
+</ul>
+</section>
+<section id="id58">
+<h3>Fixed<a class="headerlink" href="#id58" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bbox</span></code> for datacube has been fixed.</p></li>
+</ul>
+</section>
+</section>
+<section id="id59">
+<h2>[0.2.9] - 2024-09-24<a class="headerlink" href="#id59" title="Link to this heading"></a></h2>
+<section id="id60">
+<h3>Fixed<a class="headerlink" href="#id60" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">prefer_alternate</span></code> is set by default to <code class="docutils literal notranslate"><span class="pre">download</span></code> in datacube is order to
+have presigned url.</p></li>
+</ul>
+</section>
+</section>
+<section id="id61">
+<h2>[0.2.8] - 2024-09-23<a class="headerlink" href="#id61" title="Link to this heading"></a></h2>
+<section id="id62">
+<h3>Added<a class="headerlink" href="#id62" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer_meters</span></code> is available in the <code class="docutils literal notranslate"><span class="pre">datacube.ed.zonal_stats</span></code> function.</p></li>
+</ul>
+</section>
+<section id="id63">
+<h3>Fixed<a class="headerlink" href="#id63" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bbox</span></code> argument in datacube has been restored.</p></li>
+</ul>
+</section>
+</section>
+<section id="id64">
+<h2>[0.2.7] - 2024-08-29<a class="headerlink" href="#id64" title="Link to this heading"></a></h2>
+<section id="id65">
+<h3>Changed<a class="headerlink" href="#id65" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">intersects</span></code> in search now requests the bbox in order to optimize the request.
+The items</p></li>
+</ul>
+</section>
+</section>
+<section id="id66">
+<h2>[0.2.6] - 2024-08-29<a class="headerlink" href="#id66" title="Link to this heading"></a></h2>
+<section id="id67">
+<h3>Fixed<a class="headerlink" href="#id67" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">intersects</span></code> computation now uses only the geometry field in order to avoid
+json parsing error.</p></li>
+</ul>
+</section>
+</section>
+<section id="id68">
+<h2>[0.2.5] - 2024-08-28<a class="headerlink" href="#id68" title="Link to this heading"></a></h2>
+<section id="id69">
+<h3>Added<a class="headerlink" href="#id69" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EarthDataStore</span></code> now supports a json dict in config.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask_with</span></code> from datacube supports now <code class="docutils literal notranslate"><span class="pre">auto</span></code> parameters. It will ask first the
+cloudmask ML, then is not available the ag_cloudmask, and at last the native one.</p></li>
+</ul>
+</section>
+<section id="id70">
+<h3>Changed<a class="headerlink" href="#id70" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> <code class="docutils literal notranslate"><span class="pre">smart_load</span></code> is replaced with <code class="docutils literal notranslate"><span class="pre">lazy_load</span></code> to be more consistant
+with other libraries.</p></li>
+</ul>
+</section>
+</section>
+<section id="id71">
+<h2>[0.2.4] - 2024-08-13<a class="headerlink" href="#id71" title="Link to this heading"></a></h2>
+<section id="id72">
+<h3>Changed<a class="headerlink" href="#id72" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> now uses homemade <code class="docutils literal notranslate"><span class="pre">numpy</span></code> method. <code class="docutils literal notranslate"><span class="pre">smart_load</span></code> is set to
+default when using accessor. It loads the maximum of time (time dimension)
+in memory in order to speed up the process. Statistics method (min, max…)
+must by specified in the <code class="docutils literal notranslate"><span class="pre">reducers</span></code> argument.</p></li>
+<li><p>default <code class="docutils literal notranslate"><span class="pre">EDS_API_URL</span></code> from <a class="reference external" href="https://api.eds.earthdaily.com/archive/v1/stac/v1">https://api.eds.earthdaily.com/archive/v1/stac/v1</a> to
+<a class="reference external" href="https://api.earthdaily.com/platform/v1/stac">https://api.earthdaily.com/platform/v1/stac</a></p></li>
+</ul>
+</section>
+</section>
+<section id="id73">
+<h2>[0.2.3] - 2024-07-23<a class="headerlink" href="#id73" title="Link to this heading"></a></h2>
+<section id="id74">
+<h3>Added<a class="headerlink" href="#id74" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>New method to connect to earthdatastore via <code class="docutils literal notranslate"><span class="pre">earthdaily.EarthDataStore()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">earthdaily.EarthDataStore()</span></code> method also supports toml/json.</p></li>
+<li><p>command line <code class="docutils literal notranslate"><span class="pre">copy-earthdaily-credentials-template</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">request_payer</span></code> boolean in <code class="docutils literal notranslate"><span class="pre">EarthDataStore</span></code>method.</p></li>
+</ul>
+</section>
+<section id="id75">
+<h3>Fixed<a class="headerlink" href="#id75" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sentinel-1-grd</span></code> datacube wasn’t generated due to a dot in the asset name.</p></li>
+</ul>
+</section>
+</section>
+<section id="id76">
+<h2>[0.2.2] - 2024-07-03<a class="headerlink" href="#id76" title="Link to this heading"></a></h2>
+<section id="id77">
+<h3>Changed<a class="headerlink" href="#id77" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix odc-stac to version &lt;= 0.3.9 due to error in auto chunks.</p></li>
+</ul>
+</section>
+</section>
+<section id="id78">
+<h2>[0.2.1] - 2024-06-24<a class="headerlink" href="#id78" title="Link to this heading"></a></h2>
+<section id="id79">
+<h3>Changed<a class="headerlink" href="#id79" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">search</span></code> is now parallelized using datetime.</p></li>
+</ul>
+</section>
+</section>
+<section id="id80">
+<h2>[0.2.0] - 2024-06-19<a class="headerlink" href="#id80" title="Link to this heading"></a></h2>
+<section id="id81">
+<h3>Added<a class="headerlink" href="#id81" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">datacube</span></code> <code class="docutils literal notranslate"><span class="pre">mask_with</span></code> parameters supports now <code class="docutils literal notranslate"><span class="pre">cloud_mask</span></code> (cnn cloudmask from EDA).</p></li>
+</ul>
+</section>
+<section id="id82">
+<h3>Fixed<a class="headerlink" href="#id82" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>items <code class="docutils literal notranslate"><span class="pre">Datetime</span></code> are automatically converted in nanoseconds.</p></li>
+<li><p>AssetMapper is now also in the search part for only requesting the needed assets.</p></li>
+</ul>
+</section>
+</section>
+<section id="id83">
+<h2>[0.1.7] - 2024-06-14<a class="headerlink" href="#id83" title="Link to this heading"></a></h2>
+<section id="id84">
+<h3>Fixed<a class="headerlink" href="#id84" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>datacube cloud masked when using <code class="docutils literal notranslate"><span class="pre">groupby_date</span></code>.</p></li>
+</ul>
+</section>
+<section id="id85">
+<h3>Changed<a class="headerlink" href="#id85" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>accessors are now more compatible for dataarray and dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ed.clip</span></code> accessor now manages first bounding box then clip geometry to be faster.</p></li>
+<li><p>New whittaker function that is about 20 times faster.
+Beware, lambda from previous whittaker must be multiplied by 10 000 to have same results.</p></li>
+</ul>
+</section>
+</section>
+<section id="id86">
+<h2>[0.1.6] - 2024-06-05<a class="headerlink" href="#id86" title="Link to this heading"></a></h2>
+<section id="id87">
+<h3>Fixed<a class="headerlink" href="#id87" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Better management of mixing several cloud cover a same day to ensure highest clear coverage.</p></li>
+</ul>
+</section>
+</section>
+<section id="id88">
+<h2>[0.1.5] - 2024-06-05<a class="headerlink" href="#id88" title="Link to this heading"></a></h2>
+<section id="id89">
+<h3>Fixed<a class="headerlink" href="#id89" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Better management of cloud mask and error messages.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">groupby_date</span></code> is now performed after processing the cloudmask in order to ensure a better compatibility.</p></li>
+</ul>
+</section>
+</section>
+<section id="id90">
+<h2>[0.1.4] - 2024-05-23<a class="headerlink" href="#id90" title="Link to this heading"></a></h2>
+<section id="id91">
+<h3>Fixed<a class="headerlink" href="#id91" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>type str/list for <code class="docutils literal notranslate"><span class="pre">datacube</span></code> <code class="docutils literal notranslate"><span class="pre">mask_with</span></code> kwarg.</p></li>
+</ul>
+</section>
+<section id="id92">
+<h3>Added<a class="headerlink" href="#id92" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>unit tests for mask.</p></li>
+</ul>
+</section>
+</section>
+<section id="id93">
+<h2>[0.1.3] - 2024-05-22<a class="headerlink" href="#id93" title="Link to this heading"></a></h2>
+<section id="id94">
+<h3>Changed<a class="headerlink" href="#id94" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mask_with</span></code> now supports list. If so, if the first mask type is not available for a collection, it will switch to the second mask.</p></li>
+</ul>
+</section>
+</section>
+<section id="id95">
+<h2>[0.1.2] - 2024-05-15<a class="headerlink" href="#id95" title="Link to this heading"></a></h2>
+<section id="id96">
+<h3>Fixed<a class="headerlink" href="#id96" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Wrong clear_percent/clear_pixels when having multiple geometries in datacube request</p></li>
+</ul>
+</section>
+</section>
+<section id="id97">
+<h2>[0.1.1] - 2024-05-13<a class="headerlink" href="#id97" title="Link to this heading"></a></h2>
+<section id="id98">
+<h3>Fixed<a class="headerlink" href="#id98" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">properties</span></code> of datacube is now a boolean or a list, not None by default.</p></li>
+<li><p>Missing crs after whittaker.</p></li>
+</ul>
+</section>
+</section>
+<section id="id99">
+<h2>[0.1.0] - 2024-04-19<a class="headerlink" href="#id99" title="Link to this heading"></a></h2>
+<section id="id100">
+<h3>Fixed<a class="headerlink" href="#id100" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Scaled/asset when duplicated datetimes.</p></li>
+<li><p>Chunks asked in datacube are not the same as the output (due du smallest dims).</p></li>
+<li><p>Autoconverting list/dict coords to string for zarr compatibility</p></li>
+</ul>
+</section>
+</section>
+<section id="id101">
+<h2>[0.0.17] - 2024-04-15<a class="headerlink" href="#id101" title="Link to this heading"></a></h2>
+<section id="id102">
+<h3>Fixed<a class="headerlink" href="#id102" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Issue when having different time size between sensor and cloudmask.</p></li>
+</ul>
+</section>
+</section>
+<section id="id103">
+<h2>[0.0.16] - 2024-04-15<a class="headerlink" href="#id103" title="Link to this heading"></a></h2>
+<section id="id104">
+<h3>Fixed<a class="headerlink" href="#id104" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Issue with time when resample between datacube and cloudmask datacube.</p></li>
+</ul>
+</section>
+</section>
+<section id="id105">
+<h2>[0.0.15] - 2024-04-11<a class="headerlink" href="#id105" title="Link to this heading"></a></h2>
+<section id="id106">
+<h3>Fixed<a class="headerlink" href="#id106" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ag_cloud_mask_items</span></code> queries items per batch.</p></li>
+</ul>
+</section>
+</section>
+<section id="id107">
+<h2>[0.0.14] - 2024-04-11<a class="headerlink" href="#id107" title="Link to this heading"></a></h2>
+<section id="id108">
+<h3>Fixed<a class="headerlink" href="#id108" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GeoSeries</span></code> supported in GeometryManager.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ed.sel_nearest_dates</span></code> accessor avoid duplicated times.</p></li>
+<li><p>Issue when managing multiple indices with accessor <code class="docutils literal notranslate"><span class="pre">xr.ed</span></code>.</p></li>
+<li><p>Issue when same datetime when rescaling dataset.</p></li>
+</ul>
+</section>
+<section id="id109">
+<h3>Added<a class="headerlink" href="#id109" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mode</span></code> for zonal stats in <code class="docutils literal notranslate"><span class="pre">operations.reducers</span></code>.</p></li>
+</ul>
+</section>
+<section id="id110">
+<h3>Changed<a class="headerlink" href="#id110" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ag_cloud_mask_items</span></code> queries items per batch.</p></li>
+</ul>
+</section>
+<section id="removed">
+<h3>Removed<a class="headerlink" href="#removed" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Typing decorator, expected new typing library.</p></li>
+</ul>
+</section>
+</section>
+<section id="id111">
+<h2>[0.0.13] - 2024-03-06<a class="headerlink" href="#id111" title="Link to this heading"></a></h2>
+<section id="id112">
+<h3>Fixed<a class="headerlink" href="#id112" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_typer</span></code> with kwargs to other functions.</p></li>
+</ul>
+</section>
+</section>
+<section id="id113">
+<h2>[0.0.12] - 2024-03-06<a class="headerlink" href="#id113" title="Link to this heading"></a></h2>
+<section id="id114">
+<h3>Added<a class="headerlink" href="#id114" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_typer</span></code> supports custom types.</p></li>
+</ul>
+</section>
+<section id="id115">
+<h3>Changed<a class="headerlink" href="#id115" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> outputs only valid geometries. Set <code class="docutils literal notranslate"><span class="pre">True</span></code>.
+to <code class="docutils literal notranslate"><span class="pre">raise_missing_geometry</span></code> to have the old behavior.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> with geocube now manages <code class="docutils literal notranslate"><span class="pre">all_touched</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="id116">
+<h2>[0.0.11] - 2024-03-06<a class="headerlink" href="#id116" title="Link to this heading"></a></h2>
+<section id="id117">
+<h3>Fixed<a class="headerlink" href="#id117" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>some issues with <code class="docutils literal notranslate"><span class="pre">_typer</span></code> from accessor.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> manages index independently from row.</p></li>
+</ul>
+</section>
+</section>
+<section id="id118">
+<h2>[0.0.10] - 2024-03-05<a class="headerlink" href="#id118" title="Link to this heading"></a></h2>
+<section id="id119">
+<h3>Added<a class="headerlink" href="#id119" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ed.whittaker</span></code> adapted from pywapor github.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ed.zonal_stats</span></code> using new <code class="docutils literal notranslate"><span class="pre">geocube</span></code> zonal_stats engine.</p></li>
+</ul>
+</section>
+<section id="id120">
+<h3>Changed<a class="headerlink" href="#id120" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> now uses <code class="docutils literal notranslate"><span class="pre">geocube</span></code> as default processing method.</p></li>
+</ul>
+</section>
+<section id="id121">
+<h3>Removed<a class="headerlink" href="#id121" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ed.plot_index</span></code> deprecated, use <code class="docutils literal notranslate"><span class="pre">ed.plot_band</span></code> instead.</p></li>
+</ul>
+</section>
+</section>
+<section id="id122">
+<h2>[0.0.9] - 2024-02-29<a class="headerlink" href="#id122" title="Link to this heading"></a></h2>
+<section id="id123">
+<h3>Fixed<a class="headerlink" href="#id123" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_typer</span></code> has a better args management.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">available_indices</span></code> returns only indices that can be computed.</p></li>
+</ul>
+</section>
+</section>
+<section id="id124">
+<h2>[0.0.8] - 2024-02-28<a class="headerlink" href="#id124" title="Link to this heading"></a></h2>
+<section id="id125">
+<h3>Added<a class="headerlink" href="#id125" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>better management of <code class="docutils literal notranslate"><span class="pre">col_wrap</span></code> in <code class="docutils literal notranslate"><span class="pre">ed</span></code> xarray accessor.</p></li>
+</ul>
+</section>
+<section id="id126">
+<h3>Fixed<a class="headerlink" href="#id126" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>some bugs in xarray <code class="docutils literal notranslate"><span class="pre">ed</span></code> accessor.</p></li>
+</ul>
+</section>
+</section>
+<section id="id127">
+<h2>[0.0.7] - 2024-02-28<a class="headerlink" href="#id127" title="Link to this heading"></a></h2>
+<section id="id128">
+<h3>Added<a class="headerlink" href="#id128" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>xarray <code class="docutils literal notranslate"><span class="pre">ed</span></code> accessor.</p></li>
+</ul>
+</section>
+</section>
+<section id="id129">
+<h2>[0.0.6] - 2024-02-23<a class="headerlink" href="#id129" title="Link to this heading"></a></h2>
+<section id="id130">
+<h3>Fixed<a class="headerlink" href="#id130" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">to_wkt</span></code> for GeometryManager.</p></li>
+</ul>
+</section>
+<section id="id131">
+<h3>Added<a class="headerlink" href="#id131" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add docstring thanks to &#64;piclem.</p></li>
+<li><p>Token support thanks to &#64;luisageo6.</p></li>
+</ul>
+</section>
+</section>
+<section id="id132">
+<h2>[0.0.5] - 2024-02-19<a class="headerlink" href="#id132" title="Link to this heading"></a></h2>
+<section id="id133">
+<h3>Fixed<a class="headerlink" href="#id133" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">groupby_date=None</span></code> is also transferred to <code class="docutils literal notranslate"><span class="pre">mask_with</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask_with=&quot;native&quot;</span></code> also works when no assets is given.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clear_cover</span></code> is greater or equal (and not anymore greater).</p></li>
+</ul>
+</section>
+<section id="id134">
+<h3>Added<a class="headerlink" href="#id134" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">properties</span></code> parameters for datacube creation.</p></li>
+</ul>
+</section>
+</section>
+<section id="id135">
+<h2>[0.0.4] - 2024-01-24<a class="headerlink" href="#id135" title="Link to this heading"></a></h2>
+<section id="id136">
+<h3>Fixed<a class="headerlink" href="#id136" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">collections</span></code> from datacube now supports in args.</p></li>
+</ul>
+</section>
+<section id="id137">
+<h3>Changed<a class="headerlink" href="#id137" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Modify dims attributs to sizes for xarray.</p></li>
+</ul>
+</section>
+</section>
+<section id="id138">
+<h2>[0.0.3] - 2023-12-15<a class="headerlink" href="#id138" title="Link to this heading"></a></h2>
+<section id="id139">
+<h3>Added<a class="headerlink" href="#id139" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Ability to query assets in the search items.</p></li>
+</ul>
+</section>
+</section>
+<section id="id140">
+<h2>[0.0.2] - 2023-12-15<a class="headerlink" href="#id140" title="Link to this heading"></a></h2>
+<section id="id141">
+<h3>Fixed<a class="headerlink" href="#id141" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Missing json due to pypi installation.</p></li>
+<li><p>Multisensors datacube now support <code class="docutils literal notranslate"><span class="pre">stackstac</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="id142">
+<h2>[0.0.1] - 2023-12-15<a class="headerlink" href="#id142" title="Link to this heading"></a></h2>
+<section id="id143">
+<h3>Added<a class="headerlink" href="#id143" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Auth datacube <code class="docutils literal notranslate"><span class="pre">earthdaily.earthdatastore.Auth().datacube(...)</span></code> function now manages multiple collections.</p></li>
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">fields</span></code> to query only assets asked over Skyfox/EDS (better performance).</p></li>
+</ul>
+</section>
+<section id="id144">
+<h3>Changed<a class="headerlink" href="#id144" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">asset_mapper</span></code> has now all assets from available collections.</p></li>
+</ul>
+</section>
+</section>
+<section id="rc9-2023-12-12">
+<h2>[0.0.1-rc9] - 2023-12-12<a class="headerlink" href="#rc9-2023-12-12" title="Link to this heading"></a></h2>
+<section id="id145">
+<h3>Added<a class="headerlink" href="#id145" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Optimization (dask-native) for cloudmasks (Sentinel-2, Venus, ag-cloud-mask), except Landsat.</p></li>
+</ul>
+</section>
+<section id="id146">
+<h3>Changed<a class="headerlink" href="#id146" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Default chunks using odc is now <code class="docutils literal notranslate"><span class="pre">x=&quot;auto&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">y=&quot;auto&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geobox</span></code> or <code class="docutils literal notranslate"><span class="pre">geopolygon</span></code> is used to have a preclipped datacube to the bounding box of the geometry. It enhances performances.</p></li>
+</ul>
+</section>
+<section id="id147">
+<h3>Fixed<a class="headerlink" href="#id147" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Load json config for <code class="docutils literal notranslate"><span class="pre">Auth</span></code>.</p></li>
+<li><p>Remove kwargs of <code class="docutils literal notranslate"><span class="pre">geobox</span></code> for native cloudmask in order to parse new <code class="docutils literal notranslate"><span class="pre">geobox</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="rc8-2023-07-12">
+<h2>[0.0.1-rc8] - 2023-07-12<a class="headerlink" href="#rc8-2023-07-12" title="Link to this heading"></a></h2>
+<section id="id148">
+<h3>Added<a class="headerlink" href="#id148" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Tests for python 3.12.</p></li>
+<li><p>handle cross calibration (harmonization) using private collection.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Auth</span></code> automatically to EarhtDataStore after 3600 seconds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Auth</span></code> now supports presign_urls parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load_pivot_corumba</span></code> in datasets.</p></li>
+</ul>
+</section>
+<section id="id149">
+<h3>Fixed<a class="headerlink" href="#id149" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Perfect dimension compatibility between cloudmask and sensor datacube using <code class="docutils literal notranslate"><span class="pre">geobox</span></code>.</p></li>
+<li><p>Force loading native landsat cloudmask because not compatible with dask.</p></li>
+</ul>
+</section>
+</section>
+<section id="rc7-2023-11-22">
+<h2>[0.0.1-rc7] - 2023-11-22<a class="headerlink" href="#rc7-2023-11-22" title="Link to this heading"></a></h2>
+<section id="id150">
+<h3>Fixed<a class="headerlink" href="#id150" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>issue with unlogged datacube and non-geodataframe intersects.</p></li>
+<li><p>for element84 sentinel-2-l2a collection, <code class="docutils literal notranslate"><span class="pre">boa_offset_applied</span></code>is set to True since 2022-02-28.</p></li>
+<li><p>added <code class="docutils literal notranslate"><span class="pre">nir</span></code> band in <code class="docutils literal notranslate"><span class="pre">boa_offset_applied</span></code> control.</p></li>
+<li><p>fix percentage in landsat agriculture cloudmask .</p></li>
+</ul>
+</section>
+</section>
+<section id="rc6-2023-11-10">
+<h2>[0.0.1-rc6] - 2023-11-10<a class="headerlink" href="#rc6-2023-11-10" title="Link to this heading"></a></h2>
+<section id="id151">
+<h3>Fixed<a class="headerlink" href="#id151" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>fix bug in <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> using gh actions.</p></li>
+</ul>
+</section>
+</section>
+<section id="rc5-2023-11-10">
+<h2>[0.0.1-rc5] - 2023-11-10<a class="headerlink" href="#rc5-2023-11-10" title="Link to this heading"></a></h2>
+<section id="id152">
+<h3>Added<a class="headerlink" href="#id152" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">intersects</span></code> argument in search/datacube now supports wkt/geojson/geopandas.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">common_band_names</span></code> default set to True in datacube creation. It uses the new Assets Mapper in order to define to best suitable bands according to user needs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clear_cover</span></code> argument in the datacube method when using the <code class="docutils literal notranslate"><span class="pre">earthdatastore.Auth</span></code> method.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">datasets.load_pivot()</span></code> to load a GeoDataFrame of a pivot in Nebraska (alternates between corn or soy between years).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preload_mask</span></code> in authenticated datacube method set to <code class="docutils literal notranslate"><span class="pre">True</span></code>by default to load, if enough virtual memory.</p></li>
+<li><p>Several tests to check and validate code.</p></li>
+<li><p>Better performances for cloud mask statistics by checking data type.</p></li>
+</ul>
+</section>
+<section id="id153">
+<h3>Changed<a class="headerlink" href="#id153" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>masks statistics are not anymore suffixed with the cloudmask type : <code class="docutils literal notranslate"><span class="pre">clear_percent</span></code> and <code class="docutils literal notranslate"><span class="pre">clear_pixels</span></code>. Warns with a DeprecationWarning.</p></li>
+<li><p>all queries in <code class="docutils literal notranslate"><span class="pre">post_query</span></code> must return True to keep the item. If a key doesn’t exist, considers the result as False (instead of failling).</p></li>
+<li><p>default chunks are now <code class="docutils literal notranslate"><span class="pre">x=512</span></code> and <code class="docutils literal notranslate"><span class="pre">y=512</span></code> for odc-stac.</p></li>
+</ul>
+</section>
+<section id="id154">
+<h3>Fixed<a class="headerlink" href="#id154" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>search <code class="docutils literal notranslate"><span class="pre">post_query</span></code> do not block if some properties are not available on all items.</p></li>
+<li><p>some scale/offsets were not supported due to missing scale/offsets from previous assets.</p></li>
+<li><p>issues when computing datacube using Landsat cloudmask (<code class="docutils literal notranslate"><span class="pre">qa_pixel</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">intersects</span></code> now supports several geometries and don’t force selection on the first index.</p></li>
+</ul>
+</section>
+</section>
+<section id="rc4-2023-10-19">
+<h2>[0.0.1-rc4] 2023-10-19<a class="headerlink" href="#rc4-2023-10-19" title="Link to this heading"></a></h2>
+<section id="id155">
+<h3>Changed<a class="headerlink" href="#id155" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>When asking <code class="docutils literal notranslate"><span class="pre">ag_cloud_mask</span></code>, keep only sensor items that have <code class="docutils literal notranslate"><span class="pre">eda:ag_cloud_mask_available=True</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="rc3-2023-10-18">
+<h2>[0.0.1-rc3] 2023-10-18<a class="headerlink" href="#rc3-2023-10-18" title="Link to this heading"></a></h2>
+<section id="id156">
+<h3>Added<a class="headerlink" href="#id156" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">earthdaily.earthdatastore.cube_utils.zonal_stats_numpy</span></code> to compute local statistics using numpy functions. Best when high number of geometries.</p></li>
+</ul>
+</section>
+<section id="id157">
+<h3>Changed<a class="headerlink" href="#id157" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> default parameters rasterizes now whole vector in order to be
+really faster faster. Previous behavior is available by selecting <code class="docutils literal notranslate"><span class="pre">method=&quot;standard&quot;</span></code>.</p></li>
+</ul>
+</section>
+<section id="id158">
+<h3>Fixed<a class="headerlink" href="#id158" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix when number of <code class="docutils literal notranslate"><span class="pre">ag_cloud_mask</span></code> is lower than number of sensor items</p></li>
+</ul>
+</section>
+</section>
+<section id="rc2-2023-10-12">
+<h2>[0.0.1-rc2] 2023-10-12<a class="headerlink" href="#rc2-2023-10-12" title="Link to this heading"></a></h2>
+<section id="id159">
+<h3>Fixed<a class="headerlink" href="#id159" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">stats</span></code> name as dimension</p></li>
+</ul>
+</section>
+<section id="id160">
+<h3>Changed<a class="headerlink" href="#id160" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> output “feature” (not “feature_name”) and <code class="docutils literal notranslate"><span class="pre">stats</span></code> dimensions</p></li>
+</ul>
+</section>
+</section>
+<section id="rc1-2023-10-12">
+<h2>[0.0.1-rc1] 2023-10-12<a class="headerlink" href="#rc1-2023-10-12" title="Link to this heading"></a></h2>
+<section id="id161">
+<h3>Added<a class="headerlink" href="#id161" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Automatic presigned url when needed, just specify argument <code class="docutils literal notranslate"><span class="pre">prefer_alternate=&quot;download&quot;</span></code> in search.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zonal_stats</span></code> function available in <code class="docutils literal notranslate"><span class="pre">earthdatastore.cube_utils</span></code> module.</p></li>
+<li><p>An exemple on how to use <code class="docutils literal notranslate"><span class="pre">.env</span></code> credentials.</p></li>
+</ul>
+</section>
+<section id="id162">
+<h3>Changed<a class="headerlink" href="#id162" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Python version must be at least 3.10.</p></li>
+<li><p>Gdal version must be at least 3.7.0.</p></li>
+<li><p>A better documentation.</p></li>
+</ul>
+</section>
+</section>
+<section id="beta-2023-09-20">
+<h2>[0.0.1-beta] 2023-09-20<a class="headerlink" href="#beta-2023-09-20" title="Link to this heading"></a></h2>
+<section id="id163">
+<h3>Added<a class="headerlink" href="#id163" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>First public release under the name of earthdaily.</p></li>
+<li><p>module earthdatastore gathers all cube fonctions.</p></li>
+<li><p>earthdatastore.Auth() allows methods for search and datacube creation.</p></li>
+<li><p>Add if missing default scale/offset factor to collection (landsat-c2l2-sr, landsat-c2l2-st, landsat-c2l1).</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CONTRIBUTING.html" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="_autosummary/earthdaily.html" class="btn btn-neutral float-right" title="earthdaily" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

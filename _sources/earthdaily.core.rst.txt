@@ -1,0 +1,10 @@
+earthdaily.core package
+=======================
+
+Module contents
+---------------
+
+.. automodule:: earthdaily.core
+   :members:
+   :undoc-members:
+   :show-inheritance:

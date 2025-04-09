@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.earthdatastore.parallel_search module &mdash; earthdaily 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            earthdaily
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">earthdaily</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">earthdaily.earthdatastore.parallel_search module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/earthdaily.earthdatastore.parallel_search.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-earthdaily.earthdatastore.parallel_search">
+<span id="earthdaily-earthdatastore-parallel-search-module"></span><h1>earthdaily.earthdatastore.parallel_search module<a class="headerlink" href="#module-earthdaily.earthdatastore.parallel_search" title="Link to this heading"></a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.parallel_search.NoItemsFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">earthdaily.earthdatastore.parallel_search.</span></span><span class="sig-name descname"><span class="pre">NoItemsFoundError</span></span><a class="reference internal" href="_modules/earthdaily/earthdatastore/parallel_search.html#NoItemsFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.parallel_search.NoItemsFoundError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when no items are found during search operation.</p>
+<p>This exception is raised when a parallel search operation yields no results,
+indicating that the search criteria did not match any items in the dataset.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.parallel_search.datetime_split">
+<span class="sig-prename descclassname"><span class="pre">earthdaily.earthdatastore.parallel_search.</span></span><span class="sig-name descname"><span class="pre">datetime_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/earthdaily/earthdatastore/parallel_search.html#datetime_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.parallel_search.datetime_split" title="Link to this definition"></a></dt>
+<dd><p>Split a datetime range into smaller chunks based on specified frequency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dt_range</strong> (<em>tuple</em><em> of </em><em>(</em><em>datetime</em><em> or </em><em>Timestamp</em><em>)</em>) – A tuple containing the start and end datetimes to split.</p></li>
+<li><p><strong>freq</strong> (<em>str</em><em> or </em><em>int</em><em> or </em><em>Timedelta</em><em>, </em><em>default=&quot;auto&quot;</em>) – The frequency to use for splitting the datetime range.
+If “auto”, frequency is calculated based on the total date range:
+It increases by 5 days for every 6 months in the range.
+If int, interpreted as number of days.
+If Timedelta, used directly as the splitting frequency.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>default=10</em>) – Number of jobs for parallel processing (currently unused in the function
+but maintained for API compatibility).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>If the date range is smaller than the frequency:</dt><dd><p>Returns the original datetime range tuple.</p>
+</dd>
+<dt>Otherwise:</dt><dd><p>Returns a tuple containing:
+- List of datetime range tuples split by the frequency
+- The Timedelta frequency used for splitting</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[DatetimeRange, tuple[list[DatetimeRange], Timedelta]]</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The automatic frequency calculation uses the formula:
+freq = total_days // (5 + 5 * (total_days // 183))</p>
+<p>This ensures that the frequency increases by 5 days for every 6-month period
+in the total date range.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2023-01-01&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2023-12-31&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splits</span><span class="p">,</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">datetime_split</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">splits</span><span class="p">)</span>  <span class="c1"># Number of chunks</span>
+<span class="go">12</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Using fixed frequency</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splits</span><span class="p">,</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">datetime_split</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">),</span> <span class="n">freq</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># 30 days</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span>
+<span class="go">Timedelta(&#39;30 days&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.parallel_search.datetime_to_str">
+<span class="sig-prename descclassname"><span class="pre">earthdaily.earthdatastore.parallel_search.</span></span><span class="sig-name descname"><span class="pre">datetime_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt_range</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/earthdaily/earthdatastore/parallel_search.html#datetime_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.parallel_search.datetime_to_str" title="Link to this definition"></a></dt>
+<dd><p>Convert a datetime range to a tuple of formatted strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dt_range</strong> (<em>tuple</em><em> of </em><em>(</em><em>datetime</em><em> or </em><em>Timestamp</em><em>)</em>) – A tuple containing start and end datetimes to be converted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing two strings representing the formatted start and end dates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of str</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function relies on ItemSearch._format_datetime internally to perform the
+actual formatting. The returned strings are split from a forward-slash separated
+string format.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2023-01-01&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">&#39;2023-12-31&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">datetime_to_str</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
+<span class="go">(&#39;2023-01-01&#39;, &#39;2023-12-31&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.parallel_search.parallel_search">
+<span class="sig-prename descclassname"><span class="pre">earthdaily.earthdatastore.parallel_search.</span></span><span class="sig-name descname"><span class="pre">parallel_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/earthdaily/earthdatastore/parallel_search.html#parallel_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.parallel_search.parallel_search" title="Link to this definition"></a></dt>
+<dd><p>Decorator for parallelizing search operations across datetime ranges.</p>
+<p>This decorator enables parallel processing of search operations by splitting the
+datetime range into batches. It automatically handles parallel execution when
+conditions are met (multiple batches or large date range) and falls back to
+sequential processing otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>callable</em>) – <p>The search function to be parallelized. Should accept the following kwargs:
+- datetime : tuple of datetime</p>
+<blockquote>
+<div><p>Range of dates to search</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>batch_days<span class="classifier">int or “auto”, optional</span></dt><dd><p>Number of days per batch for splitting</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_jobs<span class="classifier">int, optional</span></dt><dd><p>Number of parallel jobs. Use -1 or &gt;10 for maximum of 10 jobs</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>raise_no_items<span class="classifier">bool, optional</span></dt><dd><p>Whether to raise exception when no items found</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Wrapped function that handles parallel execution of the search operation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>callable</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The wrapped function preserves the same interface as the original function
+but adds parallel processing capabilities based on the following parameters
+in kwargs:
+- batch_days : Controls the size of datetime batches
+- n_jobs : Controls the number of parallel jobs (max 10)
+- datetime : Required for parallel execution</p>
+<p>The parallel execution uses threading backend from joblib.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">joblib.Parallel</span></code></dt><dd><p>Used for parallel execution</p>
+</dd>
+<dt><a class="reference internal" href="#earthdaily.earthdatastore.parallel_search.datetime_split" title="earthdaily.earthdatastore.parallel_search.datetime_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datetime_split</span></code></a></dt><dd><p>Helper function for splitting datetime ranges</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@parallel_search</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">search_items</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">datetime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_days</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># Search implementation</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">items</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Will execute in parallel if conditions are met</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="n">search_items</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">datetime</span><span class="o">=</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">),</span>
+<span class="gp">... </span>                    <span class="n">batch_days</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, EarthDailyAgro.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
