@@ -1,0 +1,59 @@
+name: Copybara Sync
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python and Java
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl gettext
+
+      - name: Set up virtualenv and install Python deps
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install PyJWT cryptography requests
+
+      - name: Generate GitHub token and configure Git
+        id: auth
+        run: |
+          source .venv/bin/activate
+          GITHUB_TOKEN=$(python generate_token.py)
+          echo "::add-mask::$GITHUB_TOKEN"
+          echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> $GITHUB_ENV
+          git config --global user.name "Iman Shafiei"
+          git config --global user.email "iman.shafiei@earthdaily.com"
+          git config --global credential.helper store
+          echo "https://x-access-token:${GITHUB_TOKEN}@github.com" > ~/.git-credentials
+
+      - name: Download Copybara
+        run: |
+          curl -LO https://github.com/google/copybara/releases/download/v20250224/copybara_deploy.jar
+
+      - name: Substitute env vars in copy.bara.sky
+        run: |
+          envsubst < copy.bara.sky > copy.bara.generated.sky
+          mv copy.bara.generated.sky copy.bara.sky
+
+      - name: Run Copybara
+        run: |
+          java -jar copybara_deploy.jar copy.bara.sky local_test_sync --init-history
