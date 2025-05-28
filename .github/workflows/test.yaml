@@ -1,0 +1,45 @@
+name: earthdaily-python-client CI
+
+on:
+  push:
+    branches:
+      - main
+      - beta/*
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Unit Tests (Python ${{ matrix.python-version }})
+    runs-on: ${{ github.repository_visibility == 'private' && 'ed-runner-set' || 'ubuntu-latest' }}
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        include:
+          - python-version: "3.10"
+            tox_env: py310
+          - python-version: "3.11"
+            tox_env: py311
+          - python-version: "3.12"
+            tox_env: py312
+          - python-version: "3.13"
+            tox_env: py313
+    container:
+      image: python:${{ matrix.python-version }}
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install GDAL and dependencies
+        run: |
+          apt-get update
+          apt-get install -y gdal-bin libgdal-dev
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install test dependencies
+        run: poetry install --only tests
+
+      - name: Run tests with tox
+        run: poetry run tox -e ${{ matrix.tox_env }}
