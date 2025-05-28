@@ -6,14 +6,14 @@ on:
       - main
       - beta/*
   pull_request:
-    branches:
-      - main
-      - beta/*
+  workflow_dispatch:
   schedule:
     - cron: '31 17 * * 5'
 
 jobs:
   analyze:
+    if: ${{ !github.event.repository.private }}  # Only run on public repos
+
     name: Analyze (${{ matrix.language }})
     runs-on: 'ubuntu-latest'
     permissions:

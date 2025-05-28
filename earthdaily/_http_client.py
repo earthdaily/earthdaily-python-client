@@ -91,8 +91,14 @@ class HTTPClient:
             timeout=request.timeout_seconds,
         )
 
+        # Handle responses with no content (204) or empty bodies
+        try:
+            body = response.json() if response.content else {}
+        except (ValueError, requests.exceptions.JSONDecodeError):
+            body = {}
+
         return HTTPResponse(
             status_code=response.status_code,
-            body=response.json(),
+            body=body,
             headers=response.headers,
         )

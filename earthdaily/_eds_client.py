@@ -4,6 +4,13 @@ from earthdaily._eds_config import EDSConfig
 from earthdaily.legacy import EarthDataStore
 from earthdaily.platform import PlatformService
 
+try:
+    from earthdaily.internal import InternalService
+
+    _HAS_INTERNAL = True
+except ImportError:
+    _HAS_INTERNAL = False
+
 
 class EDSClient:
     """
@@ -78,3 +85,23 @@ class EDSClient:
         if not hasattr(self, "_legacy_service"):
             self._legacy_service = EarthDataStore(self.api_requester)
         return self._legacy_service
+
+    @property
+    def internal(self):
+        """
+        Lazily initializes and returns the InternalService for interacting with internal API endpoints.
+
+        Returns:
+        -------
+        InternalService:
+            The service that interacts with internal API operations.
+        Raises:
+        -------
+        NotImplementedError:
+            If the internal module is not available in this build of EDSClient.
+        """
+        if not _HAS_INTERNAL:
+            raise NotImplementedError("The 'internal' module is not available in this build of EDSClient.")
+        if not hasattr(self, "_internal_service"):
+            self._internal_service = InternalService(self.api_requester)
+        return self._internal_service

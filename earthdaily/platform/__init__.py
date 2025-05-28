@@ -2,6 +2,10 @@ from pystac_client import Client
 from pystac_client.stac_api_io import StacApiIO
 
 from earthdaily._api_requester import APIRequester
+from earthdaily.platform._bulk_delete import BulkDeleteService
+from earthdaily.platform._bulk_insert import BulkInsertService
+from earthdaily.platform._bulk_search import BulkSearchService
+from earthdaily.platform._stac_item import StacItemService
 
 
 class PlatformService:
@@ -26,6 +30,10 @@ class PlatformService:
             A flag indicating whether to use pre-signed URLs for asset access.
         """
         self.api_requester = api_requester
+        self.bulk_search = BulkSearchService(api_requester)
+        self.bulk_insert = BulkInsertService(api_requester)
+        self.bulk_delete = BulkDeleteService(api_requester)
+        self.stac_item = StacItemService(api_requester)
 
         self.pystac_client = Client.open(
             f"{api_requester.base_url}/platform/v1/stac",
