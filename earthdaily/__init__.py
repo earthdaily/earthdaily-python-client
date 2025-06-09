@@ -1,5 +1,8 @@
 from importlib.metadata import PackageNotFoundError, version
 
+# Enable namespace package support for dual installation
+__path__ = __import__("pkgutil").extend_path(__path__, __name__)
+
 try:
     __version__ = version("earthdaily")
 except PackageNotFoundError:
