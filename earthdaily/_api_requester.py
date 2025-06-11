@@ -1,6 +1,7 @@
 import json
 import platform
 from importlib.metadata import PackageNotFoundError, version
+from typing import Optional
 
 from earthdaily._auth_client import Authentication
 from earthdaily._http_client import HTTPClient, HTTPRequest, HTTPResponse
@@ -31,7 +32,7 @@ class APIRequester:
         adds an authorization header to the request using a valid token from the Authentication instance.
     """
 
-    def __init__(self, base_url: str, auth: Authentication):
+    def __init__(self, base_url: str, auth: Optional[Authentication] = None):
         """
         Initializes a new instance of APIRequester.
 
@@ -122,6 +123,7 @@ class APIRequester:
         """
 
         request.headers.update(self.headers)
-        request.headers["Authorization"] = f"Bearer {self.auth.get_token()}"
+        if self.auth:
+            request.headers["Authorization"] = f"Bearer {self.auth.get_token()}"
         response = self.http_client.send(request)
         return response

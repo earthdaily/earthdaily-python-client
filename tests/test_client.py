@@ -19,6 +19,23 @@ class TestEDSClient(unittest.TestCase):
         self.assertIsInstance(client.auth, Authentication)
         self.assertEqual(client.api_requester.auth.get_token(), "test_token")
 
+    def test_create_client_with_bypass_auth(self):
+        config = EDSConfig(bypass_auth=True, base_url="https://api.earthdaily.com")
+        client = EDSClient(config)
+
+        # Auth should be None when bypassed
+        self.assertIsNone(client.auth)
+        # Client should still be created successfully
+        self.assertIsNotNone(client)
+        self.assertEqual(client.api_requester.base_url, "https://api.earthdaily.com")
+
+    def test_bypass_auth_no_credentials_required(self):
+        config = EDSConfig(bypass_auth=True)
+        client = EDSClient(config)
+
+        self.assertIsNone(client.auth)
+        self.assertIsNotNone(client.api_requester)
+
 
 if __name__ == "__main__":
     unittest.main()

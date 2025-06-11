@@ -1,8 +1,20 @@
 from earthdaily._api_requester import APIRequester
 from earthdaily._auth_client import Authentication
 from earthdaily._eds_config import EDSConfig
-from earthdaily.legacy import EarthDataStore
-from earthdaily.platform import PlatformService
+
+try:
+    from earthdaily.legacy import EarthDataStore
+
+    _HAS_LEGACY = True
+except ImportError:
+    _HAS_LEGACY = False
+
+try:
+    from earthdaily.platform import PlatformService
+
+    _HAS_PLATFORM = True
+except ImportError:
+    _HAS_PLATFORM = False
 
 try:
     from earthdaily.internal import InternalService
@@ -44,7 +56,7 @@ class EDSClient:
             The configuration object containing client_id, client_secret, token_url, and base_url.
         """
         self.config = config
-        self.auth = self._create_auth()
+        self.auth = self._create_auth() if not config.bypass_auth else None
         self.api_requester = APIRequester(base_url=self.config.base_url, auth=self.auth)
 
     def _create_auth(self) -> Authentication:
@@ -67,7 +79,17 @@ class EDSClient:
         -------
         PlatformService:
             The service that interacts with platform-specific API operations.
+
+        Raises:
+        -------
+        ImportError:
+            If the platform module dependencies are not available.
         """
+        if not _HAS_PLATFORM:
+            raise ImportError(
+                "Platform functionality requires additional dependencies. "
+                "Install with: pip install earthdaily[platform]"
+            )
         if not hasattr(self, "_platform_service"):
             self._platform_service = PlatformService(self.api_requester, self.config.pre_sign_urls)
         return self._platform_service
@@ -81,7 +103,16 @@ class EDSClient:
         -------
         LegacyService:
             The service that interacts with legacy API operations.
+
+        Raises:
+        -------
+        ImportError:
+            If the legacy module dependencies are not available.
         """
+        if not _HAS_LEGACY:
+            raise ImportError(
+                "Legacy functionality requires additional dependencies. Install with: pip install earthdaily[legacy]"
+            )
         if not hasattr(self, "_legacy_service"):
             self._legacy_service = EarthDataStore(self.api_requester)
         return self._legacy_service

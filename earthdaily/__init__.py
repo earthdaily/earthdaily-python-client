@@ -1,5 +1,8 @@
 from importlib.metadata import PackageNotFoundError, version
 
+# Enable namespace package support for dual installation
+__path__ = __import__("pkgutil").extend_path(__path__, __name__)
+
 try:
     __version__ = version("earthdaily")
 except PackageNotFoundError:
@@ -16,9 +19,6 @@ from earthdaily._eds_config import EDSConfig
 # HTTP-related imports
 from earthdaily._http_client import HTTPClient, HTTPRequest, HTTPResponse
 
-# Platform-related imports
-from earthdaily.platform import PlatformService
-
 __all__ = [
     "Authentication",
     "APIRequester",
@@ -27,5 +27,4 @@ __all__ = [
     "HTTPResponse",
     "EDSClient",
     "EDSConfig",
-    "PlatformService",
 ]

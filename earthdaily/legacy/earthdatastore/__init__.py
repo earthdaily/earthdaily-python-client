@@ -379,7 +379,7 @@ class Auth:
             "Content-Type": "application/json",
             "Accept": "application/json",
             **self.api_requester.headers,
-            "Authorization": f"Bearer {self.api_requester.auth.get_token()}",
+            "Authorization": f"Bearer {self.api_requester.auth.get_token()}" if self.api_requester.auth else None,
             "X-Signed-Asset-Urls": str(self.__presign_urls),
             "X-Proxy-Asset-Urls": str(self.__asset_proxy_enabled),
         }
