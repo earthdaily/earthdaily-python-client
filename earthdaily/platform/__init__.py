@@ -35,14 +35,16 @@ class PlatformService:
         self.bulk_delete = BulkDeleteService(api_requester)
         self.stac_item = StacItemService(api_requester)
 
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            **api_requester.headers,
+            "X-Signed-Asset-Urls": str(pre_sign_urls),
+        }
+        if api_requester.auth:
+            headers["Authorization"] = f"Bearer {api_requester.auth.get_token()}"
         self.pystac_client = Client.open(
             f"{api_requester.base_url}/platform/v1/stac",
             stac_io=StacApiIO(max_retries=3),
-            headers={
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                **api_requester.headers,
-                "Authorization": f"Bearer {api_requester.auth.get_token()}",
-                "X-Signed-Asset-Urls": str(pre_sign_urls),
-            },
+            headers=headers,
         )

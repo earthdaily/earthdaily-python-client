@@ -46,6 +46,8 @@ class EDSConfig:
         The path to a TOML file containing configuration settings.
     ini_path: str, optional
         The path to an INI file containing configuration settings.
+    bypass_auth: bool, optional
+        A flag indicating whether to bypass authentication. Defaults to False.
     pre_sign_urls: bool, optional
         A flag indicating whether to use pre-signed URLs for asset access. Defaults to True.
 
@@ -64,6 +66,7 @@ class EDSConfig:
     toml_path: str = field(default_factory=lambda: os.getenv("EDS_TOML_PATH", ""))
     ini_path: str = field(default_factory=lambda: os.getenv("EDS_INI_PATH", ""))
     ini_profile: str = field(default_factory=lambda: os.getenv("EDS_INI_PROFILE", "default"))
+    bypass_auth: bool = False
 
     # Platform specific configurations
     pre_sign_urls: bool = True
@@ -84,12 +87,13 @@ class EDSConfig:
         self.base_url = self.base_url or config.get("EDS_API_URL", "https://api.earthdaily.com")
         missing_fields = []
 
-        if not self.client_id:
-            missing_fields.append("client_id (or EDS_CLIENT_ID)")
-        if not self.client_secret:
-            missing_fields.append("client_secret (or EDS_SECRET)")
-        if not self.token_url:
-            missing_fields.append("token_url (or EDS_AUTH_URL)")
+        if not self.bypass_auth:
+            if not self.client_id:
+                missing_fields.append("client_id (or EDS_CLIENT_ID)")
+            if not self.client_secret:
+                missing_fields.append("client_secret (or EDS_SECRET)")
+            if not self.token_url:
+                missing_fields.append("token_url (or EDS_AUTH_URL)")
 
         if missing_fields:
             raise ValueError(f"Missing required fields: {', '.join(missing_fields)}")
