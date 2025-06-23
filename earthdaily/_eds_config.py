@@ -2,9 +2,20 @@ import json
 import os
 from configparser import ConfigParser
 from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
 
 import toml
+
+
+class AssetAccessMode(str, Enum):
+    """
+    Enum-like class to define asset access modes.
+    """
+
+    RAW = "raw"
+    PRESIGNED_URLS = "presigned-urls"
+    PROXY_URLS = "proxy-urls"
 
 
 @dataclass
@@ -26,7 +37,7 @@ class EDSConfig:
     - `EDS_CLIENT_ID`: The client ID for authentication.
     - `EDS_SECRET`: The client secret for authentication.
     - `EDS_AUTH_URL`: The token URL used for retrieving the authentication token.
-    - `EDS_API_URL`: The URL used for interacting with the API’s endpoints.
+    - `EDS_API_URL`: The URL used for interacting with the API's endpoints.
 
     Parameters:
     ----------
@@ -48,8 +59,8 @@ class EDSConfig:
         The path to an INI file containing configuration settings.
     bypass_auth: bool, optional
         A flag indicating whether to bypass authentication. Defaults to False.
-    pre_sign_urls: bool, optional
-        A flag indicating whether to use pre-signed URLs for asset access. Defaults to True.
+    asset_access_mode: AssetAccessMode, optional
+        The mode of access for assets. Defaults to AssetAccessMode.PRESIGNED_URLS.
 
     Raises:
     -------
@@ -69,7 +80,7 @@ class EDSConfig:
     bypass_auth: bool = False
 
     # Platform specific configurations
-    pre_sign_urls: bool = True
+    asset_access_mode: AssetAccessMode = AssetAccessMode.PRESIGNED_URLS
 
     def __post_init__(self):
         """Validate that required fields are provided and raise errors if not."""

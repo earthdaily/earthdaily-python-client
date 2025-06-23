@@ -57,7 +57,7 @@ class EDSClient:
         """
         self.config = config
         self.auth = self._create_auth() if not config.bypass_auth else None
-        self.api_requester = APIRequester(base_url=self.config.base_url, auth=self.auth)
+        self.api_requester = APIRequester(config=config, auth=self.auth)
 
     def _create_auth(self) -> Authentication:
         """
@@ -91,7 +91,7 @@ class EDSClient:
                 "Install with: pip install earthdaily[platform]"
             )
         if not hasattr(self, "_platform_service"):
-            self._platform_service = PlatformService(self.api_requester, self.config.pre_sign_urls)
+            self._platform_service = PlatformService(self.api_requester, self.config.asset_access_mode)
         return self._platform_service
 
     @property

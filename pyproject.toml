@@ -1,6 +1,6 @@
 [project]
 name = "earthdaily"
-version = "1.0.0b12"
+version = "1.0.0b15"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
@@ -64,6 +64,7 @@ sphinx-multiversion = "^0.2.4"
 
 [tool.poetry.group.dev.dependencies]
 pyjwt = "^2.10.1"
+python-dotenv = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]
