@@ -2,6 +2,7 @@ from pystac_client import Client
 from pystac_client.stac_api_io import StacApiIO
 
 from earthdaily._api_requester import APIRequester
+from earthdaily._eds_config import AssetAccessMode
 from earthdaily.platform._bulk_delete import BulkDeleteService
 from earthdaily.platform._bulk_insert import BulkInsertService
 from earthdaily.platform._bulk_search import BulkSearchService
@@ -18,7 +19,7 @@ class PlatformService:
         An instance of APIRequester used to send HTTP requests to the EDS API.
     """
 
-    def __init__(self, api_requester: APIRequester, pre_sign_urls: bool):
+    def __init__(self, api_requester: APIRequester, asset_access_mode: AssetAccessMode):
         """
         Initialize the PlatformService.
 
@@ -26,8 +27,8 @@ class PlatformService:
         -----------
         api_requester : APIRequester
             An instance of APIRequester used to send HTTP requests to the EDS API.
-        pre_sign_urls : bool, optional
-            A flag indicating whether to use pre-signed URLs for asset access.
+        asset_access_mode : AssetAccessMode
+            The mode of access for assets. Defaults to AssetAccessMode.PRESIGNED_URLS.
         """
         self.api_requester = api_requester
         self.bulk_search = BulkSearchService(api_requester)
@@ -39,8 +40,11 @@ class PlatformService:
             "Content-Type": "application/json",
             "Accept": "application/json",
             **api_requester.headers,
-            "X-Signed-Asset-Urls": str(pre_sign_urls),
         }
+        if asset_access_mode == AssetAccessMode.PROXY_URLS:
+            headers["X-Proxy-Asset-Urls"] = "True"
+        elif asset_access_mode == AssetAccessMode.PRESIGNED_URLS:
+            headers["X-Signed-Asset-Urls"] = "True"
         if api_requester.auth:
             headers["Authorization"] = f"Bearer {api_requester.auth.get_token()}"
         self.pystac_client = Client.open(

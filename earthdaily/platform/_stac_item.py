@@ -1,12 +1,15 @@
 import json
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 
 import pystac
+from pystac import Item
 
+from earthdaily._api_requester import APIRequester
 from earthdaily._http_client import HTTPRequest
 from earthdaily.exceptions import EDSAPIError
+from earthdaily.platform._stac_item_downloader import ItemDownloader
 
 
 class ReturnFormat(Enum):
@@ -26,7 +29,7 @@ class StacItemService:
     within collections, with configurable return formats.
     """
 
-    def __init__(self, api_requester):
+    def __init__(self, api_requester: APIRequester):
         """
         Initialize the StacItemService.
 
@@ -61,18 +64,18 @@ class StacItemService:
         except ValueError:
             raise ValueError(f"Unsupported return format: {return_format}. Supported formats: json, dict, pystac")
 
-    def _prepare_item_data(self, item_data: Union[Dict[str, Any], Any]) -> Dict[str, Any]:
+    def _prepare_item_data(self, item_data: Union[dict[str, Any], Any]) -> dict[str, Any]:
         """
         Convert item data to dictionary format for API requests.
 
         Parameters:
         -----------
-        item_data : Union[Dict[str, Any], Any]
+        item_data : Union[dict[str, Any], Any]
             The item data as dict or pystac.Item object.
 
         Returns:
         --------
-        Dict[str, Any]
+        dict[str, Any]
             The item data as dictionary.
 
         Raises:
@@ -92,7 +95,7 @@ class StacItemService:
 
         raise ValueError("item_data must be a dictionary or pystac.Item object")
 
-    def _send_request(self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def _send_request(self, method: str, endpoint: str, data: Optional[dict[str, Any]] = None) -> dict[str, Any]:
         """
         Send a request to a platform endpoint.
 
@@ -102,12 +105,12 @@ class StacItemService:
             HTTP method for the request (e.g., "GET", "POST", "PUT", "DELETE").
         endpoint : str
             The specific endpoint to send the request to.
-        data : Optional[Dict[str, Any]], optional
+        data : Optional[dict[str, Any]], optional
             The payload to be sent in the request.
 
         Returns:
         --------
-        Dict[str, Any]
+        dict[str, Any]
             The response from the platform API.
 
         Raises:
@@ -125,21 +128,21 @@ class StacItemService:
         return response.body
 
     def _format_response(
-        self, response_data: Dict[str, Any], return_format: ReturnFormat
-    ) -> Union[str, Dict[str, Any], Any]:
+        self, response_data: dict[str, Any], return_format: ReturnFormat
+    ) -> Union[str, dict[str, Any], Any]:
         """
         Format the response data according to the specified return format.
 
         Parameters:
         -----------
-        response_data : Dict[str, Any]
+        response_data : dict[str, Any]
             The raw response data from the API.
         return_format : ReturnFormat
             The desired format for the return value.
 
         Returns:
         --------
-        Union[str, Dict[str, Any], Any]
+        Union[str, dict[str, Any], Any]
             The formatted response data.
 
         Raises:
@@ -163,7 +166,7 @@ class StacItemService:
 
     def get_item(
         self, collection_id: str, item_id: str, return_format: str = "dict"
-    ) -> Union[str, Dict[str, Any], Any]:
+    ) -> Union[str, dict[str, Any], Any]:
         """
         Get a STAC item from a collection.
 
@@ -179,7 +182,7 @@ class StacItemService:
 
         Returns:
         --------
-        Union[str, Dict[str, Any], Any]
+        Union[str, dict[str, Any], Any]
             The STAC item in the specified format.
 
         Raises:
@@ -195,8 +198,8 @@ class StacItemService:
         return self._format_response(response_data, validated_format)
 
     def create_item(
-        self, collection_id: str, item_data: Union[Dict[str, Any], Any], return_format: str = "dict"
-    ) -> Union[str, Dict[str, Any], Any]:
+        self, collection_id: str, item_data: Union[dict[str, Any], Any], return_format: str = "dict"
+    ) -> Union[str, dict[str, Any], Any]:
         """
         Create a new STAC item in a collection.
 
@@ -204,7 +207,7 @@ class StacItemService:
         -----------
         collection_id : str
             The ID of the collection to create the item in.
-        item_data : Union[Dict[str, Any], Any]
+        item_data : Union[dict[str, Any], Any]
             The STAC item data to create. Can be a dictionary or pystac.Item object.
         return_format : str, optional
             The format to return the response in. Defaults to "dict".
@@ -212,7 +215,7 @@ class StacItemService:
 
         Returns:
         --------
-        Union[str, Dict[str, Any], Any]
+        Union[str, dict[str, Any], Any]
             The created STAC item in the specified format.
 
         Raises:
@@ -232,9 +235,9 @@ class StacItemService:
         self,
         collection_id: str,
         item_id: str,
-        item_data: Union[Dict[str, Any], Any],
+        item_data: Union[dict[str, Any], Any],
         return_format: str = "dict",
-    ) -> Union[str, Dict[str, Any], Any]:
+    ) -> Union[str, dict[str, Any], Any]:
         """
         Update an existing STAC item in a collection.
 
@@ -244,7 +247,7 @@ class StacItemService:
             The ID of the collection containing the item.
         item_id : str
             The ID of the item to update.
-        item_data : Union[Dict[str, Any], Any]
+        item_data : Union[dict[str, Any], Any]
             The updated STAC item data. Can be a dictionary or pystac.Item object.
         return_format : str, optional
             The format to return the response in. Defaults to "dict".
@@ -252,7 +255,7 @@ class StacItemService:
 
         Returns:
         --------
-        Union[str, Dict[str, Any], Any]
+        Union[str, dict[str, Any], Any]
             The updated STAC item in the specified format.
 
         Raises:
@@ -290,3 +293,75 @@ class StacItemService:
         """
         endpoint = f"collections/{collection_id}/items/{item_id}"
         self._send_request("DELETE", endpoint)
+
+    def download_assets(
+        self,
+        item: Union[dict, Item, str],
+        asset_keys: Optional[list] = None,
+        output_dir: str = "./downloaded_assets",
+        max_workers: int = 3,
+        quiet: bool = False,
+        continue_on_error: bool = True,
+        href_type: str = "href",
+    ) -> dict[str, Any]:
+        """
+        Download assets from a STAC item.
+
+        Parameters:
+        -----------
+        item : Union[dict[str, Any], Any]
+            The STAC item containing the assets to download.
+            Can be a dictionary, pystac.Item object, or an item ID.
+        asset_keys : Optional[list], optional
+            List of asset keys to download. If None, all assets will be downloaded.
+        output_dir : str, optional
+            Directory to save downloaded files. Defaults to "./downloaded_assets".
+        max_workers : int, optional
+            Maximum number of concurrent downloads. Defaults to 3.
+        quiet : bool, optional
+            Whether to suppress progress bars. Defaults to False.
+        continue_on_error : bool, optional
+            Whether to continue downloading if an error occurs. Defaults to True.
+        href_type : str
+            Specifies which href to use from asset's alternate URLs.
+            Example: "download" would look for item.assets[key].alternate.download.href
+            If None, uses the default asset href. Defaults to "href".
+
+        Returns:
+        --------
+        dict[str, Any]
+            Dictionary mapping asset keys to downloaded file paths.
+
+        Raises:
+        -------
+        ValueError
+            If the item cannot be resolved or no assets are found.
+        EDSAPIError
+            If the API request to get the item fails.
+        """
+        # Handle the case where item is a string (collection_id/item_id)
+        if isinstance(item, str):
+            collection_id, item_id = None, None
+            parts = item.split("/", 1)
+            if len(parts) == 2:
+                collection_id, item_id = parts
+
+            if not collection_id or not item_id:
+                raise ValueError(
+                    "When providing an STAC item as a string, it must be in the format 'collection_id/item_id'"
+                )
+            item = self.get_item(collection_id=collection_id, item_id=item_id, return_format="dict")
+
+        downloader = ItemDownloader(max_workers=max_workers, api_requester=self.api_requester)
+
+        if not isinstance(item, (Item, dict)):
+            raise ValueError("Item must be a PySTAC Item or a dictionary representation of a STAC Item")
+
+        return downloader.download_assets(
+            item=item,
+            asset_keys=asset_keys,
+            output_dir=output_dir,
+            quiet=quiet,
+            continue_on_error=continue_on_error,
+            href_type=href_type,
+        )

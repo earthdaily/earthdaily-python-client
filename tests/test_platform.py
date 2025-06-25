@@ -28,11 +28,11 @@ class TestPlatformService(unittest.TestCase):
             client_secret="client_secret",
             token_url="https://token_url",
             base_url="https://example.com",
-            pre_sign_urls=True,
+            asset_access_mode="presigned-urls",
         )
         auth = Authentication(config.client_id, config.client_secret, config.token_url)
-        api_requester = APIRequester(base_url=config.base_url, auth=auth)
-        platform_service = PlatformService(api_requester, config.pre_sign_urls)
+        api_requester = APIRequester(config=config, auth=auth)
+        platform_service = PlatformService(api_requester, config.asset_access_mode)
 
         # Test pystac_client.Client.open
         mock_client_open.assert_called_once_with(

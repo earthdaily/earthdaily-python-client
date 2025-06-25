@@ -33,7 +33,7 @@ def EarthDataStore(
         Name of the profile to use in the TOML file.
         Uses "default" by default.
     asset_proxy_enabled : bool, optional
-        If True, the asset proxy URLs will be returned instead of pre-signed URLs.
+        If True, the asset proxy URLs will be returned instead of presigned URLs.
         Both asset_proxy_enabled and presign_urls cannot be True at the same time. asset_proxy_enabled takes precedence.
         Uses False by default.
 
