@@ -20,8 +20,7 @@ Ensure you have the following installed on your machine:
 
 2. **Install dependencies using Poetry**:
    ```bash
-   python3.12 -m venv .venv 
-   poetry install
+   poetry install --all-extras
    ```
 
 3. **Set up pre-commit hooks**:
@@ -65,20 +64,38 @@ To run tests for a specific Python version:
 
 ```bash
 poetry run tox -e py310  # for Python 3.10
+poetry run tox -e py311  # for Python 3.11
+poetry run tox -e py312  # for Python 3.12
+```
+
+To run specific test environments:
+
+```bash
+poetry run tox -e lint     # Run linting
+poetry run tox -e format   # Check formatting
+poetry run tox -e mypy     # Run type checking
 ```
 
 ## Code Style and Linting
 
-We use `ruff` for code linting and formatting. To check your code:
+We use `ruff` for code linting and formatting. Pre-commit hooks are configured to run automatically.
+
+To check your code manually:
 
 ```bash
-poetry run ruff check .
+poetry run tox -e lint
 ```
 
-To automatically fix issues:
+To check formatting:
 
 ```bash
-poetry run ruff check . --fix
+poetry run tox -e format
+```
+
+To run type checking:
+
+```bash
+poetry run tox -e mypy
 ```
 
 ## Building the Package
@@ -93,30 +110,11 @@ This will create both wheel and source distributions in the `dist/` directory.
 
 ## Publishing the Package
 
-To publish the package to our private PyPI repository:
-
-1. Ensure you have the necessary credentials and repository configuration.
-
-2. Update the version in `pyproject.toml`:
-   ```bash
-   poetry version patch  # or minor, or major
-   ```
-
-3. Build the package:
-   ```bash
-   poetry build
-   ```
-
-4. Publish the package:
-   ```bash
-   poetry publish -r aws
-   ```
-
-Note: Publishing is typically handled by our CI/CD pipeline. Only perform manual publishing if absolutely necessary and after consulting with the team.
+Package publishing is handled by our CI/CD pipeline. Manual publishing should only be done if absolutely necessary and after consulting with the team.
 
 ## Continuous Integration
 
-Our project uses GitHub Actions for continuous integration. The configuration can be found in `.github/workflows` at the root of the repository. It automatically runs tests, linting, and builds for each merge request.
+Our project uses GitHub Actions for continuous integration. The configuration can be found in `.github/workflows/` at the root of the repository. It automatically runs tests, linting, and builds for each pull request.
 
 ## Documentation
 

@@ -10,6 +10,8 @@ on:
 
 jobs:
   test:
+    permissions:
+      contents: read
     name: Unit Tests (Python ${{ matrix.python-version }})
     runs-on: ${{ github.repository_visibility == 'private' && 'ed-runner-set' || 'ubuntu-latest' }}
     strategy:
