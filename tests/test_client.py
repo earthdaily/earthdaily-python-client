@@ -1,32 +1,40 @@
 import unittest
-from unittest.mock import ANY, MagicMock, patch
+from unittest.mock import patch
 
-from earthdaily import EarthDataStore
-from earthdaily.earthdatastore import Auth
+from earthdaily._auth_client import Authentication
+from earthdaily._eds_client import EDSClient
+from earthdaily._eds_config import EDSConfig
 
 
-class TestEarthDataStore(unittest.TestCase):
-    @patch("earthdaily.earthdatastore.Auth.from_credentials")
-    def test_asset_proxy_enabled(self, mock_from_credentials):
-        # Mock the return value of from_credentials
-        mock_auth_instance = MagicMock(spec=Auth)
-        mock_from_credentials.return_value = mock_auth_instance
-
-        # Call EarthDataStore with asset_proxy_enabled set to True
-        auth_instance = EarthDataStore(asset_proxy_enabled=True)
-
-        # Assert that from_credentials was called with asset_proxy_enabled=True
-        mock_from_credentials.assert_called_once_with(
-            json_path=None,
-            toml_path=None,
-            profile=None,
-            client_version=ANY,
-            presign_urls=True,
-            asset_proxy_enabled=True,
+class TestEDSClient(unittest.TestCase):
+    @patch("earthdaily._auth_client.Authentication.get_token", return_value="test_token")
+    def test_create_auth(self, mock_auth):
+        config = EDSConfig(
+            client_id="client_id",
+            client_secret="client_secret",
+            token_url="token_url",
         )
+        client = EDSClient(config)
 
-        # Assert that the returned instance is the mocked instance
-        self.assertEqual(auth_instance, mock_auth_instance)
+        self.assertIsInstance(client.auth, Authentication)
+        self.assertEqual(client.api_requester.auth.get_token(), "test_token")
+
+    def test_create_client_with_bypass_auth(self):
+        config = EDSConfig(bypass_auth=True, base_url="https://api.earthdaily.com")
+        client = EDSClient(config)
+
+        # Auth should be None when bypassed
+        self.assertIsNone(client.auth)
+        # Client should still be created successfully
+        self.assertIsNotNone(client)
+        self.assertEqual(client.api_requester.base_url, "https://api.earthdaily.com")
+
+    def test_bypass_auth_no_credentials_required(self):
+        config = EDSConfig(bypass_auth=True)
+        client = EDSClient(config)
+
+        self.assertIsNone(client.auth)
+        self.assertIsNotNone(client.api_requester)
 
 
 if __name__ == "__main__":

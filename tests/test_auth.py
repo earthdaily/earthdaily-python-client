@@ -1,57 +1,39 @@
-"""
-Test Earth Data Store authentification module.
-Credentials must be defined in environment variables or
-in the default credentials in order for the test to work.
-"""
-
-import json
-import os
-import tempfile
 import unittest
-from pathlib import Path
+from unittest.mock import Mock, patch
 
-import toml
-
-from earthdaily import EarthDataStore
-from earthdaily.earthdatastore import Auth
+from earthdaily._auth_client import Authentication
 
 
 class TestAuth(unittest.TestCase):
-    def setUp(self) -> None:
-        self.credentials = Auth.read_credentials()
-        self.temporary_directory = Path(tempfile.mkdtemp())
+    def setUp(self):
+        self.auth = Authentication("client_id", "client_secret", "token_url")
 
-        # Create JSON credentials
-        self.json_path = self.temporary_directory / "credentials.json"
-        with self.json_path.open("w") as f:
-            json.dump(self.credentials, f)
+    @patch("earthdaily._auth_client.requests.Session.post")
+    def test_authenticate_success(self, mock_post):
+        # Prepare mock response
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"access_token": "test_token", "expires_in": 3600}
+        mock_post.return_value = mock_response
 
-        # Create TOML credentials
-        self.toml_path = self.temporary_directory / "credentials.toml"
-        with self.toml_path.open("w") as f:
-            toml_credentials = {
-                "default": self.credentials,
-                "test_profile": self.credentials,
-            }
-            toml.dump(toml_credentials, f)
+        # Call the method and assert
+        token = self.auth.get_token()
+        self.assertEqual(token, "test_token")
+        mock_post.assert_called_once()
 
-    def tearDown(self) -> None:
-        self.json_path.unlink()
-        self.toml_path.unlink()
-        self.temporary_directory.rmdir()
+    @patch("earthdaily._auth_client.requests.Session.post")
+    def test_authenticate_failure(self, mock_post):
+        # Prepare mock response
+        mock_response = Mock()
+        mock_response.status_code = 400
+        mock_response.json.return_value = {"error": "invalid_client"}
+        mock_post.return_value = mock_response
 
-    def test_from_json(self) -> None:
-        EarthDataStore(json_path=self.json_path)
+        # Call the method and assert
+        with self.assertRaises(ValueError) as context:
+            self.auth.authenticate()
 
-    def test_from_input_profile(self) -> None:
-        EarthDataStore(toml_path=self.toml_path, profile="test_profile")
-
-    def test_from_environment(self) -> None:
-        # Ensure environment variables are set
-        os.environ["EDS_AUTH_URL"] = self.credentials["EDS_AUTH_URL"]
-        os.environ["EDS_SECRET"] = self.credentials["EDS_SECRET"]
-        os.environ["EDS_CLIENT_ID"] = self.credentials["EDS_CLIENT_ID"]
-        EarthDataStore()
+        self.assertIn("Invalid response from Auth provider", str(context.exception))
 
 
 if __name__ == "__main__":
