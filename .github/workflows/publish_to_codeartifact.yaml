@@ -1,9 +1,8 @@
 name: Publish to CodeArtifact
 
+# This workflow manually uploads the package to AWS CodeArtifact.
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   publish-to-codeartifact:

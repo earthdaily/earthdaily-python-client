@@ -152,3 +152,6 @@ cython_debug/
 
 # asv environments
 .asv
+
+# examples
+custom_examples/

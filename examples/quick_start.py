@@ -2,125 +2,135 @@
 Quick Start Example
 ====================
 
-This example demonstrates how to use the EarthDaily Python client
-to fetch and process STAC items.
+This example demonstrates how to use the EarthDaily Python client v1
+to search for and work with STAC items.
 
-- Initializes an EDS client.
-- Queries the legacy API.
-- Searches the platform for STAC items.
-- Handles API errors gracefully.
+Features demonstrated:
+- Client initialization with environment variables
+- Searching for STAC items
+- Basic error handling
+- Asset information access
 
+Requirements:
+- Set your EDS credentials as environment variables or in a .env file:
+  EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL
 """
+
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    print("💡 Consider installing python-dotenv to automatically load .env files:")
+    print("   pip install python-dotenv")
 
 from earthdaily import EDSClient, EDSConfig
 from earthdaily.exceptions import EDSAPIError
 
 
 def initialize_client():
-    """Initialize the EarthDaily API client with default configuration."""
+    """Initialize the EarthDaily API client with environment variables."""
+    print("🚀 Initializing EarthDaily Client...")
+
+    # EDSConfig will automatically read from environment variables:
+    # EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL
     config = EDSConfig()
-    return EDSClient(config)
+    client = EDSClient(config)
+
+    print("✅ Client initialized successfully!")
+    return client
 
 
 def search_stac_items(client):
-    """Search for STAC items in the EarthDaily platform."""
+    """Search for STAC items using the platform API."""
     try:
-        print("\n🔍 Searching for Venus-L2A items...")
+        print("\n🔍 Searching for Sentinel-2 L2A items...")
+
+        # Search for recent Sentinel-2 items with cloud mask available
         search_result = client.platform.pystac_client.search(
             collections=["sentinel-2-l2a"],
             query={"eda:ag_cloud_mask_available": {"eq": True}},
             datetime="2024-06-01T00:00:00Z/2024-08-01T00:00:00Z",
-            max_items=50,
+            max_items=5,  # Limit results for demo
         )
 
-        items = search_result.items()
-        print("\n🌍 STAC items Found:")
-        for item in items:
-            print(item)
+        items = list(search_result.items())
+        print(f"\n🌍 Found {len(items)} STAC items:")
+
+        for i, item in enumerate(items, 1):
+            print(f"  {i}. {item.id}")
+            print(f"     Date: {item.datetime}")
+            print(f"     Cloud cover: {item.properties.get('eo:cloud_cover', 'N/A')}%")
+            print(f"     Assets: {len(item.assets)} available")
+
+            # Show some key assets
+            key_assets = ["red", "green", "blue", "nir", "visual", "thumbnail"]
+            available_key_assets = [asset for asset in key_assets if asset in item.assets]
+            if available_key_assets:
+                print(f"     Key assets: {', '.join(available_key_assets)}")
+            print()
+
+        return items
 
     except EDSAPIError as e:
-        print(f"\n❌ API error: {e}\nStatus Code: {e.status_code}\nDetails: {e.body}")
+        print(f"\n❌ API error: {e}")
+        print(f"   Status Code: {e.status_code}")
+        print(f"   Details: {e.body}")
+        return []
     except Exception as e:
-        print(f"\nUnexpected error while searching for data: {e}")
+        print(f"\n💥 Unexpected error while searching: {e}")
+        return []
+
+
+def explore_item_details(item):
+    """Explore details of a STAC item."""
+    print(f"\n🔍 Exploring item: {item.id}")
+    print(f"   Collection: {item.collection_id}")
+    print(f"   Geometry type: {item.geometry['type']}")
+    print(f"   Bounding box: {item.bbox}")
+
+    # Show properties
+    print("\n   Key properties:")
+    key_props = ["datetime", "eo:cloud_cover", "gsd", "platform", "constellation"]
+    for prop in key_props:
+        if prop in item.properties:
+            print(f"     {prop}: {item.properties[prop]}")
+
+    # Show available assets
+    print(f"\n   Available assets ({len(item.assets)}):")
+    for asset_name, asset in item.assets.items():
+        print(f"     {asset_name}: {asset.media_type or 'Unknown type'}")
+        if hasattr(asset, "extra_fields") and "gsd" in asset.extra_fields:
+            print(f"       Resolution: {asset.extra_fields['gsd']}m")
 
 
 def main():
-    """Main function to execute the quick start workflow."""
-    print("\n🚀 Initializing EarthDaily Client...")
-    client = initialize_client()
-    # r = client.platform.stac_item.get_item("venus-l2a", "VENUS-XS_20171208-143816-000_L2A_25MAYO_D")
-    stac_item_data = {
-        "type": "Feature",
-        "stac_version": "1.0.0",
-        "stac_extensions": ["https://earthdaily-stac-extensions.s3.us-east-1.amazonaws.com/eda/v0.1.0/schema.json"],
-        "id": "test-1234",
-        "collection": "eda-labels-vessels",
-        "geometry": {
-            "type": "Polygon",
-            "coordinates": [
-                [
-                    [-68.003608703613, -38.143650054932],
-                    [-67.412925720215, -38.143650054932],
-                    [-67.412925720215, -37.555374145508],
-                    [-68.003608703613, -37.555374145508],
-                    [-68.003608703613, -38.143650054932],
-                ]
-            ],
-        },
-        "bbox": [-68.003608703613, -38.143650054932, -67.412925720215, -37.555374145508],
-        "properties": {
-            "gsd": 5,
-            "title": "test-1234",
-            "license": "CC-BY-NC-4.0",
-            "mission": "venus",
-            "platform": "VENUS",
-            "proj:epsg": 32719,
-            "providers": [
-                {"name": "Theia", "roles": ["licensor", "producer", "processor"]},
-                {"url": "https://earthdaily.com", "name": "EarthDaily Analytics", "roles": ["processor", "host"]},
-            ],
-            "view:azimuth": 191.617727,
-            "constellation": "VENUS",
-            "eda:water_cover": 0,
-            "eda:product_type": "REFLECTANCE",
-            "processing:level": "L2A",
-            "theia:product_id": "VENUS-XS_20171208-143816-000_L2A_25MAYO_C_V3-0",
-            "view:sun_azimuth": 63.9400504497,
-            "theia:sensor_mode": "XS",
-            "theia:source_uuid": "fc6ced30-0294-5afe-9699-a9c4705c03a0",
-            "sat:absolute_orbit": 1863,
-            "view:sun_elevation": 63.0446423284,
-            "view:incidence_angle": 26.070811499999998,
-            "theia:product_version": "3.0",
-            "theia:publication_date": "2022-07-12T17:06:12.613000Z",
-            "eo:cloud_cover": 0,
-            "start_datetime": "2017-12-08T14:38:16.000000Z",
-            "end_datetime": "2017-12-08T14:38:16.000000Z",
-            "created": "2023-03-29T02:38:21.634449Z",
-            "updated": "2023-10-04T21:54:26.373346Z",
-            "datetime": "2017-12-08T14:38:16.000000Z",
-        },
-        "links": [],
-        "assets": {},
-    }
+    """Main function to demonstrate the quick start workflow."""
     try:
-        r = client.platform.stac_item.create_item("eda-labels-vessels", stac_item_data)
-        print(f"\n📦 Retrieved STAC Item: {r}")
-    except EDSAPIError as e:
-        print(f"\n❌ API error: {e}\nStatus Code: {e.status_code}\nDetails: {e.body}")
+        # Initialize client
+        client = initialize_client()
 
-    r = client.platform.stac_item.get_item("eda-labels-vessels", "test-1234")
-    print(f"\n📦 Retrieved STAC Item: {r}")
+        # Search for items
+        items = search_stac_items(client)
 
-    # Update the item
-    stac_item_data["properties"]["eda:water_cover"] = 0.5
-    r = client.platform.stac_item.update_item("eda-labels-vessels", "test-1234", stac_item_data)
-    print(f"\n📦 Updated STAC Item: {r}")
+        if items:
+            # Explore the first item in detail
+            explore_item_details(items[0])
 
-    client.platform.stac_item.delete_item("eda-labels-vessels", "test-1234")
-    print("\n📦 Deleted STAC Item")
+            print("\n✨ Quick start completed successfully!")
+            print(f"   Found {len(items)} items to work with.")
+            print("   Try the other examples to learn about:")
+            print("   - Creating datacubes (datacube_example.py)")
+            print("   - Downloading assets (asset_download_example.py)")
+            print("   - Bulk operations (bulk_search_example.py)")
+        else:
+            print("\n❌ No items found. Check your search parameters and try again.")
 
-    # search_stac_items(client)
+    except Exception as e:
+        print(f"\n💥 Error in main workflow: {e}")
+        print("\n💡 Make sure you have set your EDS credentials as environment variables:")
+        print("   EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL")
 
 
 if __name__ == "__main__":

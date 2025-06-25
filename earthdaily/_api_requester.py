@@ -4,6 +4,7 @@ from importlib.metadata import PackageNotFoundError, version
 from typing import Optional
 
 from earthdaily._auth_client import Authentication
+from earthdaily._eds_config import AssetAccessMode, EDSConfig
 from earthdaily._http_client import HTTPClient, HTTPRequest, HTTPResponse
 
 
@@ -16,6 +17,8 @@ class APIRequester:
 
     Attributes:
     ----------
+    config: EDSConfig
+        The configuration object containing settings for the API requester.
     base_url: str
         The base URL for all API calls.
     auth: Authentication
@@ -32,18 +35,19 @@ class APIRequester:
         adds an authorization header to the request using a valid token from the Authentication instance.
     """
 
-    def __init__(self, base_url: str, auth: Optional[Authentication] = None):
+    def __init__(self, config: EDSConfig, auth: Optional[Authentication] = None):
         """
         Initializes a new instance of APIRequester.
 
         Parameters:
         ----------
-        base_url: str
-            The base URL for all API calls.
+        config: EDSConfig
+            The configuration object containing settings for the API requester.
         auth: Authentication
             The authentication manager to obtain tokens for API requests.
         """
-        self.base_url = base_url
+        self.config = config
+        self.base_url = config.base_url
         self.auth = auth
         self.http_client = HTTPClient()
         self.headers = self._generate_headers()
@@ -98,10 +102,17 @@ class APIRequester:
             "system_info": uname_info,
         }
 
-        return {
+        headers = {
             "X-EDA-Client-User-Agent": json.dumps(client_metadata),
             "User-Agent": user_agent,
         }
+
+        if self.config.asset_access_mode == AssetAccessMode.PRESIGNED_URLS:
+            headers["X-Signed-Asset-Urls"] = "True"
+        elif self.config.asset_access_mode == AssetAccessMode.PROXY_URLS:
+            headers["X-Proxy-Asset-Urls"] = "True"
+
+        return headers
 
     def send_request(self, request: HTTPRequest) -> HTTPResponse:
         """

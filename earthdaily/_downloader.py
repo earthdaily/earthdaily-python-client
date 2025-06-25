@@ -102,6 +102,13 @@ class HttpDownloader:
             ) as response:
                 response.raise_for_status()
 
+                # Get filename from the final URL if there was a redirect
+                if self.allow_redirects and response.url != file_url:
+                    final_url = urlparse(response.url)
+                    final_filename = os.path.basename(final_url.path)
+                    if final_filename and "." in final_filename:
+                        file_name = final_filename
+
                 file_path = Path(save_location).joinpath(file_name)
                 total_size = int(response.headers.get("content-length", 0))
 
@@ -121,7 +128,7 @@ class HttpDownloader:
                         for chunk in response.iter_content(chunk_size=chunk_size):
                             file.write(chunk)
 
-            return file_url, file_path
+                return file_url, file_path
 
         except (HTTPError, ConnectionError, Timeout, RequestException, OSError) as err:
             error_message = f"Error downloading {file_url}: {err}"
