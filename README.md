@@ -1,6 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/earthdaily.svg)](https://badge.fury.io/py/earthdaily)
 [![Documentation](https://img.shields.io/badge/Documentation-Online-brightgreen.svg)](https://earthdaily.github.io/earthdaily-python-client/)
-[![Build Status](https://github.com/earthdaily/earthdaily-python-client/actions/workflows/pytest-prod.yaml/badge.svg)](https://github.com/earthdaily/earthdaily-python-client/actions)
 ![Python Versions](https://img.shields.io/badge/Python-3.10%20|%203.11%20|%203.12-blue)
 [![Issues](https://img.shields.io/github/issues/earthdaily/earthdaily-python-client.svg)](https://github.com/earthdaily/earthdaily-python-client/issues)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
@@ -30,7 +29,7 @@ This package is designed to make geospatial workflows more efficient and accessi
 Make sure you have valid Earth Data Store authentication credentials. These can be retrieved from the [EarthDaily Account Management](https://console.earthdaily.com/account) page.
 
 <p align="center">
-<img src="https://github.com/earthdaily/earthdaily-python-client/raw/main/docs/assets/images/account.png" width="450">
+<img src="https://github.com/earthdaily/earthdaily-python-client/raw/legacy/0.x/docs/assets/images/account.png" width="450">
 </p>
 
 ## Installation
