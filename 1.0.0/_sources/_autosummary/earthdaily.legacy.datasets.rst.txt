@@ -1,0 +1,43 @@
+earthdaily.legacy.datasets
+==========================
+
+.. automodule:: earthdaily.legacy.datasets
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      load_pivot
+      load_pivot_corumba
+   .. automodule:: earthdaily.legacy.datasets
+      :members:
+      :exclude-members: 
+      :undoc-members:
+      :noindex:
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   data
+

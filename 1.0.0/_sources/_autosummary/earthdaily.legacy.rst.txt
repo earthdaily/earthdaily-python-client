@@ -1,0 +1,46 @@
+earthdaily.legacy
+=================
+
+.. automodule:: earthdaily.legacy
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      EarthDataStore
+   .. automodule:: earthdaily.legacy
+      :members:
+      :exclude-members: 
+      :undoc-members:
+      :noindex:
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   accessor
+   core
+   datasets
+   earthdatastore
+   utils
+

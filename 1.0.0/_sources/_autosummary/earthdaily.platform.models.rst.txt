@@ -1,0 +1,32 @@
+earthdaily.platform.models
+==========================
+
+.. automodule:: earthdaily.platform.models
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      UploadConfig
+   
+   
+
+   
+   
+   
+
+
+

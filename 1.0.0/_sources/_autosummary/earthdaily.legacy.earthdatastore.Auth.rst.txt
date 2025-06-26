@@ -1,0 +1,28 @@
+earthdaily.legacy.earthdatastore.Auth
+=====================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore
+
+.. autoclass:: Auth
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~Auth.datacube
+      ~Auth.explore
+      ~Auth.find_cloud_mask_items
+      ~Auth.search
+   
+   
+
+   
+   
+   

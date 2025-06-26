@@ -1,0 +1,23 @@
+earthdaily.legacy.datasets.data
+===============================
+
+.. automodule:: earthdaily.legacy.datasets.data
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,6 @@
+earthdaily.accessor.xr\_loop\_func
+==================================
+
+.. currentmodule:: earthdaily.accessor
+
+.. autofunction:: xr_loop_func

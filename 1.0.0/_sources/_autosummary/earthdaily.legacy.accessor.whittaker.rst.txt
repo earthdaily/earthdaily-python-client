@@ -1,0 +1,35 @@
+earthdaily.legacy.accessor.whittaker
+====================================
+
+.. automodule:: earthdaily.legacy.accessor.whittaker
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      whittaker
+   .. automodule:: earthdaily.legacy.accessor.whittaker
+      :members:
+      :exclude-members: 
+      :undoc-members:
+      :noindex:
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+

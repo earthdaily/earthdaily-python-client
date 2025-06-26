@@ -1,0 +1,42 @@
+earthdaily.accessor
+===================
+
+.. automodule:: earthdaily.accessor
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      xr_loop_func
+   .. automodule:: earthdaily.accessor
+      :members:
+      :exclude-members: 
+      :undoc-members:
+      :noindex:
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   whittaker
+

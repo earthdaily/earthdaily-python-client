@@ -1,0 +1,6 @@
+earthdaily.datasets.load\_pivot
+===============================
+
+.. currentmodule:: earthdaily.datasets
+
+.. autofunction:: load_pivot

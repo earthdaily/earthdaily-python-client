@@ -1,0 +1,6 @@
+earthdaily.legacy.accessor.whittaker.whittaker
+==============================================
+
+.. currentmodule:: earthdaily.legacy.accessor.whittaker
+
+.. autofunction:: whittaker

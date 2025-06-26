@@ -1,0 +1,39 @@
+earthdaily.platform
+===================
+
+.. automodule:: earthdaily.platform
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      PlatformService
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   models
+

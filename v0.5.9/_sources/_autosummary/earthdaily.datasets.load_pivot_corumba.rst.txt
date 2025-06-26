@@ -1,0 +1,6 @@
+earthdaily.datasets.load\_pivot\_corumba
+========================================
+
+.. currentmodule:: earthdaily.datasets
+
+.. autofunction:: load_pivot_corumba

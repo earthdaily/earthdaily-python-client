@@ -1,0 +1,45 @@
+earthdaily.earthdatastore.mask
+==============================
+
+.. automodule:: earthdaily.earthdatastore.mask
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      QA_PIXEL_cloud_detection
+      filter_clear_cover
+   .. automodule:: earthdaily.earthdatastore.mask
+      :members:
+      :exclude-members: Mask, 
+      :undoc-members:
+      :noindex:
+   
+   
+   
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      Mask
+   
+   
+
+   
+   
+   
+
+
+

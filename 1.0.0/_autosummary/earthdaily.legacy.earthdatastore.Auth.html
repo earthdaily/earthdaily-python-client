@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.legacy.earthdatastore.Auth &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="earthdaily.legacy.earthdatastore.StacCollectionExplorer" href="earthdaily.legacy.earthdatastore.StacCollectionExplorer.html" />
+    <link rel="prev" title="earthdaily.legacy.earthdatastore.validate_property_condition" href="earthdaily.legacy.earthdatastore.validate_property_condition.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.exceptions.html">earthdaily.exceptions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="earthdaily.legacy.html">earthdaily.legacy</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="earthdaily.legacy.EarthDataStore.html">earthdaily.legacy.earthdatastore</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.earthdatastore.apply_single_condition.html">earthdaily.legacy.earthdatastore.apply_single_condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.earthdatastore.enhance_assets.html">earthdaily.legacy.earthdatastore.enhance_assets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.earthdatastore.filter_items.html">earthdaily.legacy.earthdatastore.filter_items</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.earthdatastore.post_query_items.html">earthdaily.legacy.earthdatastore.post_query_items</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.earthdatastore.validate_property_condition.html">earthdaily.legacy.earthdatastore.validate_property_condition</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">earthdaily.legacy.earthdatastore.Auth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.earthdatastore.StacCollectionExplorer.html">earthdaily.legacy.earthdatastore.StacCollectionExplorer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.earthdatastore.cube_utils.html">earthdaily.legacy.earthdatastore.cube_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.earthdatastore.mask.html">earthdaily.legacy.earthdatastore.mask</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.earthdatastore.parallel_search.html">earthdaily.legacy.earthdatastore.parallel_search</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.legacy.accessor.html">earthdaily.legacy.accessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.legacy.core.html">earthdaily.legacy.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.legacy.datasets.html">earthdaily.legacy.datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.legacy.utils.html">earthdaily.legacy.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.platform.html">earthdaily.platform</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.legacy.html">earthdaily.legacy</a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.legacy.EarthDataStore.html">earthdaily.legacy.earthdatastore</a></li>
+      <li class="breadcrumb-item active">earthdaily.legacy.earthdatastore.Auth</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/earthdaily.legacy.earthdatastore.Auth.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="earthdaily-legacy-earthdatastore-auth">
+<h1>earthdaily.legacy.earthdatastore.Auth<a class="headerlink" href="#earthdaily-legacy-earthdatastore-auth" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="earthdaily.legacy.earthdatastore.Auth">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">earthdaily.legacy.earthdatastore.</span></span><span class="sig-name descname"><span class="pre">Auth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_requester</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">presign_urls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_proxy_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/legacy/earthdatastore.html#Auth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.legacy.earthdatastore.Auth" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A client for interacting with the Earth Data Store API.
+By default, Earth Data Store will look for environment variables called
+EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>str</em><em> | </em><em>dict</em><em>, </em><em>optional</em>) – The path to the json file containing the Earth Data Store credentials,
+or a dict with those credentials.</p></li>
+<li><p><strong>asset_proxy_enabled</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use asset proxy URLs, by default False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eds</span> <span class="o">=</span> <span class="n">earthdaily</span><span class="o">.</span><span class="n">earthdatastore</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collection</span> <span class="o">=</span> <span class="s2">&quot;venus-l2a&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theia_location</span> <span class="o">=</span> <span class="s2">&quot;MEAD&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_cloud_cover</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;theia:location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;eq&quot;</span><span class="p">:</span> <span class="n">theia_location</span><span class="p">},</span> <span class="s2">&quot;eo:cloud_cover&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lt&quot;</span><span class="p">:</span> <span class="n">max_cloud_cover</span><span class="p">}</span> <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collections</span><span class="o">=</span><span class="n">collection</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">))</span>
+<span class="go">132</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.legacy.earthdatastore.Auth.datacube" title="earthdaily.legacy.earthdatastore.Auth.datacube"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datacube</span></code></a></p></td>
+<td><p>Create a datacube.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.legacy.earthdatastore.Auth.explore" title="earthdaily.legacy.earthdatastore.Auth.explore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">explore</span></code></a></p></td>
+<td><p>Explore a collection, its properties and assets.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.legacy.earthdatastore.Auth.find_cloud_mask_items" title="earthdaily.legacy.earthdatastore.Auth.find_cloud_mask_items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_cloud_mask_items</span></code></a></p></td>
+<td><p>Search the catalog for the ag_cloud_mask items matching the given items_collection.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.legacy.earthdatastore.Auth.search" title="earthdaily.legacy.earthdatastore.Auth.search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search</span></code></a></p></td>
+<td><p>A wrapper around the pystac client search method.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.legacy.earthdatastore.Auth.datacube">
+<span class="sig-name descname"><span class="pre">datacube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intersects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_statistics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clear_cover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefer_alternate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'download'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_default_scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common_band_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_calibration_collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cloud_search_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/legacy/earthdatastore.html#Auth.datacube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.legacy.earthdatastore.Auth.datacube" title="Link to this definition"></a></dt>
+<dd><p>Create a datacube.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collections</strong> (<em>str</em><em> | </em><em>list</em>) – If several collections, the first collection will be the reference collection (for spatial resolution).</p></li>
+<li><p><strong>datetime</strong> (<em>Either a single datetime</em><em> or </em><em>datetime range used to filter results.</em>) – <p>You may express a single datetime using a <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code>
+instance, a <a class="reference external" href="https://tools.ietf.org/html/rfc3339">RFC 3339-compliant</a>
+timestamp, or a simple date string (see below). Instances of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code> may be either
+timezone aware or unaware. Timezone aware instances will be converted to
+a UTC timestamp before being passed
+to the endpoint. Timezone unaware instances are assumed to represent UTC
+timestamps. You may represent a
+datetime range using a <code class="docutils literal notranslate"><span class="pre">&quot;/&quot;</span></code> separated string as described in the
+spec, or a list, tuple, or iterator
+of 2 timestamps or datetime instances. For open-ended ranges, use either
+<code class="docutils literal notranslate"><span class="pre">&quot;..&quot;</span></code> (<code class="docutils literal notranslate"><span class="pre">'2020-01-01:00:00:00Z/..'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">['2020-01-01:00:00:00Z',</span> <span class="pre">'..']</span></code>) or a value of <code class="docutils literal notranslate"><span class="pre">None</span></code>
+(<code class="docutils literal notranslate"><span class="pre">['2020-01-01:00:00:00Z',</span> <span class="pre">None]</span></code>).</p>
+<p>If using a simple date string, the datetime can be specified in
+<code class="docutils literal notranslate"><span class="pre">YYYY-mm-dd</span></code> format, optionally truncating
+to <code class="docutils literal notranslate"><span class="pre">YYYY-mm</span></code> or just <code class="docutils literal notranslate"><span class="pre">YYYY</span></code>. Simple date strings will be expanded to
+include the entire time period, for example:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017</span></code> expands to <code class="docutils literal notranslate"><span class="pre">2017-01-01T00:00:00Z/2017-12-31T23:59:59Z</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017-06</span></code> expands to <code class="docutils literal notranslate"><span class="pre">2017-06-01T00:00:00Z/2017-06-30T23:59:59Z</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017-06-10</span></code> expands to
+<code class="docutils literal notranslate"><span class="pre">2017-06-10T00:00:00Z/2017-06-10T23:59:59Z</span></code></p></li>
+</ul>
+<p>If used in a range, the end of the range expands to the end of that
+day/month/year, for example:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017/2018</span></code> expands to
+<code class="docutils literal notranslate"><span class="pre">2017-01-01T00:00:00Z/2018-12-31T23:59:59Z</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017-06/2017-07</span></code> expands to
+<code class="docutils literal notranslate"><span class="pre">2017-06-01T00:00:00Z/2017-07-31T23:59:59Z</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017-06-10/2017-06-11</span></code> expands to
+<code class="docutils literal notranslate"><span class="pre">2017-06-10T00:00:00Z/2017-06-11T23:59:59Z</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>assets</strong> (<em>None</em><em> | </em><em>list</em><em> | </em><em>dict</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
+<li><p><strong>intersects</strong> (<em>(</em><em>gpd.GeoDataFrame</em><em>, </em><em>str</em><em>(</em><em>wkt</em><em>)</em><em>, </em><em>dict</em><em>(</em><em>json</em><em>)</em><em>)</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
+<li><p><strong>bbox</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
+<li><p><strong>mask_with</strong> (<em>(</em><em>None</em><em>, </em><em>str</em><em>, </em><em>list</em><em>)</em><em>, </em><em>optional</em>) – “native” mask, or “ag_cloud_mask”, or [“ag_cloud_mask”,”native”],
+and so if ag_cloud_mask is not available, will switch to native.
+The default is None.</p></li>
+<li><p><strong>mask_statistics</strong> (<em>bool</em><em> | </em><em>int</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is False.</p></li>
+<li><p><strong>clear_cover</strong> (<em>(</em><em>int</em><em>, </em><em>float</em><em>)</em><em>, </em><em>optional</em>) – Percent of clear data above a field (from 0 to 100).
+The default is None.</p></li>
+<li><p><strong>prefer_alternate</strong> (<em>(</em><em>str</em><em>, </em><em>False</em><em>)</em><em>, </em><em>optional</em>) – Uses the alternate/download href instead of the default href.
+The default is “download”.</p></li>
+<li><p><strong>search_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is {}.</p></li>
+<li><p><strong>add_default_scale_factor</strong> (<em>bool</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is True.</p></li>
+<li><p><strong>common_band_names</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is True.</p></li>
+<li><p><strong>cross_calibration_collection</strong> (<em>(</em><em>None</em><em> | </em><em>str</em><em>)</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
+<li><p><strong>properties</strong> (<em>(</em><em>bool</em><em> | </em><em>str</em><em> | </em><em>list</em><em>)</em><em>, </em><em>optional</em>) – Retrieve properties per item. The default is False.</p></li>
+<li><p><strong>**kwargs</strong> (<em>TYPE</em>) – <p>DESCRIPTION.
+: TYPE</p>
+<blockquote>
+<div><p>DESCRIPTION.</p>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – DESCRIPTION.</p></li>
+<li><p><strong>Warning</strong> – DESCRIPTION.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ds</strong> – DESCRIPTION.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>TYPE</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.legacy.earthdatastore.Auth.explore">
+<span class="sig-name descname"><span class="pre">explore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/legacy/earthdatastore.html#Auth.explore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.legacy.earthdatastore.Auth.explore" title="Link to this definition"></a></dt>
+<dd><p>Explore a collection, its properties and assets. If not collection specified,
+returns the list of collections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>collection</strong> (<em>str</em><em>, </em><em>optional.</em>) – Collection name. The default is None.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of collections, or a collection to explore using module
+StacCollectionExplorer.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str|<a class="reference internal" href="earthdaily.legacy.earthdatastore.StacCollectionExplorer.html#earthdaily.legacy.earthdatastore.StacCollectionExplorer" title="earthdaily.legacy.earthdatastore.StacCollectionExplorer">StacCollectionExplorer</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">eds</span> <span class="o">=</span> <span class="n">earthdaily</span><span class="o">.</span><span class="n">earthdatastore</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collection</span> <span class="o">=</span> <span class="s2">&quot;venus-l2a&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eds</span><span class="o">.</span><span class="n">explore</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span><span class="o">.</span><span class="n">item_properties</span>
+<span class="go">{&#39;constellation&#39;: &#39;VENUS&#39;,</span>
+<span class="go"> &#39;created&#39;: &#39;2023-06-14T00:14:10.167450Z&#39;,</span>
+<span class="go"> &#39;datetime&#39;: &#39;2023-06-07T11:23:18.000000Z&#39;,</span>
+<span class="go"> &#39;description&#39;: &#39;&#39;,</span>
+<span class="go"> &#39;eda:geometry_tags&#39;: [&#39;RESOLVED_CLOCKWISE_POLYGON&#39;],</span>
+<span class="go"> ...</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.legacy.earthdatastore.Auth.find_cloud_mask_items">
+<span class="sig-name descname"><span class="pre">find_cloud_mask_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items_collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cloudmask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ag_cloud_mask'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/legacy/earthdatastore.html#Auth.find_cloud_mask_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.legacy.earthdatastore.Auth.find_cloud_mask_items" title="Link to this definition"></a></dt>
+<dd><p>Search the catalog for the ag_cloud_mask items matching the given items_collection.
+The ag_cloud_mask items are searched in the <cite>ag_cloud_mask_collection_id</cite> collection using the
+<cite>ag_cloud_mask_item_id</cite> properties of the items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>items_collection</strong> (<em>pystac.ItemCollection</em>) – The items to find corresponding ag cloud mask items for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The filtered item collection.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pystac.ItemCollection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.legacy.earthdatastore.Auth.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intersects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefer_alternate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_default_scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_no_items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_days</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deduplicate_items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/legacy/earthdatastore.html#Auth.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.legacy.earthdatastore.Auth.search" title="Link to this definition"></a></dt>
+<dd><p>A wrapper around the pystac client search method. Add some features to enhance experience.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collections</strong> (<em>str</em><em> | </em><em>list</em>) – Collection(s) to search. It is recommended to only search one collection at a time.</p></li>
+<li><p><strong>intersects</strong> (<em>gpd.GeoDataFrame</em><em>, </em><em>optional</em>) – If provided, the results will contain only intersecting items. The default is None.</p></li>
+<li><p><strong>bbox</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – If provided, the results will contain only intersecting items. The default is None.</p></li>
+<li><p><strong>post_query</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – STAC-like filters applied on retrieved items. The default is None.</p></li>
+<li><p><strong>prefer_alternate</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – Prefer alternate links when available. The default is None.</p></li>
+<li><p><strong>**kwargs</strong> (<em>TYPE</em>) – Keyword arguments passed to the pystac client search method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>items_collection</strong> – The filtered STAC items.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ItemCollection</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">collections</span><span class="o">=</span><span class="s1">&#39;sentinel-2-l2a&#39;</span><span class="p">,</span><span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">43</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">43</span><span class="p">],</span><span class="n">datetime</span><span class="o">=</span><span class="s1">&#39;2017&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+<span class="go">27</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="go">S2A_31TCH_20170126_0_L2A</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="go">dict_keys([&#39;aot&#39;, &#39;nir&#39;, &#39;red&#39;, ... , &#39;tileinfo_metadata&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
+<span class="go">{</span>
+<span class="go">    &quot;created&quot;: &quot;2020-09-01T04:59:33.629000Z&quot;,</span>
+<span class="go">    &quot;updated&quot;: &quot;2022-11-08T13:08:57.661605Z&quot;,</span>
+<span class="go">    &quot;platform&quot;: &quot;sentinel-2a&quot;,</span>
+<span class="go">    &quot;grid:code&quot;: &quot;MGRS-31TCH&quot;,</span>
+<span class="go">    ...</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="earthdaily.legacy.earthdatastore.validate_property_condition.html" class="btn btn-neutral float-left" title="earthdaily.legacy.earthdatastore.validate_property_condition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.legacy.earthdatastore.StacCollectionExplorer.html" class="btn btn-neutral float-right" title="earthdaily.legacy.earthdatastore.StacCollectionExplorer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="earthdaily.legacy.earthdatastore.Auth.html">1.0.0</a></dd>
+      <dd><a href="../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

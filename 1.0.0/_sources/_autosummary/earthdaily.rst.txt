@@ -1,0 +1,32 @@
+﻿earthdaily
+==========
+
+.. automodule:: earthdaily
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   exceptions
+   legacy
+   platform
+

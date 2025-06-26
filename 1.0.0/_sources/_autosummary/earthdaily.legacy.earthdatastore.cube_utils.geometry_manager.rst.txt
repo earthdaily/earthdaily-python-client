@@ -1,0 +1,32 @@
+earthdaily.legacy.earthdatastore.cube\_utils.geometry\_manager
+==============================================================
+
+.. automodule:: earthdaily.legacy.earthdatastore.cube_utils.geometry_manager
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      GeometryManager
+   
+   
+
+   
+   
+   
+
+
+

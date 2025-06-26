@@ -1,0 +1,31 @@
+earthdaily.exceptions
+=====================
+
+.. automodule:: earthdaily.exceptions
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      EDSAPIError
+      UnsupportedAssetException
+   
+   
+
+
+

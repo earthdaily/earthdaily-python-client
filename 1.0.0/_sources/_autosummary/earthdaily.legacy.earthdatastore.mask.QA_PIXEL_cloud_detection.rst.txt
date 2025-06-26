@@ -1,0 +1,6 @@
+earthdaily.legacy.earthdatastore.mask.QA\_PIXEL\_cloud\_detection
+=================================================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore.mask
+
+.. autofunction:: QA_PIXEL_cloud_detection

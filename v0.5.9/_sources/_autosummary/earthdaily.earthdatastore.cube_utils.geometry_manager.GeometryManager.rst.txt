@@ -1,0 +1,30 @@
+earthdaily.earthdatastore.cube\_utils.geometry\_manager.GeometryManager
+=======================================================================
+
+.. currentmodule:: earthdaily.earthdatastore.cube_utils.geometry_manager
+
+.. autoclass:: GeometryManager
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~GeometryManager.buffer_in_meter
+      ~GeometryManager.to_bbox
+      ~GeometryManager.to_geopandas
+      ~GeometryManager.to_intersects
+      ~GeometryManager.to_json
+      ~GeometryManager.to_wkt
+   
+   
+
+   
+   
+   

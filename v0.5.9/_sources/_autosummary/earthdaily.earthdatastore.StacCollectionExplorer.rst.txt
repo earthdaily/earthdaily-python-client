@@ -1,0 +1,33 @@
+earthdaily.earthdatastore.StacCollectionExplorer
+================================================
+
+.. currentmodule:: earthdaily.earthdatastore
+
+.. autoclass:: StacCollectionExplorer
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~StacCollectionExplorer.asset_metadata
+      ~StacCollectionExplorer.assets
+      ~StacCollectionExplorer.assets_metadata
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StacCollectionExplorer.item_properties
+   
+   
