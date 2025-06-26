@@ -27,8 +27,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="earthdaily.accessor" href="earthdaily.accessor.html" />
-    <link rel="prev" title="earthdaily.earthdatastore.mask.Mask" href="earthdaily.earthdatastore.mask.Mask.html" /> 
+    <link rel="next" title="earthdaily.earthdatastore.post_query_items" href="earthdaily.earthdatastore.post_query_items.html" />
+    <link rel="prev" title="earthdaily.earthdatastore.metacube" href="earthdaily.earthdatastore.metacube.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -67,18 +67,34 @@
 <li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="earthdaily.EarthDataStore.html">earthdaily.earthdatastore</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.apply_single_condition.html">earthdaily.earthdatastore.apply_single_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.dataclass.html">earthdaily.earthdatastore.dataclass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.datacube.html">earthdaily.earthdatastore.datacube</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.enhance_assets.html">earthdaily.earthdatastore.enhance_assets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.filter_items.html">earthdaily.earthdatastore.filter_items</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.post_query_items.html">earthdaily.earthdatastore.post_query_items</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.validate_property_condition.html">earthdaily.earthdatastore.validate_property_condition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Auth.html">earthdaily.earthdatastore.Auth</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.EarthDataStoreConfig.html">earthdaily.earthdatastore.EarthDataStoreConfig</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacCollectionExplorer.html">earthdaily.earthdatastore.StacCollectionExplorer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.html">earthdaily.earthdatastore.cube_utils</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.mask.html">earthdaily.earthdatastore.mask</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">earthdaily.earthdatastore.parallel_search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.metacube.html">earthdaily.earthdatastore.metacube</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">earthdaily.earthdatastore.parallel_search</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.earthdatastore.parallel_search"><code class="docutils literal notranslate"><span class="pre">parallel_search()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.post_query_items.html">earthdaily.earthdatastore.post_query_items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.validate_property_condition.html">earthdaily.earthdatastore.validate_property_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Any.html">earthdaily.earthdatastore.Any</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Auth.html">earthdaily.earthdatastore.Auth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Client.html">earthdaily.earthdatastore.Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.EarthDataStoreConfig.html">earthdaily.earthdatastore.EarthDataStoreConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.ItemCollection.html">earthdaily.earthdatastore.ItemCollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Path.html">earthdaily.earthdatastore.Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Retry.html">earthdaily.earthdatastore.Retry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacApiIO.html">earthdaily.earthdatastore.StacApiIO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacCollectionExplorer.html">earthdaily.earthdatastore.StacCollectionExplorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.NoItemsFoundError.html">earthdaily.earthdatastore.NoItemsFoundError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.datacube"><code class="docutils literal notranslate"><span class="pre">datacube()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.metacube"><code class="docutils literal notranslate"><span class="pre">metacube()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.html">earthdaily.earthdatastore.cube_utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.mask.html">earthdaily.earthdatastore.mask</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.Path.html">earthdaily.Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.accessor.html">earthdaily.accessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.core.html">earthdaily.core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.datasets.html">earthdaily.datasets</a></li>
@@ -113,16 +129,89 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-earthdaily.earthdatastore.parallel_search">
-<span id="earthdaily-earthdatastore-parallel-search"></span><h1>earthdaily.earthdatastore.parallel_search<a class="headerlink" href="#module-earthdaily.earthdatastore.parallel_search" title="Link to this heading"></a></h1>
+  <section id="earthdaily-earthdatastore-parallel-search">
+<h1>earthdaily.earthdatastore.parallel_search<a class="headerlink" href="#earthdaily-earthdatastore-parallel-search" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.parallel_search">
+<span class="sig-prename descclassname"><span class="pre">earthdaily.earthdatastore.</span></span><span class="sig-name descname"><span class="pre">parallel_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/parallel_search.html#parallel_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.parallel_search" title="Link to this definition"></a></dt>
+<dd><p>Decorator for parallelizing search operations across datetime ranges.</p>
+<p>This decorator enables parallel processing of search operations by splitting the
+datetime range into batches. It automatically handles parallel execution when
+conditions are met (multiple batches or large date range) and falls back to
+sequential processing otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>callable</em>) – <p>The search function to be parallelized. Should accept the following kwargs:
+- datetime : tuple of datetime</p>
+<blockquote>
+<div><p>Range of dates to search</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>batch_days<span class="classifier">int or “auto”, optional</span></dt><dd><p>Number of days per batch for splitting</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_jobs<span class="classifier">int, optional</span></dt><dd><p>Number of parallel jobs. Use -1 or &gt;10 for maximum of 10 jobs</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>raise_no_items<span class="classifier">bool, optional</span></dt><dd><p>Whether to raise exception when no items found</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Wrapped function that handles parallel execution of the search operation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>callable</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The wrapped function preserves the same interface as the original function
+but adds parallel processing capabilities based on the following parameters
+in kwargs:
+- batch_days : Controls the size of datetime batches
+- n_jobs : Controls the number of parallel jobs (max 10)
+- datetime : Required for parallel execution</p>
+<p>The parallel execution uses threading backend from joblib.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">joblib.Parallel</span></code></dt><dd><p>Used for parallel execution</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">datetime_split</span></code></dt><dd><p>Helper function for splitting datetime ranges</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@parallel_search</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">search_items</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">datetime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_days</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># Search implementation</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">items</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Will execute in parallel if conditions are met</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="n">search_items</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">datetime</span><span class="o">=</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">),</span>
+<span class="gp">... </span>                    <span class="n">batch_days</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="earthdaily.earthdatastore.mask.Mask.html" class="btn btn-neutral float-left" title="earthdaily.earthdatastore.mask.Mask" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="earthdaily.accessor.html" class="btn btn-neutral float-right" title="earthdaily.accessor" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="earthdaily.earthdatastore.metacube.html" class="btn btn-neutral float-left" title="earthdaily.earthdatastore.metacube" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.earthdatastore.post_query_items.html" class="btn btn-neutral float-right" title="earthdaily.earthdatastore.post_query_items" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
@@ -153,6 +242,10 @@
       <dt>Tags</dt>
       <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
       <dd><a href="earthdaily.earthdatastore.parallel_search.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../main/index.html">main</a></dd>
     </dl>
   </div>
 </div><script>

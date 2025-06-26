@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystac_client.stac_api_io &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystac_client.stac_api_io</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystac_client.stac_api_io</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlparse</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystac</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.link</span><span class="w"> </span><span class="kn">import</span> <span class="n">Link</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.serialization</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">identify_stac_object</span><span class="p">,</span>
+    <span class="n">identify_stac_object_type</span><span class="p">,</span>
+    <span class="n">merge_common_properties</span><span class="p">,</span>
+    <span class="n">migrate_to_latest</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.stac_io</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultStacIO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Session</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">requests.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPAdapter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Retry</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystac_client</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIError</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pystac.catalog</span><span class="w"> </span><span class="kn">import</span> <span class="n">Catalog</span> <span class="k">as</span> <span class="n">Catalog_Type</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pystac.stac_object</span><span class="w"> </span><span class="kn">import</span> <span class="n">STACObject</span> <span class="k">as</span> <span class="n">STACObject_Type</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="n">Timeout</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="StacApiIO">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.platform.StacApiIO.html#earthdaily.legacy.earthdatastore.StacApiIO">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StacApiIO</span><span class="p">(</span><span class="n">DefaultStacIO</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">conformance</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">request_modifier</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Request</span><span class="p">],</span> <span class="n">Request</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Timeout</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">Retry</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize class for API IO</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            headers : Optional dictionary of headers to include in all requests</span>
+<span class="sd">            conformance (DEPRECATED) : Optional list of `Conformance Classes</span>
+<span class="sd">                &lt;https://github.com/radiantearth/stac-api-spec/blob/master/overview.md#conformance-classes&gt;`__.</span>
+
+<span class="sd">                .. deprecated:: 0.7.0</span>
+<span class="sd">                    Conformance can be altered on the client class directly</span>
+
+<span class="sd">            parameters: Optional dictionary of query string parameters to</span>
+<span class="sd">              include in all requests.</span>
+<span class="sd">            request_modifier: Optional callable that can be used to modify Request</span>
+<span class="sd">              objects before they are sent. If provided, the callable receives a</span>
+<span class="sd">              `request.Request` and must either modify the object directly or return</span>
+<span class="sd">              a new / modified request instance.</span>
+<span class="sd">            timeout: Optional float or (float, float) tuple following the semantics</span>
+<span class="sd">              defined by `Requests</span>
+<span class="sd">              &lt;https://requests.readthedocs.io/en/latest/api/#main-interface&gt;`__.</span>
+<span class="sd">            max_retries: The number of times to retry requests. Set to ``None`` to</span>
+<span class="sd">              disable retries.</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            StacApiIO : StacApiIO instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO - this should super() to parent class</span>
+
+        <span class="k">if</span> <span class="n">conformance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="s2">&quot;The `conformance` option is deprecated and will be &quot;</span>
+                    <span class="s2">&quot;removed in the next major release. Instead use &quot;</span>
+                    <span class="s2">&quot;`Client.set_conforms_to` or `Client.add_conforms_to` to control &quot;</span>
+                    <span class="s2">&quot;behavior.&quot;</span>
+                <span class="p">),</span>
+                <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">max_retries</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">,</span> <span class="n">HTTPAdapter</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="n">HTTPAdapter</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
+            <span class="n">request_modifier</span><span class="o">=</span><span class="n">request_modifier</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="StacApiIO.update">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.platform.StacApiIO.html#earthdaily.legacy.earthdatastore.StacApiIO.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">request_modifier</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Request</span><span class="p">],</span> <span class="n">Request</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Timeout</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates this StacApi&#39;s headers, parameters, and/or request_modifer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            headers : Optional dictionary of headers to include in all requests</span>
+<span class="sd">            parameters: Optional dictionary of query string parameters to</span>
+<span class="sd">              include in all requests.</span>
+<span class="sd">            request_modifier: Optional callable that can be used to modify Request</span>
+<span class="sd">              objects before they are sent. If provided, the callable receives a</span>
+<span class="sd">              `request.Request` and must either modify the object directly or return</span>
+<span class="sd">              a new / modified request instance.</span>
+<span class="sd">            timeout: Optional float or (float, float) tuple following the semantics</span>
+<span class="sd">              defined by `Requests</span>
+<span class="sd">              &lt;https://requests.readthedocs.io/en/latest/api/#main-interface&gt;`__.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">headers</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameters</span> <span class="ow">or</span> <span class="p">{})</span>  <span class="c1"># type: ignore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_req_modifier</span> <span class="o">=</span> <span class="n">request_modifier</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span></div>
+
+
+<div class="viewcode-block" id="StacApiIO.read_text">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.platform.StacApiIO.html#earthdaily.legacy.earthdatastore.StacApiIO.read_text">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">link</span><span class="o">.</span><span class="n">HREF</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read text from the given URI.</span>
+
+<span class="sd">        Overwrites the default method for reading text from a URL or file to allow</span>
+<span class="sd">        :class:`urllib.request.Request` instances as input. This method also raises</span>
+<span class="sd">        any :exc:`urllib.error.HTTPError` exceptions rather than catching</span>
+<span class="sd">        them to allow us to handle different response status codes as needed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">Link</span><span class="p">):</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+            <span class="n">href</span> <span class="o">=</span> <span class="n">link</span><span class="p">[</span><span class="s2">&quot;href&quot;</span><span class="p">]</span>
+            <span class="c1"># get headers and body from Link and add to request from simple STAC</span>
+            <span class="c1"># resolver</span>
+            <span class="n">merge</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;merge&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+
+            <span class="c1"># If the link object includes a &quot;method&quot; property, use that. If not</span>
+            <span class="c1"># fall back to &#39;GET&#39;.</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="s2">&quot;GET&quot;</span><span class="p">)</span>
+            <span class="c1"># If the link object includes a &quot;headers&quot; property, use that and</span>
+            <span class="c1"># respect the &quot;merge&quot; property.</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;headers&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="c1"># If &quot;POST&quot; use the body object that and respect the &quot;merge&quot; property.</span>
+            <span class="n">link_body</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+                <span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="p">{</span><span class="o">**</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parameters&quot;</span><span class="p">,</span> <span class="p">{})),</span> <span class="o">**</span><span class="n">link_body</span><span class="p">}</span>
+                    <span class="k">if</span> <span class="n">merge</span>
+                    <span class="k">else</span> <span class="n">link_body</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># parameters are already in the link href</span>
+                <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+                <span class="n">href</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># str or something that can be str&#39;ed</span>
+            <span class="n">href</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_is_url</span><span class="p">(</span><span class="n">href</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">href</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">href</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">href_contents</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">href_contents</span></div>
+
+
+<div class="viewcode-block" id="StacApiIO.request">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.platform.StacApiIO.html#earthdaily.legacy.earthdatastore.StacApiIO.request">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">href</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Makes a request to an http endpoint</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            href (str): The request URL</span>
+<span class="sd">            method (Optional[str], optional): The http method to use, &#39;GET&#39; or &#39;POST&#39;.</span>
+<span class="sd">              Defaults to None, which will result in &#39;GET&#39; being used.</span>
+<span class="sd">            headers (Optional[Dict[str, str]], optional): Additional headers to include</span>
+<span class="sd">                in request. Defaults to None.</span>
+<span class="sd">            parameters (Optional[Dict[str, Any]], optional): parameters to send with</span>
+<span class="sd">                request. Defaults to None.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            APIError: raised if the server returns an error response</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            str: The decoded response from the endpoint</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">href</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">href</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">modified</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_req_modifier</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_req_modifier</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">prepped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">prepare_request</span><span class="p">(</span><span class="n">modified</span> <span class="ow">or</span> <span class="n">request</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prepped</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">prepped</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2"> Headers: </span><span class="si">{</span><span class="n">prepped</span><span class="o">.</span><span class="n">headers</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; Payload: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; Timeout: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">send_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">merge_environment_settings</span><span class="p">(</span>
+                <span class="n">prepped</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="p">{},</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cert</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">prepped</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span> <span class="o">**</span><span class="n">send_kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">APIError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">APIError</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">APIError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="StacApiIO.write_text_to_href">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.platform.StacApiIO.html#earthdaily.legacy.earthdatastore.StacApiIO.write_text_to_href">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_text_to_href</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">href</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_is_url</span><span class="p">(</span><span class="n">href</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">APIError</span><span class="p">(</span><span class="s2">&quot;Transactions not supported&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">write_text_to_href</span><span class="p">(</span><span class="n">href</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StacApiIO.stac_object_from_dict">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.platform.StacApiIO.html#earthdaily.legacy.earthdatastore.StacApiIO.stac_object_from_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stac_object_from_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">href</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">link</span><span class="o">.</span><span class="n">HREF</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Catalog_Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">preserve_dict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;STACObject_Type&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deserializes a :class:`~pystac.STACObject` sub-class instance from a</span>
+<span class="sd">        dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            d : The dictionary to deserialize</span>
+<span class="sd">            href : Optional href to associate with the STAC object</span>
+<span class="sd">            root : Optional root :class:`~pystac.Catalog` to associate with the</span>
+<span class="sd">                STAC object.</span>
+<span class="sd">            preserve_dict: If ``False``, the dict parameter ``d`` may be modified</span>
+<span class="sd">                during this method call. Otherwise the dict is not mutated.</span>
+<span class="sd">                Defaults to ``True``, which results results in a deepcopy of the</span>
+<span class="sd">                parameter. Set to ``False`` when possible to avoid the performance</span>
+<span class="sd">                hit of a deepcopy.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">identify_stac_object_type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">==</span> <span class="n">pystac</span><span class="o">.</span><span class="n">STACObjectType</span><span class="o">.</span><span class="n">ITEM</span><span class="p">:</span>
+            <span class="n">collection_cache</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">collection_cache</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">_resolved_objects</span><span class="o">.</span><span class="n">as_collection_cache</span><span class="p">()</span>
+
+            <span class="c1"># Merge common properties in case this is an older STAC object.</span>
+            <span class="n">merge_common_properties</span><span class="p">(</span>
+                <span class="n">d</span><span class="p">,</span> <span class="n">json_href</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">href</span><span class="p">),</span> <span class="n">collection_cache</span><span class="o">=</span><span class="n">collection_cache</span>
+            <span class="p">)</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="n">identify_stac_object</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">migrate_to_latest</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">object_type</span> <span class="o">==</span> <span class="n">pystac</span><span class="o">.</span><span class="n">STACObjectType</span><span class="o">.</span><span class="n">CATALOG</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">pystac_client</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">Client</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="n">d</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">href</span><span class="p">),</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">migrate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">preserve_dict</span><span class="o">=</span><span class="n">preserve_dict</span>
+            <span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">_stac_io</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">object_type</span> <span class="o">==</span> <span class="n">pystac</span><span class="o">.</span><span class="n">STACObjectType</span><span class="o">.</span><span class="n">COLLECTION</span><span class="p">:</span>
+            <span class="n">collection_client</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">pystac_client</span><span class="o">.</span><span class="n">collection_client</span><span class="o">.</span><span class="n">CollectionClient</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                    <span class="n">d</span><span class="p">,</span>
+                    <span class="n">href</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">href</span><span class="p">),</span>
+                    <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
+                    <span class="n">migrate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">preserve_dict</span><span class="o">=</span><span class="n">preserve_dict</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">collection_client</span><span class="o">.</span><span class="n">_stac_io</span> <span class="o">=</span> <span class="bp">self</span>
+            <span class="k">return</span> <span class="n">collection_client</span>
+
+        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">object_type</span> <span class="o">==</span> <span class="n">pystac</span><span class="o">.</span><span class="n">STACObjectType</span><span class="o">.</span><span class="n">ITEM</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="n">d</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">href</span><span class="p">),</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span> <span class="n">migrate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">preserve_dict</span><span class="o">=</span><span class="n">preserve_dict</span>
+            <span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown STAC object type </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">object_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StacApiIO.get_pages">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.platform.StacApiIO.html#earthdaily.legacy.earthdatastore.StacApiIO.get_pages">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pages</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterator that yields dictionaries for each page at a STAC paging</span>
+<span class="sd">        endpoint, e.g., /collections, /search</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            Dict[str, Any] : JSON content from a single page</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">page</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;collections&quot;</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">yield</span> <span class="n">page</span>
+
+        <span class="n">next_link</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">link</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;links&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="n">link</span><span class="p">[</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;next&quot;</span><span class="p">),</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="k">while</span> <span class="n">next_link</span><span class="p">:</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="n">Link</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">next_link</span><span class="p">)</span>
+            <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">page</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;collections&quot;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">yield</span> <span class="n">page</span>
+
+            <span class="c1"># get the next link and make the next request</span>
+            <span class="n">next_link</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">link</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;links&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="n">link</span><span class="p">[</span><span class="s2">&quot;rel&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;next&quot;</span><span class="p">),</span> <span class="kc">None</span>
+            <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_url</span><span class="p">(</span><span class="n">href</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">href</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">scheme</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">netloc</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="stac_api_io.html">1.0.0</a></dd>
+      <dd><a href="../../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

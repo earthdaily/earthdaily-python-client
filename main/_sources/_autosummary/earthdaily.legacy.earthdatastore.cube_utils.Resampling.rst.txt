@@ -1,0 +1,55 @@
+earthdaily.legacy.earthdatastore.cube\_utils.Resampling
+=======================================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore.cube_utils
+
+.. autoclass:: Resampling
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~Resampling.conjugate
+      ~Resampling.bit_length
+      ~Resampling.bit_count
+      ~Resampling.to_bytes
+      ~Resampling.from_bytes
+      ~Resampling.as_integer_ratio
+      ~Resampling.is_integer
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Resampling.real
+      ~Resampling.imag
+      ~Resampling.numerator
+      ~Resampling.denominator
+      ~Resampling.nearest
+      ~Resampling.bilinear
+      ~Resampling.cubic
+      ~Resampling.cubic_spline
+      ~Resampling.lanczos
+      ~Resampling.average
+      ~Resampling.mode
+      ~Resampling.gauss
+      ~Resampling.max
+      ~Resampling.min
+      ~Resampling.med
+      ~Resampling.q1
+      ~Resampling.q3
+      ~Resampling.sum
+      ~Resampling.rms
+   
+   

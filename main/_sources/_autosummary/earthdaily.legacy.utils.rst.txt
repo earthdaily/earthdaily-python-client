@@ -1,0 +1,30 @@
+earthdaily.legacy.utils
+=======================
+
+.. automodule:: earthdaily.legacy.utils
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   copy_credentials_template
+

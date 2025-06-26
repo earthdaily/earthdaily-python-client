@@ -1,0 +1,41 @@
+earthdaily.legacy.earthdatastore.cube\_utils.defaultdict
+========================================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore.cube_utils
+
+.. autoclass:: defaultdict
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~defaultdict.clear
+      ~defaultdict.copy
+      ~defaultdict.fromkeys
+      ~defaultdict.get
+      ~defaultdict.items
+      ~defaultdict.keys
+      ~defaultdict.pop
+      ~defaultdict.popitem
+      ~defaultdict.setdefault
+      ~defaultdict.update
+      ~defaultdict.values
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~defaultdict.default_factory
+   
+   

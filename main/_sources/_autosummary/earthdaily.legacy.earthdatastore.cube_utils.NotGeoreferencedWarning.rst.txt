@@ -1,0 +1,6 @@
+earthdaily.legacy.earthdatastore.cube\_utils.NotGeoreferencedWarning
+====================================================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore.cube_utils
+
+.. autoexception:: NotGeoreferencedWarning

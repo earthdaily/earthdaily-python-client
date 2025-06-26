@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rasterio.enums &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">rasterio.enums</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rasterio.enums</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Enumerations.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">IntEnum</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TransformDirection</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coordinate transform direction</span>
+<span class="sd">    </span>
+<span class="sd">    Forward transform direction defined as image pixel (row, col) to </span>
+<span class="sd">    geographic/projected (x, y) coordinates. Reverse transform direction defined as</span>
+<span class="sd">    geographic/projected (x, y) to image pixel (row, col) coordinates.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The convention for transform direction for RPC based coordinate transform is</span>
+<span class="sd">    typically the opposite of what is previously described. For consistency</span>
+<span class="sd">    all coordinate transforms methods use the same convention.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">forward</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">reverse</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TransformMethod</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">affine</span> <span class="o">=</span> <span class="s1">&#39;transform&#39;</span>
+    <span class="n">gcps</span> <span class="o">=</span> <span class="s1">&#39;gcps&#39;</span>
+    <span class="n">rpcs</span> <span class="o">=</span> <span class="s1">&#39;rpcs&#39;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ColorInterp</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raster band color interpretation.&quot;&quot;&quot;</span>
+    <span class="n">undefined</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">gray</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">grey</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">palette</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">red</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">green</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">blue</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">hue</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">saturation</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">lightness</span> <span class="o">=</span> <span class="mi">9</span>
+    <span class="n">cyan</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">magenta</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">yellow</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">black</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">Cb</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">Cr</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="c1"># Below values since GDAL 3.10</span>
+    <span class="n">pan</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="n">coastal</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">rededge</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="n">nir</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">swir</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">mwir</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">lwir</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="n">tir</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">other_ir</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="c1"># GCI_IR_Reserved_1 = 26</span>
+    <span class="c1"># GCI_IR_Reserved_2 = 27</span>
+    <span class="c1"># GCI_IR_Reserved_3 = 28</span>
+    <span class="c1"># GCI_IR_Reserved_4 = 29</span>
+    <span class="n">sar_ka</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">sar_k</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="n">sar_ku</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">sar_x</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="n">sar_c</span> <span class="o">=</span> <span class="mi">34</span>
+    <span class="n">sar_s</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="n">sar_l</span> <span class="o">=</span> <span class="mi">36</span>
+    <span class="n">sar_p</span> <span class="o">=</span> <span class="mi">37</span>
+
+
+<div class="viewcode-block" id="Resampling">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.Resampling.html#earthdaily.legacy.earthdatastore.cube_utils.Resampling">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Resampling</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Available warp resampling algorithms.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nearest</span>
+<span class="sd">        Nearest neighbor resampling (default, fastest algorithm, worst interpolation quality).</span>
+<span class="sd">    bilinear</span>
+<span class="sd">        Bilinear resampling.</span>
+<span class="sd">    cubic</span>
+<span class="sd">        Cubic resampling.</span>
+<span class="sd">    cubic_spline</span>
+<span class="sd">        Cubic spline resampling.</span>
+<span class="sd">    lanczos</span>
+<span class="sd">        Lanczos windowed sinc resampling.</span>
+<span class="sd">    average</span>
+<span class="sd">        Average resampling, computes the weighted average of all non-NODATA contributing pixels.</span>
+<span class="sd">    mode</span>
+<span class="sd">        Mode resampling, selects the value which appears most often of all the sampled points.</span>
+<span class="sd">    gauss</span>
+<span class="sd">        Gaussian resampling, Note: not available to the functions in rio.warp.</span>
+<span class="sd">    max</span>
+<span class="sd">        Maximum resampling, selects the maximum value from all non-NODATA contributing pixels. (GDAL &gt;= 2.0)</span>
+<span class="sd">    min</span>
+<span class="sd">        Minimum resampling, selects the minimum value from all non-NODATA contributing pixels. (GDAL &gt;= 2.0)</span>
+<span class="sd">    med</span>
+<span class="sd">        Median resampling, selects the median value of all non-NODATA contributing pixels. (GDAL &gt;= 2.0)</span>
+<span class="sd">    q1</span>
+<span class="sd">        Q1, first quartile resampling, selects the first quartile value of all non-NODATA contributing pixels. (GDAL &gt;= 2.0)</span>
+<span class="sd">    q3</span>
+<span class="sd">        Q3, third quartile resampling, selects the third quartile value of all non-NODATA contributing pixels. (GDAL &gt;= 2.0)</span>
+<span class="sd">    sum</span>
+<span class="sd">        Sum, compute the weighted sum of all non-NODATA contributing pixels. (GDAL &gt;= 3.1)</span>
+<span class="sd">    rms</span>
+<span class="sd">        RMS, root mean square / quadratic mean of all non-NODATA contributing pixels. (GDAL &gt;= 3.3)</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    The first 8, &#39;nearest&#39;, &#39;bilinear&#39;, &#39;cubic&#39;, &#39;cubic_spline&#39;,</span>
+<span class="sd">    &#39;lanczos&#39;, &#39;average&#39;, &#39;mode&#39;, and &#39;gauss&#39;, are available for making</span>
+<span class="sd">    dataset overviews.</span>
+
+<span class="sd">    &#39;max&#39;, &#39;min&#39;, &#39;med&#39;, &#39;q1&#39;, &#39;q3&#39; are only supported in GDAL &gt;= 2.0.0.</span>
+
+<span class="sd">    &#39;nearest&#39;, &#39;bilinear&#39;, &#39;cubic&#39;, &#39;cubic_spline&#39;, &#39;lanczos&#39;,</span>
+<span class="sd">    &#39;average&#39;, &#39;mode&#39; are always available (GDAL &gt;= 1.10).</span>
+
+<span class="sd">    &#39;sum&#39; is only supported in GDAL &gt;= 3.1.</span>
+
+<span class="sd">    &#39;rms&#39; is only supported in GDAL &gt;= 3.3.</span>
+
+<span class="sd">    Note: &#39;gauss&#39; is not available to the functions in rio.warp.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nearest</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">bilinear</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">cubic</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">cubic_spline</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">lanczos</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">average</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">gauss</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="nb">max</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="nb">min</span> <span class="o">=</span> <span class="mi">9</span>
+    <span class="n">med</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">q3</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">rms</span> <span class="o">=</span> <span class="mi">14</span></div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OverviewResampling</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Available Overview resampling algorithms.</span>
+
+<span class="sd">    The first 8, &#39;nearest&#39;, &#39;bilinear&#39;, &#39;cubic&#39;, &#39;cubic_spline&#39;,</span>
+<span class="sd">    &#39;lanczos&#39;, &#39;average&#39;, &#39;mode&#39;, and &#39;gauss&#39;, are available for making</span>
+<span class="sd">    dataset overviews.</span>
+
+<span class="sd">    &#39;nearest&#39;, &#39;bilinear&#39;, &#39;cubic&#39;, &#39;cubic_spline&#39;, &#39;lanczos&#39;,</span>
+<span class="sd">    &#39;average&#39;, &#39;mode&#39; are always available (GDAL &gt;= 1.10).</span>
+
+<span class="sd">    &#39;rms&#39; is only supported in GDAL &gt;= 3.3.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nearest</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">bilinear</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">cubic</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">cubic_spline</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">lanczos</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">average</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">gauss</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">rms</span> <span class="o">=</span> <span class="mi">14</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Compression</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Available compression algorithms for GeoTIFFs.</span>
+
+<span class="sd">    Note that compression options for EXR, MRF, etc are not included</span>
+<span class="sd">    in this enum.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">jpeg</span> <span class="o">=</span> <span class="s1">&#39;JPEG&#39;</span>
+    <span class="n">lzw</span> <span class="o">=</span> <span class="s1">&#39;LZW&#39;</span>
+    <span class="n">packbits</span> <span class="o">=</span> <span class="s1">&#39;PACKBITS&#39;</span>
+    <span class="n">deflate</span> <span class="o">=</span> <span class="s1">&#39;DEFLATE&#39;</span>
+    <span class="n">ccittrle</span> <span class="o">=</span> <span class="s1">&#39;CCITTRLE&#39;</span>
+    <span class="n">ccittfax3</span> <span class="o">=</span> <span class="s1">&#39;CCITTFAX3&#39;</span>
+    <span class="n">ccittfax4</span> <span class="o">=</span> <span class="s1">&#39;CCITTFAX4&#39;</span>
+    <span class="n">lzma</span> <span class="o">=</span> <span class="s1">&#39;LZMA&#39;</span>
+    <span class="n">none</span> <span class="o">=</span> <span class="s1">&#39;NONE&#39;</span>
+    <span class="n">zstd</span> <span class="o">=</span> <span class="s1">&#39;ZSTD&#39;</span>
+    <span class="n">lerc</span> <span class="o">=</span> <span class="s1">&#39;LERC&#39;</span>
+    <span class="n">lerc_deflate</span> <span class="o">=</span> <span class="s1">&#39;LERC_DEFLATE&#39;</span>
+    <span class="n">lerc_zstd</span> <span class="o">=</span> <span class="s1">&#39;LERC_ZSTD&#39;</span>
+    <span class="n">webp</span> <span class="o">=</span> <span class="s1">&#39;WEBP&#39;</span>
+    <span class="n">jpeg2000</span> <span class="o">=</span> <span class="s1">&#39;JPEG2000&#39;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Interleaving</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">pixel</span> <span class="o">=</span> <span class="s1">&#39;PIXEL&#39;</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;LINE&#39;</span>
+    <span class="n">band</span> <span class="o">=</span> <span class="s1">&#39;BAND&#39;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MaskFlags</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">all_valid</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">per_dataset</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">nodata</span> <span class="o">=</span> <span class="mi">8</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PhotometricInterp</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">black</span> <span class="o">=</span> <span class="s1">&#39;MINISBLACK&#39;</span>
+    <span class="n">white</span> <span class="o">=</span> <span class="s1">&#39;MINISWHITE&#39;</span>
+    <span class="n">rgb</span> <span class="o">=</span> <span class="s1">&#39;RGB&#39;</span>
+    <span class="n">cmyk</span> <span class="o">=</span> <span class="s1">&#39;CMYK&#39;</span>
+    <span class="n">ycbcr</span> <span class="o">=</span> <span class="s1">&#39;YCbCr&#39;</span>
+    <span class="n">cielab</span> <span class="o">=</span> <span class="s1">&#39;CIELAB&#39;</span>
+    <span class="n">icclab</span> <span class="o">=</span> <span class="s1">&#39;ICCLAB&#39;</span>
+    <span class="n">itulab</span> <span class="o">=</span> <span class="s1">&#39;ITULAB&#39;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MergeAlg</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Available rasterization algorithms&quot;&quot;&quot;</span>
+    <span class="n">replace</span> <span class="o">=</span> <span class="s1">&#39;REPLACE&#39;</span>
+    <span class="n">add</span> <span class="o">=</span> <span class="s1">&#39;ADD&#39;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">WktVersion</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     .. versionadded:: 1.3.0</span>
+
+<span class="sd">    Supported CRS WKT string versions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: WKT Version 2 from 2015</span>
+    <span class="n">WKT2_2015</span> <span class="o">=</span> <span class="s2">&quot;WKT2_2015&quot;</span>
+    <span class="c1">#: Alias for latest WKT Version 2</span>
+    <span class="n">WKT2</span> <span class="o">=</span> <span class="s2">&quot;WKT2&quot;</span>
+    <span class="c1">#: WKT Version 2 from 2019</span>
+    <span class="n">WKT2_2019</span> <span class="o">=</span> <span class="s2">&quot;WKT2_2018&quot;</span>
+    <span class="c1">#: WKT Version 1 GDAL Style</span>
+    <span class="n">WKT1_GDAL</span> <span class="o">=</span> <span class="s2">&quot;WKT1_GDAL&quot;</span>
+    <span class="c1">#: Alias for WKT Version 1 GDAL Style</span>
+    <span class="n">WKT1</span> <span class="o">=</span> <span class="s2">&quot;WKT1&quot;</span>
+    <span class="c1">#: WKT Version 1 ESRI Style</span>
+    <span class="n">WKT1_ESRI</span> <span class="o">=</span> <span class="s2">&quot;WKT1_ESRI&quot;</span>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_missing_</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;WKT2_2019&quot;</span><span class="p">:</span>
+            <span class="c1"># WKT2_2019 alias added in GDAL 3.2, use WKT2_2018 for compatibility</span>
+            <span class="k">return</span> <span class="n">WktVersion</span><span class="o">.</span><span class="n">WKT2_2019</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid value for WktVersion: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="enums.html">1.0.0</a></dd>
+      <dd><a href="../../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

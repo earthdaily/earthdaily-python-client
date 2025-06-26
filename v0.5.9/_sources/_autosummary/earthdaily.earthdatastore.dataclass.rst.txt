@@ -1,0 +1,6 @@
+earthdaily.earthdatastore.dataclass
+===================================
+
+.. currentmodule:: earthdaily.earthdatastore
+
+.. autofunction:: dataclass

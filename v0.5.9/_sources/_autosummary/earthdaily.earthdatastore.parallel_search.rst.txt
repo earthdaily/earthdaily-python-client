@@ -1,23 +1,6 @@
 earthdaily.earthdatastore.parallel\_search
 ==========================================
 
-.. automodule:: earthdaily.earthdatastore.parallel_search
+.. currentmodule:: earthdaily.earthdatastore
 
-   
-   
-   
-
-   
-   
-   
-   
-   
-   
-   
-
-   
-   
-   
-
-
-
+.. autofunction:: parallel_search

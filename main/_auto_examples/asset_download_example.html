@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asset Download Example &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Asset Download Example</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_auto_examples/asset_download_example.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-asset-download-example-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="asset-download-example">
+<span id="sphx-glr-auto-examples-asset-download-example-py"></span><h1>Asset Download Example<a class="headerlink" href="#asset-download-example" title="Link to this heading"></a></h1>
+<p>This example demonstrates how to use the EarthDaily Python client v1
+to download assets from STAC items.</p>
+<p>Features demonstrated:
+- Searching for STAC items
+- Downloading specific assets
+- Working with different asset access modes
+- Progress monitoring during downloads
+- Organizing downloaded files</p>
+<p>Requirements:
+- Set your EDS credentials as environment variables or in a .env file
+- Install with platform support: pip install earthdaily[platform]</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># Load environment variables from .env file</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+
+    <span class="n">load_dotenv</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;💡 Consider installing python-dotenv to automatically load .env files:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   pip install python-dotenv&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSClient</span><span class="p">,</span> <span class="n">EDSConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily._eds_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">AssetAccessMode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSAPIError</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">initialize_client</span><span class="p">(</span><span class="n">asset_access_mode</span><span class="o">=</span><span class="s2">&quot;presigned-urls&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the EarthDaily API client with specified asset access mode.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;🚀 Initializing EarthDaily Client (Asset mode: </span><span class="si">{</span><span class="n">asset_access_mode</span><span class="si">}</span><span class="s2">)...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Map string to enum</span>
+    <span class="n">mode_mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;presigned-urls&quot;</span><span class="p">:</span> <span class="n">AssetAccessMode</span><span class="o">.</span><span class="n">PRESIGNED_URLS</span><span class="p">,</span> <span class="s2">&quot;proxy-urls&quot;</span><span class="p">:</span> <span class="n">AssetAccessMode</span><span class="o">.</span><span class="n">PROXY_URLS</span><span class="p">}</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">EDSConfig</span><span class="p">(</span><span class="n">asset_access_mode</span><span class="o">=</span><span class="n">mode_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">asset_access_mode</span><span class="p">,</span> <span class="n">AssetAccessMode</span><span class="o">.</span><span class="n">PRESIGNED_URLS</span><span class="p">))</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">EDSClient</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Client initialized successfully!&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">client</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">search_for_items</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">collection</span><span class="o">=</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span> <span class="n">max_items</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Search for STAC items to download.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🔍 Searching for </span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2"> items...&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">search_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pystac_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="n">collections</span><span class="o">=</span><span class="p">[</span><span class="n">collection</span><span class="p">],</span>
+            <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-06-01T00:00:00Z/2024-06-30T23:59:59Z&quot;</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;eo:cloud_cover&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lt&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}},</span>  <span class="c1"># Low cloud cover</span>
+            <span class="n">max_items</span><span class="o">=</span><span class="n">max_items</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">search_result</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items with &lt;10% cloud cover&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      Date: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">datetime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      Cloud cover: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;eo:cloud_cover&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;N/A&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      Available assets: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">items</span>
+
+    <span class="k">except</span> <span class="n">EDSAPIError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error searching for items: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;💥 Unexpected error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">show_available_assets</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Display available assets for a STAC item.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📦 Available assets for </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Group assets by type</span>
+    <span class="n">visual_assets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">spectral_assets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">metadata_assets</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">asset_name</span><span class="p">,</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">media_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="s2">&quot;media_type&quot;</span><span class="p">,</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">keyword</span> <span class="ow">in</span> <span class="n">asset_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;visual&quot;</span><span class="p">,</span> <span class="s2">&quot;thumbnail&quot;</span><span class="p">,</span> <span class="s2">&quot;overview&quot;</span><span class="p">]):</span>
+            <span class="n">visual_assets</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">asset_name</span><span class="p">,</span> <span class="n">media_type</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="n">keyword</span> <span class="ow">in</span> <span class="n">asset_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;nir&quot;</span><span class="p">,</span> <span class="s2">&quot;swir&quot;</span><span class="p">]):</span>
+            <span class="n">spectral_assets</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">asset_name</span><span class="p">,</span> <span class="n">media_type</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">metadata_assets</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">asset_name</span><span class="p">,</span> <span class="n">media_type</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">visual_assets</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   📸 Visual assets:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">media_type</span> <span class="ow">in</span> <span class="n">visual_assets</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      - </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">media_type</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">spectral_assets</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   🌈 Spectral assets:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">media_type</span> <span class="ow">in</span> <span class="n">spectral_assets</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      - </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">media_type</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">metadata_assets</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   📄 Metadata assets:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">media_type</span> <span class="ow">in</span> <span class="n">metadata_assets</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>  <span class="c1"># Show first 5</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      - </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">media_type</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">metadata_assets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      ... and </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">metadata_assets</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="si">}</span><span class="s2"> more metadata assets&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">download_specific_assets</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">asset_keys</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download specific assets from a STAC item.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Downloading assets: </span><span class="si">{</span><span class="n">asset_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Item: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Output directory: </span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Ensure output directory exists</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+        <span class="n">output_path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Download assets</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">download_assets</span><span class="p">(</span>
+            <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">,</span>
+            <span class="n">asset_keys</span><span class="o">=</span><span class="n">asset_keys</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
+            <span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>  <span class="c1"># Parallel downloads</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Assets downloaded successfully!&quot;</span><span class="p">)</span>
+
+        <span class="c1"># List downloaded files</span>
+        <span class="n">downloaded_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">output_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">downloaded_files</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Downloaded files:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">downloaded_files</span><span class="p">:</span>
+                <span class="n">size_mb</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;     - </span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">size_mb</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> MB)&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error downloading assets: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">download_by_item_string</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">item_string</span><span class="p">,</span> <span class="n">asset_keys</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download assets using item string (collection/item_id format).&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📥 Downloading from item string: </span><span class="si">{</span><span class="n">item_string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+        <span class="n">output_path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">download_assets</span><span class="p">(</span>
+            <span class="n">item</span><span class="o">=</span><span class="n">item_string</span><span class="p">,</span>
+            <span class="n">asset_keys</span><span class="o">=</span><span class="n">asset_keys</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
+            <span class="n">href_type</span><span class="o">=</span><span class="s2">&quot;alternate.download.href&quot;</span><span class="p">,</span>  <span class="c1"># Use alternate download links</span>
+            <span class="n">max_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Assets downloaded successfully using item string!&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error downloading with item string: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">demo_basic_download</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate basic asset downloading.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📥 DEMO: Basic Asset Download&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+
+    <span class="c1"># Initialize client</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">initialize_client</span><span class="p">(</span><span class="s2">&quot;presigned-urls&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Search for items</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">search_for_items</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ No items found for download demo&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">item</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Show available assets</span>
+    <span class="n">show_available_assets</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="c1"># Download visual assets</span>
+    <span class="n">visual_assets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;visual&quot;</span><span class="p">,</span> <span class="s2">&quot;thumbnail&quot;</span><span class="p">]</span>
+    <span class="n">available_visual</span> <span class="o">=</span> <span class="p">[</span><span class="n">asset</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">visual_assets</span> <span class="k">if</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">available_visual</span><span class="p">:</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;Downloads&quot;</span> <span class="o">/</span> <span class="s2">&quot;earthdaily_assets&quot;</span> <span class="o">/</span> <span class="s2">&quot;basic_demo&quot;</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">download_specific_assets</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">available_visual</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✨ Basic download demo completed!&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;💡 Check downloaded files in: </span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ No visual assets available for download&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">demo_advanced_download</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate advanced asset downloading with different configurations.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🛠️  DEMO: Advanced Asset Download&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">This demo shows different download configurations:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1. Proxy URLs vs Presigned URLs&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2. Different asset types&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;3. Parallel downloads&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Compare different access modes</span>
+    <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;presigned-urls&quot;</span><span class="p">,</span> <span class="s2">&quot;proxy-urls&quot;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Testing </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2"> ---&quot;</span><span class="p">)</span>
+
+        <span class="n">client</span> <span class="o">=</span> <span class="n">initialize_client</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">search_for_items</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">items</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Download spectral assets</span>
+            <span class="n">spectral_assets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">]</span>
+            <span class="n">available_spectral</span> <span class="o">=</span> <span class="p">[</span><span class="n">asset</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">spectral_assets</span> <span class="k">if</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">available_spectral</span><span class="p">:</span>
+                <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;Downloads&quot;</span> <span class="o">/</span> <span class="s2">&quot;earthdaily_assets&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;advanced_demo_</span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">download_specific_assets</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">available_spectral</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">output_dir</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">demo_collection_download</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate downloading from different collections.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🌍 DEMO: Multi-Collection Download&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+
+    <span class="n">collections_to_try</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span> <span class="s2">&quot;landsat-c2l2-sr&quot;</span><span class="p">]</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">initialize_client</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">collection</span> <span class="ow">in</span> <span class="n">collections_to_try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Processing </span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2"> ---&quot;</span><span class="p">)</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="n">search_for_items</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">items</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Try to download thumbnail or visual asset</span>
+            <span class="n">preferred_assets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;thumbnail&quot;</span><span class="p">,</span> <span class="s2">&quot;visual&quot;</span><span class="p">,</span> <span class="s2">&quot;overview&quot;</span><span class="p">]</span>
+            <span class="n">available_assets</span> <span class="o">=</span> <span class="p">[</span><span class="n">asset</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">preferred_assets</span> <span class="k">if</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">available_assets</span><span class="p">:</span>
+                <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;Downloads&quot;</span> <span class="o">/</span> <span class="s2">&quot;earthdaily_assets&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;collection_demo_</span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">download_specific_assets</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">available_assets</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="n">output_dir</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   No preferred assets available for </span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main function to demonstrate asset download workflows.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📥 EarthDaily Asset Download Examples&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">This example demonstrates various asset download methods.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Choose a demo to run:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1. Basic asset download (visual assets)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2. Advanced download configurations&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;3. Multi-collection download&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;4. Run all demos&quot;</span><span class="p">)</span>
+
+        <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Enter your choice (1/2/3/4): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span><span class="p">:</span>
+            <span class="n">demo_basic_download</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span>
+            <span class="n">demo_advanced_download</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;3&quot;</span><span class="p">:</span>
+            <span class="n">demo_collection_download</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span>
+            <span class="n">demo_basic_download</span><span class="p">()</span>
+            <span class="n">demo_advanced_download</span><span class="p">()</span>
+            <span class="n">demo_collection_download</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ Invalid choice. Running basic demo by default...&quot;</span><span class="p">)</span>
+            <span class="n">demo_basic_download</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🎉 Download examples completed!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;💡 Downloaded files are organized in your Downloads/earthdaily_assets/ folder&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">⚠️  Demo interrupted by user&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">❌ Import Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;💡 Make sure to install with platform support:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   pip install earthdaily[platform]&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💥 Unexpected error in main: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💡 Make sure you have set your EDS credentials as environment variables:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-asset-download-example-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/33140bc40de30f7a6c8716086ede29dd/asset_download_example.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">asset_download_example.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/141b83b67929536442deaa29e805af84/asset_download_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">asset_download_example.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/f1363a1d4e1ab7d7d88cc8799d0a1841/asset_download_example.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">asset_download_example.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
+      <dd><a href="../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="asset_download_example.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

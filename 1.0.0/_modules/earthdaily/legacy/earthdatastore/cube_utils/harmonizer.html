@@ -186,6 +186,8 @@
         <span class="k">return</span> <span class="n">ds_</span></div>
 
 
+<div class="viewcode-block" id="Harmonizer.xcal_functions_parser">
+<a class="viewcode-back" href="../../../../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.harmonizer.Harmonizer.html#earthdaily.legacy.earthdatastore.cube_utils.harmonizer.Harmonizer.xcal_functions_parser">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">xcal_functions_parser</span><span class="p">(</span><span class="n">functions</span><span class="p">,</span> <span class="n">dataarray</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">):</span>
         <span class="n">xscaled_dataarray</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">idx_function</span><span class="p">,</span> <span class="n">function</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">functions</span><span class="p">):</span>
@@ -201,8 +203,11 @@
 
         <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">xscaled_dataarray</span><span class="p">:</span>
             <span class="n">dataarray</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">op</span><span class="p">[</span><span class="s2">&quot;condition&quot;</span><span class="p">],</span> <span class="n">dataarray</span> <span class="o">*</span> <span class="n">op</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">op</span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">],</span> <span class="n">dataarray</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">dataarray</span>
+        <span class="k">return</span> <span class="n">dataarray</span></div>
 
+
+<div class="viewcode-block" id="Harmonizer.apply_to_asset">
+<a class="viewcode-back" href="../../../../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.harmonizer.Harmonizer.html#earthdaily.legacy.earthdatastore.cube_utils.harmonizer.Harmonizer.apply_to_asset">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">apply_to_asset</span><span class="p">(</span><span class="n">functions</span><span class="p">,</span> <span class="n">dataarray</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span> <span class="n">band_name</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">functions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># Single function</span>
@@ -211,8 +216,11 @@
             <span class="c1"># Multiple functions</span>
             <span class="c1"># TO DO : Replace x variable and the eval(xr_where_string) by a native function</span>
             <span class="n">dataarray</span> <span class="o">=</span> <span class="n">Harmonizer</span><span class="o">.</span><span class="n">xcal_functions_parser</span><span class="p">(</span><span class="n">functions</span><span class="p">,</span> <span class="n">dataarray</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">dataarray</span>
+        <span class="k">return</span> <span class="n">dataarray</span></div>
 
+
+<div class="viewcode-block" id="Harmonizer.check_timerange">
+<a class="viewcode-back" href="../../../../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.harmonizer.Harmonizer.html#earthdaily.legacy.earthdatastore.cube_utils.harmonizer.Harmonizer.check_timerange">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_timerange</span><span class="p">(</span><span class="n">xcal_item</span><span class="p">,</span> <span class="n">item_datetime</span><span class="p">):</span>
         <span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">xcal_item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s2">&quot;published&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span><span class="p">)</span>
         <span class="n">start_date</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
@@ -228,6 +236,7 @@
             <span class="k">return</span> <span class="n">start_date</span> <span class="o">&lt;=</span> <span class="n">item_datetime</span> <span class="o">&lt;=</span> <span class="n">end_date</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">start_date</span> <span class="o">&lt;=</span> <span class="n">item_datetime</span></div>
+</div>
 
 </pre></div>
 
@@ -263,6 +272,10 @@
       <dt>Tags</dt>
       <dd><a href="harmonizer.html">1.0.0</a></dd>
       <dd><a href="../../../../../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../../../../../main/index.html">main</a></dd>
     </dl>
   </div>
 </div><script>

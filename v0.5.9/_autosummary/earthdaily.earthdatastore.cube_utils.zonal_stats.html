@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.earthdatastore.cube_utils.zonal_stats &mdash; EarthDaily Python Client 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="earthdaily.earthdatastore.cube_utils.AssetMapper" href="earthdaily.earthdatastore.cube_utils.AssetMapper.html" />
+    <link rel="prev" title="earthdaily.earthdatastore.cube_utils.wraps" href="earthdaily.earthdatastore.cube_utils.wraps.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="earthdaily.EarthDataStore.html">earthdaily.earthdatastore</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.apply_single_condition.html">earthdaily.earthdatastore.apply_single_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.dataclass.html">earthdaily.earthdatastore.dataclass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.datacube.html">earthdaily.earthdatastore.datacube</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.enhance_assets.html">earthdaily.earthdatastore.enhance_assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.filter_items.html">earthdaily.earthdatastore.filter_items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.metacube.html">earthdaily.earthdatastore.metacube</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.parallel_search.html">earthdaily.earthdatastore.parallel_search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.post_query_items.html">earthdaily.earthdatastore.post_query_items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.validate_property_condition.html">earthdaily.earthdatastore.validate_property_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Any.html">earthdaily.earthdatastore.Any</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Auth.html">earthdaily.earthdatastore.Auth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Client.html">earthdaily.earthdatastore.Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.EarthDataStoreConfig.html">earthdaily.earthdatastore.EarthDataStoreConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.ItemCollection.html">earthdaily.earthdatastore.ItemCollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Path.html">earthdaily.earthdatastore.Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Retry.html">earthdaily.earthdatastore.Retry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacApiIO.html">earthdaily.earthdatastore.StacApiIO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacCollectionExplorer.html">earthdaily.earthdatastore.StacCollectionExplorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.NoItemsFoundError.html">earthdaily.earthdatastore.NoItemsFoundError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.datacube"><code class="docutils literal notranslate"><span class="pre">datacube()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.metacube"><code class="docutils literal notranslate"><span class="pre">metacube()</span></code></a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.html">earthdaily.earthdatastore.cube_utils</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.box.html">earthdaily.earthdatastore.cube_utils.box</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.datacube.html">earthdaily.earthdatastore.cube_utils.datacube</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.metacube.html">earthdaily.earthdatastore.cube_utils.metacube</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.rescale_assets_with_items.html">earthdaily.earthdatastore.cube_utils.rescale_assets_with_items</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.wraps.html">earthdaily.earthdatastore.cube_utils.wraps</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">earthdaily.earthdatastore.cube_utils.zonal_stats</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.AssetMapper.html">earthdaily.earthdatastore.cube_utils.AssetMapper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.GeometryManager.html">earthdaily.earthdatastore.cube_utils.GeometryManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.Harmonizer.html">earthdaily.earthdatastore.cube_utils.harmonizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.Resampling.html">earthdaily.earthdatastore.cube_utils.Resampling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.defaultdict.html">earthdaily.earthdatastore.cube_utils.defaultdict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.NotGeoreferencedWarning.html">earthdaily.earthdatastore.cube_utils.NotGeoreferencedWarning</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.html#earthdaily.earthdatastore.cube_utils.GeometryManager"><code class="docutils literal notranslate"><span class="pre">GeometryManager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.html#earthdaily.earthdatastore.cube_utils.zonal_stats"><code class="docutils literal notranslate"><span class="pre">zonal_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.asset_mapper.html">earthdaily.earthdatastore.cube_utils.asset_mapper</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.geometry_manager.html">earthdaily.earthdatastore.cube_utils.geometry_manager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.preprocessing.html">earthdaily.earthdatastore.cube_utils.preprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.mask.html">earthdaily.earthdatastore.mask</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.Path.html">earthdaily.Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.accessor.html">earthdaily.accessor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.core.html">earthdaily.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.datasets.html">earthdaily.datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.utils.html">earthdaily.utils</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.EarthDataStore.html">earthdaily.earthdatastore</a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.earthdatastore.cube_utils.html">earthdaily.earthdatastore.cube_utils</a></li>
+      <li class="breadcrumb-item active">earthdaily.earthdatastore.cube_utils.zonal_stats</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/earthdaily.earthdatastore.cube_utils.zonal_stats.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="earthdaily-earthdatastore-cube-utils-zonal-stats">
+<h1>earthdaily.earthdatastore.cube_utils.zonal_stats<a class="headerlink" href="#earthdaily-earthdatastore-cube-utils-zonal-stats" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.cube_utils.zonal_stats">
+<span class="sig-prename descclassname"><span class="pre">earthdaily.earthdatastore.cube_utils.</span></span><span class="sig-name descname"><span class="pre">zonal_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'numpy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lazy_load</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_memory_mb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reducers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['mean']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_touched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_meters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore/cube_utils/_zonal.html#zonal_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.cube_utils.zonal_stats" title="Link to this definition"></a></dt>
+<dd><p>Calculate zonal statistics for xarray Dataset based on geometric boundaries.</p>
+<p>This function computes statistical summaries of Dataset values within each geometry’s zone,
+supporting parallel processing through xarray’s apply_ufunc and multiple computation methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>xarray.Dataset</em>) – Input dataset containing variables for statistics computation.</p></li>
+<li><p><strong>geometries</strong> (<em>Union</em><em>[</em><em>geopandas.GeoDataFrame</em><em>, </em><em>geopandas.GeoSeries</em><em>]</em>) – Geometries defining the zones for statistics calculation.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
+<dt>Method for computation. Options:</dt><dd><ul>
+<li><p>’numpy’: Uses numpy functions with parallel processing</p></li>
+<li><p>’polars’: Uses polars for data manipulation</p></li>
+<li><p>’xvec’: Uses xvec library (must be installed)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Default is ‘numpy’.</p>
+</p></li>
+<li><p><strong>lazy_load</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, optimizes memory usage by loading chunks of data for ‘numpy’ method.
+Default is True.</p></li>
+<li><p><strong>max_memory_mb</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum memory to use in megabytes. If None, uses maximum available memory.
+Default is None.</p></li>
+<li><p><strong>reducers</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – List of statistical operations to perform. Functions should be numpy nan-functions
+(e.g., ‘mean’ uses np.nanmean). Default is [‘mean’].</p></li>
+<li><p><strong>all_touched</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, includes all pixels touched by geometries in computation.
+Default is True.</p></li>
+<li><p><strong>preserve_columns</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, preserves all columns from input geometries in output.
+Default is True.</p></li>
+<li><p><strong>buffer_meters</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>, </em><em>None</em><em>]</em><em>, </em><em>optional</em>) – Buffer distance in meters to apply to geometries before computation.
+Default is None.</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – Additional keyword arguments passed to underlying computation functions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Dataset containing computed statistics with dimensions:</dt><dd><ul class="simple">
+<li><p>time (if present in input)</p></li>
+<li><p>feature (number of geometries)</p></li>
+<li><p>zonal_statistics (number of reducers)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Additional coordinates include geometry WKT and preserved columns if requested.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.Dataset</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">xarray.apply_ufunc</span></code></dt><dd><p>Function used for parallel computation</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasterio.features</span></code></dt><dd><p>Used for geometry rasterization</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>Memory usage is optimized for time series data when lazy_load=True by processing
+in chunks determined by available system memory.</p>
+<p>The ‘xvec’ method requires the xvec package to be installed separately.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s2">&quot;temperature.nc&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">polygons</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s2">&quot;zones.geojson&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">compute_zonal_stats</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">dataset</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">polygons</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">reducers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">lazy_load</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ImportError</strong> – If ‘xvec’ method is selected but xvec package is not installed.</p></li>
+<li><p><strong>ValueError</strong> – If invalid method or reducer is specified.</p></li>
+<li><p><strong>DeprecationWarning</strong> – If deprecated parameters are used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="earthdaily.earthdatastore.cube_utils.wraps.html" class="btn btn-neutral float-left" title="earthdaily.earthdatastore.cube_utils.wraps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.earthdatastore.cube_utils.AssetMapper.html" class="btn btn-neutral float-right" title="earthdaily.earthdatastore.cube_utils.AssetMapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.5.9
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
+      <dd><a href="earthdaily.earthdatastore.cube_utils.zonal_stats.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

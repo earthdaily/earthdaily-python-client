@@ -1,0 +1,6 @@
+earthdaily.platform.models.dataclass
+====================================
+
+.. currentmodule:: earthdaily.platform.models
+
+.. autofunction:: dataclass

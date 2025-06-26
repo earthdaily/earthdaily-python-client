@@ -41,19 +41,6 @@ Import librairies
     console = Console(force_interactive=True)
 
 
-
-.. rst-class:: sphx-glr-script-out
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/examples/common_band_names.py", line 11, in <module>
-        from rich.console import Console
-    ModuleNotFoundError: No module named 'rich'
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 19-24
 
 Show each collection with their earthdaily common band names
@@ -76,11 +63,6 @@ to use the central wavelength (rededge70 is rededge1 of sentinel-2 for example).
         for common_name, asset in assets[0].items():
             table.add_row(asset, common_name)
         console.print(table)
-
-
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** (0 minutes 0.005 seconds)
 
 
 .. _sphx_glr_download__auto_examples_common_band_names.py:

@@ -1,0 +1,41 @@
+earthdaily.EDSConfig
+====================
+
+.. currentmodule:: earthdaily
+
+.. autoclass:: EDSConfig
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~EDSConfig.load_config_from_file
+      ~EDSConfig.read_credentials_from_ini
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~EDSConfig.asset_access_mode
+      ~EDSConfig.base_url
+      ~EDSConfig.bypass_auth
+      ~EDSConfig.client_id
+      ~EDSConfig.client_secret
+      ~EDSConfig.token_url
+      ~EDSConfig.json_path
+      ~EDSConfig.toml_path
+      ~EDSConfig.ini_path
+      ~EDSConfig.ini_profile
+   
+   

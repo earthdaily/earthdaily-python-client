@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.platform._stac_item &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../platform.html">earthdaily.platform</a></li>
+      <li class="breadcrumb-item active">earthdaily.platform._stac_item</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for earthdaily.platform._stac_item</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystac</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily._api_requester</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRequester</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily._http_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPRequest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSAPIError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.platform._stac_item_downloader</span><span class="w"> </span><span class="kn">import</span> <span class="n">ItemDownloader</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ReturnFormat</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for different return formats.&quot;&quot;&quot;</span>
+
+    <span class="n">JSON</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
+    <span class="n">DICT</span> <span class="o">=</span> <span class="s2">&quot;dict&quot;</span>
+    <span class="n">PYSTAC</span> <span class="o">=</span> <span class="s2">&quot;pystac&quot;</span>
+
+
+<div class="viewcode-block" id="StacItemService">
+<a class="viewcode-back" href="../../../_autosummary/earthdaily.platform.StacItemService.html#earthdaily.platform.StacItemService">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">StacItemService</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Service for managing STAC items in the Earth Data Store platform.</span>
+
+<span class="sd">    This service provides methods to create, read, update, and delete STAC items</span>
+<span class="sd">    within collections, with configurable return formats.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_requester</span><span class="p">:</span> <span class="n">APIRequester</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the StacItemService.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        api_requester : APIRequester</span>
+<span class="sd">            An instance of APIRequester used to send HTTP requests to the EDS API.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_requester</span> <span class="o">=</span> <span class="n">api_requester</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_return_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_format</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReturnFormat</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate and convert return format string to ReturnFormat enum.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        return_format : str</span>
+<span class="sd">            The return format as string.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        ReturnFormat</span>
+<span class="sd">            The validated ReturnFormat enum.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the return format is not supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ReturnFormat</span><span class="p">(</span><span class="n">return_format</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported return format: </span><span class="si">{</span><span class="n">return_format</span><span class="si">}</span><span class="s2">. Supported formats: json, dict, pystac&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_item_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert item data to dictionary format for API requests.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        item_data : Union[dict[str, Any], Any]</span>
+<span class="sd">            The item data as dict or pystac.Item object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            The item data as dictionary.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the item data format is not supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">item_data</span>
+
+        <span class="c1"># Check if it&#39;s a pystac Item object</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item_data</span><span class="p">,</span> <span class="s2">&quot;to_dict&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">item_data</span><span class="p">,</span> <span class="s2">&quot;to_dict&quot;</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">item_data</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to convert pystac Item to dict: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;item_data must be a dictionary or pystac.Item object&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_send_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send a request to a platform endpoint.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        method : str</span>
+<span class="sd">            HTTP method for the request (e.g., &quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;).</span>
+<span class="sd">        endpoint : str</span>
+<span class="sd">            The specific endpoint to send the request to.</span>
+<span class="sd">        data : Optional[dict[str, Any]], optional</span>
+<span class="sd">            The payload to be sent in the request.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            The response from the platform API.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        EDSAPIError</span>
+<span class="sd">            If the API returns an error response.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_requester</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/platform/v1/stac/</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_requester</span><span class="o">.</span><span class="n">send_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">204</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">EDSAPIError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API request failed with status </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">body</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_format_response</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">response_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">return_format</span><span class="p">:</span> <span class="n">ReturnFormat</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Format the response data according to the specified return format.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        response_data : dict[str, Any]</span>
+<span class="sd">            The raw response data from the API.</span>
+<span class="sd">        return_format : ReturnFormat</span>
+<span class="sd">            The desired format for the return value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        Union[str, dict[str, Any], Any]</span>
+<span class="sd">            The formatted response data.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ImportError</span>
+<span class="sd">            If pystac is not available when PYSTAC format is requested.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">return_format</span> <span class="o">==</span> <span class="n">ReturnFormat</span><span class="o">.</span><span class="n">JSON</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">return_format</span> <span class="o">==</span> <span class="n">ReturnFormat</span><span class="o">.</span><span class="n">DICT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response_data</span>
+        <span class="k">elif</span> <span class="n">return_format</span> <span class="o">==</span> <span class="n">ReturnFormat</span><span class="o">.</span><span class="n">PYSTAC</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">response_data</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                    <span class="s2">&quot;pystac library is required for PYSTAC return format. Install with: pip install pystac&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported return format: </span><span class="si">{</span><span class="n">return_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StacItemService.get_item">
+<a class="viewcode-back" href="../../../_autosummary/earthdaily.platform.StacItemService.html#earthdaily.platform.StacItemService.get_item">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_item</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">return_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dict&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a STAC item from a collection.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        collection_id : str</span>
+<span class="sd">            The ID of the collection containing the item.</span>
+<span class="sd">        item_id : str</span>
+<span class="sd">            The ID of the item to retrieve.</span>
+<span class="sd">        return_format : str, optional</span>
+<span class="sd">            The format to return the response in. Defaults to &quot;dict&quot;.</span>
+<span class="sd">            Supported formats: &quot;dict&quot;, &quot;json&quot;, &quot;pystac&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        Union[str, dict[str, Any], Any]</span>
+<span class="sd">            The STAC item in the specified format.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        EDSAPIError</span>
+<span class="sd">            If the API request fails.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the return format is not supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">validated_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_return_format</span><span class="p">(</span><span class="n">return_format</span><span class="p">)</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;collections/</span><span class="si">{</span><span class="n">collection_id</span><span class="si">}</span><span class="s2">/items/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">response_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_response</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">validated_format</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StacItemService.create_item">
+<a class="viewcode-back" href="../../../_autosummary/earthdaily.platform.StacItemService.html#earthdaily.platform.StacItemService.create_item">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_item</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">item_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="n">return_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dict&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new STAC item in a collection.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        collection_id : str</span>
+<span class="sd">            The ID of the collection to create the item in.</span>
+<span class="sd">        item_data : Union[dict[str, Any], Any]</span>
+<span class="sd">            The STAC item data to create. Can be a dictionary or pystac.Item object.</span>
+<span class="sd">        return_format : str, optional</span>
+<span class="sd">            The format to return the response in. Defaults to &quot;dict&quot;.</span>
+<span class="sd">            Supported formats: &quot;dict&quot;, &quot;json&quot;, &quot;pystac&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        Union[str, dict[str, Any], Any]</span>
+<span class="sd">            The created STAC item in the specified format.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        EDSAPIError</span>
+<span class="sd">            If the API request fails.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the return format or item data format is not supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">validated_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_return_format</span><span class="p">(</span><span class="n">return_format</span><span class="p">)</span>
+        <span class="n">prepared_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_item_data</span><span class="p">(</span><span class="n">item_data</span><span class="p">)</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;collections/</span><span class="si">{</span><span class="n">collection_id</span><span class="si">}</span><span class="s2">/items&quot;</span>
+        <span class="n">response_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">prepared_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_response</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">validated_format</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StacItemService.update_item">
+<a class="viewcode-back" href="../../../_autosummary/earthdaily.platform.StacItemService.html#earthdaily.platform.StacItemService.update_item">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_item</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">collection_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">item_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">return_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update an existing STAC item in a collection.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        collection_id : str</span>
+<span class="sd">            The ID of the collection containing the item.</span>
+<span class="sd">        item_id : str</span>
+<span class="sd">            The ID of the item to update.</span>
+<span class="sd">        item_data : Union[dict[str, Any], Any]</span>
+<span class="sd">            The updated STAC item data. Can be a dictionary or pystac.Item object.</span>
+<span class="sd">        return_format : str, optional</span>
+<span class="sd">            The format to return the response in. Defaults to &quot;dict&quot;.</span>
+<span class="sd">            Supported formats: &quot;dict&quot;, &quot;json&quot;, &quot;pystac&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        Union[str, dict[str, Any], Any]</span>
+<span class="sd">            The updated STAC item in the specified format.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        EDSAPIError</span>
+<span class="sd">            If the API request fails.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the return format or item data format is not supported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">validated_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_return_format</span><span class="p">(</span><span class="n">return_format</span><span class="p">)</span>
+        <span class="n">prepared_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_item_data</span><span class="p">(</span><span class="n">item_data</span><span class="p">)</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;collections/</span><span class="si">{</span><span class="n">collection_id</span><span class="si">}</span><span class="s2">/items/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">response_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_request</span><span class="p">(</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">prepared_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_response</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">validated_format</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StacItemService.delete_item">
+<a class="viewcode-back" href="../../../_autosummary/earthdaily.platform.StacItemService.html#earthdaily.platform.StacItemService.delete_item">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete a STAC item from a collection.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        collection_id : str</span>
+<span class="sd">            The ID of the collection containing the item.</span>
+<span class="sd">        item_id : str</span>
+<span class="sd">            The ID of the item to delete.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        EDSAPIError</span>
+<span class="sd">            If the API request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;collections/</span><span class="si">{</span><span class="n">collection_id</span><span class="si">}</span><span class="s2">/items/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send_request</span><span class="p">(</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StacItemService.download_assets">
+<a class="viewcode-back" href="../../../_autosummary/earthdaily.platform.StacItemService.html#earthdaily.platform.StacItemService.download_assets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">download_assets</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">item</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">Item</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">asset_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;./downloaded_assets&quot;</span><span class="p">,</span>
+        <span class="n">max_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">quiet</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">continue_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">href_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;href&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download assets from a STAC item.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        item : Union[dict[str, Any], Any]</span>
+<span class="sd">            The STAC item containing the assets to download.</span>
+<span class="sd">            Can be a dictionary, pystac.Item object, or an item ID.</span>
+<span class="sd">        asset_keys : Optional[list], optional</span>
+<span class="sd">            List of asset keys to download. If None, all assets will be downloaded.</span>
+<span class="sd">        output_dir : str, optional</span>
+<span class="sd">            Directory to save downloaded files. Defaults to &quot;./downloaded_assets&quot;.</span>
+<span class="sd">        max_workers : int, optional</span>
+<span class="sd">            Maximum number of concurrent downloads. Defaults to 3.</span>
+<span class="sd">        quiet : bool, optional</span>
+<span class="sd">            Whether to suppress progress bars. Defaults to False.</span>
+<span class="sd">        continue_on_error : bool, optional</span>
+<span class="sd">            Whether to continue downloading if an error occurs. Defaults to True.</span>
+<span class="sd">        href_type : str</span>
+<span class="sd">            Specifies which href to use from asset&#39;s alternate URLs.</span>
+<span class="sd">            Example: &quot;download&quot; would look for item.assets[key].alternate.download.href</span>
+<span class="sd">            If None, uses the default asset href. Defaults to &quot;href&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            Dictionary mapping asset keys to downloaded file paths.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the item cannot be resolved or no assets are found.</span>
+<span class="sd">        EDSAPIError</span>
+<span class="sd">            If the API request to get the item fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Handle the case where item is a string (collection_id/item_id)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">collection_id</span><span class="p">,</span> <span class="n">item_id</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">collection_id</span><span class="p">,</span> <span class="n">item_id</span> <span class="o">=</span> <span class="n">parts</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">collection_id</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">item_id</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;When providing an STAC item as a string, it must be in the format &#39;collection_id/item_id&#39;&quot;</span>
+                <span class="p">)</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">collection_id</span><span class="o">=</span><span class="n">collection_id</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="n">item_id</span><span class="p">,</span> <span class="n">return_format</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span><span class="p">)</span>
+
+        <span class="n">downloader</span> <span class="o">=</span> <span class="n">ItemDownloader</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">max_workers</span><span class="p">,</span> <span class="n">api_requester</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">api_requester</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="p">(</span><span class="n">Item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Item must be a PySTAC Item or a dictionary representation of a STAC Item&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">downloader</span><span class="o">.</span><span class="n">download_assets</span><span class="p">(</span>
+            <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">,</span>
+            <span class="n">asset_keys</span><span class="o">=</span><span class="n">asset_keys</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">,</span>
+            <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">,</span>
+            <span class="n">continue_on_error</span><span class="o">=</span><span class="n">continue_on_error</span><span class="p">,</span>
+            <span class="n">href_type</span><span class="o">=</span><span class="n">href_type</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="_stac_item.html">1.0.0</a></dd>
+      <dd><a href="../../../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

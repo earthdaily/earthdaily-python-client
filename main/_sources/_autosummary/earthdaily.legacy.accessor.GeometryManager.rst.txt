@@ -1,0 +1,30 @@
+earthdaily.legacy.accessor.GeometryManager
+==========================================
+
+.. currentmodule:: earthdaily.legacy.accessor
+
+.. autoclass:: GeometryManager
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~GeometryManager.buffer_in_meter
+      ~GeometryManager.to_bbox
+      ~GeometryManager.to_geopandas
+      ~GeometryManager.to_intersects
+      ~GeometryManager.to_json
+      ~GeometryManager.to_wkt
+   
+   
+
+   
+   
+   

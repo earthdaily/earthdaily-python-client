@@ -1,0 +1,183 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_auto_examples/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p># EarthDaily Python Client Examples</p>
+<p>Welcome to the EarthDaily Python Client examples! These examples demonstrate the key features and capabilities of the v1 client.</p>
+<p>## Available Examples</p>
+<p>### 🚀 [Quick Start](quick_start.py)
+Get started quickly with searching and exploring STAC items using the new v1 API.</p>
+<p>### 📊 [Datacube Creation](datacube_example.py)
+Learn how to create datacubes using the legacy API for backward compatibility with v0.x code.</p>
+<p>### 📥 [Asset Download](asset_download_example.py)
+Download satellite data assets with different access modes and configurations.</p>
+<p>### 🔍 [Bulk Search Operations](bulk_search_example.py)
+Perform large-scale searches and downloads using the bulk search functionality.</p>
+<p>## Getting Started</p>
+<ol class="arabic simple">
+<li><p><strong>Set up your credentials</strong> as environment variables:
+<code class="docutils literal notranslate"><span class="pre">`bash</span>
+<span class="pre">export</span> <span class="pre">EDS_CLIENT_ID=&quot;your_client_id&quot;</span>
+<span class="pre">export</span> <span class="pre">EDS_SECRET=&quot;your_client_secret&quot;</span>
+<span class="pre">export</span> <span class="pre">EDS_AUTH_URL=&quot;your_auth_url&quot;</span>
+<span class="pre">export</span> <span class="pre">EDS_API_URL=&quot;https://api.earthdaily.com&quot;</span>
+<span class="pre">`</span></code></p></li>
+<li><p><strong>Install the required dependencies</strong>:
+<code class="docutils literal notranslate"><span class="pre">`bash</span>
+<span class="pre">#</span> <span class="pre">For</span> <span class="pre">all</span> <span class="pre">examples</span>
+<span class="pre">pip</span> <span class="pre">install</span> <span class="pre">earthdaily[platform,legacy]</span>
+<span class="pre">`</span></code></p></li>
+<li><p><strong>Run an example</strong>:
+<code class="docutils literal notranslate"><span class="pre">`bash</span>
+<span class="pre">python</span> <span class="pre">quick_start.py</span>
+<span class="pre">`</span></code></p></li>
+</ol>
+<p>Each example includes interactive demos and detailed explanations to help you understand the EarthDaily Python client capabilities.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to use the EarthDaily Python client v1 to search for and work with STAC items."><img alt="" src="../_images/sphx_glr_quick_start_thumb.png" />
+<p><a class="reference internal" href="quick_start.html#sphx-glr-auto-examples-quick-start-py"><span class="std std-ref">Quick Start Example</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Quick Start Example</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to create datacubes using the EarthDaily Python client v1 with the legacy API for backward compatibility."><img alt="" src="../_images/sphx_glr_datacube_example_thumb.png" />
+<p><a class="reference internal" href="datacube_example.html#sphx-glr-auto-examples-datacube-example-py"><span class="std std-ref">Datacube Creation Example</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Datacube Creation Example</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to use the EarthDaily Python client v1 to perform bulk search operations for large-scale data discovery and download."><img alt="" src="../_images/sphx_glr_bulk_search_example_thumb.png" />
+<p><a class="reference internal" href="bulk_search_example.html#sphx-glr-auto-examples-bulk-search-example-py"><span class="std std-ref">Bulk Search Example</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Bulk Search Example</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to use the EarthDaily Python client v1 to download assets from STAC items."><img alt="" src="../_images/sphx_glr_asset_download_example_thumb.png" />
+<p><a class="reference internal" href="asset_download_example.html#sphx-glr-auto-examples-asset-download-example-py"><span class="std std-ref">Asset Download Example</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Asset Download Example</div>
+</div></div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/8845d11ecb15bc8f327918febd001c4d/_auto_examples_python.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">_auto_examples_python.zip</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/225d151ea821367300a1321f418806af/_auto_examples_jupyter.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">_auto_examples_jupyter.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
+      <dd><a href="../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

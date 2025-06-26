@@ -1,0 +1,26 @@
+earthdaily.Authentication
+=========================
+
+.. currentmodule:: earthdaily
+
+.. autoclass:: Authentication
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~Authentication.authenticate
+      ~Authentication.get_token
+   
+   
+
+   
+   
+   

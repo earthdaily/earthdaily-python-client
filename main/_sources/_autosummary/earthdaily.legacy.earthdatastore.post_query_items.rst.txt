@@ -1,0 +1,6 @@
+earthdaily.legacy.earthdatastore.post\_query\_items
+===================================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore
+
+.. autofunction:: post_query_items

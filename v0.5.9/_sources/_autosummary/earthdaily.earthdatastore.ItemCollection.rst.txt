@@ -1,0 +1,37 @@
+earthdaily.earthdatastore.ItemCollection
+========================================
+
+.. currentmodule:: earthdaily.earthdatastore
+
+.. autoclass:: ItemCollection
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~ItemCollection.clone
+      ~ItemCollection.from_dict
+      ~ItemCollection.from_file
+      ~ItemCollection.is_item_collection
+      ~ItemCollection.save_object
+      ~ItemCollection.to_dict
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ItemCollection.items
+      ~ItemCollection.extra_fields
+   
+   

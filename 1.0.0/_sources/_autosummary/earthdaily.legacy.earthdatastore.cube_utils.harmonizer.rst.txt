@@ -1,4 +1,4 @@
-earthdaily.legacy.earthdatastore.cube\_utils.harmonizer
+﻿earthdaily.legacy.earthdatastore.cube\_utils.harmonizer
 =======================================================
 
 .. automodule:: earthdaily.legacy.earthdatastore.cube_utils.harmonizer
@@ -21,6 +21,7 @@ earthdaily.legacy.earthdatastore.cube\_utils.harmonizer
       :nosignatures:
    
       Harmonizer
+      datetime
    
    
 

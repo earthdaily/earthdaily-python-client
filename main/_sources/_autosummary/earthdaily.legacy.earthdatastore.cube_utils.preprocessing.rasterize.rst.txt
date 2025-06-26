@@ -1,0 +1,6 @@
+earthdaily.legacy.earthdatastore.cube\_utils.preprocessing.rasterize
+====================================================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore.cube_utils.preprocessing
+
+.. autofunction:: rasterize

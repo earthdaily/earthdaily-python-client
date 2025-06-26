@@ -1,0 +1,28 @@
+earthdaily.platform.BulkInsertService
+=====================================
+
+.. currentmodule:: earthdaily.platform
+
+.. autoclass:: BulkInsertService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~BulkInsertService.create
+      ~BulkInsertService.fetch
+      ~BulkInsertService.start
+      ~BulkInsertService.zip_dir
+   
+   
+
+   
+   
+   

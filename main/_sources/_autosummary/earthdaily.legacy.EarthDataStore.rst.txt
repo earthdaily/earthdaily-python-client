@@ -1,0 +1,73 @@
+earthdaily.legacy.earthdatastore
+================================
+
+.. automodule:: earthdaily.legacy.earthdatastore
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      apply_single_condition
+      datacube
+      enhance_assets
+      filter_items
+      metacube
+      parallel_search
+      post_query_items
+      validate_property_condition
+   .. automodule:: earthdaily.legacy.earthdatastore
+      :members:
+      :exclude-members: APIRequester, Any, Auth, Client, ItemCollection, Retry, StacApiIO, StacCollectionExplorer, NoItemsFoundError
+      :undoc-members:
+      :noindex:
+   
+   
+   
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      APIRequester
+      Any
+      Auth
+      Client
+      ItemCollection
+      Retry
+      StacApiIO
+      StacCollectionExplorer
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      NoItemsFoundError
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   cube_utils
+   mask
+

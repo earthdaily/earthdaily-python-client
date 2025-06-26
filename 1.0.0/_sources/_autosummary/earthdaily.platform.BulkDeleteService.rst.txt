@@ -1,0 +1,28 @@
+earthdaily.platform.BulkDeleteService
+=====================================
+
+.. currentmodule:: earthdaily.platform
+
+.. autoclass:: BulkDeleteService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~BulkDeleteService.create
+      ~BulkDeleteService.fetch
+      ~BulkDeleteService.start
+      ~BulkDeleteService.zip_dir
+   
+   
+
+   
+   
+   

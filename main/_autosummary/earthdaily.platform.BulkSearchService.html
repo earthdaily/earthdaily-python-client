@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.platform.BulkSearchService &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="earthdaily.platform.Client" href="earthdaily.platform.Client.html" />
+    <link rel="prev" title="earthdaily.platform.BulkInsertService" href="earthdaily.platform.BulkInsertService.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.version.html">earthdaily.version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.APIRequester.html">earthdaily.APIRequester</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.Authentication.html">earthdaily.Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.EDSClient.html">earthdaily.EDSClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.EDSConfig.html">earthdaily.EDSConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPClient.html">earthdaily.HTTPClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPRequest.html">earthdaily.HTTPRequest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPResponse.html">earthdaily.HTTPResponse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.PackageNotFoundError.html">earthdaily.PackageNotFoundError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.Authentication"><code class="docutils literal notranslate"><span class="pre">Authentication</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.APIRequester"><code class="docutils literal notranslate"><span class="pre">APIRequester</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPClient"><code class="docutils literal notranslate"><span class="pre">HTTPClient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPRequest"><code class="docutils literal notranslate"><span class="pre">HTTPRequest</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPResponse"><code class="docutils literal notranslate"><span class="pre">HTTPResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.EDSClient"><code class="docutils literal notranslate"><span class="pre">EDSClient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.EDSConfig"><code class="docutils literal notranslate"><span class="pre">EDSConfig</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.exceptions.html">earthdaily.exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.legacy.html">earthdaily.legacy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="earthdaily.platform.html">earthdaily.platform</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.APIRequester.html">earthdaily.platform.APIRequester</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.AssetAccessMode.html">earthdaily.platform.AssetAccessMode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.BulkDeleteService.html">earthdaily.platform.BulkDeleteService</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.BulkInsertService.html">earthdaily.platform.BulkInsertService</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">earthdaily.platform.BulkSearchService</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.platform.BulkSearchService"><code class="docutils literal notranslate"><span class="pre">BulkSearchService</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.Client.html">earthdaily.platform.Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.PlatformService.html">earthdaily.platform.PlatformService</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.StacApiIO.html">earthdaily.platform.StacApiIO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.StacItemService.html">earthdaily.platform.StacItemService</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.html#earthdaily.platform.PlatformService"><code class="docutils literal notranslate"><span class="pre">PlatformService</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.platform.models.html">earthdaily.platform.models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.platform.html">earthdaily.platform</a></li>
+      <li class="breadcrumb-item active">earthdaily.platform.BulkSearchService</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/earthdaily.platform.BulkSearchService.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="earthdaily-platform-bulksearchservice">
+<h1>earthdaily.platform.BulkSearchService<a class="headerlink" href="#earthdaily-platform-bulksearchservice" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="earthdaily.platform.BulkSearchService">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">earthdaily.platform.</span></span><span class="sig-name descname"><span class="pre">BulkSearchService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_requester</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/platform/_bulk_search.html#BulkSearchService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.platform.BulkSearchService" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Service for managing bulk search operations in the Earth Data Store.</p>
+<p>This class provides methods to create, monitor, and download results from
+bulk search operations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.platform.BulkSearchService.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/platform/_bulk_search.html#BulkSearchService.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.platform.BulkSearchService.create" title="Link to this definition"></a></dt>
+<dd><p>Initiates a new bulk search request.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.platform.BulkSearchService.fetch">
+<span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/platform/_bulk_search.html#BulkSearchService.fetch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.platform.BulkSearchService.fetch" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the current status of a bulk search job.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.platform.BulkSearchService.download_bulk_read_assets">
+<span class="sig-name descname"><span class="pre">download_bulk_read_assets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BulkSearchJob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="earthdaily.legacy.utils.copy_credentials_template.Path.html#earthdaily.legacy.utils.copy_credentials_template.Path" title="earthdaily.legacy.utils.copy_credentials_template.Path"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/platform/_bulk_search.html#BulkSearchService.download_bulk_read_assets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.platform.BulkSearchService.download_bulk_read_assets" title="Link to this definition"></a></dt>
+<dd><p>Downloads assets from a completed bulk search job.</p>
+</dd></dl>
+
+<p>Initialize the BulkReadService.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>api_requester<span class="classifier">APIRequester</span></dt><dd><p>An instance of APIRequester used to send HTTP requests to the EDS API.</p>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id0" title="earthdaily.platform.BulkSearchService.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a></p></td>
+<td><p>Create a new bulk search request in the Earth Data Store.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id4" title="earthdaily.platform.BulkSearchService.download_bulk_read_assets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download_bulk_read_assets</span></code></a></p></td>
+<td><p>Download assets associated with a completed bulk read job.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id2" title="earthdaily.platform.BulkSearchService.fetch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch</span></code></a></p></td>
+<td><p>Get the status of a bulk read job and optionally download assets if the job is completed.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intersects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_lang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sortby</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/platform/_bulk_search.html#BulkSearchService.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Create a new bulk search request in the Earth Data Store.</p>
+<p>This method initiates a new asynchronous bulk search operation based on the
+provided parameters. It returns a response containing a job ID that can be
+used to track the progress of the search and retrieve results.</p>
+<section id="id1">
+<h3>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>collections: Optional[List[Union[str, Any]]]</dt><dd><p>List of one or more Collection IDs or pystac.Collection instances.</p>
+</dd>
+<dt>export_format: Optional[str]</dt><dd><p>The format to export the results in.</p>
+</dd>
+<dt>limit: int</dt><dd><p>A recommendation to the service as to the number of items to return
+per page of results. Defaults to 100.</p>
+</dd>
+<dt>ids: Optional[List[str]]</dt><dd><p>List of one or more Item ids to filter on.</p>
+</dd>
+<dt>bbox: Optional[Union[List[float], tuple, Any]]</dt><dd><p>A list, tuple, or iterator representing a bounding box of 2D
+or 3D coordinates. Results will be filtered to only those
+intersecting the bounding box.</p>
+</dd>
+<dt>intersects: Optional[Union[str, Dict[str, Any]]]</dt><dd><p>A string or dictionary representing a GeoJSON geometry or feature,
+or an object that implements a __geo_interface__ property.</p>
+</dd>
+<dt>datetime: Optional[str]</dt><dd><p>Either a single datetime or datetime range used to filter results.
+Can be a datetime string, a datetime object, or a range string.</p>
+</dd>
+<dt>query: Optional[Union[List[Any], Dict[str, Any]]]</dt><dd><p>List or JSON of query parameters as per the STAC API query extension.</p>
+</dd>
+<dt>filter: Optional[Dict[str, Any]]</dt><dd><p>JSON of query parameters as per the STAC API filter extension.</p>
+</dd>
+<dt>filter_lang: Optional[str]</dt><dd><p>Language variant used in the filter body.</p>
+</dd>
+<dt>sortby: Optional[Union[str, List[str]]]</dt><dd><p>A single field or list of fields to sort the response by.</p>
+</dd>
+<dt>fields: Optional[List[str]]</dt><dd><p>A list of fields to include in the response.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Object containing the job_id for the created bulk search request.</p>
+</dd>
+<dt class="field-even">rtype<span class="colon">:</span></dt>
+<dd class="field-even"><p>BulkSearchCreateResponse</p>
+</dd>
+<dt class="field-odd">raises EDSAPIError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the API returns an error response</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/platform/_bulk_search.html#BulkSearchService.fetch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Get the status of a bulk read job and optionally download assets if the job is completed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">BulkSearchJob</span></code></span></p>
+</dd>
+</dl>
+<section id="id3">
+<h3>Parameters:<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>job_id<span class="classifier">str</span></dt><dd><p>The ID of the bulk read job to check.</p>
+</dd>
+<dt>download_assets<span class="classifier">bool, optional</span></dt><dd><p>Whether to download the assets once the job is completed. Defaults to False.</p>
+</dd>
+<dt>save_location<span class="classifier">Optional[Path], optional</span></dt><dd><p>Path to the directory where assets will be saved if download_assets is True. Defaults to None.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<p>:
+JobStatusResponse</p>
+<blockquote>
+<div><p>Object containing the status of the bulk read job.</p>
+</div></blockquote>
+</section>
+<section id="raises">
+<h3>Raises:<a class="headerlink" href="#raises" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If download_assets is True and save_location is not provided.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">download_bulk_read_assets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_location</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/platform/_bulk_search.html#BulkSearchService.download_bulk_read_assets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Download assets associated with a completed bulk read job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<section id="id5">
+<h3>Raises:<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If the job is not completed or no assets are available.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="earthdaily.platform.BulkInsertService.html" class="btn btn-neutral float-left" title="earthdaily.platform.BulkInsertService" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.platform.Client.html" class="btn btn-neutral float-right" title="earthdaily.platform.Client" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
+      <dd><a href="../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="earthdaily.platform.BulkSearchService.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

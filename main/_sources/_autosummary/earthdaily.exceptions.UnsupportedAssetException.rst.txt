@@ -1,0 +1,6 @@
+earthdaily.exceptions.UnsupportedAssetException
+===============================================
+
+.. currentmodule:: earthdaily.exceptions
+
+.. autoexception:: UnsupportedAssetException

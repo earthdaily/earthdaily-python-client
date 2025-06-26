@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily._eds_config &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">earthdaily._eds_config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for earthdaily._eds_config</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">configparser</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">toml</span>
+
+
+<div class="viewcode-block" id="AssetAccessMode">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.platform.AssetAccessMode.html#earthdaily.AssetAccessMode">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AssetAccessMode</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enum-like class to define asset access modes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RAW</span> <span class="o">=</span> <span class="s2">&quot;raw&quot;</span>
+    <span class="n">PRESIGNED_URLS</span> <span class="o">=</span> <span class="s2">&quot;presigned-urls&quot;</span>
+    <span class="n">PROXY_URLS</span> <span class="o">=</span> <span class="s2">&quot;proxy-urls&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="EDSConfig">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.EDSConfig.html#earthdaily.EDSConfig">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EDSConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Configuration class for the Earth Data Store (EDS) Client.</span>
+
+<span class="sd">    This class is responsible for holding configuration values needed to interact with the</span>
+<span class="sd">    Earth Data Store API, including authentication credentials, API endpoints, and the</span>
+<span class="sd">    authentication method. The configuration can be provided via input parameters or fetched</span>
+<span class="sd">    from environment variables.</span>
+
+<span class="sd">    The priority for each field is as follows:</span>
+<span class="sd">    1. If a parameter is passed during initialization, it is used.</span>
+<span class="sd">    2. If no parameter is provided, it falls back to an environment variable.</span>
+<span class="sd">    3. If neither is available (for required fields), it raises a ValueError.</span>
+
+<span class="sd">    Required Environment Variables (if not passed during initialization):</span>
+<span class="sd">    - `EDS_CLIENT_ID`: The client ID for authentication.</span>
+<span class="sd">    - `EDS_SECRET`: The client secret for authentication.</span>
+<span class="sd">    - `EDS_AUTH_URL`: The token URL used for retrieving the authentication token.</span>
+<span class="sd">    - `EDS_API_URL`: The URL used for interacting with the API&#39;s endpoints.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    client_id: str</span>
+<span class="sd">        The client ID for authentication. If not provided, it defaults to `EDS_CLIENT_ID` from environment variables.</span>
+<span class="sd">    client_secret: str</span>
+<span class="sd">        The client secret for authentication.</span>
+<span class="sd">        If not provided, it defaults to `EDS_SECRET` from environment variables.</span>
+<span class="sd">    token_url: str</span>
+<span class="sd">        The token URL to retrieve authentication tokens.</span>
+<span class="sd">        If not provided, it defaults to `EDS_AUTH_URL` from environment variables.</span>
+<span class="sd">    base_url: str, optional</span>
+<span class="sd">        The base URL for the Earth Data Store API. Defaults to &quot;https://api.earthdaily.com&quot;.</span>
+<span class="sd">    json_path: str, optional</span>
+<span class="sd">        The path to a JSON file containing configuration settings.</span>
+<span class="sd">    toml_path: str, optional</span>
+<span class="sd">        The path to a TOML file containing configuration settings.</span>
+<span class="sd">    ini_path: str, optional</span>
+<span class="sd">        The path to an INI file containing configuration settings.</span>
+<span class="sd">    bypass_auth: bool, optional</span>
+<span class="sd">        A flag indicating whether to bypass authentication. Defaults to False.</span>
+<span class="sd">    asset_access_mode: AssetAccessMode, optional</span>
+<span class="sd">        The mode of access for assets. Defaults to AssetAccessMode.PRESIGNED_URLS.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">    -------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If any of the required parameters (client_id, client_secret, token_url) are not provided either via input</span>
+<span class="sd">        or environment variables.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">client_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">client_secret</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">token_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">json_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_JSON_PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">toml_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_TOML_PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">ini_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_INI_PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">ini_profile</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EDS_INI_PROFILE&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">))</span>
+    <span class="n">bypass_auth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Platform specific configurations</span>
+    <span class="n">asset_access_mode</span><span class="p">:</span> <span class="n">AssetAccessMode</span> <span class="o">=</span> <span class="n">AssetAccessMode</span><span class="o">.</span><span class="n">PRESIGNED_URLS</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that required fields are provided and raise errors if not.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_path</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_config_from_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">toml_path</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_config_from_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toml_path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">ini_path</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_config_from_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ini_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;EDS_CLIENT_ID&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_secret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_secret</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;EDS_SECRET&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_url</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;EDS_AUTH_URL&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;EDS_API_URL&quot;</span><span class="p">,</span> <span class="s2">&quot;https://api.earthdaily.com&quot;</span><span class="p">)</span>
+        <span class="n">missing_fields</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bypass_auth</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_id</span><span class="p">:</span>
+                <span class="n">missing_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;client_id (or EDS_CLIENT_ID)&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_secret</span><span class="p">:</span>
+                <span class="n">missing_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;client_secret (or EDS_SECRET)&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_url</span><span class="p">:</span>
+                <span class="n">missing_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;token_url (or EDS_AUTH_URL)&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">missing_fields</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required fields: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_fields</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EDSConfig.load_config_from_file">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.EDSConfig.html#earthdaily.EDSConfig.load_config_from_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_config_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Configuration file &#39;</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&#39; does not exist.&quot;</span><span class="p">)</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.json&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.toml&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">toml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;.ini&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_credentials_from_ini</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ini_profile</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported config file type: &#39;</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&#39;. Use .json or .toml&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EDSConfig.read_credentials_from_ini">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.EDSConfig.html#earthdaily.EDSConfig.read_credentials_from_ini">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_credentials_from_ini</span><span class="p">(</span><span class="n">ini_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">profile</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read credentials from an INI file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ini_path : str</span>
+<span class="sd">            The path to the INI file containing credentials.</span>
+<span class="sd">        profile : str, optional</span>
+<span class="sd">            The profile section name to read from. Defaults to &#39;default&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary containing credentials with upper-cased keys.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        FileNotFoundError</span>
+<span class="sd">            If the INI file does not exist.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the specified profile is not found in the INI file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ini_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ini_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ini_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;INI config file not found at: </span><span class="si">{</span><span class="n">ini_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">config_parser</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">config_parser</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ini_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">profile</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config_parser</span><span class="p">:</span>
+            <span class="n">available</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config_parser</span><span class="o">.</span><span class="n">sections</span><span class="p">())</span> <span class="ow">or</span> <span class="s2">&quot;no profiles&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Profile &#39;</span><span class="si">{</span><span class="n">profile</span><span class="si">}</span><span class="s2">&#39; not found in INI file. Available profiles: </span><span class="si">{</span><span class="n">available</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">credentials</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">config_parser</span><span class="p">[</span><span class="n">profile</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="k">return</span> <span class="n">credentials</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="_eds_config.html">1.0.0</a></dd>
+      <dd><a href="../../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

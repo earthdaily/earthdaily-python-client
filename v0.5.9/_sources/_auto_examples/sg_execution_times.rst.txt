@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.155** total execution time for 6 files **from _auto_examples**:
+**00:00.000** total execution time for 6 files **from _auto_examples**:
 
 .. container::
 
@@ -32,21 +32,21 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr__auto_examples_compare_scale_s2.py` (``compare_scale_s2.py``)
-     - 00:00.138
-     - 0.0
    * - :ref:`sphx_glr__auto_examples_common_band_names.py` (``common_band_names.py``)
-     - 00:00.005
+     - 00:00.000
      - 0.0
-   * - :ref:`sphx_glr__auto_examples_first_steps_create_datacube.py` (``first_steps_create_datacube.py``)
-     - 00:00.005
+   * - :ref:`sphx_glr__auto_examples_compare_scale_s2.py` (``compare_scale_s2.py``)
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr__auto_examples_field_evolution.py` (``field_evolution.py``)
-     - 00:00.004
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr__auto_examples_first_steps_create_datacube.py` (``first_steps_create_datacube.py``)
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr__auto_examples_multisensors_cube.py` (``multisensors_cube.py``)
-     - 00:00.002
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr__auto_examples_summary_stack.py` (``summary_stack.py``)
-     - 00:00.001
+     - 00:00.000
      - 0.0

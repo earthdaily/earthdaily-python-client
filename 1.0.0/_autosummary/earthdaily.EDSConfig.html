@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.EDSConfig &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="earthdaily.HTTPClient" href="earthdaily.HTTPClient.html" />
+    <link rel="prev" title="earthdaily.EDSClient" href="earthdaily.EDSClient.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.version.html">earthdaily.version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.APIRequester.html">earthdaily.APIRequester</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.Authentication.html">earthdaily.Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.EDSClient.html">earthdaily.EDSClient</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">earthdaily.EDSConfig</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#earthdaily.EDSConfig"><code class="docutils literal notranslate"><span class="pre">EDSConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.client_id"><code class="docutils literal notranslate"><span class="pre">EDSConfig.client_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.client_secret"><code class="docutils literal notranslate"><span class="pre">EDSConfig.client_secret</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.token_url"><code class="docutils literal notranslate"><span class="pre">EDSConfig.token_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.base_url"><code class="docutils literal notranslate"><span class="pre">EDSConfig.base_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.json_path"><code class="docutils literal notranslate"><span class="pre">EDSConfig.json_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.toml_path"><code class="docutils literal notranslate"><span class="pre">EDSConfig.toml_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.ini_path"><code class="docutils literal notranslate"><span class="pre">EDSConfig.ini_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.ini_profile"><code class="docutils literal notranslate"><span class="pre">EDSConfig.ini_profile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.bypass_auth"><code class="docutils literal notranslate"><span class="pre">EDSConfig.bypass_auth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.asset_access_mode"><code class="docutils literal notranslate"><span class="pre">EDSConfig.asset_access_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.load_config_from_file"><code class="docutils literal notranslate"><span class="pre">EDSConfig.load_config_from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.EDSConfig.read_credentials_from_ini"><code class="docutils literal notranslate"><span class="pre">EDSConfig.read_credentials_from_ini()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPClient.html">earthdaily.HTTPClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPRequest.html">earthdaily.HTTPRequest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPResponse.html">earthdaily.HTTPResponse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.PackageNotFoundError.html">earthdaily.PackageNotFoundError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.Authentication"><code class="docutils literal notranslate"><span class="pre">Authentication</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.APIRequester"><code class="docutils literal notranslate"><span class="pre">APIRequester</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPClient"><code class="docutils literal notranslate"><span class="pre">HTTPClient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPRequest"><code class="docutils literal notranslate"><span class="pre">HTTPRequest</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPResponse"><code class="docutils literal notranslate"><span class="pre">HTTPResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.EDSClient"><code class="docutils literal notranslate"><span class="pre">EDSClient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.EDSConfig"><code class="docutils literal notranslate"><span class="pre">EDSConfig</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.exceptions.html">earthdaily.exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.legacy.html">earthdaily.legacy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.platform.html">earthdaily.platform</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.html">earthdaily</a></li>
+      <li class="breadcrumb-item active">earthdaily.EDSConfig</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/earthdaily.EDSConfig.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="earthdaily-edsconfig">
+<h1>earthdaily.EDSConfig<a class="headerlink" href="#earthdaily-edsconfig" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">earthdaily.</span></span><span class="sig-name descname"><span class="pre">EDSConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_url=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_path=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_path=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ini_path=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ini_profile=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bypass_auth=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_access_mode=AssetAccessMode.PRESIGNED_URLS</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/_eds_config.html#EDSConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.EDSConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Configuration class for the Earth Data Store (EDS) Client.</p>
+<p>This class is responsible for holding configuration values needed to interact with the
+Earth Data Store API, including authentication credentials, API endpoints, and the
+authentication method. The configuration can be provided via input parameters or fetched
+from environment variables.</p>
+<p>The priority for each field is as follows:
+1. If a parameter is passed during initialization, it is used.
+2. If no parameter is provided, it falls back to an environment variable.
+3. If neither is available (for required fields), it raises a ValueError.</p>
+<p>Required Environment Variables (if not passed during initialization):
+- <cite>EDS_CLIENT_ID</cite>: The client ID for authentication.
+- <cite>EDS_SECRET</cite>: The client secret for authentication.
+- <cite>EDS_AUTH_URL</cite>: The token URL used for retrieving the authentication token.
+- <cite>EDS_API_URL</cite>: The URL used for interacting with the API’s endpoints.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>client_id: str</dt><dd><p>The client ID for authentication. If not provided, it defaults to <cite>EDS_CLIENT_ID</cite> from environment variables.</p>
+</dd>
+<dt>client_secret: str</dt><dd><p>The client secret for authentication.
+If not provided, it defaults to <cite>EDS_SECRET</cite> from environment variables.</p>
+</dd>
+<dt>token_url: str</dt><dd><p>The token URL to retrieve authentication tokens.
+If not provided, it defaults to <cite>EDS_AUTH_URL</cite> from environment variables.</p>
+</dd>
+<dt>base_url: str, optional</dt><dd><p>The base URL for the Earth Data Store API. Defaults to “<a class="reference external" href="https://api.earthdaily.com">https://api.earthdaily.com</a>”.</p>
+</dd>
+<dt>json_path: str, optional</dt><dd><p>The path to a JSON file containing configuration settings.</p>
+</dd>
+<dt>toml_path: str, optional</dt><dd><p>The path to a TOML file containing configuration settings.</p>
+</dd>
+<dt>ini_path: str, optional</dt><dd><p>The path to an INI file containing configuration settings.</p>
+</dd>
+<dt>bypass_auth: bool, optional</dt><dd><p>A flag indicating whether to bypass authentication. Defaults to False.</p>
+</dd>
+<dt>asset_access_mode: AssetAccessMode, optional</dt><dd><p>The mode of access for assets. Defaults to AssetAccessMode.PRESIGNED_URLS.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h2>Raises:<a class="headerlink" href="#raises" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If any of the required parameters (client_id, client_secret, token_url) are not provided either via input
+or environment variables.</p>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.load_config_from_file" title="earthdaily.EDSConfig.load_config_from_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_config_from_file</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.read_credentials_from_ini" title="earthdaily.EDSConfig.read_credentials_from_ini"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_credentials_from_ini</span></code></a></p></td>
+<td><p>Read credentials from an INI file.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.asset_access_mode" title="earthdaily.EDSConfig.asset_access_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">asset_access_mode</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.base_url" title="earthdaily.EDSConfig.base_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base_url</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.bypass_auth" title="earthdaily.EDSConfig.bypass_auth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bypass_auth</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.client_id" title="earthdaily.EDSConfig.client_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">client_id</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.client_secret" title="earthdaily.EDSConfig.client_secret"><code class="xref py py-obj docutils literal notranslate"><span class="pre">client_secret</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.token_url" title="earthdaily.EDSConfig.token_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">token_url</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.json_path" title="earthdaily.EDSConfig.json_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">json_path</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.toml_path" title="earthdaily.EDSConfig.toml_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toml_path</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.ini_path" title="earthdaily.EDSConfig.ini_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ini_path</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.EDSConfig.ini_profile" title="earthdaily.EDSConfig.ini_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ini_profile</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.client_id">
+<span class="sig-name descname"><span class="pre">client_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#earthdaily.EDSConfig.client_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.client_secret">
+<span class="sig-name descname"><span class="pre">client_secret</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#earthdaily.EDSConfig.client_secret" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.token_url">
+<span class="sig-name descname"><span class="pre">token_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#earthdaily.EDSConfig.token_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.base_url">
+<span class="sig-name descname"><span class="pre">base_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#earthdaily.EDSConfig.base_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.json_path">
+<span class="sig-name descname"><span class="pre">json_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#earthdaily.EDSConfig.json_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.toml_path">
+<span class="sig-name descname"><span class="pre">toml_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#earthdaily.EDSConfig.toml_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.ini_path">
+<span class="sig-name descname"><span class="pre">ini_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#earthdaily.EDSConfig.ini_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.ini_profile">
+<span class="sig-name descname"><span class="pre">ini_profile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#earthdaily.EDSConfig.ini_profile" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.bypass_auth">
+<span class="sig-name descname"><span class="pre">bypass_auth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#earthdaily.EDSConfig.bypass_auth" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.asset_access_mode">
+<span class="sig-name descname"><span class="pre">asset_access_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="earthdaily.platform.AssetAccessMode.html#earthdaily.platform.AssetAccessMode" title="earthdaily._eds_config.AssetAccessMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssetAccessMode</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'presigned-urls'</span></em><a class="headerlink" href="#earthdaily.EDSConfig.asset_access_mode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.load_config_from_file">
+<span class="sig-name descname"><span class="pre">load_config_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/_eds_config.html#EDSConfig.load_config_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.EDSConfig.load_config_from_file" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.EDSConfig.read_credentials_from_ini">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials_from_ini</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ini_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/_eds_config.html#EDSConfig.read_credentials_from_ini"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.EDSConfig.read_credentials_from_ini" title="Link to this definition"></a></dt>
+<dd><p>Read credentials from an INI file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ini_path</strong> (<em>str</em>) – The path to the INI file containing credentials.</p></li>
+<li><p><strong>profile</strong> (<em>str</em><em>, </em><em>optional</em>) – The profile section name to read from. Defaults to ‘default’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing credentials with upper-cased keys.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If the INI file does not exist.</p></li>
+<li><p><strong>ValueError</strong> – If the specified profile is not found in the INI file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="earthdaily.EDSClient.html" class="btn btn-neutral float-left" title="earthdaily.EDSClient" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.HTTPClient.html" class="btn btn-neutral float-right" title="earthdaily.HTTPClient" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="earthdaily.EDSConfig.html">1.0.0</a></dd>
+      <dd><a href="../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

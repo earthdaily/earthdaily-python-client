@@ -42,12 +42,6 @@ Import librairies
     from earthdaily import EarthDataStore, datasets
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 22-23
 
 Loading geometry
@@ -58,12 +52,6 @@ Loading geometry
 
 
     geometry = datasets.load_pivot()
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 27-29
@@ -77,28 +65,6 @@ Init earthdatastore with environment variables or default credentials
 
 
     eds = EarthDataStore()
-
-
-
-.. rst-class:: sphx-glr-script-out
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/examples/first_steps_create_datacube.py", line 30, in <module>
-        eds = EarthDataStore()
-              ^^^^^^^^^^^^^^^^
-      File "/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/__init__.py", line 51, in EarthDataStore
-        return earthdatastore.Auth.from_credentials(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      File "/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/earthdatastore/__init__.py", line 464, in from_credentials
-        config = cls.read_credentials(
-                 ^^^^^^^^^^^^^^^^^^^^^
-      File "/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/earthdatastore/__init__.py", line 529, in read_credentials
-        raise NotImplementedError("Credentials weren't found.")
-    NotImplementedError: Credentials weren't found.
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 33-35
@@ -183,11 +149,6 @@ Mask datacube
     )  # at least 50% of clear pixels
     #
     s2_datacube.ed.plot_rgb(vmin=0, vmax=0.2, col="time", col_wrap=4)
-
-
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** (0 minutes 0.005 seconds)
 
 
 .. _sphx_glr_download__auto_examples_first_steps_create_datacube.py:

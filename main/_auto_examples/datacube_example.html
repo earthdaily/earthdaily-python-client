@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datacube Creation Example &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Datacube Creation Example</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_auto_examples/datacube_example.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-datacube-example-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="datacube-creation-example">
+<span id="sphx-glr-auto-examples-datacube-example-py"></span><h1>Datacube Creation Example<a class="headerlink" href="#datacube-creation-example" title="Link to this heading"></a></h1>
+<p>This example demonstrates how to create datacubes using the EarthDaily Python client v1
+with the legacy API for backward compatibility.</p>
+<p>Features demonstrated:
+- Using the legacy API for v0.x compatibility
+- Loading sample geometries
+- Creating datacubes with various parameters
+- Working with masking and cloud filtering
+- Basic datacube operations</p>
+<p>Requirements:
+- Set your EDS credentials as environment variables or in a .env file
+- Install with legacy support: pip install earthdaily[legacy]</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="c1"># Load environment variables from .env file</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+
+    <span class="n">load_dotenv</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;💡 Consider installing python-dotenv to automatically load .env files:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   pip install python-dotenv&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSClient</span><span class="p">,</span> <span class="n">EDSConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSAPIError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.legacy</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span>
+
+<span class="c1"># Suppress warnings for cleaner output</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">initialize_client</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the EarthDaily API client.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🚀 Initializing EarthDaily Client with legacy support...&quot;</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">EDSConfig</span><span class="p">()</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">EDSClient</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Client initialized successfully!&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">client</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_sample_geometry</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a sample geometry for testing.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📍 Loading sample pivot geometry...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Load the built-in pivot geometry</span>
+    <span class="n">pivot</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_pivot</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Try to access geometry attributes</span>
+        <span class="n">geom_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pivot</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pivot</span><span class="p">,</span> <span class="s2">&quot;total_bounds&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">geom_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Geometry type: </span><span class="si">{</span><span class="n">geom_type</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">geom_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Bounds: </span><span class="si">{</span><span class="n">bounds</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Sample geometry loaded&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Sample geometry loaded&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pivot</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_basic_datacube</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">geometry</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a basic datacube with Sentinel-2 data.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🔍 Creating basic Sentinel-2 datacube...&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">datacube</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">legacy</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
+            <span class="n">collections</span><span class="o">=</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span>
+            <span class="n">intersects</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span>
+            <span class="n">datetime</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2023-06-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-08-01&quot;</span><span class="p">],</span>  <span class="c1"># Summer months</span>
+            <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;nir&quot;</span><span class="p">],</span>
+            <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Convert to reflectance values</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Datacube created successfully!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Shape: </span><span class="si">{</span><span class="n">datacube</span><span class="o">.</span><span class="n">sizes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Variables: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">datacube</span><span class="o">.</span><span class="n">data_vars</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Time range: </span><span class="si">{</span><span class="n">datacube</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">datacube</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Coordinate system: </span><span class="si">{</span><span class="n">datacube</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">crs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Spatial resolution: </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">datacube</span><span class="o">.</span><span class="n">rio</span><span class="o">.</span><span class="n">resolution</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">m&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">datacube</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error creating basic datacube: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_masked_datacube</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">geometry</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a datacube with cloud masking.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">☁️ Creating cloud-masked datacube...&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">datacube</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">legacy</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
+            <span class="n">collections</span><span class="o">=</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span>
+            <span class="n">intersects</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span>
+            <span class="n">datetime</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2023-06-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-08-01&quot;</span><span class="p">],</span>
+            <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;nir&quot;</span><span class="p">],</span>
+            <span class="n">mask_with</span><span class="o">=</span><span class="s2">&quot;native&quot;</span><span class="p">,</span>  <span class="c1"># Use native SCL mask</span>
+            <span class="n">clear_cover</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>  <span class="c1"># Require at least 30% clear pixels</span>
+            <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Masked datacube created successfully!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Shape: </span><span class="si">{</span><span class="n">datacube</span><span class="o">.</span><span class="n">sizes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Variables: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">datacube</span><span class="o">.</span><span class="n">data_vars</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Clear pixel percentages: </span><span class="si">{</span><span class="n">datacube</span><span class="o">.</span><span class="n">clear_percent</span><span class="o">.</span><span class="n">values</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">datacube</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error creating masked datacube: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_datacube</span><span class="p">(</span><span class="n">datacube</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;datacube&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform basic analysis on a datacube.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">datacube</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📊 Analyzing </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Calculate NDVI</span>
+    <span class="k">if</span> <span class="s2">&quot;red&quot;</span> <span class="ow">in</span> <span class="n">datacube</span><span class="o">.</span><span class="n">data_vars</span> <span class="ow">and</span> <span class="s2">&quot;nir&quot;</span> <span class="ow">in</span> <span class="n">datacube</span><span class="o">.</span><span class="n">data_vars</span><span class="p">:</span>
+        <span class="n">ndvi</span> <span class="o">=</span> <span class="p">(</span><span class="n">datacube</span><span class="o">.</span><span class="n">nir</span> <span class="o">-</span> <span class="n">datacube</span><span class="o">.</span><span class="n">red</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">datacube</span><span class="o">.</span><span class="n">nir</span> <span class="o">+</span> <span class="n">datacube</span><span class="o">.</span><span class="n">red</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   NDVI range: </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">ndvi</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">ndvi</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Mean NDVI: </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">ndvi</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Show temporal information</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">datacube</span><span class="o">.</span><span class="n">time</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Number of time steps: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">datacube</span><span class="o">.</span><span class="n">time</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Calculate time resolution in days</span>
+        <span class="n">time_diff</span> <span class="o">=</span> <span class="n">datacube</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">datacube</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">days</span> <span class="o">=</span> <span class="n">time_diff</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;timedelta64[D]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Time resolution: ~</span><span class="si">{</span><span class="n">days</span><span class="si">}</span><span class="s2"> days&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Show spatial information</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Spatial dimensions: </span><span class="si">{</span><span class="n">datacube</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="n">datacube</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Total pixels per time step: </span><span class="si">{</span><span class="n">datacube</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">datacube</span><span class="o">.</span><span class="n">sizes</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">demonstrate_search_functionality</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">geometry</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate the search functionality without creating a datacube.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🔍 Demonstrating search functionality...&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Search for items</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">legacy</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="n">collections</span><span class="o">=</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span>
+            <span class="n">intersects</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span>
+            <span class="n">datetime</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2023-07-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-07-31&quot;</span><span class="p">],</span>
+            <span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;eo:cloud_cover&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lt&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}},</span>  <span class="c1"># Low cloud cover</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items with &lt;20% cloud cover&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Show details of first few items</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">[:</span><span class="mi">3</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      Date: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">datetime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      Cloud cover: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;eo:cloud_cover&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;N/A&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">items</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error in search: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main function to demonstrate datacube creation workflows.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Initialize client</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">initialize_client</span><span class="p">()</span>
+
+        <span class="c1"># Load sample geometry</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="n">load_sample_geometry</span><span class="p">()</span>
+
+        <span class="c1"># Demonstrate search functionality</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">demonstrate_search_functionality</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">geometry</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✅ Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> suitable items. Proceeding with datacube creation...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Create basic datacube</span>
+            <span class="n">basic_cube</span> <span class="o">=</span> <span class="n">create_basic_datacube</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">geometry</span><span class="p">)</span>
+            <span class="n">analyze_datacube</span><span class="p">(</span><span class="n">basic_cube</span><span class="p">,</span> <span class="s2">&quot;basic datacube&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Create masked datacube</span>
+            <span class="n">masked_cube</span> <span class="o">=</span> <span class="n">create_masked_datacube</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">geometry</span><span class="p">)</span>
+            <span class="n">analyze_datacube</span><span class="p">(</span><span class="n">masked_cube</span><span class="p">,</span> <span class="s2">&quot;masked datacube&quot;</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✨ Datacube example completed successfully!&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;💡 Next steps:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - Try different collections (sentinel-1-rtc, landsat-c2l2-sr)&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - Experiment with different time periods&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - Use your own geometries&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - Calculate vegetation indices or other analytics&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">❌ No suitable items found for the specified criteria.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;💡 Try adjusting the date range or cloud cover threshold.&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">EDSAPIError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">❌ API Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Status Code: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">❌ Import Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;💡 Make sure to install with legacy support:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   pip install earthdaily[legacy]&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💥 Unexpected error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💡 Make sure you have set your EDS credentials as environment variables:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-datacube-example-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/3e8add34b15b8262c09769ff82f90e07/datacube_example.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">datacube_example.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/2201d07442ae3b1634c9995ac8636eee/datacube_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">datacube_example.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/0ef8d2127c227af3a4c736aab7c5981b/datacube_example.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">datacube_example.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
+      <dd><a href="../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="datacube_example.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

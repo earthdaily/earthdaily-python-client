@@ -17,13 +17,23 @@ earthdaily.accessor
       xr_loop_func
    .. automodule:: earthdaily.accessor
       :members:
-      :exclude-members: 
+      :exclude-members: GeometryManager, Point, 
       :undoc-members:
       :noindex:
    
    
    
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      GeometryManager
+      Point
    
    
 

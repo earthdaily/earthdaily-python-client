@@ -142,21 +142,6 @@ to download the full example code.</p>
 <span class="n">cross_calibration_collection</span> <span class="o">=</span> <span class="s2">&quot;sentinel-2-l2a&quot;</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/examples/multisensors_cube.py&quot;</span>, line <span class="m">24</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">()</span>
-<span class="w">          </span><span class="pm">^^^^^^^^^^^^^^^^</span>
-  File <span class="nb">&quot;/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/__init__.py&quot;</span>, line <span class="m">51</span>, in <span class="n">EarthDataStore</span>
-<span class="w">    </span><span class="k">return</span> <span class="n">earthdatastore</span><span class="o">.</span><span class="n">Auth</span><span class="o">.</span><span class="n">from_credentials</span><span class="p">(</span>
-<span class="w">           </span><span class="pm">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
-  File <span class="nb">&quot;/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/earthdatastore/__init__.py&quot;</span>, line <span class="m">464</span>, in <span class="n">from_credentials</span>
-<span class="w">    </span><span class="n">config</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_credentials</span><span class="p">(</span>
-<span class="w">             </span><span class="pm">^^^^^^^^^^^^^^^^^^^^^</span>
-  File <span class="nb">&quot;/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/earthdatastore/__init__.py&quot;</span>, line <span class="m">529</span>, in <span class="n">read_credentials</span>
-<span class="w">    </span><span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Credentials weren&#39;t found.&quot;</span><span class="p">)</span>
-<span class="gr">NotImplementedError</span>: <span class="n">Credentials weren&#39;t found.</span>
-</pre></div>
-</div>
 </section>
 <section id="create-the-multisensors-datacube">
 <h2>Create the multisensors datacube<a class="headerlink" href="#create-the-multisensors-datacube" title="Link to this heading"></a></h2>
@@ -199,7 +184,6 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.002 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-multisensors-cube-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/a21b8d749ac018e8bf8e9d0fd32610a9/multisensors_cube.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">multisensors_cube.ipynb</span></code></a></p>
@@ -251,6 +235,10 @@ to download the full example code.</p>
       <dt>Tags</dt>
       <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
       <dd><a href="multisensors_cube.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../main/index.html">main</a></dd>
     </dl>
   </div>
 </div><script>

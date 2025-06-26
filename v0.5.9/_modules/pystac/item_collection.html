@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pystac.item_collection &mdash; EarthDaily Python Client 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pystac.item_collection</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pystac.item_collection</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">html</span><span class="w"> </span><span class="kn">import</span> <span class="n">escape</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">TypeAlias</span><span class="p">,</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystac</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">STACTypeError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.html.jinja_env</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_jinja_env</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.serialization.identify</span><span class="w"> </span><span class="kn">import</span> <span class="n">identify_stac_object_type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pystac.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">HREF</span><span class="p">,</span> <span class="n">is_absolute_href</span><span class="p">,</span> <span class="n">make_absolute_href</span><span class="p">,</span> <span class="n">make_posix_style</span>
+
+<span class="n">ItemLike</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Item</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+
+<span class="c1">#: Generalized version of :class:`ItemCollection`</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;ItemCollection&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ItemCollection">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.ItemCollection.html#earthdaily.earthdatastore.ItemCollection">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ItemCollection</span><span class="p">(</span><span class="n">Collection</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation of a GeoJSON FeatureCollection whose features are all STAC</span>
+<span class="sd">    Items.</span>
+
+<span class="sd">    All :class:`~pystac.Item` instances passed to the :class:`ItemCollection` instance</span>
+<span class="sd">    during instantiation are cloned and have their ``&quot;root&quot;`` URL cleared. Instances of</span>
+<span class="sd">    this class implement the abstract methods of :class:`typing.Collection` and can also</span>
+<span class="sd">    be added together (see below for examples using these methods).</span>
+
+<span class="sd">    Any additional top-level fields in the FeatureCollection are retained in</span>
+<span class="sd">    :attr:`~pystac.ItemCollection.extra_fields` by the</span>
+<span class="sd">    :meth:`~pystac.ItemCollection.from_dict` and</span>
+<span class="sd">    :meth:`~pystac.ItemCollection.from_file`</span>
+<span class="sd">    methods and will be present in the serialized file</span>
+<span class="sd">    from :meth:`~pystac.ItemCollection.save_object`.</span>
+
+<span class="sd">    Arguments:</span>
+
+<span class="sd">        items : List of :class:`~pystac.Item` instances to include in the</span>
+<span class="sd">            :class:`ItemCollection`.</span>
+<span class="sd">        extra_fields : Dictionary of additional top-level fields included in the</span>
+<span class="sd">            :class:`ItemCollection`.</span>
+<span class="sd">        clone_items : Optional flag indicating whether :class:`~pystac.Item` instances</span>
+<span class="sd">            should be cloned before storing in the :class:`ItemCollection`. Setting to</span>
+<span class="sd">            ``False`` will result in faster instantiation, but changes made to</span>
+<span class="sd">            :class:`~pystac.Item` instances in the :class:`ItemCollection` will mutate</span>
+<span class="sd">            the original ``Item``. Defaults to ``True``.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">        Loop over all items in the :class`ItemCollection`</span>
+
+<span class="sd">        &gt;&gt;&gt; item_collection: ItemCollection = ...</span>
+<span class="sd">        &gt;&gt;&gt; for item in item_collection:</span>
+<span class="sd">        ...     ...</span>
+
+<span class="sd">        Get the number of :class:`~pystac.Item` instances in the</span>
+<span class="sd">        :class:`ItemCollection`</span>
+
+<span class="sd">        &gt;&gt;&gt; length: int = len(item_collection)</span>
+
+<span class="sd">        Check if an :class:`~pystac.Item` is in the :class:`ItemCollection`. Note</span>
+<span class="sd">        that the ``clone_items`` argument must be ``False`` for this to return</span>
+<span class="sd">        ``True``, since equality of PySTAC objects is currently evaluated using default</span>
+<span class="sd">        object equality (i.e. ``item_1 is item_2``).</span>
+
+<span class="sd">        &gt;&gt;&gt; item: Item = ...</span>
+<span class="sd">        &gt;&gt;&gt; item_collection = ItemCollection(items=[item], clone_items=False)</span>
+<span class="sd">        &gt;&gt;&gt; assert item in item_collection</span>
+
+<span class="sd">        Combine :class:`ItemCollection` instances</span>
+
+<span class="sd">        &gt;&gt;&gt; item_1: Item = ...</span>
+<span class="sd">        &gt;&gt;&gt; item_2: Item = ...</span>
+<span class="sd">        &gt;&gt;&gt; item_3: Item = ...</span>
+<span class="sd">        &gt;&gt;&gt; item_collection_1 = ItemCollection(items=[item_1, item_2])</span>
+<span class="sd">        &gt;&gt;&gt; item_collection_2 = ItemCollection(items=[item_2, item_3])</span>
+<span class="sd">        &gt;&gt;&gt; combined = item_collection_1 + item_collection_2</span>
+<span class="sd">        &gt;&gt;&gt; assert len(combined) == 4</span>
+<span class="sd">        # If an item is present in both ItemCollections it will occur twice</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List of :class:`pystac.Item` instances contained in this ``ItemCollection``.&quot;&quot;&quot;</span>
+
+    <span class="n">extra_fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dictionary of additional top-level fields for the GeoJSON</span>
+<span class="sd">    FeatureCollection.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">items</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ItemLike</span><span class="p">],</span>
+        <span class="n">extra_fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">clone_items</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">map_item</span><span class="p">(</span><span class="n">item_or_dict</span><span class="p">:</span> <span class="n">ItemLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="p">:</span>
+            <span class="c1"># Converts dicts to pystac.Items and clones if necessary</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item_or_dict</span><span class="p">,</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">item_or_dict</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="k">if</span> <span class="n">clone_items</span> <span class="k">else</span> <span class="n">item_or_dict</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">item_or_dict</span><span class="p">,</span> <span class="n">preserve_dict</span><span class="o">=</span><span class="n">clone_items</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">map_item</span><span class="p">,</span> <span class="n">items</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_fields</span> <span class="o">=</span> <span class="n">extra_fields</span> <span class="ow">or</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">__x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span>
+
+<div class="viewcode-block" id="ItemCollection.__add__">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.ItemCollection.html#earthdaily.earthdatastore.ItemCollection.__add__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemCollection</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ItemCollection</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="n">combined</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ItemCollection</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="n">combined</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ItemCollection.to_dict">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.ItemCollection.html#earthdaily.earthdatastore.ItemCollection.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transform_hrefs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serializes an :class:`ItemCollection` instance to a dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            transform_hrefs: If True, transform the HREF of hierarchical links</span>
+<span class="sd">                of Items based on the type of catalog the Item belongs to (if any).</span>
+<span class="sd">                I.e. if the item belongs to a root catalog that is</span>
+<span class="sd">                RELATIVE_PUBLISHED or SELF_CONTAINED,</span>
+<span class="sd">                hierarchical link HREFs will be transformed to be relative to the</span>
+<span class="sd">                catalog root. This can be slow if the Items have root links that</span>
+<span class="sd">                have not yet been resolved. Defaults to False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;FeatureCollection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">transform_hrefs</span><span class="o">=</span><span class="n">transform_hrefs</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span>
+            <span class="p">],</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">extra_fields</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">jinja_env</span> <span class="o">=</span> <span class="n">get_jinja_env</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">jinja_env</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">jinja_env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;JSON.jinja2&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="nb">dict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">escape</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+<div class="viewcode-block" id="ItemCollection.clone">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.ItemCollection.html#earthdaily.earthdatastore.ItemCollection.clone">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemCollection</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a clone of this instance. This clone is a deep copy; all</span>
+<span class="sd">        :class:`~pystac.Item` instances are cloned and all additional top-level fields</span>
+<span class="sd">        are deep copied.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">items</span><span class="o">=</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">],</span>
+            <span class="n">extra_fields</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra_fields</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ItemCollection.from_dict">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.ItemCollection.html#earthdaily.earthdatastore.ItemCollection.from_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">C</span><span class="p">],</span>
+        <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">preserve_dict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">root</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">Catalog</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a :class:`ItemCollection` instance from a dictionary.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            d : The dictionary from which the :class:`ItemCollection` will be created</span>
+<span class="sd">            preserve_dict: If False, the dict parameter ``d`` may be modified</span>
+<span class="sd">                during this method call. Otherwise the dict is not mutated.</span>
+<span class="sd">                Defaults to True, which results results in a deepcopy of the</span>
+<span class="sd">                parameter. Set to False when possible to avoid the performance</span>
+<span class="sd">                hit of a deepcopy.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_item_collection</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">STACTypeError</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">pystac</span><span class="o">.</span><span class="n">Item</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">preserve_dict</span><span class="o">=</span><span class="n">preserve_dict</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="p">]</span>
+        <span class="n">extra_fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">)}</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span> <span class="n">extra_fields</span><span class="o">=</span><span class="n">extra_fields</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ItemCollection.from_file">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.ItemCollection.html#earthdaily.earthdatastore.ItemCollection.from_file">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">C</span><span class="p">],</span> <span class="n">href</span><span class="p">:</span> <span class="n">HREF</span><span class="p">,</span> <span class="n">stac_io</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">StacIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reads a :class:`ItemCollection` from a JSON file.</span>
+
+<span class="sd">        Arguments:</span>
+<span class="sd">            href : Path to the file.</span>
+<span class="sd">            stac_io : A :class:`~pystac.StacIO` instance to use for file I/O</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">stac_io</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stac_io</span> <span class="o">=</span> <span class="n">pystac</span><span class="o">.</span><span class="n">StacIO</span><span class="o">.</span><span class="n">default</span><span class="p">()</span>
+
+        <span class="n">href</span> <span class="o">=</span> <span class="n">make_posix_style</span><span class="p">(</span><span class="n">href</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_absolute_href</span><span class="p">(</span><span class="n">href</span><span class="p">):</span>
+            <span class="n">href</span> <span class="o">=</span> <span class="n">make_absolute_href</span><span class="p">(</span><span class="n">href</span><span class="p">)</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="n">stac_io</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">href</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">preserve_dict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ItemCollection.save_object">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.ItemCollection.html#earthdaily.earthdatastore.ItemCollection.save_object">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_object</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dest_href</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">stac_io</span><span class="p">:</span> <span class="n">pystac</span><span class="o">.</span><span class="n">StacIO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Saves this instance to the ``dest_href`` location.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dest_href : Location to which the file will be saved.</span>
+<span class="sd">            stac_io: Optional :class:`~pystac.StacIO` instance to use. If not provided,</span>
+<span class="sd">                will use the default instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">stac_io</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stac_io</span> <span class="o">=</span> <span class="n">pystac</span><span class="o">.</span><span class="n">StacIO</span><span class="o">.</span><span class="n">default</span><span class="p">()</span>
+
+        <span class="n">stac_io</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span><span class="n">dest_href</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ItemCollection.is_item_collection">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.ItemCollection.html#earthdaily.earthdatastore.ItemCollection.is_item_collection">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_item_collection</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the given dictionary represents a valid :class:`ItemCollection`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            d : Dictionary to check</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">typ</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+
+        <span class="c1"># All ItemCollections are GeoJSON FeatureCollections</span>
+        <span class="k">if</span> <span class="n">typ</span> <span class="o">!=</span> <span class="s2">&quot;FeatureCollection&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># If it is a FeatureCollection and has a &quot;stac_version&quot; field, then it is an</span>
+        <span class="c1">#  ItemCollection. This will cover ItemCollections from STAC 0.9 to</span>
+        <span class="c1">#  &lt;1.0.0-beta.1, when ItemCollections were removed from the core STAC Spec</span>
+        <span class="k">if</span> <span class="s2">&quot;stac_version&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Prior to STAC 0.9 ItemCollections did not have a stac_version field and could</span>
+        <span class="c1">#  only be identified by the fact that all of their &#39;features&#39; are STAC Items.</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="n">identify_stac_object_type</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> <span class="o">==</span> <span class="n">pystac</span><span class="o">.</span><span class="n">STACObjectType</span><span class="o">.</span><span class="n">ITEM</span>
+            <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.5.9
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../../1.0.0/index.html">1.0.0</a></dd>
+      <dd><a href="item_collection.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

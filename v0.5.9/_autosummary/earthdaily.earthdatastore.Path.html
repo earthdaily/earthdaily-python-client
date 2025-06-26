@@ -1,0 +1,815 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.earthdatastore.Path &mdash; EarthDaily Python Client 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="earthdaily.earthdatastore.Retry" href="earthdaily.earthdatastore.Retry.html" />
+    <link rel="prev" title="earthdaily.earthdatastore.ItemCollection" href="earthdaily.earthdatastore.ItemCollection.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="earthdaily.EarthDataStore.html">earthdaily.earthdatastore</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.apply_single_condition.html">earthdaily.earthdatastore.apply_single_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.dataclass.html">earthdaily.earthdatastore.dataclass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.datacube.html">earthdaily.earthdatastore.datacube</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.enhance_assets.html">earthdaily.earthdatastore.enhance_assets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.filter_items.html">earthdaily.earthdatastore.filter_items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.metacube.html">earthdaily.earthdatastore.metacube</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.parallel_search.html">earthdaily.earthdatastore.parallel_search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.post_query_items.html">earthdaily.earthdatastore.post_query_items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.validate_property_condition.html">earthdaily.earthdatastore.validate_property_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Any.html">earthdaily.earthdatastore.Any</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Auth.html">earthdaily.earthdatastore.Auth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Client.html">earthdaily.earthdatastore.Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.EarthDataStoreConfig.html">earthdaily.earthdatastore.EarthDataStoreConfig</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.ItemCollection.html">earthdaily.earthdatastore.ItemCollection</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">earthdaily.earthdatastore.Path</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.earthdatastore.Path"><code class="docutils literal notranslate"><span class="pre">Path</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Retry.html">earthdaily.earthdatastore.Retry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacApiIO.html">earthdaily.earthdatastore.StacApiIO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacCollectionExplorer.html">earthdaily.earthdatastore.StacCollectionExplorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.NoItemsFoundError.html">earthdaily.earthdatastore.NoItemsFoundError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.datacube"><code class="docutils literal notranslate"><span class="pre">datacube()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.metacube"><code class="docutils literal notranslate"><span class="pre">metacube()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.html">earthdaily.earthdatastore.cube_utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.mask.html">earthdaily.earthdatastore.mask</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.Path.html">earthdaily.Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.accessor.html">earthdaily.accessor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.core.html">earthdaily.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.datasets.html">earthdaily.datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.utils.html">earthdaily.utils</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.EarthDataStore.html">earthdaily.earthdatastore</a></li>
+      <li class="breadcrumb-item active">earthdaily.earthdatastore.Path</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/earthdaily.earthdatastore.Path.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="earthdaily-earthdatastore-path">
+<h1>earthdaily.earthdatastore.Path<a class="headerlink" href="#earthdaily-earthdatastore-path" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">earthdaily.earthdatastore.</span></span><span class="sig-name descname"><span class="pre">Path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PurePath</span></code></p>
+<p>PurePath subclass that can make system calls.</p>
+<p>Path represents a filesystem path but unlike PurePath, also offers
+methods to do system calls on path objects. Depending on your system,
+instantiating a Path will return either a PosixPath or a WindowsPath
+object. You can also instantiate a PosixPath or WindowsPath directly,
+but cannot instantiate a WindowsPath on a POSIX system or vice versa.</p>
+<p>Construct a PurePath from one or several strings and or existing
+PurePath objects.  The strings and path objects are combined so as
+to yield a canonicalized path, which is incorporated into the
+new PurePath object.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.absolute" title="earthdaily.earthdatastore.Path.absolute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">absolute</span></code></a></p></td>
+<td><p>Return an absolute version of this path by prepending the current working directory.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.as_posix" title="earthdaily.earthdatastore.Path.as_posix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">as_posix</span></code></a></p></td>
+<td><p>Return the string representation of the path with forward (/) slashes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.as_uri" title="earthdaily.earthdatastore.Path.as_uri"><code class="xref py py-obj docutils literal notranslate"><span class="pre">as_uri</span></code></a></p></td>
+<td><p>Return the path as a 'file' URI.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.chmod" title="earthdaily.earthdatastore.Path.chmod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chmod</span></code></a></p></td>
+<td><p>Change the permissions of the path, like os.chmod().</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.cwd" title="earthdaily.earthdatastore.Path.cwd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cwd</span></code></a></p></td>
+<td><p>Return a new path pointing to the current working directory.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.exists" title="earthdaily.earthdatastore.Path.exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exists</span></code></a></p></td>
+<td><p>Whether this path exists.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.expanduser" title="earthdaily.earthdatastore.Path.expanduser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expanduser</span></code></a></p></td>
+<td><p>Return a new path with expanded ~ and ~user constructs (as returned by os.path.expanduser)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.glob" title="earthdaily.earthdatastore.Path.glob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">glob</span></code></a></p></td>
+<td><p>Iterate over this subtree and yield all existing files (of any kind, including directories) matching the given relative pattern.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.group" title="earthdaily.earthdatastore.Path.group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">group</span></code></a></p></td>
+<td><p>Return the group name of the file gid.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.hardlink_to" title="earthdaily.earthdatastore.Path.hardlink_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hardlink_to</span></code></a></p></td>
+<td><p>Make this path a hard link pointing to the same file as <em>target</em>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.home" title="earthdaily.earthdatastore.Path.home"><code class="xref py py-obj docutils literal notranslate"><span class="pre">home</span></code></a></p></td>
+<td><p>Return a new path pointing to the user's home directory (as returned by os.path.expanduser('~')).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_absolute" title="earthdaily.earthdatastore.Path.is_absolute"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_absolute</span></code></a></p></td>
+<td><p>True if the path is absolute (has both a root and, if applicable, a drive).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_block_device" title="earthdaily.earthdatastore.Path.is_block_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_block_device</span></code></a></p></td>
+<td><p>Whether this path is a block device.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_char_device" title="earthdaily.earthdatastore.Path.is_char_device"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_char_device</span></code></a></p></td>
+<td><p>Whether this path is a character device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_dir" title="earthdaily.earthdatastore.Path.is_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_dir</span></code></a></p></td>
+<td><p>Whether this path is a directory.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_fifo" title="earthdaily.earthdatastore.Path.is_fifo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_fifo</span></code></a></p></td>
+<td><p>Whether this path is a FIFO.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_file" title="earthdaily.earthdatastore.Path.is_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_file</span></code></a></p></td>
+<td><p>Whether this path is a regular file (also True for symlinks pointing to regular files).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_junction" title="earthdaily.earthdatastore.Path.is_junction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_junction</span></code></a></p></td>
+<td><p>Whether this path is a junction.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_mount" title="earthdaily.earthdatastore.Path.is_mount"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_mount</span></code></a></p></td>
+<td><p>Check if this path is a mount point</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_relative_to" title="earthdaily.earthdatastore.Path.is_relative_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_relative_to</span></code></a></p></td>
+<td><p>Return True if the path is relative to another path or False.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_reserved" title="earthdaily.earthdatastore.Path.is_reserved"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_reserved</span></code></a></p></td>
+<td><p>Return True if the path contains one of the special names reserved by the system, if any.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_socket" title="earthdaily.earthdatastore.Path.is_socket"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_socket</span></code></a></p></td>
+<td><p>Whether this path is a socket.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.is_symlink" title="earthdaily.earthdatastore.Path.is_symlink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_symlink</span></code></a></p></td>
+<td><p>Whether this path is a symbolic link.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.iterdir" title="earthdaily.earthdatastore.Path.iterdir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterdir</span></code></a></p></td>
+<td><p>Yield path objects of the directory contents.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.joinpath" title="earthdaily.earthdatastore.Path.joinpath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">joinpath</span></code></a></p></td>
+<td><p>Combine this path with one or several arguments, and return a new path representing either a subpath (if all arguments are relative paths) or a totally different path (if one of the arguments is anchored).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.lchmod" title="earthdaily.earthdatastore.Path.lchmod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lchmod</span></code></a></p></td>
+<td><p>Like chmod(), except if the path points to a symlink, the symlink's permissions are changed, rather than its target's.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.lstat" title="earthdaily.earthdatastore.Path.lstat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lstat</span></code></a></p></td>
+<td><p>Like stat(), except if the path points to a symlink, the symlink's status information is returned, rather than its target's.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.match" title="earthdaily.earthdatastore.Path.match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match</span></code></a></p></td>
+<td><p>Return True if this path matches the given pattern.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.mkdir" title="earthdaily.earthdatastore.Path.mkdir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mkdir</span></code></a></p></td>
+<td><p>Create a new directory at this given path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.open" title="earthdaily.earthdatastore.Path.open"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open</span></code></a></p></td>
+<td><p>Open the file pointed to by this path and return a file object, as the built-in open() function does.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.owner" title="earthdaily.earthdatastore.Path.owner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">owner</span></code></a></p></td>
+<td><p>Return the login name of the file owner.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.read_bytes" title="earthdaily.earthdatastore.Path.read_bytes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_bytes</span></code></a></p></td>
+<td><p>Open the file in bytes mode, read it, and close the file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.read_text" title="earthdaily.earthdatastore.Path.read_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_text</span></code></a></p></td>
+<td><p>Open the file in text mode, read it, and close the file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.readlink" title="earthdaily.earthdatastore.Path.readlink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readlink</span></code></a></p></td>
+<td><p>Return the path to which the symbolic link points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.relative_to" title="earthdaily.earthdatastore.Path.relative_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relative_to</span></code></a></p></td>
+<td><p>Return the relative path to another path identified by the passed arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.rename" title="earthdaily.earthdatastore.Path.rename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rename</span></code></a></p></td>
+<td><p>Rename this path to the target path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.replace" title="earthdaily.earthdatastore.Path.replace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">replace</span></code></a></p></td>
+<td><p>Rename this path to the target path, overwriting if that path exists.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.resolve" title="earthdaily.earthdatastore.Path.resolve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve</span></code></a></p></td>
+<td><p>Make the path absolute, resolving all symlinks on the way and also normalizing it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.rglob" title="earthdaily.earthdatastore.Path.rglob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rglob</span></code></a></p></td>
+<td><p>Recursively yield all existing files (of any kind, including directories) matching the given relative pattern, anywhere in this subtree.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.rmdir" title="earthdaily.earthdatastore.Path.rmdir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rmdir</span></code></a></p></td>
+<td><p>Remove this directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.samefile" title="earthdaily.earthdatastore.Path.samefile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">samefile</span></code></a></p></td>
+<td><p>Return whether other_path is the same or not as this file (as returned by os.path.samefile()).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.stat" title="earthdaily.earthdatastore.Path.stat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stat</span></code></a></p></td>
+<td><p>Return the result of the stat() system call on this path, like os.stat() does.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.symlink_to" title="earthdaily.earthdatastore.Path.symlink_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">symlink_to</span></code></a></p></td>
+<td><p>Make this path a symlink pointing to the target path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.touch" title="earthdaily.earthdatastore.Path.touch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">touch</span></code></a></p></td>
+<td><p>Create this file with the given access mode, if it doesn't exist.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.unlink" title="earthdaily.earthdatastore.Path.unlink"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unlink</span></code></a></p></td>
+<td><p>Remove this file or link.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.walk" title="earthdaily.earthdatastore.Path.walk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">walk</span></code></a></p></td>
+<td><p>Walk the directory tree from this directory, similar to os.walk().</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.with_name" title="earthdaily.earthdatastore.Path.with_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">with_name</span></code></a></p></td>
+<td><p>Return a new path with the file name changed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.with_segments" title="earthdaily.earthdatastore.Path.with_segments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">with_segments</span></code></a></p></td>
+<td><p>Construct a new path object from any number of path-like objects.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.with_stem" title="earthdaily.earthdatastore.Path.with_stem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">with_stem</span></code></a></p></td>
+<td><p>Return a new path with the stem changed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.with_suffix" title="earthdaily.earthdatastore.Path.with_suffix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">with_suffix</span></code></a></p></td>
+<td><p>Return a new path with the file suffix changed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.write_bytes" title="earthdaily.earthdatastore.Path.write_bytes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_bytes</span></code></a></p></td>
+<td><p>Open the file in bytes mode, write to it, and close the file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.write_text" title="earthdaily.earthdatastore.Path.write_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_text</span></code></a></p></td>
+<td><p>Open the file in text mode, write to it, and close the file.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.anchor" title="earthdaily.earthdatastore.Path.anchor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">anchor</span></code></a></p></td>
+<td><p>The concatenation of the drive and root, or ''.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.drive" title="earthdaily.earthdatastore.Path.drive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">drive</span></code></a></p></td>
+<td><p>The drive prefix (letter or UNC path), if any.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.name" title="earthdaily.earthdatastore.Path.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<td><p>The final path component, if any.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.parent" title="earthdaily.earthdatastore.Path.parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parent</span></code></a></p></td>
+<td><p>The logical parent of the path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.parents" title="earthdaily.earthdatastore.Path.parents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parents</span></code></a></p></td>
+<td><p>A sequence of this path's logical parents.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.parts" title="earthdaily.earthdatastore.Path.parts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parts</span></code></a></p></td>
+<td><p>An object providing sequence-like access to the components in the filesystem path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.root" title="earthdaily.earthdatastore.Path.root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root</span></code></a></p></td>
+<td><p>The root of the path, if any.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.stem" title="earthdaily.earthdatastore.Path.stem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stem</span></code></a></p></td>
+<td><p>The final path component, minus its last suffix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.suffix" title="earthdaily.earthdatastore.Path.suffix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">suffix</span></code></a></p></td>
+<td><p>The final component's last suffix, if any.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.Path.suffixes" title="earthdaily.earthdatastore.Path.suffixes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">suffixes</span></code></a></p></td>
+<td><p>A list of the final component's suffixes, if any.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.stat">
+<span class="sig-name descname"><span class="pre">stat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow_symlinks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.stat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.stat" title="Link to this definition"></a></dt>
+<dd><p>Return the result of the stat() system call on this path, like
+os.stat() does.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.lstat">
+<span class="sig-name descname"><span class="pre">lstat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.lstat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.lstat" title="Link to this definition"></a></dt>
+<dd><p>Like stat(), except if the path points to a symlink, the symlink’s
+status information is returned, rather than its target’s.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.exists">
+<span class="sig-name descname"><span class="pre">exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow_symlinks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.exists" title="Link to this definition"></a></dt>
+<dd><p>Whether this path exists.</p>
+<p>This method normally follows symlinks; to check whether a symlink exists,
+add the argument follow_symlinks=False.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_dir">
+<span class="sig-name descname"><span class="pre">is_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.is_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_dir" title="Link to this definition"></a></dt>
+<dd><p>Whether this path is a directory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_file">
+<span class="sig-name descname"><span class="pre">is_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.is_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_file" title="Link to this definition"></a></dt>
+<dd><p>Whether this path is a regular file (also True for symlinks pointing
+to regular files).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_mount">
+<span class="sig-name descname"><span class="pre">is_mount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.is_mount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_mount" title="Link to this definition"></a></dt>
+<dd><p>Check if this path is a mount point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_symlink">
+<span class="sig-name descname"><span class="pre">is_symlink</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.is_symlink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_symlink" title="Link to this definition"></a></dt>
+<dd><p>Whether this path is a symbolic link.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_junction">
+<span class="sig-name descname"><span class="pre">is_junction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.is_junction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_junction" title="Link to this definition"></a></dt>
+<dd><p>Whether this path is a junction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_block_device">
+<span class="sig-name descname"><span class="pre">is_block_device</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.is_block_device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_block_device" title="Link to this definition"></a></dt>
+<dd><p>Whether this path is a block device.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_char_device">
+<span class="sig-name descname"><span class="pre">is_char_device</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.is_char_device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_char_device" title="Link to this definition"></a></dt>
+<dd><p>Whether this path is a character device.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_fifo">
+<span class="sig-name descname"><span class="pre">is_fifo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.is_fifo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_fifo" title="Link to this definition"></a></dt>
+<dd><p>Whether this path is a FIFO.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_socket">
+<span class="sig-name descname"><span class="pre">is_socket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.is_socket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_socket" title="Link to this definition"></a></dt>
+<dd><p>Whether this path is a socket.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.samefile">
+<span class="sig-name descname"><span class="pre">samefile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.samefile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.samefile" title="Link to this definition"></a></dt>
+<dd><p>Return whether other_path is the same or not as this file
+(as returned by os.path.samefile()).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.open" title="Link to this definition"></a></dt>
+<dd><p>Open the file pointed to by this path and return a file object, as
+the built-in open() function does.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.read_bytes">
+<span class="sig-name descname"><span class="pre">read_bytes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.read_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.read_bytes" title="Link to this definition"></a></dt>
+<dd><p>Open the file in bytes mode, read it, and close the file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.read_text">
+<span class="sig-name descname"><span class="pre">read_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.read_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.read_text" title="Link to this definition"></a></dt>
+<dd><p>Open the file in text mode, read it, and close the file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.write_bytes">
+<span class="sig-name descname"><span class="pre">write_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.write_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.write_bytes" title="Link to this definition"></a></dt>
+<dd><p>Open the file in bytes mode, write to it, and close the file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.write_text">
+<span class="sig-name descname"><span class="pre">write_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.write_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.write_text" title="Link to this definition"></a></dt>
+<dd><p>Open the file in text mode, write to it, and close the file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.iterdir">
+<span class="sig-name descname"><span class="pre">iterdir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.iterdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.iterdir" title="Link to this definition"></a></dt>
+<dd><p>Yield path objects of the directory contents.</p>
+<p>The children are yielded in arbitrary order, and the
+special entries ‘.’ and ‘..’ are not included.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.glob">
+<span class="sig-name descname"><span class="pre">glob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">case_sensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.glob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.glob" title="Link to this definition"></a></dt>
+<dd><p>Iterate over this subtree and yield all existing files (of any
+kind, including directories) matching the given relative pattern.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.rglob">
+<span class="sig-name descname"><span class="pre">rglob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">case_sensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.rglob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.rglob" title="Link to this definition"></a></dt>
+<dd><p>Recursively yield all existing files (of any kind, including
+directories) matching the given relative pattern, anywhere in
+this subtree.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.walk">
+<span class="sig-name descname"><span class="pre">walk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top_down</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow_symlinks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.walk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.walk" title="Link to this definition"></a></dt>
+<dd><p>Walk the directory tree from this directory, similar to os.walk().</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.cwd">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cwd</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.cwd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.cwd" title="Link to this definition"></a></dt>
+<dd><p>Return a new path pointing to the current working directory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.home">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">home</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.home"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.home" title="Link to this definition"></a></dt>
+<dd><p>Return a new path pointing to the user’s home directory (as
+returned by os.path.expanduser(‘~’)).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.absolute">
+<span class="sig-name descname"><span class="pre">absolute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.absolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.absolute" title="Link to this definition"></a></dt>
+<dd><p>Return an absolute version of this path by prepending the current
+working directory. No normalization or symlink resolution is performed.</p>
+<p>Use resolve() to get the canonical path to a file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.resolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.resolve" title="Link to this definition"></a></dt>
+<dd><p>Make the path absolute, resolving all symlinks on the way and also
+normalizing it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.owner">
+<span class="sig-name descname"><span class="pre">owner</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.owner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.owner" title="Link to this definition"></a></dt>
+<dd><p>Return the login name of the file owner.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.group">
+<span class="sig-name descname"><span class="pre">group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.group" title="Link to this definition"></a></dt>
+<dd><p>Return the group name of the file gid.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.readlink">
+<span class="sig-name descname"><span class="pre">readlink</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.readlink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.readlink" title="Link to this definition"></a></dt>
+<dd><p>Return the path to which the symbolic link points.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.touch">
+<span class="sig-name descname"><span class="pre">touch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">438</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exist_ok</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.touch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.touch" title="Link to this definition"></a></dt>
+<dd><p>Create this file with the given access mode, if it doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.mkdir">
+<span class="sig-name descname"><span class="pre">mkdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">511</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exist_ok</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.mkdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.mkdir" title="Link to this definition"></a></dt>
+<dd><p>Create a new directory at this given path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.chmod">
+<span class="sig-name descname"><span class="pre">chmod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow_symlinks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.chmod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.chmod" title="Link to this definition"></a></dt>
+<dd><p>Change the permissions of the path, like os.chmod().</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.lchmod">
+<span class="sig-name descname"><span class="pre">lchmod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.lchmod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.lchmod" title="Link to this definition"></a></dt>
+<dd><p>Like chmod(), except if the path points to a symlink, the symlink’s
+permissions are changed, rather than its target’s.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.unlink">
+<span class="sig-name descname"><span class="pre">unlink</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">missing_ok</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.unlink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.unlink" title="Link to this definition"></a></dt>
+<dd><p>Remove this file or link.
+If the path is a directory, use rmdir() instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.rmdir">
+<span class="sig-name descname"><span class="pre">rmdir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.rmdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.rmdir" title="Link to this definition"></a></dt>
+<dd><p>Remove this directory.  The directory must be empty.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.rename">
+<span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.rename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.rename" title="Link to this definition"></a></dt>
+<dd><p>Rename this path to the target path.</p>
+<p>The target path may be absolute or relative. Relative paths are
+interpreted relative to the current working directory, <em>not</em> the
+directory of the Path object.</p>
+<p>Returns the new Path instance pointing to the target path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.replace">
+<span class="sig-name descname"><span class="pre">replace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.replace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.replace" title="Link to this definition"></a></dt>
+<dd><p>Rename this path to the target path, overwriting if that path exists.</p>
+<p>The target path may be absolute or relative. Relative paths are
+interpreted relative to the current working directory, <em>not</em> the
+directory of the Path object.</p>
+<p>Returns the new Path instance pointing to the target path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.symlink_to">
+<span class="sig-name descname"><span class="pre">symlink_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_is_directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.symlink_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.symlink_to" title="Link to this definition"></a></dt>
+<dd><p>Make this path a symlink pointing to the target path.
+Note the order of arguments (link, target) is the reverse of os.symlink.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.hardlink_to">
+<span class="sig-name descname"><span class="pre">hardlink_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.hardlink_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.hardlink_to" title="Link to this definition"></a></dt>
+<dd><p>Make this path a hard link pointing to the same file as <em>target</em>.</p>
+<p>Note the order of arguments (self, target) is the reverse of os.link’s.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.expanduser">
+<span class="sig-name descname"><span class="pre">expanduser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pathlib.html#Path.expanduser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Path.expanduser" title="Link to this definition"></a></dt>
+<dd><p>Return a new path with expanded ~ and ~user constructs
+(as returned by os.path.expanduser)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.anchor">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">anchor</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.anchor" title="Link to this definition"></a></dt>
+<dd><p>The concatenation of the drive and root, or ‘’.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.as_posix">
+<span class="sig-name descname"><span class="pre">as_posix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.as_posix" title="Link to this definition"></a></dt>
+<dd><p>Return the string representation of the path with forward (/)
+slashes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.as_uri">
+<span class="sig-name descname"><span class="pre">as_uri</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.as_uri" title="Link to this definition"></a></dt>
+<dd><p>Return the path as a ‘file’ URI.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.drive">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">drive</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.drive" title="Link to this definition"></a></dt>
+<dd><p>The drive prefix (letter or UNC path), if any.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_absolute">
+<span class="sig-name descname"><span class="pre">is_absolute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_absolute" title="Link to this definition"></a></dt>
+<dd><p>True if the path is absolute (has both a root and, if applicable,
+a drive).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_relative_to">
+<span class="sig-name descname"><span class="pre">is_relative_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_deprecated</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_relative_to" title="Link to this definition"></a></dt>
+<dd><p>Return True if the path is relative to another path or False.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.is_reserved">
+<span class="sig-name descname"><span class="pre">is_reserved</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.is_reserved" title="Link to this definition"></a></dt>
+<dd><p>Return True if the path contains one of the special names reserved
+by the system, if any.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.joinpath">
+<span class="sig-name descname"><span class="pre">joinpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pathsegments</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.joinpath" title="Link to this definition"></a></dt>
+<dd><p>Combine this path with one or several arguments, and return a
+new path representing either a subpath (if all arguments are relative
+paths) or a totally different path (if one of the arguments is
+anchored).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.match">
+<span class="sig-name descname"><span class="pre">match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_pattern</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">case_sensitive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.match" title="Link to this definition"></a></dt>
+<dd><p>Return True if this path matches the given pattern.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.name">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.name" title="Link to this definition"></a></dt>
+<dd><p>The final path component, if any.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.parent">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.parent" title="Link to this definition"></a></dt>
+<dd><p>The logical parent of the path.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.parents">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parents</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.parents" title="Link to this definition"></a></dt>
+<dd><p>A sequence of this path’s logical parents.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.parts">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parts</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.parts" title="Link to this definition"></a></dt>
+<dd><p>An object providing sequence-like access to the
+components in the filesystem path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.relative_to">
+<span class="sig-name descname"><span class="pre">relative_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_deprecated</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">walk_up</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.relative_to" title="Link to this definition"></a></dt>
+<dd><p>Return the relative path to another path identified by the passed
+arguments.  If the operation is not possible (because this is not
+related to the other path), raise ValueError.</p>
+<p>The <em>walk_up</em> parameter controls whether <cite>..</cite> may be used to resolve
+the path.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.root">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.root" title="Link to this definition"></a></dt>
+<dd><p>The root of the path, if any.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.stem">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stem</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.stem" title="Link to this definition"></a></dt>
+<dd><p>The final path component, minus its last suffix.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.suffix">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">suffix</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.suffix" title="Link to this definition"></a></dt>
+<dd><p>The final component’s last suffix, if any.</p>
+<p>This includes the leading period. For example: ‘.txt’</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.suffixes">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">suffixes</span></span><a class="headerlink" href="#earthdaily.earthdatastore.Path.suffixes" title="Link to this definition"></a></dt>
+<dd><p>A list of the final component’s suffixes, if any.</p>
+<p>These include the leading periods. For example: [‘.tar’, ‘.gz’]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.with_name">
+<span class="sig-name descname"><span class="pre">with_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.with_name" title="Link to this definition"></a></dt>
+<dd><p>Return a new path with the file name changed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.with_segments">
+<span class="sig-name descname"><span class="pre">with_segments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">pathsegments</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.with_segments" title="Link to this definition"></a></dt>
+<dd><p>Construct a new path object from any number of path-like objects.
+Subclasses may override this method to customize how new path objects
+are created from methods like <cite>iterdir()</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.with_stem">
+<span class="sig-name descname"><span class="pre">with_stem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.with_stem" title="Link to this definition"></a></dt>
+<dd><p>Return a new path with the stem changed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Path.with_suffix">
+<span class="sig-name descname"><span class="pre">with_suffix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">suffix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.earthdatastore.Path.with_suffix" title="Link to this definition"></a></dt>
+<dd><p>Return a new path with the file suffix changed.  If the path
+has no suffix, add given suffix.  If the given suffix is an empty
+string, remove the suffix from the path.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="earthdaily.earthdatastore.ItemCollection.html" class="btn btn-neutral float-left" title="earthdaily.earthdatastore.ItemCollection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.earthdatastore.Retry.html" class="btn btn-neutral float-right" title="earthdaily.earthdatastore.Retry" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.5.9
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
+      <dd><a href="earthdaily.earthdatastore.Path.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

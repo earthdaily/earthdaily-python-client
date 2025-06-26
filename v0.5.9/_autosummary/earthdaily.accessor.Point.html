@@ -1,0 +1,1043 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.accessor.Point &mdash; EarthDaily Python Client 0.5.9 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=9a3cda14"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="earthdaily.accessor.whittaker" href="earthdaily.accessor.whittaker.html" />
+    <link rel="prev" title="earthdaily.accessor.GeometryManager" href="earthdaily.accessor.GeometryManager.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">earthdaily documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples gallery</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../_auto_examples/index.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AUTHENTICATION.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.EarthDataStore.html">earthdaily.earthdatastore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.Path.html">earthdaily.Path</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="earthdaily.accessor.html">earthdaily.accessor</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.accessor.xr_loop_func.html">earthdaily.accessor.xr_loop_func</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.accessor.GeometryManager.html">earthdaily.accessor.GeometryManager</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">earthdaily.accessor.Point</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.accessor.Point"><code class="docutils literal notranslate"><span class="pre">Point</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.accessor.html#earthdaily.accessor.xr_loop_func"><code class="docutils literal notranslate"><span class="pre">xr_loop_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.accessor.whittaker.html">earthdaily.accessor.whittaker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.core.html">earthdaily.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.datasets.html">earthdaily.datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.utils.html">earthdaily.utils</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.html">earthdaily</a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.accessor.html">earthdaily.accessor</a></li>
+      <li class="breadcrumb-item active">earthdaily.accessor.Point</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/earthdaily.accessor.Point.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="earthdaily-accessor-point">
+<h1>earthdaily.accessor.Point<a class="headerlink" href="#earthdaily-accessor-point" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">earthdaily.accessor.</span></span><span class="sig-name descname"><span class="pre">Point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shapely/geometry/point.html#Point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.accessor.Point" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseGeometry</span></code></p>
+<p>A geometry type that represents a single coordinate with
+x,y and possibly z values.</p>
+<p>A point is a zero-dimensional feature and has zero length and zero area.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>float</em><em>, or </em><em>sequence</em><em> of </em><em>floats</em>) – <p>The coordinates can either be passed as a single parameter, or as
+individual float values using multiple parameters:</p>
+<ol class="arabic simple">
+<li><p>1 parameter: a sequence or array-like of with 2 or 3 values.</p></li>
+<li><p>2 or 3 parameters (float): x, y, and possibly z.</p></li>
+</ol>
+</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z</span></span></dt>
+<dd><p>Coordinate values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<p>Constructing the Point using separate parameters for x and y:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Constructing the Point using a list of x, y coordinates:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Point</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="go">POINT (1 -1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">y</span>
+<span class="go">-1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">x</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.almost_equals" title="earthdaily.accessor.Point.almost_equals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">almost_equals</span></code></a></p></td>
+<td><p>True if geometries are equal at all coordinates to a specified decimal place.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.buffer" title="earthdaily.accessor.Point.buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">buffer</span></code></a></p></td>
+<td><p>Get a geometry that represents all points within a distance of this geometry.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.contains" title="earthdaily.accessor.Point.contains"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contains</span></code></a></p></td>
+<td><p>Returns True if the geometry contains the other, else False</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.contains_properly" title="earthdaily.accessor.Point.contains_properly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contains_properly</span></code></a></p></td>
+<td><p>Returns True if the geometry completely contains the other, with no common boundary points, else False</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.covered_by" title="earthdaily.accessor.Point.covered_by"><code class="xref py py-obj docutils literal notranslate"><span class="pre">covered_by</span></code></a></p></td>
+<td><p>Returns True if the geometry is covered by the other, else False</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.covers" title="earthdaily.accessor.Point.covers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">covers</span></code></a></p></td>
+<td><p>Returns True if the geometry covers the other, else False</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.crosses" title="earthdaily.accessor.Point.crosses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crosses</span></code></a></p></td>
+<td><p>Returns True if the geometries cross, else False</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.difference" title="earthdaily.accessor.Point.difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">difference</span></code></a></p></td>
+<td><p>Returns the difference of the geometries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.disjoint" title="earthdaily.accessor.Point.disjoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disjoint</span></code></a></p></td>
+<td><p>Returns True if geometries are disjoint, else False</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.distance" title="earthdaily.accessor.Point.distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance</span></code></a></p></td>
+<td><p>Unitless distance to other geometry (float)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.dwithin" title="earthdaily.accessor.Point.dwithin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dwithin</span></code></a></p></td>
+<td><p>Returns True if geometry is within a given distance from the other, else False.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.equals" title="earthdaily.accessor.Point.equals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equals</span></code></a></p></td>
+<td><p>Returns True if geometries are equal, else False.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.equals_exact" title="earthdaily.accessor.Point.equals_exact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">equals_exact</span></code></a></p></td>
+<td><p>True if geometries are equal to within a specified tolerance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.geometryType" title="earthdaily.accessor.Point.geometryType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geometryType</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.hausdorff_distance" title="earthdaily.accessor.Point.hausdorff_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hausdorff_distance</span></code></a></p></td>
+<td><p>Unitless hausdorff distance to other geometry (float)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.interpolate" title="earthdaily.accessor.Point.interpolate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interpolate</span></code></a></p></td>
+<td><p>Return a point at the specified distance along a linear geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.intersection" title="earthdaily.accessor.Point.intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersection</span></code></a></p></td>
+<td><p>Returns the intersection of the geometries.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.intersects" title="earthdaily.accessor.Point.intersects"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersects</span></code></a></p></td>
+<td><p>Returns True if geometries intersect, else False</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.line_interpolate_point" title="earthdaily.accessor.Point.line_interpolate_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">line_interpolate_point</span></code></a></p></td>
+<td><p>Return a point at the specified distance along a linear geometry</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.line_locate_point" title="earthdaily.accessor.Point.line_locate_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">line_locate_point</span></code></a></p></td>
+<td><p>Returns the distance along this geometry to a point nearest the specified point</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.normalize" title="earthdaily.accessor.Point.normalize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize</span></code></a></p></td>
+<td><p>Converts geometry to normal form (or canonical form).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.overlaps" title="earthdaily.accessor.Point.overlaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlaps</span></code></a></p></td>
+<td><p>Returns True if geometries overlap, else False</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.point_on_surface" title="earthdaily.accessor.Point.point_on_surface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">point_on_surface</span></code></a></p></td>
+<td><p>Returns a point guaranteed to be within the object, cheaply.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.project" title="earthdaily.accessor.Point.project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project</span></code></a></p></td>
+<td><p>Returns the distance along this geometry to a point nearest the specified point</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.relate" title="earthdaily.accessor.Point.relate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relate</span></code></a></p></td>
+<td><p>Returns the DE-9IM intersection matrix for the two geometries (string)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.relate_pattern" title="earthdaily.accessor.Point.relate_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relate_pattern</span></code></a></p></td>
+<td><p>Returns True if the DE-9IM string code for the relationship between the geometries satisfies the pattern, else False</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.representative_point" title="earthdaily.accessor.Point.representative_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">representative_point</span></code></a></p></td>
+<td><p>Returns a point guaranteed to be within the object, cheaply.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.reverse" title="earthdaily.accessor.Point.reverse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reverse</span></code></a></p></td>
+<td><p>Returns a copy of this geometry with the order of coordinates reversed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.segmentize" title="earthdaily.accessor.Point.segmentize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">segmentize</span></code></a></p></td>
+<td><p>Adds vertices to line segments based on maximum segment length.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.simplify" title="earthdaily.accessor.Point.simplify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simplify</span></code></a></p></td>
+<td><p>Returns a simplified geometry produced by the Douglas-Peucker algorithm</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.svg" title="earthdaily.accessor.Point.svg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">svg</span></code></a></p></td>
+<td><p>Returns SVG circle element for the Point geometry.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.symmetric_difference" title="earthdaily.accessor.Point.symmetric_difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">symmetric_difference</span></code></a></p></td>
+<td><p>Returns the symmetric difference of the geometries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.touches" title="earthdaily.accessor.Point.touches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">touches</span></code></a></p></td>
+<td><p>Returns True if geometries touch, else False</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.union" title="earthdaily.accessor.Point.union"><code class="xref py py-obj docutils literal notranslate"><span class="pre">union</span></code></a></p></td>
+<td><p>Returns the union of the geometries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.within" title="earthdaily.accessor.Point.within"><code class="xref py py-obj docutils literal notranslate"><span class="pre">within</span></code></a></p></td>
+<td><p>Returns True if geometry is within the other, else False</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.area" title="earthdaily.accessor.Point.area"><code class="xref py py-obj docutils literal notranslate"><span class="pre">area</span></code></a></p></td>
+<td><p>Unitless area of the geometry (float)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.boundary" title="earthdaily.accessor.Point.boundary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boundary</span></code></a></p></td>
+<td><p>Returns a lower dimension geometry that bounds the object</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.bounds" title="earthdaily.accessor.Point.bounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bounds</span></code></a></p></td>
+<td><p>Returns minimum bounding region (minx, miny, maxx, maxy)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.centroid" title="earthdaily.accessor.Point.centroid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">centroid</span></code></a></p></td>
+<td><p>Returns the geometric center of the object</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.convex_hull" title="earthdaily.accessor.Point.convex_hull"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convex_hull</span></code></a></p></td>
+<td><p>that's a convex hull, more or less</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.coords" title="earthdaily.accessor.Point.coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coords</span></code></a></p></td>
+<td><p>Access to geometry's coordinates (CoordinateSequence)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.envelope" title="earthdaily.accessor.Point.envelope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">envelope</span></code></a></p></td>
+<td><p>A figure that envelopes the geometry</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.geom_type" title="earthdaily.accessor.Point.geom_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geom_type</span></code></a></p></td>
+<td><p>Name of the geometry's type, such as 'Point'</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.has_z" title="earthdaily.accessor.Point.has_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_z</span></code></a></p></td>
+<td><p>True if the geometry's coordinate sequence(s) have z values (are 3-dimensional)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.is_closed" title="earthdaily.accessor.Point.is_closed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_closed</span></code></a></p></td>
+<td><p>True if the geometry is closed, else False</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.is_empty" title="earthdaily.accessor.Point.is_empty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_empty</span></code></a></p></td>
+<td><p>True if the set of points in this geometry is empty, else False</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.is_ring" title="earthdaily.accessor.Point.is_ring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_ring</span></code></a></p></td>
+<td><p>True if the geometry is a closed ring, else False</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.is_simple" title="earthdaily.accessor.Point.is_simple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_simple</span></code></a></p></td>
+<td><p>True if the geometry is simple, meaning that any self-intersections are only at boundary points, else False</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.is_valid" title="earthdaily.accessor.Point.is_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid</span></code></a></p></td>
+<td><p>True if the geometry is valid (definition depends on sub-class), else False</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.length" title="earthdaily.accessor.Point.length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">length</span></code></a></p></td>
+<td><p>Unitless length of the geometry (float)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.minimum_clearance" title="earthdaily.accessor.Point.minimum_clearance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">minimum_clearance</span></code></a></p></td>
+<td><p>Unitless distance by which a node could be moved to produce an invalid geometry (float)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.minimum_rotated_rectangle" title="earthdaily.accessor.Point.minimum_rotated_rectangle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">minimum_rotated_rectangle</span></code></a></p></td>
+<td><p>Returns the oriented envelope (minimum rotated rectangle) that encloses the geometry.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.oriented_envelope" title="earthdaily.accessor.Point.oriented_envelope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">oriented_envelope</span></code></a></p></td>
+<td><p>Returns the oriented envelope (minimum rotated rectangle) that encloses the geometry.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.type" title="earthdaily.accessor.Point.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.wkb" title="earthdaily.accessor.Point.wkb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wkb</span></code></a></p></td>
+<td><p>WKB representation of the geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.wkb_hex" title="earthdaily.accessor.Point.wkb_hex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wkb_hex</span></code></a></p></td>
+<td><p>WKB hex representation of the geometry</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.wkt" title="earthdaily.accessor.Point.wkt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wkt</span></code></a></p></td>
+<td><p>WKT representation of the geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.x" title="earthdaily.accessor.Point.x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">x</span></code></a></p></td>
+<td><p>Return x coordinate.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.xy" title="earthdaily.accessor.Point.xy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xy</span></code></a></p></td>
+<td><p>Separate arrays of X and Y coordinate values</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.y" title="earthdaily.accessor.Point.y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">y</span></code></a></p></td>
+<td><p>Return y coordinate.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.accessor.Point.z" title="earthdaily.accessor.Point.z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">z</span></code></a></p></td>
+<td><p>Return z coordinate.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.x">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#earthdaily.accessor.Point.x" title="Link to this definition"></a></dt>
+<dd><p>Return x coordinate.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.y">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#earthdaily.accessor.Point.y" title="Link to this definition"></a></dt>
+<dd><p>Return y coordinate.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.z">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z</span></span><a class="headerlink" href="#earthdaily.accessor.Point.z" title="Link to this definition"></a></dt>
+<dd><p>Return z coordinate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.svg">
+<span class="sig-name descname"><span class="pre">svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shapely/geometry/point.html#Point.svg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.accessor.Point.svg" title="Link to this definition"></a></dt>
+<dd><p>Returns SVG circle element for the Point geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scale_factor</strong> (<em>float</em>) – Multiplication factor for the SVG circle diameter.  Default is 1.</p></li>
+<li><p><strong>fill_color</strong> (<em>str</em><em>, </em><em>optional</em>) – Hex string for fill color. Default is to use “#66cc99” if
+geometry is valid, and “#ff3333” if invalid.</p></li>
+<li><p><strong>opacity</strong> (<em>float</em>) – Float number between 0 and 1 for color opacity. Default value is 0.6</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.xy">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xy</span></span><a class="headerlink" href="#earthdaily.accessor.Point.xy" title="Link to this definition"></a></dt>
+<dd><p>Separate arrays of X and Y coordinate values</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">xy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">[0.0]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="go">[0.0]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.almost_equals">
+<span class="sig-name descname"><span class="pre">almost_equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.almost_equals" title="Link to this definition"></a></dt>
+<dd><p>True if geometries are equal at all coordinates to a
+specified decimal place.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.8.0: </span>The ‘almost_equals()’ method is deprecated
+and will be removed in Shapely 2.1 because the name is
+confusing. The ‘equals_exact()’ method should be used
+instead.</p>
+</div>
+<p>Refers to approximate coordinate equality, which requires
+coordinates to be approximately equal and in the same order for
+all components of a geometry.</p>
+<p>Because of this it is possible for “equals()” to be True for two
+geometries and “almost_equals()” to be False.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]),</span>
+<span class="gp">... </span>    <span class="mf">1e-6</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.area">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">area</span></span><a class="headerlink" href="#earthdaily.accessor.Point.area" title="Link to this definition"></a></dt>
+<dd><p>Unitless area of the geometry (float)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.boundary">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">boundary</span></span><a class="headerlink" href="#earthdaily.accessor.Point.boundary" title="Link to this definition"></a></dt>
+<dd><p>Returns a lower dimension geometry that bounds the object</p>
+<p>The boundary of a polygon is a line, the boundary of a line is a
+collection of points. The boundary of a point is an empty (null)
+collection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.bounds">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><a class="headerlink" href="#earthdaily.accessor.Point.bounds" title="Link to this definition"></a></dt>
+<dd><p>Returns minimum bounding region (minx, miny, maxx, maxy)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.buffer">
+<span class="sig-name descname"><span class="pre">buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quad_segs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cap_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'round'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">join_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'round'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mitre_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_sided</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.buffer" title="Link to this definition"></a></dt>
+<dd><p>Get a geometry that represents all points within a distance
+of this geometry.</p>
+<p>A positive distance produces a dilation, a negative distance an
+erosion. A very small or zero distance may sometimes be used to
+“tidy” a polygon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>float</em>) – The distance to buffer around the object.</p></li>
+<li><p><strong>resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – The resolution of the buffer around each vertex of the
+object.</p></li>
+<li><p><strong>quad_segs</strong> (<em>int</em><em>, </em><em>optional</em>) – Sets the number of line segments used to approximate an
+angle fillet.</p></li>
+<li><p><strong>cap_style</strong> (<em>shapely.BufferCapStyle</em><em> or </em><em>{'round'</em><em>, </em><em>'square'</em><em>, </em><em>'flat'}</em><em>, </em><em>default 'round'</em>) – Specifies the shape of buffered line endings. BufferCapStyle.round (‘round’)
+results in circular line endings (see <code class="docutils literal notranslate"><span class="pre">quad_segs</span></code>). Both BufferCapStyle.square
+(‘square’) and BufferCapStyle.flat (‘flat’) result in rectangular line endings,
+only BufferCapStyle.flat (‘flat’) will end at the original vertex,
+while BufferCapStyle.square (‘square’) involves adding the buffer width.</p></li>
+<li><p><strong>join_style</strong> (<em>shapely.BufferJoinStyle</em><em> or </em><em>{'round'</em><em>, </em><em>'mitre'</em><em>, </em><em>'bevel'}</em><em>, </em><em>default 'round'</em>) – Specifies the shape of buffered line midpoints. BufferJoinStyle.ROUND (‘round’)
+results in rounded shapes. BufferJoinStyle.bevel (‘bevel’) results in a beveled
+edge that touches the original vertex. BufferJoinStyle.mitre (‘mitre’) results
+in a single vertex that is beveled depending on the <code class="docutils literal notranslate"><span class="pre">mitre_limit</span></code> parameter.</p></li>
+<li><p><strong>mitre_limit</strong> (<em>float</em><em>, </em><em>optional</em>) – The mitre limit ratio is used for very sharp corners. The
+mitre ratio is the ratio of the distance from the corner to
+the end of the mitred offset corner. When two line segments
+meet at a sharp angle, a miter join will extend the original
+geometry. To prevent unreasonable geometry, the mitre limit
+allows controlling the maximum length of the join corner.
+Corners with a ratio which exceed the limit will be beveled.</p></li>
+<li><p><strong>single_side</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>The side used is determined by the sign of the buffer
+distance:</p>
+<blockquote>
+<div><p>a positive distance indicates the left-hand side
+a negative distance indicates the right-hand side</p>
+</div></blockquote>
+<p>The single-sided buffer of point geometries is the same as
+the regular buffer.  The End Cap Style for single-sided
+buffers is always ignored, and forced to the equivalent of
+CAP_FLAT.</p>
+</p></li>
+<li><p><strong>quadsegs</strong> (<em>int</em><em>, </em><em>optional</em>) – Deprecated alias for <cite>quad_segs</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Geometry</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The return value is a strictly two-dimensional geometry. All
+Z coordinates of the original geometry will be ignored.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">shapely.wkt</span><span class="w"> </span><span class="kn">import</span> <span class="n">loads</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="s1">&#39;POINT (0.0 0.0)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>16-gon approx of a unit radius circle:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>
+<span class="go">3.1365484905459...</span>
+</pre></div>
+</div>
+<p>128-gon approximation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>
+<span class="go">3.141513801144...</span>
+</pre></div>
+</div>
+<p>triangle approximation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>
+<span class="go">3.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cap_style</span><span class="o">=</span><span class="n">BufferCapStyle</span><span class="o">.</span><span class="n">square</span><span class="p">)</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+<span class="go">[(1.0, 1.0), (1.0, -1.0), (-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cap_style</span><span class="o">=</span><span class="n">BufferCapStyle</span><span class="o">.</span><span class="n">square</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>
+<span class="go">4.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.centroid">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">centroid</span></span><a class="headerlink" href="#earthdaily.accessor.Point.centroid" title="Link to this definition"></a></dt>
+<dd><p>Returns the geometric center of the object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.contains">
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.contains" title="Link to this definition"></a></dt>
+<dd><p>Returns True if the geometry contains the other, else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.contains_properly">
+<span class="sig-name descname"><span class="pre">contains_properly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.contains_properly" title="Link to this definition"></a></dt>
+<dd><p>Returns True if the geometry completely contains the other, with no
+common boundary points, else False</p>
+<p>Refer to <cite>shapely.contains_properly</cite> for full documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.convex_hull">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convex_hull</span></span><a class="headerlink" href="#earthdaily.accessor.Point.convex_hull" title="Link to this definition"></a></dt>
+<dd><p>that’s a
+convex hull, more or less</p>
+<p>The convex hull of a three member multipoint, for example, is a
+triangular polygon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Imagine an elastic band stretched around the geometry</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.coords">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coords</span></span><a class="headerlink" href="#earthdaily.accessor.Point.coords" title="Link to this definition"></a></dt>
+<dd><p>Access to geometry’s coordinates (CoordinateSequence)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.covered_by">
+<span class="sig-name descname"><span class="pre">covered_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.covered_by" title="Link to this definition"></a></dt>
+<dd><p>Returns True if the geometry is covered by the other, else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.covers">
+<span class="sig-name descname"><span class="pre">covers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.covers" title="Link to this definition"></a></dt>
+<dd><p>Returns True if the geometry covers the other, else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.crosses">
+<span class="sig-name descname"><span class="pre">crosses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.crosses" title="Link to this definition"></a></dt>
+<dd><p>Returns True if the geometries cross, else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.difference">
+<span class="sig-name descname"><span class="pre">difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.difference" title="Link to this definition"></a></dt>
+<dd><p>Returns the difference of the geometries.</p>
+<p>Refer to <cite>shapely.difference</cite> for full documentation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.disjoint">
+<span class="sig-name descname"><span class="pre">disjoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.disjoint" title="Link to this definition"></a></dt>
+<dd><p>Returns True if geometries are disjoint, else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.distance">
+<span class="sig-name descname"><span class="pre">distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.distance" title="Link to this definition"></a></dt>
+<dd><p>Unitless distance to other geometry (float)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.dwithin">
+<span class="sig-name descname"><span class="pre">dwithin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.dwithin" title="Link to this definition"></a></dt>
+<dd><p>Returns True if geometry is within a given distance from the other, else False.</p>
+<p>Refer to <cite>shapely.dwithin</cite> for full documentation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.envelope">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">envelope</span></span><a class="headerlink" href="#earthdaily.accessor.Point.envelope" title="Link to this definition"></a></dt>
+<dd><p>A figure that envelopes the geometry</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.equals">
+<span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.equals" title="Link to this definition"></a></dt>
+<dd><p>Returns True if geometries are equal, else False.</p>
+<p>This method considers point-set equality (or topological
+equality), and is equivalent to (self.within(other) &amp;
+self.contains(other)).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.equals_exact">
+<span class="sig-name descname"><span class="pre">equals_exact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.equals_exact" title="Link to this definition"></a></dt>
+<dd><p>True if geometries are equal to within a specified
+tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<em>BaseGeometry</em>) – The other geometry object in this comparison.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – Absolute tolerance in the same units as coordinates.</p></li>
+<li><p><strong>equality</strong> (<em>This method considers coordinate</em>)</p></li>
+<li><p><strong>requires</strong> (<em>which</em>)</p></li>
+<li><p><strong>components</strong> (<em>coordinates to be equal and in the same order for all</em>)</p></li>
+<li><p><strong>geometry.</strong> (<em>of a</em>)</p></li>
+<li><p><strong>two</strong> (<em>Because</em><em> of </em><em>this it is possible for &quot;equals</em><em>(</em><em>)</em><em>&quot; to be True for</em>)</p></li>
+<li><p><strong>False.</strong> (<em>geometries and &quot;equals_exact</em><em>(</em><em>)</em><em>&quot; to be</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]),</span>
+<span class="gp">... </span>    <span class="mf">1e-6</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.geom_type">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">geom_type</span></span><a class="headerlink" href="#earthdaily.accessor.Point.geom_type" title="Link to this definition"></a></dt>
+<dd><p>Name of the geometry’s type, such as ‘Point’</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.geometryType">
+<span class="sig-name descname"><span class="pre">geometryType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.geometryType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.has_z">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_z</span></span><a class="headerlink" href="#earthdaily.accessor.Point.has_z" title="Link to this definition"></a></dt>
+<dd><p>True if the geometry’s coordinate sequence(s) have z values (are
+3-dimensional)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.hausdorff_distance">
+<span class="sig-name descname"><span class="pre">hausdorff_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.hausdorff_distance" title="Link to this definition"></a></dt>
+<dd><p>Unitless hausdorff distance to other geometry (float)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.interpolate">
+<span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.interpolate" title="Link to this definition"></a></dt>
+<dd><p>Return a point at the specified distance along a linear geometry</p>
+<p>Negative length values are taken as measured in the reverse
+direction from the end of the geometry. Out-of-range index
+values are handled by clamping them to the valid range of values.
+If the normalized arg is True, the distance will be interpreted as a
+fraction of the geometry’s length.</p>
+<p>Alias of <cite>line_interpolate_point</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.intersection">
+<span class="sig-name descname"><span class="pre">intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.intersection" title="Link to this definition"></a></dt>
+<dd><p>Returns the intersection of the geometries.</p>
+<p>Refer to <cite>shapely.intersection</cite> for full documentation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.intersects">
+<span class="sig-name descname"><span class="pre">intersects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.intersects" title="Link to this definition"></a></dt>
+<dd><p>Returns True if geometries intersect, else False</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.is_closed">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_closed</span></span><a class="headerlink" href="#earthdaily.accessor.Point.is_closed" title="Link to this definition"></a></dt>
+<dd><p>True if the geometry is closed, else False</p>
+<p>Applicable only to 1-D geometries.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.is_empty">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_empty</span></span><a class="headerlink" href="#earthdaily.accessor.Point.is_empty" title="Link to this definition"></a></dt>
+<dd><p>True if the set of points in this geometry is empty, else False</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.is_ring">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_ring</span></span><a class="headerlink" href="#earthdaily.accessor.Point.is_ring" title="Link to this definition"></a></dt>
+<dd><p>True if the geometry is a closed ring, else False</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.is_simple">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_simple</span></span><a class="headerlink" href="#earthdaily.accessor.Point.is_simple" title="Link to this definition"></a></dt>
+<dd><p>True if the geometry is simple, meaning that any self-intersections
+are only at boundary points, else False</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.is_valid">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_valid</span></span><a class="headerlink" href="#earthdaily.accessor.Point.is_valid" title="Link to this definition"></a></dt>
+<dd><p>True if the geometry is valid (definition depends on sub-class),
+else False</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.length">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">length</span></span><a class="headerlink" href="#earthdaily.accessor.Point.length" title="Link to this definition"></a></dt>
+<dd><p>Unitless length of the geometry (float)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.line_interpolate_point">
+<span class="sig-name descname"><span class="pre">line_interpolate_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.line_interpolate_point" title="Link to this definition"></a></dt>
+<dd><p>Return a point at the specified distance along a linear geometry</p>
+<p>Negative length values are taken as measured in the reverse
+direction from the end of the geometry. Out-of-range index
+values are handled by clamping them to the valid range of values.
+If the normalized arg is True, the distance will be interpreted as a
+fraction of the geometry’s length.</p>
+<p>Alias of <cite>interpolate</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.line_locate_point">
+<span class="sig-name descname"><span class="pre">line_locate_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.line_locate_point" title="Link to this definition"></a></dt>
+<dd><p>Returns the distance along this geometry to a point nearest the
+specified point</p>
+<p>If the normalized arg is True, return the distance normalized to the
+length of the linear geometry.</p>
+<p>Alias of <cite>project</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.minimum_clearance">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum_clearance</span></span><a class="headerlink" href="#earthdaily.accessor.Point.minimum_clearance" title="Link to this definition"></a></dt>
+<dd><p>Unitless distance by which a node could be moved to produce an invalid geometry (float)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.minimum_rotated_rectangle">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum_rotated_rectangle</span></span><a class="headerlink" href="#earthdaily.accessor.Point.minimum_rotated_rectangle" title="Link to this definition"></a></dt>
+<dd><p>Returns the oriented envelope (minimum rotated rectangle) that
+encloses the geometry.</p>
+<p>Unlike <cite>envelope</cite> this rectangle is not constrained to be parallel to the
+coordinate axes. If the convex hull of the object is a degenerate (line
+or point) this degenerate is returned.</p>
+<p>Alias of <cite>oriented_envelope</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.normalize" title="Link to this definition"></a></dt>
+<dd><p>Converts geometry to normal form (or canonical form).</p>
+<p>This method orders the coordinates, rings of a polygon and parts of
+multi geometries consistently. Typically useful for testing purposes
+(for example in combination with <cite>equals_exact</cite>).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">shapely</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiLineString</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line</span> <span class="o">=</span> <span class="n">MultiLineString</span><span class="p">([[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="go">&lt;MULTILINESTRING ((2 2, 3 3), (0 0, 1 1))&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.oriented_envelope">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">oriented_envelope</span></span><a class="headerlink" href="#earthdaily.accessor.Point.oriented_envelope" title="Link to this definition"></a></dt>
+<dd><p>Returns the oriented envelope (minimum rotated rectangle) that
+encloses the geometry.</p>
+<p>Unlike envelope this rectangle is not constrained to be parallel to the
+coordinate axes. If the convex hull of the object is a degenerate (line
+or point) this degenerate is returned.</p>
+<p>Alias of <cite>minimum_rotated_rectangle</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.overlaps">
+<span class="sig-name descname"><span class="pre">overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.overlaps" title="Link to this definition"></a></dt>
+<dd><p>Returns True if geometries overlap, else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.point_on_surface">
+<span class="sig-name descname"><span class="pre">point_on_surface</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.point_on_surface" title="Link to this definition"></a></dt>
+<dd><p>Returns a point guaranteed to be within the object, cheaply.</p>
+<p>Alias of <cite>representative_point</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.project">
+<span class="sig-name descname"><span class="pre">project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.project" title="Link to this definition"></a></dt>
+<dd><p>Returns the distance along this geometry to a point nearest the
+specified point</p>
+<p>If the normalized arg is True, return the distance normalized to the
+length of the linear geometry.</p>
+<p>Alias of <cite>line_locate_point</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.relate">
+<span class="sig-name descname"><span class="pre">relate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.relate" title="Link to this definition"></a></dt>
+<dd><p>Returns the DE-9IM intersection matrix for the two geometries
+(string)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.relate_pattern">
+<span class="sig-name descname"><span class="pre">relate_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.relate_pattern" title="Link to this definition"></a></dt>
+<dd><p>Returns True if the DE-9IM string code for the relationship between
+the geometries satisfies the pattern, else False</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.representative_point">
+<span class="sig-name descname"><span class="pre">representative_point</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.representative_point" title="Link to this definition"></a></dt>
+<dd><p>Returns a point guaranteed to be within the object, cheaply.</p>
+<p>Alias of <cite>point_on_surface</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.reverse">
+<span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.reverse" title="Link to this definition"></a></dt>
+<dd><p>Returns a copy of this geometry with the order of coordinates reversed.</p>
+<p>If the geometry is a polygon with interior rings, the interior rings are also
+reversed.</p>
+<p>Points are unchanged.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_ccw</span></code></dt><dd><p>Checks if a geometry is clockwise.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">shapely</span><span class="w"> </span><span class="kn">import</span> <span class="n">LineString</span><span class="p">,</span> <span class="n">Polygon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="go">&lt;LINESTRING (1 2, 0 0)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Polygon</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="go">&lt;POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.segmentize">
+<span class="sig-name descname"><span class="pre">segmentize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_segment_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.segmentize" title="Link to this definition"></a></dt>
+<dd><p>Adds vertices to line segments based on maximum segment length.</p>
+<p>Additional vertices will be added to every line segment in an input geometry
+so that segments are no longer than the provided maximum segment length. New
+vertices will evenly subdivide each segment.</p>
+<p>Only linear components of input geometries are densified; other geometries
+are returned unmodified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>max_segment_length</strong> (<em>float</em><em> or </em><em>array_like</em>) – Additional vertices will be added so that all line segments are no
+longer this value.  Must be greater than 0.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">shapely</span><span class="w"> </span><span class="kn">import</span> <span class="n">LineString</span><span class="p">,</span> <span class="n">Polygon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span><span class="o">.</span><span class="n">segmentize</span><span class="p">(</span><span class="n">max_segment_length</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">&lt;LINESTRING (0 0, 0 5, 0 10)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Polygon</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span><span class="o">.</span><span class="n">segmentize</span><span class="p">(</span><span class="n">max_segment_length</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">&lt;POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0))&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.simplify">
+<span class="sig-name descname"><span class="pre">simplify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_topology</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.simplify" title="Link to this definition"></a></dt>
+<dd><p>Returns a simplified geometry produced by the Douglas-Peucker
+algorithm</p>
+<p>Coordinates of the simplified geometry will be no more than the
+tolerance distance from the original. Unless the topology preserving
+option is used, the algorithm may produce self-intersecting or
+otherwise invalid geometries.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.symmetric_difference">
+<span class="sig-name descname"><span class="pre">symmetric_difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.symmetric_difference" title="Link to this definition"></a></dt>
+<dd><p>Returns the symmetric difference of the geometries.</p>
+<p>Refer to <cite>shapely.symmetric_difference</cite> for full documentation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.touches">
+<span class="sig-name descname"><span class="pre">touches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.touches" title="Link to this definition"></a></dt>
+<dd><p>Returns True if geometries touch, else False</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.type">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#earthdaily.accessor.Point.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.union" title="Link to this definition"></a></dt>
+<dd><p>Returns the union of the geometries.</p>
+<p>Refer to <cite>shapely.union</cite> for full documentation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.within">
+<span class="sig-name descname"><span class="pre">within</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#earthdaily.accessor.Point.within" title="Link to this definition"></a></dt>
+<dd><p>Returns True if geometry is within the other, else False</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.wkb">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wkb</span></span><a class="headerlink" href="#earthdaily.accessor.Point.wkb" title="Link to this definition"></a></dt>
+<dd><p>WKB representation of the geometry</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.wkb_hex">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wkb_hex</span></span><a class="headerlink" href="#earthdaily.accessor.Point.wkb_hex" title="Link to this definition"></a></dt>
+<dd><p>WKB hex representation of the geometry</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="earthdaily.accessor.Point.wkt">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wkt</span></span><a class="headerlink" href="#earthdaily.accessor.Point.wkt" title="Link to this definition"></a></dt>
+<dd><p>WKT representation of the geometry</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="earthdaily.accessor.GeometryManager.html" class="btn btn-neutral float-left" title="earthdaily.accessor.GeometryManager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.accessor.whittaker.html" class="btn btn-neutral float-right" title="earthdaily.accessor.whittaker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.5.9
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
+      <dd><a href="earthdaily.accessor.Point.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

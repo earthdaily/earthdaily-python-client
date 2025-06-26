@@ -1,0 +1,23 @@
+earthdaily.legacy.core
+======================
+
+.. automodule:: earthdaily.legacy.core
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,764 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EarthDaily Python Client Documentation &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="earthdaily" href="_autosummary/earthdaily.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/earthdaily.html">earthdaily</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">EarthDaily Python Client Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="earthdaily-python-client-documentation">
+<h1>EarthDaily Python Client Documentation<a class="headerlink" href="#earthdaily-python-client-documentation" title="Link to this heading"></a></h1>
+<aside class="sidebar">
+<p class="sidebar-title">About EarthDaily Python CLient</p>
+<div class="line-block">
+<div class="line"><strong>Author</strong>: EarthDaily</div>
+<div class="line"><strong>Source code</strong>: <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client">Git project</a></div>
+<div class="line"><strong>Bug tracker</strong>: <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/issues">Git issues</a></div>
+<div class="line"><strong>Generated</strong>: Jun 25, 2025</div>
+<div class="line"><strong>License</strong>: MIT</div>
+</div>
+</aside>
+<section id="earthdaily-python-client">
+<h2>EarthDaily Python Client<a class="headerlink" href="#earthdaily-python-client" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://badge.fury.io/py/earthdaily"><img alt="PyPI version" src="https://badge.fury.io/py/earthdaily.svg" /></a>
+<a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/"><img alt="Documentation" src="https://img.shields.io/badge/Documentation-Online-brightgreen.svg" /></a>
+<img alt="Python Versions" src="https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue" /></p>
+<p>The EarthDaily Python Client is a comprehensive library for interacting with the EarthDaily Analytics platform. It provides seamless access to satellite data, STAC item management, and platform APIs through a unified interface.</p>
+<section id="key-features">
+<h3>🚀 Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Platform API Access</strong>: Full integration with EarthDaily platform services</p></li>
+<li><p><strong>STAC Item Management</strong>: Complete CRUD operations for STAC items</p></li>
+<li><p><strong>Legacy Support</strong>: Backward compatibility with v0 datacube functionality</p></li>
+<li><p><strong>Modern Architecture</strong>: Streamlined client design with comprehensive error handling</p></li>
+<li><p><strong>Flexible Installation</strong>: Modular installation options for different use cases</p></li>
+</ul>
+</section>
+<section id="installation">
+<h3>📦 Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h3>
+<p><strong>Supported Python Versions</strong>: 3.10, 3.11, 3.12, 3.13</p>
+<section id="basic-installation">
+<h4>Basic Installation<a class="headerlink" href="#basic-installation" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily
+</pre></div>
+</div>
+</section>
+<section id="recommended-installation-platform-features">
+<h4>Recommended Installation (Platform Features)<a class="headerlink" href="#recommended-installation-platform-features" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily<span class="o">[</span>platform<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="legacy-support-v0-compatibility">
+<h4>Legacy Support (v0 Compatibility)<a class="headerlink" href="#legacy-support-v0-compatibility" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily<span class="o">[</span>legacy<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="full-installation-all-features">
+<h4>Full Installation (All Features)<a class="headerlink" href="#full-installation-all-features" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily<span class="o">[</span>platform,legacy<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="environment-setup">
+<h3>🔧 Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading"></a></h3>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in your project root with your credentials:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># .env</span>
+<span class="nv">EDS_CLIENT_ID</span><span class="o">=</span>your_client_id
+<span class="nv">EDS_SECRET</span><span class="o">=</span>your_client_secret
+<span class="nv">EDS_AUTH_URL</span><span class="o">=</span>https://your-auth-url.com/oauth/token
+<span class="nv">EDS_API_URL</span><span class="o">=</span>https://api.earthdaily.com
+</pre></div>
+</div>
+</section>
+<section id="quick-start">
+<h3>🏃 Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSClient</span><span class="p">,</span> <span class="n">EDSConfig</span>
+
+<span class="c1"># Load environment variables</span>
+<span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;.env&quot;</span><span class="p">)</span>
+
+<span class="c1"># Initialize client</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">EDSConfig</span><span class="p">()</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">EDSClient</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="alternative-configuration">
+<h4>Alternative Configuration<a class="headerlink" href="#alternative-configuration" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Direct configuration (without .env file)</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">EDSConfig</span><span class="p">(</span>
+    <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;your_client_id&quot;</span><span class="p">,</span>
+    <span class="n">client_secret</span><span class="o">=</span><span class="s2">&quot;your_client_secret&quot;</span><span class="p">,</span>
+    <span class="n">token_url</span><span class="o">=</span><span class="s2">&quot;https://your-auth-url.com/oauth/token&quot;</span><span class="p">,</span>
+    <span class="n">api_url</span><span class="o">=</span><span class="s2">&quot;https://api.earthdaily.com&quot;</span>
+<span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">EDSClient</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="core-features">
+<h3>🌍 Core Features<a class="headerlink" href="#core-features" title="Link to this heading"></a></h3>
+<section id="platform-api-integration">
+<h4>Platform API Integration<a class="headerlink" href="#platform-api-integration" title="Link to this heading"></a></h4>
+<p>Search for satellite data using STAC:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Search for Sentinel-2 data</span>
+<span class="n">search_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pystac_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">collections</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">],</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-06-01T00:00:00Z/2024-08-01T00:00:00Z&quot;</span><span class="p">,</span>
+    <span class="n">max_items</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+<span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">search_result</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="stac-item-management">
+<h4>STAC Item Management<a class="headerlink" href="#stac-item-management" title="Link to this heading"></a></h4>
+<p>Create and manage STAC items:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a new STAC item</span>
+<span class="n">stac_item</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;stac_version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;example-item-123&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;collection&quot;</span><span class="p">:</span> <span class="s2">&quot;your-collection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">67.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">37.8</span><span class="p">]},</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;datetime&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-01-01T00:00:00Z&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;links&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;assets&quot;</span><span class="p">:</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">create_item</span><span class="p">(</span><span class="s2">&quot;your-collection&quot;</span><span class="p">,</span> <span class="n">stac_item</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="legacy-datacube-support">
+<h4>Legacy Datacube Support<a class="headerlink" href="#legacy-datacube-support" title="Link to this heading"></a></h4>
+<p>Access v0 functionality through the legacy interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.legacy.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_pivot</span>
+
+<span class="c1"># Load geometry and create datacube</span>
+<span class="n">geometry</span> <span class="o">=</span> <span class="n">load_pivot</span><span class="p">()</span>
+<span class="n">datacube</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">legacy</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
+    <span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span>
+    <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;nir&quot;</span><span class="p">],</span>
+    <span class="n">intersects</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2022-08-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-08-09&quot;</span><span class="p">],</span>
+    <span class="n">mask_with</span><span class="o">=</span><span class="s2">&quot;native&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="architecture-overview">
+<h3>🏗️ Architecture Overview<a class="headerlink" href="#architecture-overview" title="Link to this heading"></a></h3>
+<p>The client is organized into main modules:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">client.platform</span></code></strong>: Modern platform API access</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">pystac_client</span></code>: STAC catalog search</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stac_item</span></code>: STAC item CRUD operations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bulk_search</span></code>: Bulk search operations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bulk_insert</span></code>: Bulk data insertion</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bulk_delete</span></code>: Bulk data deletion</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">client.legacy</span></code></strong>: v0 compatibility layer</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">datacube()</span></code>: Create analysis-ready datacubes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search()</span></code>: Legacy search functionality</p></li>
+<li><p>Access to existing v0 methods</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="platform-api-methods">
+<h3>🔧 Platform API Methods<a class="headerlink" href="#platform-api-methods" title="Link to this heading"></a></h3>
+<section id="stac-item-management-client-platform-stac-item">
+<h4>STAC Item Management (<code class="docutils literal notranslate"><span class="pre">client.platform.stac_item</span></code>)<a class="headerlink" href="#stac-item-management-client-platform-stac-item" title="Link to this heading"></a></h4>
+<section id="create-items">
+<h5>Create Items<a class="headerlink" href="#create-items" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a new STAC item</span>
+<span class="n">item</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">create_item</span><span class="p">(</span>
+    <span class="n">collection_id</span><span class="o">=</span><span class="s2">&quot;your-collection&quot;</span><span class="p">,</span>
+    <span class="n">item_data</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stac_version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;item-123&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">67.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">37.8</span><span class="p">]},</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;datetime&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-01-01T00:00:00Z&quot;</span><span class="p">}</span>
+    <span class="p">},</span>
+    <span class="n">return_format</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span>  <span class="c1"># &quot;dict&quot;, &quot;json&quot;, or &quot;pystac&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="read-items">
+<h5>Read Items<a class="headerlink" href="#read-items" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a specific item</span>
+<span class="n">item</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span>
+    <span class="n">collection_id</span><span class="o">=</span><span class="s2">&quot;your-collection&quot;</span><span class="p">,</span>
+    <span class="n">item_id</span><span class="o">=</span><span class="s2">&quot;item-123&quot;</span><span class="p">,</span>
+    <span class="n">return_format</span><span class="o">=</span><span class="s2">&quot;pystac&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="update-items">
+<h5>Update Items<a class="headerlink" href="#update-items" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update an existing item</span>
+<span class="n">updated_item</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">update_item</span><span class="p">(</span>
+    <span class="n">collection_id</span><span class="o">=</span><span class="s2">&quot;your-collection&quot;</span><span class="p">,</span>
+    <span class="n">item_id</span><span class="o">=</span><span class="s2">&quot;item-123&quot;</span><span class="p">,</span>
+    <span class="n">item_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;updated&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-01-02T00:00:00Z&quot;</span><span class="p">}},</span>
+    <span class="n">return_format</span><span class="o">=</span><span class="s2">&quot;dict&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="delete-items">
+<h5>Delete Items<a class="headerlink" href="#delete-items" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete an item</span>
+<span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">delete_item</span><span class="p">(</span>
+    <span class="n">collection_id</span><span class="o">=</span><span class="s2">&quot;your-collection&quot;</span><span class="p">,</span>
+    <span class="n">item_id</span><span class="o">=</span><span class="s2">&quot;item-123&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="download-assets">
+<h5>Download Assets<a class="headerlink" href="#download-assets" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download item assets</span>
+<span class="n">downloads</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">download_assets</span><span class="p">(</span>
+    <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">,</span>
+    <span class="n">asset_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">],</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./downloads&quot;</span><span class="p">,</span>
+    <span class="n">max_workers</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="bulk-search-client-platform-bulk-search">
+<h4>Bulk Search (<code class="docutils literal notranslate"><span class="pre">client.platform.bulk_search</span></code>)<a class="headerlink" href="#bulk-search-client-platform-bulk-search" title="Link to this heading"></a></h4>
+<section id="create-bulk-search">
+<h5>Create Bulk Search<a class="headerlink" href="#create-bulk-search" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a bulk search job</span>
+<span class="n">search_job</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">bulk_search</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">collections</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">],</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01T00:00:00Z/2024-02-01T00:00:00Z&quot;</span><span class="p">,</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">74.2</span><span class="p">,</span> <span class="mf">40.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.9</span><span class="p">,</span> <span class="mf">40.9</span><span class="p">],</span>  <span class="c1"># NYC area</span>
+    <span class="n">limit</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">export_format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job ID: </span><span class="si">{</span><span class="n">search_job</span><span class="o">.</span><span class="n">job_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="monitor-job-status">
+<h5>Monitor Job Status<a class="headerlink" href="#monitor-job-status" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check job status</span>
+<span class="n">job_status</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">bulk_search</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">search_job</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Status: </span><span class="si">{</span><span class="n">job_status</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Assets: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">job_status</span><span class="o">.</span><span class="n">assets</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="download-results">
+<h5>Download Results<a class="headerlink" href="#download-results" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download search results when completed</span>
+<span class="k">if</span> <span class="n">job_status</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;COMPLETED&quot;</span><span class="p">:</span>
+    <span class="n">job_status</span><span class="o">.</span><span class="n">download_assets</span><span class="p">(</span><span class="n">save_location</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./bulk_results&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="bulk-insert-client-platform-bulk-insert">
+<h4>Bulk Insert (<code class="docutils literal notranslate"><span class="pre">client.platform.bulk_insert</span></code>)<a class="headerlink" href="#bulk-insert-client-platform-bulk-insert" title="Link to this heading"></a></h4>
+<section id="create-bulk-insert-job">
+<h5>Create Bulk Insert Job<a class="headerlink" href="#create-bulk-insert-job" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create bulk insert job</span>
+<span class="n">insert_job</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">bulk_insert</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">collection_id</span><span class="o">=</span><span class="s2">&quot;your-collection&quot;</span><span class="p">,</span>
+    <span class="n">error_handling_mode</span><span class="o">=</span><span class="s2">&quot;CONTINUE&quot;</span><span class="p">,</span>  <span class="c1"># or &quot;STOP&quot;</span>
+    <span class="n">conflict_resolution_mode</span><span class="o">=</span><span class="s2">&quot;SKIP&quot;</span>  <span class="c1"># or &quot;OVERRIDE&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="upload-data">
+<h5>Upload Data<a class="headerlink" href="#upload-data" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare STAC items file and upload</span>
+<span class="n">items_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./stac_items.jsonl&quot;</span><span class="p">)</span>  <span class="c1"># JSONL format</span>
+<span class="n">insert_job</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">items_file</span><span class="p">)</span>
+
+<span class="c1"># Start the job</span>
+<span class="n">insert_job</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="monitor-insert-progress">
+<h5>Monitor Insert Progress<a class="headerlink" href="#monitor-insert-progress" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check insert job status</span>
+<span class="n">job_status</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">bulk_insert</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">insert_job</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Items written: </span><span class="si">{</span><span class="n">job_status</span><span class="o">.</span><span class="n">items_written_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Errors: </span><span class="si">{</span><span class="n">job_status</span><span class="o">.</span><span class="n">items_error_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="bulk-delete-client-platform-bulk-delete">
+<h4>Bulk Delete (<code class="docutils literal notranslate"><span class="pre">client.platform.bulk_delete</span></code>)<a class="headerlink" href="#bulk-delete-client-platform-bulk-delete" title="Link to this heading"></a></h4>
+<section id="create-bulk-delete-job">
+<h5>Create Bulk Delete Job<a class="headerlink" href="#create-bulk-delete-job" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create bulk delete job</span>
+<span class="n">delete_job</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">bulk_delete</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">collection_id</span><span class="o">=</span><span class="s2">&quot;your-collection&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="upload-item-ids">
+<h5>Upload Item IDs<a class="headerlink" href="#upload-item-ids" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare file with item IDs to delete</span>
+<span class="n">ids_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./items_to_delete.txt&quot;</span><span class="p">)</span>
+<span class="n">delete_job</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">ids_file</span><span class="p">)</span>
+
+<span class="c1"># Start the deletion</span>
+<span class="n">delete_job</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="monitor-deletion-progress">
+<h5>Monitor Deletion Progress<a class="headerlink" href="#monitor-deletion-progress" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check delete job status</span>
+<span class="n">job_status</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">bulk_delete</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">delete_job</span><span class="o">.</span><span class="n">job_id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Items deleted: </span><span class="si">{</span><span class="n">job_status</span><span class="o">.</span><span class="n">items_deleted_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Errors: </span><span class="si">{</span><span class="n">job_status</span><span class="o">.</span><span class="n">items_error_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="stac-catalog-search-client-platform-pystac-client">
+<h4>STAC Catalog Search (<code class="docutils literal notranslate"><span class="pre">client.platform.pystac_client</span></code>)<a class="headerlink" href="#stac-catalog-search-client-platform-pystac-client" title="Link to this heading"></a></h4>
+<section id="standard-stac-search">
+<h5>Standard STAC Search<a class="headerlink" href="#standard-stac-search" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Search for items using STAC API</span>
+<span class="n">search_results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pystac_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">collections</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">],</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01T00:00:00Z/2024-02-01T00:00:00Z&quot;</span><span class="p">,</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">74.2</span><span class="p">,</span> <span class="mf">40.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.9</span><span class="p">,</span> <span class="mf">40.9</span><span class="p">],</span>
+    <span class="n">max_items</span><span class="o">=</span><span class="mi">50</span>
+<span class="p">)</span>
+
+<span class="c1"># Process results</span>
+<span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">search_results</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="get-collections">
+<h5>Get Collections<a class="headerlink" href="#get-collections" title="Link to this heading"></a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List available collections</span>
+<span class="n">collections</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pystac_client</span><span class="o">.</span><span class="n">get_collections</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">collection</span> <span class="ow">in</span> <span class="n">collections</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Collection: </span><span class="si">{</span><span class="n">collection</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="legacy-methods-client-legacy">
+<h3>🔄 Legacy Methods (<code class="docutils literal notranslate"><span class="pre">client.legacy</span></code>)<a class="headerlink" href="#legacy-methods-client-legacy" title="Link to this heading"></a></h3>
+<section id="create-datacubes">
+<h4>Create Datacubes<a class="headerlink" href="#create-datacubes" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.legacy.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_pivot</span>
+
+<span class="c1"># Load sample geometry</span>
+<span class="n">geometry</span> <span class="o">=</span> <span class="n">load_pivot</span><span class="p">()</span>
+
+<span class="c1"># Create analysis-ready datacube</span>
+<span class="n">datacube</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">legacy</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
+    <span class="n">collections</span><span class="o">=</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span>
+    <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;nir&quot;</span><span class="p">],</span>
+    <span class="n">intersects</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2022-08-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-08-09&quot;</span><span class="p">],</span>
+    <span class="n">mask_with</span><span class="o">=</span><span class="s2">&quot;native&quot;</span><span class="p">,</span>  <span class="c1"># Apply cloud masking</span>
+    <span class="n">clear_cover</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>      <span class="c1"># Minimum 50% clear pixels</span>
+    <span class="n">groupby_date</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span>  <span class="c1"># Aggregate by date</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="search-items">
+<h4>Search Items<a class="headerlink" href="#search-items" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Search for items (legacy interface)</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">legacy</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">collections</span><span class="o">=</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span>
+    <span class="n">intersects</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2022-08-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2022-08-09&quot;</span><span class="p">],</span>
+    <span class="n">limit</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-collection-datacubes">
+<h4>Multi-Collection Datacubes<a class="headerlink" href="#multi-collection-datacubes" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create datacube from multiple collections</span>
+<span class="n">datacube</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">legacy</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
+    <span class="n">collections</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sentinel-2-l2a&quot;</span><span class="p">,</span> <span class="s2">&quot;landsat-c2l2-sr&quot;</span><span class="p">],</span>
+    <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">],</span>
+    <span class="n">intersects</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2022-08&quot;</span><span class="p">,</span>
+    <span class="n">cross_calibration_collection</span><span class="o">=</span><span class="s2">&quot;landsat-c2l2-sr&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="usage-examples">
+<h3>🔍 Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading"></a></h3>
+<section id="data-discovery">
+<h4>Data Discovery<a class="headerlink" href="#data-discovery" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find available collections</span>
+<span class="n">collections</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pystac_client</span><span class="o">.</span><span class="n">get_collections</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">collections</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="download-data">
+<h4>Download Data<a class="headerlink" href="#download-data" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download assets from search results</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">download_item_assets</span><span class="p">(</span>
+        <span class="n">item</span><span class="p">,</span>
+        <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">],</span>
+        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;./downloads&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="error-handling">
+<h4>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSAPIError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">search_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pystac_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+        <span class="n">collections</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;invalid-collection&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="k">except</span> <span class="n">EDSAPIError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="documentation-examples">
+<h3>📚 Documentation &amp; Examples<a class="headerlink" href="#documentation-examples" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/">📖 <strong>Full API Documentation</strong></a></p></li>
+<li><p><a class="reference internal" href="#docs/migration-v0-to-v1.md"><span class="xref myst">🔄 <strong>Migration Guide (v0 → v1)</strong></span></a></p></li>
+<li><p><a class="reference internal" href="#examples/"><span class="xref myst">📝 <strong>Quick Start Examples</strong></span></a></p></li>
+<li><p><a class="reference internal" href="#custom_examples/"><span class="xref myst">🧪 <strong>Jupyter Notebooks</strong></span></a></p></li>
+</ul>
+</section>
+<section id="contributing">
+<h3>🤝 Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h3>
+<p>We welcome contributions! Please see our <a class="reference internal" href="#CONTRIBUTING.md"><span class="xref myst">Contributing Guide</span></a> for details on:</p>
+<ul class="simple">
+<li><p>Development setup</p></li>
+<li><p>Code style guidelines</p></li>
+<li><p>Testing procedures</p></li>
+<li><p>Pull request process</p></li>
+</ul>
+</section>
+<section id="license">
+<h3>📄 License<a class="headerlink" href="#license" title="Link to this heading"></a></h3>
+<p>This project is licensed under the MIT License - see the <a class="reference internal" href="#LICENSE"><span class="xref myst">LICENSE</span></a> file for details.</p>
+</section>
+<section id="support">
+<h3>🆘 Support<a class="headerlink" href="#support" title="Link to this heading"></a></h3>
+<p>Need help? Here’s how to get support:</p>
+<ul class="simple">
+<li><p>📖 Check the <a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/">documentation</a></p></li>
+<li><p>🐛 <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/issues/new">Open an issue</a> for bugs</p></li>
+<li><p>💬 Ask questions in <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/discussions">GitHub Discussions</a></p></li>
+<li><p>📧 Contact our support team</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Ready to get started?</strong> Check out our <a class="reference internal" href="#examples/quick_start.py"><span class="xref myst">Quick Start Example</span></a> or explore the <a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/">API Documentation</a>! 🚀</p>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">EarthDaily Python Client Documentation</a></li>
+</ul>
+</div>
+<section id="contributing-to-earthdaily-python-client">
+<h2>Contributing to EarthDaily Python Client<a class="headerlink" href="#contributing-to-earthdaily-python-client" title="Link to this heading"></a></h2>
+<p>This document will guide you through the steps required to set up your development environment, develop, test, and contribute to the project.</p>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
+<p>Ensure you have the following installed on your machine:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.python.org/downloads/">Python 3.10+</a></p></li>
+<li><p><a class="reference external" href="https://python-poetry.org/docs/#installation">Poetry</a> (for dependency management)</p></li>
+<li><p><a class="reference external" href="https://tox.readthedocs.io/en/latest/">Tox</a> (for running tests in multiple environments)</p></li>
+<li><p><a class="reference external" href="https://pre-commit.com/">Pre-commit</a> (for managing pre-commit hooks)</p></li>
+</ul>
+</section>
+<section id="setting-up-the-development-environment">
+<h3>Setting Up the Development Environment<a class="headerlink" href="#setting-up-the-development-environment" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Clone the repository</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:earthdaily/earthdaily-python-client.git
+<span class="nb">cd</span><span class="w"> </span>earthdaily-python-client
+</pre></div>
+</div>
+</li>
+<li><p><strong>Install dependencies using Poetry</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install<span class="w"> </span>--all-extras
+</pre></div>
+</div>
+</li>
+<li><p><strong>Set up pre-commit hooks</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pre-commit<span class="w"> </span>install
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="development-workflow">
+<h3>Development Workflow<a class="headerlink" href="#development-workflow" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Create a new branch for your feature or bugfix</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feature/your-feature-name
+</pre></div>
+</div>
+</li>
+<li><p><strong>Make your changes and commit them</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;your commit message&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Run tests locally</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>tox
+</pre></div>
+</div>
+</li>
+<li><p><strong>Push your changes and create a merge request</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feature/your-feature-name
+</pre></div>
+</div>
+<p>Then, go to the GitHub repository and create a new pull request.</p>
+</li>
+</ol>
+</section>
+<section id="running-tests">
+<h3>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h3>
+<p>We use <code class="docutils literal notranslate"><span class="pre">tox</span></code> to run tests across multiple Python versions. To run all tests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>tox
+</pre></div>
+</div>
+<p>To run tests for a specific Python version:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>py310<span class="w">  </span><span class="c1"># for Python 3.10</span>
+poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>py311<span class="w">  </span><span class="c1"># for Python 3.11</span>
+poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>py312<span class="w">  </span><span class="c1"># for Python 3.12</span>
+</pre></div>
+</div>
+<p>To run specific test environments:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>lint<span class="w">     </span><span class="c1"># Run linting</span>
+poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>format<span class="w">   </span><span class="c1"># Check formatting</span>
+poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>mypy<span class="w">     </span><span class="c1"># Run type checking</span>
+</pre></div>
+</div>
+</section>
+<section id="code-style-and-linting">
+<h3>Code Style and Linting<a class="headerlink" href="#code-style-and-linting" title="Link to this heading"></a></h3>
+<p>We use <code class="docutils literal notranslate"><span class="pre">ruff</span></code> for code linting and formatting. Pre-commit hooks are configured to run automatically.</p>
+<p>To check your code manually:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>lint
+</pre></div>
+</div>
+<p>To check formatting:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>format
+</pre></div>
+</div>
+<p>To run type checking:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>mypy
+</pre></div>
+</div>
+</section>
+<section id="building-the-package">
+<h3>Building the Package<a class="headerlink" href="#building-the-package" title="Link to this heading"></a></h3>
+<p>To build the package, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>build
+</pre></div>
+</div>
+<p>This will create both wheel and source distributions in the <code class="docutils literal notranslate"><span class="pre">dist/</span></code> directory.</p>
+</section>
+<section id="publishing-the-package">
+<h3>Publishing the Package<a class="headerlink" href="#publishing-the-package" title="Link to this heading"></a></h3>
+<p>Package publishing is handled by our CI/CD pipeline. Manual publishing should only be done if absolutely necessary and after consulting with the team.</p>
+</section>
+<section id="continuous-integration">
+<h3>Continuous Integration<a class="headerlink" href="#continuous-integration" title="Link to this heading"></a></h3>
+<p>Our project uses GitHub Actions for continuous integration. The configuration can be found in <code class="docutils literal notranslate"><span class="pre">.github/workflows/</span></code> at the root of the repository. It automatically runs tests, linting, and builds for each pull request.</p>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h3>
+<p>When adding new features or making significant changes, please update the documentation accordingly. This includes updating the README.md file and any relevant docstrings in the code.</p>
+</section>
+<section id="reporting-issues">
+<h3>Reporting Issues<a class="headerlink" href="#reporting-issues" title="Link to this heading"></a></h3>
+<p>If you encounter any bugs or have feature requests, please create an issue in our GitHub repository. Provide as much detail as possible, including steps to reproduce for bugs, and clear descriptions for feature requests.</p>
+</section>
+<section id="code-of-conduct">
+<h3>Code of Conduct<a class="headerlink" href="#code-of-conduct" title="Link to this heading"></a></h3>
+<p>Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.</p>
+<p>Thank you for contributing to EarthDaily Python Client!</p>
+</section>
+</section>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/earthdaily.html#module-earthdaily" title="earthdaily"><code class="xref py py-obj docutils literal notranslate"><span class="pre">earthdaily</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="_autosummary/earthdaily.html" class="btn btn-neutral float-right" title="earthdaily" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../1.0.0/index.html">1.0.0</a></dd>
+      <dd><a href="../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

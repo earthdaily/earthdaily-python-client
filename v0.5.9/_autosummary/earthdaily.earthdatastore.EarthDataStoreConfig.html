@@ -27,8 +27,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="earthdaily.earthdatastore.StacCollectionExplorer" href="earthdaily.earthdatastore.StacCollectionExplorer.html" />
-    <link rel="prev" title="earthdaily.earthdatastore.Auth" href="earthdaily.earthdatastore.Auth.html" /> 
+    <link rel="next" title="earthdaily.earthdatastore.ItemCollection" href="earthdaily.earthdatastore.ItemCollection.html" />
+    <link rel="prev" title="earthdaily.earthdatastore.Client" href="earthdaily.earthdatastore.Client.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -67,21 +67,34 @@
 <li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="earthdaily.EarthDataStore.html">earthdaily.earthdatastore</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.apply_single_condition.html">earthdaily.earthdatastore.apply_single_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.dataclass.html">earthdaily.earthdatastore.dataclass</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.datacube.html">earthdaily.earthdatastore.datacube</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.enhance_assets.html">earthdaily.earthdatastore.enhance_assets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.filter_items.html">earthdaily.earthdatastore.filter_items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.metacube.html">earthdaily.earthdatastore.metacube</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.parallel_search.html">earthdaily.earthdatastore.parallel_search</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.post_query_items.html">earthdaily.earthdatastore.post_query_items</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.validate_property_condition.html">earthdaily.earthdatastore.validate_property_condition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Any.html">earthdaily.earthdatastore.Any</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Auth.html">earthdaily.earthdatastore.Auth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Client.html">earthdaily.earthdatastore.Client</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">earthdaily.earthdatastore.EarthDataStoreConfig</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#earthdaily.earthdatastore.EarthDataStoreConfig"><code class="docutils literal notranslate"><span class="pre">EarthDataStoreConfig</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.ItemCollection.html">earthdaily.earthdatastore.ItemCollection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Path.html">earthdaily.earthdatastore.Path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Retry.html">earthdaily.earthdatastore.Retry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacApiIO.html">earthdaily.earthdatastore.StacApiIO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacCollectionExplorer.html">earthdaily.earthdatastore.StacCollectionExplorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.NoItemsFoundError.html">earthdaily.earthdatastore.NoItemsFoundError</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.datacube"><code class="docutils literal notranslate"><span class="pre">datacube()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.metacube"><code class="docutils literal notranslate"><span class="pre">metacube()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.html">earthdaily.earthdatastore.cube_utils</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.mask.html">earthdaily.earthdatastore.mask</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.parallel_search.html">earthdaily.earthdatastore.parallel_search</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.Path.html">earthdaily.Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.accessor.html">earthdaily.accessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.core.html">earthdaily.core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.datasets.html">earthdaily.datasets</a></li>
@@ -130,23 +143,48 @@
 <p class="rubric">Attributes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_token</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.EarthDataStoreConfig.access_token" title="earthdaily.earthdatastore.EarthDataStoreConfig.access_token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_token</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">auth_url</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.EarthDataStoreConfig.auth_url" title="earthdaily.earthdatastore.EarthDataStoreConfig.auth_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">auth_url</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">client_id</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.EarthDataStoreConfig.client_id" title="earthdaily.earthdatastore.EarthDataStoreConfig.client_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">client_id</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">client_secret</span></code></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.EarthDataStoreConfig.client_secret" title="earthdaily.earthdatastore.EarthDataStoreConfig.client_secret"><code class="xref py py-obj docutils literal notranslate"><span class="pre">client_secret</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">eds_url</span></code></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.earthdatastore.EarthDataStoreConfig.eds_url" title="earthdaily.earthdatastore.EarthDataStoreConfig.eds_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eds_url</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.EarthDataStoreConfig.auth_url">
+<span class="sig-name descname"><span class="pre">auth_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#earthdaily.earthdatastore.EarthDataStoreConfig.auth_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.EarthDataStoreConfig.client_secret">
+<span class="sig-name descname"><span class="pre">client_secret</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#earthdaily.earthdatastore.EarthDataStoreConfig.client_secret" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.EarthDataStoreConfig.client_id">
+<span class="sig-name descname"><span class="pre">client_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#earthdaily.earthdatastore.EarthDataStoreConfig.client_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.EarthDataStoreConfig.eds_url">
+<span class="sig-name descname"><span class="pre">eds_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://api.earthdaily.com/platform/v1/stac'</span></em><a class="headerlink" href="#earthdaily.earthdatastore.EarthDataStoreConfig.eds_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.EarthDataStoreConfig.access_token">
+<span class="sig-name descname"><span class="pre">access_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#earthdaily.earthdatastore.EarthDataStoreConfig.access_token" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
@@ -155,8 +193,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="earthdaily.earthdatastore.Auth.html" class="btn btn-neutral float-left" title="earthdaily.earthdatastore.Auth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="earthdaily.earthdatastore.StacCollectionExplorer.html" class="btn btn-neutral float-right" title="earthdaily.earthdatastore.StacCollectionExplorer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="earthdaily.earthdatastore.Client.html" class="btn btn-neutral float-left" title="earthdaily.earthdatastore.Client" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.earthdatastore.ItemCollection.html" class="btn btn-neutral float-right" title="earthdaily.earthdatastore.ItemCollection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
@@ -187,6 +225,10 @@
       <dt>Tags</dt>
       <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
       <dd><a href="earthdaily.earthdatastore.EarthDataStoreConfig.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../main/index.html">main</a></dd>
     </dl>
   </div>
 </div><script>

@@ -1,0 +1,6 @@
+earthdaily.legacy.earthdatastore.metacube
+=========================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore
+
+.. autofunction:: metacube

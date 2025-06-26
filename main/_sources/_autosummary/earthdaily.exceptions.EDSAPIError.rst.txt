@@ -1,0 +1,6 @@
+earthdaily.exceptions.EDSAPIError
+=================================
+
+.. currentmodule:: earthdaily.exceptions
+
+.. autoexception:: EDSAPIError

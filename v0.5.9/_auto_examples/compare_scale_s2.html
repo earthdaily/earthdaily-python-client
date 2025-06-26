@@ -137,21 +137,6 @@ to download the full example code.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/examples/compare_scale_s2.py&quot;</span>, line <span class="m">26</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="n">eds</span> <span class="o">=</span> <span class="n">EarthDataStore</span><span class="p">()</span>
-<span class="w">          </span><span class="pm">^^^^^^^^^^^^^^^^</span>
-  File <span class="nb">&quot;/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/__init__.py&quot;</span>, line <span class="m">51</span>, in <span class="n">EarthDataStore</span>
-<span class="w">    </span><span class="k">return</span> <span class="n">earthdatastore</span><span class="o">.</span><span class="n">Auth</span><span class="o">.</span><span class="n">from_credentials</span><span class="p">(</span>
-<span class="w">           </span><span class="pm">^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
-  File <span class="nb">&quot;/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/earthdatastore/__init__.py&quot;</span>, line <span class="m">464</span>, in <span class="n">from_credentials</span>
-<span class="w">    </span><span class="n">config</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_credentials</span><span class="p">(</span>
-<span class="w">             </span><span class="pm">^^^^^^^^^^^^^^^^^^^^^</span>
-  File <span class="nb">&quot;/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/earthdatastore/__init__.py&quot;</span>, line <span class="m">529</span>, in <span class="n">read_credentials</span>
-<span class="w">    </span><span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Credentials weren&#39;t found.&quot;</span><span class="p">)</span>
-<span class="gr">NotImplementedError</span>: <span class="n">Credentials weren&#39;t found.</span>
-</pre></div>
-</div>
 <p>Search for collection items</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_cube</span><span class="p">(</span><span class="n">rescale</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="n">pivot_cube</span> <span class="o">=</span> <span class="n">eds</span><span class="o">.</span><span class="n">datacube</span><span class="p">(</span>
@@ -195,7 +180,6 @@ to download the full example code.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.138 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-compare-scale-s2-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/5ea4ce5e4abd0c5e5e010e0100cd1d7c/compare_scale_s2.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">compare_scale_s2.ipynb</span></code></a></p>
@@ -247,6 +231,10 @@ to download the full example code.</p>
       <dt>Tags</dt>
       <dd><a href="../../1.0.0/index.html">1.0.0</a></dd>
       <dd><a href="compare_scale_s2.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../main/index.html">main</a></dd>
     </dl>
   </div>
 </div><script>

@@ -17,13 +17,22 @@
       EarthDataStore
    .. automodule:: earthdaily
       :members:
-      :exclude-members: 
+      :exclude-members: Path, 
       :undoc-members:
       :noindex:
    
    
    
    
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      Path
    
    
 

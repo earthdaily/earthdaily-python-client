@@ -1,0 +1,6 @@
+earthdaily.PackageNotFoundError
+===============================
+
+.. currentmodule:: earthdaily
+
+.. autoexception:: PackageNotFoundError

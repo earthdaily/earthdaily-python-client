@@ -461,18 +461,27 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">item_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())}</span>
 
+<div class="viewcode-block" id="StacCollectionExplorer.assets">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.StacCollectionExplorer.html#earthdaily.earthdatastore.StacCollectionExplorer.assets">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">assets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">asset_name</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">asset_metadata</span><span class="p">(</span><span class="n">asset_name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
+
+<div class="viewcode-block" id="StacCollectionExplorer.assets_metadata">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.StacCollectionExplorer.html#earthdaily.earthdatastore.StacCollectionExplorer.assets_metadata">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">assets_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">asset_name</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">asset_metadata</span><span class="p">(</span><span class="n">asset_name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">asset_metadata</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">()}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">asset_metadata</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="p">()}</span></div>
 
+
+<div class="viewcode-block" id="StacCollectionExplorer.asset_metadata">
+<a class="viewcode-back" href="../../_autosummary/earthdaily.earthdatastore.StacCollectionExplorer.html#earthdaily.earthdatastore.StacCollectionExplorer.asset_metadata">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">asset_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">assets</span><span class="p">[</span><span class="n">asset_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Exploring collection &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="si">}</span><span class="s1">&quot;&#39;</span></div>
@@ -1717,6 +1726,10 @@
       <dt>Tags</dt>
       <dd><a href="../../../1.0.0/index.html">1.0.0</a></dd>
       <dd><a href="earthdatastore.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../../main/index.html">main</a></dd>
     </dl>
   </div>
 </div><script>

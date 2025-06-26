@@ -1,0 +1,6 @@
+earthdaily.accessor.whittaker.solve\_banded
+===========================================
+
+.. currentmodule:: earthdaily.accessor.whittaker
+
+.. autofunction:: solve_banded

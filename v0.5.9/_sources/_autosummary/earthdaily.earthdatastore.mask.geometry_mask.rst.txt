@@ -1,0 +1,6 @@
+earthdaily.earthdatastore.mask.geometry\_mask
+=============================================
+
+.. currentmodule:: earthdaily.earthdatastore.mask
+
+.. autofunction:: geometry_mask

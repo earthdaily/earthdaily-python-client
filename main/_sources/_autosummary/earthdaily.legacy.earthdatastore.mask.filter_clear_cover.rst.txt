@@ -1,0 +1,6 @@
+earthdaily.legacy.earthdatastore.mask.filter\_clear\_cover
+==========================================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore.mask
+
+.. autofunction:: filter_clear_cover

@@ -90,14 +90,20 @@
 
 
 <div class="viewcode-block" id="AssetMapper">
-<a class="viewcode-back" href="../../../../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.asset_mapper.AssetMapper.html#earthdaily.legacy.earthdatastore.cube_utils.asset_mapper.AssetMapper">[docs]</a>
+<a class="viewcode-back" href="../../../../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.asset_mapper.AssetMapper.html#earthdaily.legacy.earthdatastore.cube_utils.AssetMapper">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AssetMapper</span><span class="p">:</span>
+<div class="viewcode-block" id="AssetMapper.__init__">
+<a class="viewcode-back" href="../../../../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.asset_mapper.html#earthdaily.legacy.earthdatastore.cube_utils.AssetMapper.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">available_collections</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_asset_mapper_config</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_collections</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">_asset_mapper_config</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
+
+<div class="viewcode-block" id="AssetMapper.collection_mapping">
+<a class="viewcode-back" href="../../../../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.asset_mapper.AssetMapper.html#earthdaily.legacy.earthdatastore.cube_utils.AssetMapper.collection_mapping">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">collection_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collection_exists</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">raise_warning</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">_asset_mapper_config</span><span class="p">[</span><span class="n">collection</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">_asset_mapper_config</span><span class="p">[</span><span class="n">collection</span><span class="p">]</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_collection_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">raise_warning</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">exists</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">collection</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_collections</span> <span class="k">else</span> <span class="kc">False</span>
@@ -105,9 +111,14 @@
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Collection </span><span class="si">{</span><span class="n">collection</span><span class="si">}</span><span class="s2"> has not been implemented&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">exists</span>
 
+<div class="viewcode-block" id="AssetMapper.collection_spectral_assets">
+<a class="viewcode-back" href="../../../../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.asset_mapper.AssetMapper.html#earthdaily.legacy.earthdatastore.cube_utils.AssetMapper.collection_spectral_assets">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">collection_spectral_assets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mapping</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection_mapping</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="AssetMapper.map_collection_assets">
+<a class="viewcode-back" href="../../../../../_autosummary/earthdaily.legacy.earthdatastore.cube_utils.asset_mapper.AssetMapper.html#earthdaily.legacy.earthdatastore.cube_utils.AssetMapper.map_collection_assets">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">map_collection_assets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">assets</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">assets</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">assets</span>
@@ -134,6 +145,7 @@
                 <span class="k">if</span> <span class="n">matching_assets</span><span class="p">:</span>
                     <span class="n">output_assets</span><span class="p">[</span><span class="n">asset</span><span class="p">]</span> <span class="o">=</span> <span class="n">asset</span>
         <span class="k">return</span> <span class="n">output_assets</span></div>
+</div>
 
 </pre></div>
 
@@ -169,6 +181,10 @@
       <dt>Tags</dt>
       <dd><a href="asset_mapper.html">1.0.0</a></dd>
       <dd><a href="../../../../../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../../../../../main/index.html">main</a></dd>
     </dl>
   </div>
 </div><script>

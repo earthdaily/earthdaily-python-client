@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>earthdaily.Authentication &mdash; EarthDaily Python Client 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="earthdaily.EDSClient" href="earthdaily.EDSClient.html" />
+    <link rel="prev" title="earthdaily.APIRequester" href="earthdaily.APIRequester.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            EarthDaily Python Client
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">EarthDaily Python Client Documentation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.version.html">earthdaily.version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.APIRequester.html">earthdaily.APIRequester</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">earthdaily.Authentication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#earthdaily.Authentication"><code class="docutils literal notranslate"><span class="pre">Authentication</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.Authentication.authenticate"><code class="docutils literal notranslate"><span class="pre">Authentication.authenticate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#earthdaily.Authentication.get_token"><code class="docutils literal notranslate"><span class="pre">Authentication.get_token()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.EDSClient.html">earthdaily.EDSClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.EDSConfig.html">earthdaily.EDSConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPClient.html">earthdaily.HTTPClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPRequest.html">earthdaily.HTTPRequest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPResponse.html">earthdaily.HTTPResponse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.PackageNotFoundError.html">earthdaily.PackageNotFoundError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.Authentication"><code class="docutils literal notranslate"><span class="pre">Authentication</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.APIRequester"><code class="docutils literal notranslate"><span class="pre">APIRequester</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPClient"><code class="docutils literal notranslate"><span class="pre">HTTPClient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPRequest"><code class="docutils literal notranslate"><span class="pre">HTTPRequest</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPResponse"><code class="docutils literal notranslate"><span class="pre">HTTPResponse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.EDSClient"><code class="docutils literal notranslate"><span class="pre">EDSClient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.EDSConfig"><code class="docutils literal notranslate"><span class="pre">EDSConfig</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.exceptions.html">earthdaily.exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.legacy.html">earthdaily.legacy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="earthdaily.platform.html">earthdaily.platform</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">EarthDaily Python Client</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="earthdaily.html">earthdaily</a></li>
+      <li class="breadcrumb-item active">earthdaily.Authentication</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/earthdaily.Authentication.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="earthdaily-authentication">
+<h1>earthdaily.Authentication<a class="headerlink" href="#earthdaily-authentication" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="earthdaily.Authentication">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">earthdaily.</span></span><span class="sig-name descname"><span class="pre">Authentication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/_auth_client.html#Authentication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.Authentication" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Authentication class using the OAuth 2.0 client credentials flow.</p>
+<p>This class exchanges client credentials (client_id and client_secret) for an access token
+at the token endpoint and handles token renewal when necessary.</p>
+<section id="attributes">
+<h2>Attributes:<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>client_id: str</dt><dd><p>client ID</p>
+</dd>
+<dt>client_secret: str</dt><dd><p>client secret</p>
+</dd>
+<dt>token_url: str</dt><dd><p>The token endpoint URL to retrieve the access token.</p>
+</dd>
+<dt>token: str, optional</dt><dd><p>The current valid access token, initially None.</p>
+</dd>
+<dt>expiry: float</dt><dd><p>The timestamp of when the current token expires.</p>
+</dd>
+</dl>
+<p>Initializes the authentication class with the necessary credentials and token endpoint.</p>
+</section>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>client_id<span class="classifier">str</span></dt><dd><p>client ID</p>
+</dd>
+<dt>client_secret<span class="classifier">str</span></dt><dd><p>client secret</p>
+</dd>
+<dt>token_url<span class="classifier">str</span></dt><dd><p>The token endpoint URL to retrieve the access token.</p>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#earthdaily.Authentication.authenticate" title="earthdaily.Authentication.authenticate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">authenticate</span></code></a></p></td>
+<td><p>Authenticates using client credentials and retrieves an access token.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#earthdaily.Authentication.get_token" title="earthdaily.Authentication.get_token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_token</span></code></a></p></td>
+<td><p>Retrieves and returns a valid access token.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.Authentication.authenticate">
+<span class="sig-name descname"><span class="pre">authenticate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/_auth_client.html#Authentication.authenticate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.Authentication.authenticate" title="Link to this definition"></a></dt>
+<dd><p>Authenticates using client credentials and retrieves an access token.</p>
+<p>This method initializes a session and configures it to use HTTP Basic Authentication with the provided
+client_id and client_secret. It performs an HTTP POST request to the token endpoint, specifically
+requesting an access token via the client credentials grant type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<section id="raises">
+<h3>Raises:<a class="headerlink" href="#raises" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>ValueError:</dt><dd><p>If the authentication request fails, returns an invalid response, or if the response cannot be
+parsed as JSON.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.Authentication.get_token">
+<span class="sig-name descname"><span class="pre">get_token</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/_auth_client.html#Authentication.get_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.Authentication.get_token" title="Link to this definition"></a></dt>
+<dd><p>Retrieves and returns a valid access token. If the current token is expired or not set,
+it re-authenticates to get a new token.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+<section id="returns">
+<h3>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<p>:
+str:</p>
+<blockquote>
+<div><p>A valid access token.</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="earthdaily.APIRequester.html" class="btn btn-neutral float-left" title="earthdaily.APIRequester" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.EDSClient.html" class="btn btn-neutral float-right" title="earthdaily.EDSClient" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, EarthDaily.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: 1.0.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="earthdaily.Authentication.html">1.0.0</a></dd>
+      <dd><a href="../../v0.5.9/index.html">v0.5.9</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../../main/index.html">main</a></dd>
+    </dl>
+  </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

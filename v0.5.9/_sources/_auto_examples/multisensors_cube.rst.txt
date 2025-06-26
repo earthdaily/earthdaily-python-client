@@ -38,12 +38,6 @@ Import librairies
     from earthdaily import EarthDataStore, datasets
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 17-19
 
 Set parameters
@@ -69,28 +63,6 @@ Init earthdatastore with environment variables or default credentials
     clear_cover = 50
     resampling = "cubic"
     cross_calibration_collection = "sentinel-2-l2a"
-
-
-
-.. rst-class:: sphx-glr-script-out
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/examples/multisensors_cube.py", line 24, in <module>
-        eds = EarthDataStore()
-              ^^^^^^^^^^^^^^^^
-      File "/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/__init__.py", line 51, in EarthDataStore
-        return earthdatastore.Auth.from_credentials(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      File "/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/earthdatastore/__init__.py", line 464, in from_credentials
-        config = cls.read_credentials(
-                 ^^^^^^^^^^^^^^^^^^^^^
-      File "/private/var/folders/_t/czv_cfrd613_6_gd_p8qpqd80000gp/T/tmpe3d2wmoi/7261d0bf6bc6b22a0278281791f6623d19ddf89a/earthdaily/earthdatastore/__init__.py", line 529, in read_credentials
-        raise NotImplementedError("Credentials weren't found.")
-    NotImplementedError: Credentials weren't found.
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 36-38
@@ -161,11 +133,6 @@ See the NDVI mean evolution
     datacube["NDVI"].groupby("time").mean(...).plot.line(x="time")
     plt.title("NDVI evolution")
     plt.show()
-
-
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** (0 minutes 0.002 seconds)
 
 
 .. _sphx_glr_download__auto_examples_multisensors_cube.py:

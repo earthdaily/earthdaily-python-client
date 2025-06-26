@@ -1,0 +1,27 @@
+earthdaily.platform.BulkSearchService
+=====================================
+
+.. currentmodule:: earthdaily.platform
+
+.. autoclass:: BulkSearchService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~BulkSearchService.create
+      ~BulkSearchService.download_bulk_read_assets
+      ~BulkSearchService.fetch
+   
+   
+
+   
+   
+   

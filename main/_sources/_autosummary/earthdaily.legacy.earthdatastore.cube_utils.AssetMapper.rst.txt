@@ -1,0 +1,27 @@
+earthdaily.legacy.earthdatastore.cube\_utils.AssetMapper
+========================================================
+
+.. currentmodule:: earthdaily.legacy.earthdatastore.cube_utils
+
+.. autoclass:: AssetMapper
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~AssetMapper.collection_mapping
+      ~AssetMapper.collection_spectral_assets
+      ~AssetMapper.map_collection_assets
+   
+   
+
+   
+   
+   
