@@ -81,3 +81,4 @@ docs/sg_execution_times.rst
 docs/html/
 
 *.0
+.DS_Store
