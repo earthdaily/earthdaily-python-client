@@ -4,6 +4,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [1.0.2]
+
+### Changed
+- Updated development and documentation dependencies to latest versions
+- Updated core dependencies: requests to >=2.32.4, setuptools to >=78.1.1
+
+### Added
+- Added protobuf>=5.29.5 security constraint for spyndex dependency chain
+
+### Removed
+- Removed unused sphinx-autobuild dependency
+
+## [1.0.1]
+
+### Fixed
+- Minor documentation issues in README.md
+
+## [1.0.0]
+
+### Added
+- **Platform API Integration**: Full STAC item CRUD operations now supported
+- **Bulk Operations Suite**: Bulk Search, Insert, and Delete operations
+- **Enhanced Authentication**: `bypass_auth` flag support for VPN-based deployments
+- **Modern Architecture**: Clean separation between platform and legacy functionality
+- **Flexible Installation**: Modular installation with `[platform]`, `[legacy]` extras
+- **Legacy Support**: v0 functionality preserved in dedicated legacy namespace
+- **Python Support**: Full compatibility with Python 3.10, 3.11, 3.12, and 3.13
+
+### Changed
+- **New Client API**: Main client now accessed via `EDSClient` and `EDSConfig`
+- **Method Parameters**: Some method parameters and return formats have changed
+- **Environment Variables**: Updated environment variable handling
+
+### Breaking Changes
+- **Migration Required**: Significant architectural changes from v0
+  - Main client now accessed via `EDSClient` and `EDSConfig`
+  - Some method parameters and return formats have changed
+  - Environment variable handling has been updated
+- **Version Pinning**: If using v0, pin your version (`earthdaily<1.0.0`) until ready to migrate
+- **Migration Guide**: See `docs/migration-v0-to-v1.md` for detailed migration instructions
+
+### Notes
+- **First stable release** of the EarthDaily Python Client
+- Complete feature set with production-ready architecture
+- Extensive development through beta releases leading to this milestone
+
 ## [1.0.0b1] - 2025-02-19
 
 ### Added
