@@ -375,23 +375,12 @@ print([c.id for c in collections])
 ```python
 # Download assets from search results
 for item in items:
-    client.platform.stac_item.download_item_assets(
+    client.platform.stac_item.download_assets(
         item,
-        assets=["blue", "green", "red"],
-        path="./downloads"
+        asset_keys=["blue", "green", "red"],
+        output_dir="./downloads",
+        max_workers=3
     )
-```
-
-### Error Handling
-```python
-from earthdaily.exceptions import EDSAPIError
-
-try:
-    search_result = client.platform.pystac_client.search(
-        collections=["invalid-collection"]
-    )
-except EDSAPIError as e:
-    print(f"API Error: {e}")
 ```
 
 ## 📚 Documentation & Examples
@@ -399,7 +388,7 @@ except EDSAPIError as e:
 - [📖 **Full API Documentation**](https://earthdaily.github.io/earthdaily-python-client/)
 - [🔄 **Migration Guide (v0 → v1)**](docs/migration-v0-to-v1.md)
 - [📝 **Quick Start Examples**](examples/)
-- [🧪 **Jupyter Notebooks**](custom_examples/)
+- [🧪 **Jupyter Notebooks**](https://earthdaily.github.io/EDA-Documentation/EDS%20Examples/EDS%20Examples/)
 
 ## 🤝 Contributing
 
@@ -421,7 +410,6 @@ Need help? Here's how to get support:
 - 📖 Check the [documentation](https://earthdaily.github.io/earthdaily-python-client/)
 - 🐛 [Open an issue](https://github.com/earthdaily/earthdaily-python-client/issues/new) for bugs
 - 💬 Ask questions in [GitHub Discussions](https://github.com/earthdaily/earthdaily-python-client/discussions)
-- 📧 Contact our support team
 
 ---
 
