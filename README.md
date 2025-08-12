@@ -25,17 +25,17 @@ pip install earthdaily
 
 ### Recommended Installation (Platform Features)
 ```bash
-pip install earthdaily[platform]
+pip install "earthdaily[platform]"
 ```
 
 ### Legacy Support (v0 Compatibility)
 ```bash
-pip install earthdaily[legacy]
+pip install "earthdaily[legacy]"
 ```
 
 ### Full Installation (All Features)
 ```bash
-pip install earthdaily[platform,legacy]
+pip install "earthdaily[platform,legacy]"
 ```
 
 ## 🔧 Environment Setup
@@ -50,10 +50,15 @@ EDS_AUTH_URL=https://your-auth-url.com/oauth/token
 EDS_API_URL=https://api.earthdaily.com
 ```
 
+**Note**: To use `.env` files, install `python-dotenv` separately:
+```bash
+pip install python-dotenv
+```
+
 ## 🏃 Quick Start
 
 ```python
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # pip install python-dotenv
 from earthdaily import EDSClient, EDSConfig
 
 # Load environment variables
@@ -214,7 +219,7 @@ search_job = client.platform.bulk_search.create(
     datetime="2024-01-01T00:00:00Z/2024-02-01T00:00:00Z",
     bbox=[-74.2, 40.6, -73.9, 40.9],  # NYC area
     limit=1000,
-    export_format="json"
+    export_format="stacjson"
 )
 print(f"Job ID: {search_job.job_id}")
 ```

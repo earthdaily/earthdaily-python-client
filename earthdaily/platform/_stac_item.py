@@ -302,7 +302,7 @@ class StacItemService:
         max_workers: int = 3,
         quiet: bool = False,
         continue_on_error: bool = True,
-        href_type: str = "href",
+        href_type: str = "alternate.download.href",
     ) -> dict[str, Any]:
         """
         Download assets from a STAC item.
@@ -325,7 +325,7 @@ class StacItemService:
         href_type : str
             Specifies which href to use from asset's alternate URLs.
             Example: "download" would look for item.assets[key].alternate.download.href
-            If None, uses the default asset href. Defaults to "href".
+            If None, uses the default asset href. Defaults to "alternate.download.href".
 
         Returns:
         --------
