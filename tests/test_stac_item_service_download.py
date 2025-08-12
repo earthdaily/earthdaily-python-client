@@ -4,6 +4,7 @@ from unittest.mock import Mock, patch
 
 import pystac
 
+from earthdaily._eds_config import AssetAccessMode
 from earthdaily.exceptions import EDSAPIError
 from earthdaily.platform._stac_item import StacItemService
 
@@ -12,6 +13,9 @@ class TestStacItemServiceDownloadAssets(unittest.TestCase):
     def setUp(self):
         self.mock_api_requester = Mock()
         self.mock_api_requester.base_url = "https://api.example.com"
+        self.mock_config = Mock()
+        self.mock_config.asset_access_mode = AssetAccessMode.PRESIGNED_URLS
+        self.mock_api_requester.config = self.mock_config
         self.stac_item_service = StacItemService(self.mock_api_requester)
 
         # Create a sample STAC item for testing
@@ -41,6 +45,90 @@ class TestStacItemServiceDownloadAssets(unittest.TestCase):
         # Verify the downloader was initialized with correct parameters
         mock_downloader_cls.assert_called_once_with(max_workers=8, api_requester=self.mock_api_requester)
 
+    @patch("earthdaily.platform._stac_item.ItemDownloader")
+    def test_download_assets_init_downloader_with_proxy_urls(self, mock_downloader_cls):
+        """Test that ItemDownloader automatically detects proxy URLs from config"""
+        # Set up config for proxy URLs
+        self.mock_config.asset_access_mode = AssetAccessMode.PROXY_URLS
+
+        mock_downloader_instance = Mock()
+        mock_downloader_cls.return_value = mock_downloader_instance
+        mock_downloader_instance.download_assets.return_value = self.mock_downloaded_path
+
+        self.stac_item_service.download_assets(item=self.sample_stac_item_dict, max_workers=4)
+
+        # Verify the downloader was initialized with correct parameters
+        mock_downloader_cls.assert_called_once_with(max_workers=4, api_requester=self.mock_api_requester)
+
+    @patch("earthdaily.platform._stac_item.ItemDownloader")
+    def test_download_assets_with_proxy_urls_and_custom_href_type(self, mock_downloader_cls):
+        """Test downloading assets with proxy URLs (auto-detected) and custom href_type"""
+        # Set up config for proxy URLs
+        self.mock_config.asset_access_mode = AssetAccessMode.PROXY_URLS
+
+        mock_downloader_instance = Mock()
+        mock_downloader_cls.return_value = mock_downloader_instance
+        mock_downloaded_path = {"visual": Path("/mock/path/alternate_asset.tif")}
+        mock_downloader_instance.download_assets.return_value = mock_downloaded_path
+
+        result = self.stac_item_service.download_assets(
+            item=self.sample_stac_item_dict,
+            asset_keys=["visual"],
+            output_dir="/test/output",
+            href_type="alternate.download.href",
+        )
+
+        # Verify the downloader was initialized
+        mock_downloader_cls.assert_called_once_with(max_workers=3, api_requester=self.mock_api_requester)
+
+        # Verify the download_assets call included custom href_type
+        mock_downloader_instance.download_assets.assert_called_once_with(
+            item=self.sample_stac_item_dict,
+            asset_keys=["visual"],
+            output_dir="/test/output",
+            quiet=False,
+            continue_on_error=True,
+            href_type="alternate.download.href",
+        )
+
+        self.assertEqual(result, mock_downloaded_path)
+
+    @patch("earthdaily.platform._stac_item.ItemDownloader")
+    def test_download_assets_proxy_urls_with_string_item(self, mock_downloader_cls):
+        """Test downloading assets with proxy URLs (auto-detected) when item is provided as string"""
+        # Set up config for proxy URLs
+        self.mock_config.asset_access_mode = AssetAccessMode.PROXY_URLS
+
+        mock_downloader_instance = Mock()
+        mock_downloader_cls.return_value = mock_downloader_instance
+        mock_downloader_instance.download_assets.return_value = self.mock_downloaded_path
+
+        with patch.object(self.stac_item_service, "get_item", return_value=self.sample_stac_item_dict) as mock_get_item:
+            result = self.stac_item_service.download_assets(item="test_collection/test_item_id")
+
+        # Verify get_item was called
+        mock_get_item.assert_called_once_with(
+            collection_id="test_collection", item_id="test_item_id", return_format="dict"
+        )
+
+        # Verify downloader was initialized
+        mock_downloader_cls.assert_called_once_with(max_workers=3, api_requester=self.mock_api_requester)
+
+        self.assertEqual(result, self.mock_downloaded_path)
+
+    @patch("earthdaily.platform._stac_item.ItemDownloader")
+    def test_download_assets_with_presigned_urls_config(self, mock_downloader_cls):
+        """Test that ItemDownloader works with presigned URLs config"""
+        # Config is already set to PRESIGNED_URLS in setUp
+        mock_downloader_instance = Mock()
+        mock_downloader_cls.return_value = mock_downloader_instance
+        mock_downloader_instance.download_assets.return_value = self.mock_downloaded_path
+
+        self.stac_item_service.download_assets(item=self.sample_stac_item_dict)
+
+        # Verify the downloader was initialized correctly
+        mock_downloader_cls.assert_called_once_with(max_workers=3, api_requester=self.mock_api_requester)
+
     @patch("earthdaily.platform._stac_item_downloader.ItemDownloader.download_assets")
     def test_download_assets_with_dict(self, mock_download):
         """Test downloading assets when providing a dictionary item"""
@@ -57,7 +145,7 @@ class TestStacItemServiceDownloadAssets(unittest.TestCase):
             output_dir="/test/output",
             quiet=False,
             continue_on_error=True,
-            href_type="href",
+            href_type="alternate.download.href",
         )
 
         # Verify the result is passed through from the downloader
@@ -107,7 +195,7 @@ class TestStacItemServiceDownloadAssets(unittest.TestCase):
             output_dir="/test/output",
             quiet=False,
             continue_on_error=True,
-            href_type="href",
+            href_type="alternate.download.href",
         )
 
         # Verify the result is passed through from the downloader

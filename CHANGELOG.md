@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4]
+
+### Fixed
+- Fix the `pip install earthdaily` command and add quotes when installing optional dependencies.
+- Clarify `pip install python-dotenv` in the README files.
+- Fix `export_format` in README for bulk search example.
+- Fix the `smv_branch_whitelist` in `docs/conf.py` to only allow `main` and `lts/0.x` branches.
+
+## [1.0.3]
+
+### Added
+- Proxy URL support for asset downloads via `AssetAccessMode.PROXY_URLS` config
+- Automatic authentication headers and redirects for proxy URLs
+- Added unit tests for proxy URL functionality
+
+### Changed
+- Default `href_type` changed from `"href"` to `"alternate.download.href"` for better usability
 
 ## [1.0.2]
 

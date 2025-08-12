@@ -29,7 +29,7 @@ Perform large-scale searches and downloads using the bulk search functionality.
 2. **Install the required dependencies**:
    ```bash
    # For all examples
-   pip install earthdaily[platform,legacy]
+   pip install "earthdaily[platform,legacy]"
    ```
 
 3. **Run an example**:

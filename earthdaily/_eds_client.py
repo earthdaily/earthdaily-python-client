@@ -88,7 +88,7 @@ class EDSClient:
         if not _HAS_PLATFORM:
             raise ImportError(
                 "Platform functionality requires additional dependencies. "
-                "Install with: pip install earthdaily[platform]"
+                "Install with: pip install 'earthdaily[platform]'"
             )
         if not hasattr(self, "_platform_service"):
             self._platform_service = PlatformService(self.api_requester, self.config.asset_access_mode)
@@ -111,7 +111,7 @@ class EDSClient:
         """
         if not _HAS_LEGACY:
             raise ImportError(
-                "Legacy functionality requires additional dependencies. Install with: pip install earthdaily[legacy]"
+                "Legacy functionality requires additional dependencies. Install with: pip install 'earthdaily[legacy]'"
             )
         if not hasattr(self, "_legacy_service"):
             self._legacy_service = EarthDataStore(self.api_requester)
