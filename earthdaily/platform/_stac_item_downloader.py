@@ -6,6 +6,7 @@ from pystac import Item
 
 from earthdaily._api_requester import APIRequester
 from earthdaily._downloader import HttpDownloader
+from earthdaily._eds_config import AssetAccessMode
 from earthdaily._eds_logging import LoggerConfig
 from earthdaily.platform._stac_item_asset import get_resolver_for_url
 
@@ -34,11 +35,17 @@ class ItemDownloader:
             max_workers: Maximum number of concurrent downloads
             timeout: Timeout for download requests, in seconds
             allow_redirects: Whether to allow URL redirects during download
+            api_requester: API requester instance for authentication
         """
         self.max_workers = max_workers
         self.timeout = timeout
         self.allow_redirects = allow_redirects
         self.api_requester = api_requester
+
+        # Automatically determine proxy URL mode from config
+        self.use_proxy_urls = (
+            api_requester is not None and api_requester.config.asset_access_mode == AssetAccessMode.PROXY_URLS
+        )
 
     def download_assets(
         self,
@@ -47,7 +54,7 @@ class ItemDownloader:
         output_dir: Union[str, Path] = ".",
         quiet: bool = False,
         continue_on_error: bool = False,
-        href_type: str = "href",
+        href_type: str = "alternate.download.href",
     ) -> dict[str, Path]:
         """
         Download selected assets from a PySTAC Item.
@@ -210,9 +217,15 @@ class ItemDownloader:
         Returns:
             Path to the downloaded file, or None if download failed and continue_on_error is True
         """
+        # When using proxy URLs (auto-detected from config), ensure redirects are enabled
+        allow_redirects = self.allow_redirects
+        if self.use_proxy_urls:
+            allow_redirects = True  # Proxy URLs require following redirects to get to final download URL
+            logger.debug(f"Using proxy URL mode for download: {url}")
+
         custom_downloader = CustomHeadersDownloader(
             supported_protocols=["http", "https"],
-            allow_redirects=self.allow_redirects,
+            allow_redirects=allow_redirects,
             custom_headers=headers,
         )
 

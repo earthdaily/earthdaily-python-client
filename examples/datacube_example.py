@@ -14,7 +14,7 @@ Features demonstrated:
 
 Requirements:
 - Set your EDS credentials as environment variables or in a .env file
-- Install with legacy support: pip install earthdaily[legacy]
+- Install with legacy support: pip install 'earthdaily[legacy]'
 """
 
 import warnings
@@ -214,7 +214,7 @@ def main():
     except ImportError as e:
         print(f"\n❌ Import Error: {e}")
         print("💡 Make sure to install with legacy support:")
-        print("   pip install earthdaily[legacy]")
+        print("   pip install 'earthdaily[legacy]'")
     except Exception as e:
         print(f"\n💥 Unexpected error: {e}")
         print("\n💡 Make sure you have set your EDS credentials as environment variables:")
