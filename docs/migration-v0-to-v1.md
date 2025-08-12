@@ -30,17 +30,17 @@ pip install earthdaily
 
 For **platform API functionality** (recommended for v1 features):
 ```bash
-pip install earthdaily[platform]
+pip install "earthdaily[platform]"
 ```
 
 For **legacy v0 functionality** (if you need backward compatibility):
 ```bash
-pip install earthdaily[legacy]
+pip install "earthdaily[legacy]"
 ```
 
 For **both platform and legacy features**:
 ```bash
-pip install earthdaily[platform,legacy]
+pip install "earthdaily[platform,legacy]"
 ```
 
 ## 🔄 Key Differences
@@ -103,7 +103,7 @@ EDS_API_URL=https://api.earthdaily.com
 
 Load environment variables in your code:
 ```python
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # pip install python-dotenv
 load_dotenv(".env")  # Required for authentication
 ```
 
@@ -179,9 +179,14 @@ items = client.legacy.search(
 
 ## 📋 v1 Examples
 
+**Note**: To use `.env` files, install `python-dotenv` separately:
+```bash
+pip install python-dotenv
+```
+
 ### Basic Client Setup
 ```python
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # pip install python-dotenv
 from earthdaily import EDSClient, EDSConfig
 
 load_dotenv(".env")  # Load credentials

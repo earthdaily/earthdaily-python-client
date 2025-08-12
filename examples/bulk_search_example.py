@@ -13,7 +13,7 @@ Features demonstrated:
 
 Requirements:
 - Set your EDS credentials as environment variables or in a .env file
-- Install with platform support: pip install earthdaily[platform]
+- Install with platform support: pip install 'earthdaily[platform]'
 """
 
 import time
@@ -262,7 +262,7 @@ def main():
     except ImportError as e:
         print(f"\n❌ Import Error: {e}")
         print("💡 Make sure to install with platform support:")
-        print("   pip install earthdaily[platform]")
+        print("   pip install 'earthdaily[platform]'")
     except Exception as e:
         print(f"\n💥 Unexpected error in main: {e}")
         print("\n💡 Make sure you have set your EDS credentials as environment variables:")

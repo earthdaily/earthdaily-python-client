@@ -63,6 +63,6 @@ source_suffix = {
     ".md": "markdown",
 }
 
-smv_tag_whitelist = r"^1\.0\.0b.*$"
-smv_branch_whitelist = r"^(main|beta/1\.x|lts/0\.x)$"
+smv_tag_whitelist = r"^1\.0\.0.*$"
+smv_branch_whitelist = r"^(main|lts/0\.x)$"
 smv_prefer_remote_refs = True
