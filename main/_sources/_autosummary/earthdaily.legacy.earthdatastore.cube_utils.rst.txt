@@ -14,15 +14,12 @@ earthdaily.legacy.earthdatastore.cube\_utils
       :toctree:
       :nosignatures:
    
-      box
       datacube
       metacube
       rescale_assets_with_items
-      wraps
-      zonal_stats
    .. automodule:: earthdaily.legacy.earthdatastore.cube_utils
       :members:
-      :exclude-members: Any, AssetMapper, GeometryManager, Harmonizer, Resampling, defaultdict, NotGeoreferencedWarning
+      :exclude-members: 
       :undoc-members:
       :noindex:
    
@@ -30,30 +27,9 @@ earthdaily.legacy.earthdatastore.cube\_utils
    
    
    
-   .. rubric:: Classes
-
-   .. autosummary::
-      :toctree:
-      :template: custom-class-template.rst
-      :nosignatures:
-   
-      Any
-      AssetMapper
-      GeometryManager
-      Harmonizer
-      Resampling
-      defaultdict
-   
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-      :toctree:
-   
-      NotGeoreferencedWarning
    
    
 

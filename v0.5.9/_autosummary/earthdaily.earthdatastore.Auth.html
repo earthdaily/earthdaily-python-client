@@ -27,8 +27,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="earthdaily.earthdatastore.Client" href="earthdaily.earthdatastore.Client.html" />
-    <link rel="prev" title="earthdaily.earthdatastore.Any" href="earthdaily.earthdatastore.Any.html" /> 
+    <link rel="next" title="earthdaily.earthdatastore.EarthDataStoreConfig" href="earthdaily.earthdatastore.EarthDataStoreConfig.html" />
+    <link rel="prev" title="earthdaily.earthdatastore.validate_property_condition" href="earthdaily.earthdatastore.validate_property_condition.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -67,34 +67,21 @@
 <li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="earthdaily.EarthDataStore.html">earthdaily.earthdatastore</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.apply_single_condition.html">earthdaily.earthdatastore.apply_single_condition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.dataclass.html">earthdaily.earthdatastore.dataclass</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.datacube.html">earthdaily.earthdatastore.datacube</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.enhance_assets.html">earthdaily.earthdatastore.enhance_assets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.filter_items.html">earthdaily.earthdatastore.filter_items</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.metacube.html">earthdaily.earthdatastore.metacube</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.parallel_search.html">earthdaily.earthdatastore.parallel_search</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.post_query_items.html">earthdaily.earthdatastore.post_query_items</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.validate_property_condition.html">earthdaily.earthdatastore.validate_property_condition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Any.html">earthdaily.earthdatastore.Any</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">earthdaily.earthdatastore.Auth</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#earthdaily.earthdatastore.Auth"><code class="docutils literal notranslate"><span class="pre">Auth</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Client.html">earthdaily.earthdatastore.Client</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.EarthDataStoreConfig.html">earthdaily.earthdatastore.EarthDataStoreConfig</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.ItemCollection.html">earthdaily.earthdatastore.ItemCollection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Path.html">earthdaily.earthdatastore.Path</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.Retry.html">earthdaily.earthdatastore.Retry</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacApiIO.html">earthdaily.earthdatastore.StacApiIO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.StacCollectionExplorer.html">earthdaily.earthdatastore.StacCollectionExplorer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.NoItemsFoundError.html">earthdaily.earthdatastore.NoItemsFoundError</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.datacube"><code class="docutils literal notranslate"><span class="pre">datacube()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.EarthDataStore.html#earthdaily.earthdatastore.metacube"><code class="docutils literal notranslate"><span class="pre">metacube()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.cube_utils.html">earthdaily.earthdatastore.cube_utils</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.mask.html">earthdaily.earthdatastore.mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="earthdaily.earthdatastore.parallel_search.html">earthdaily.earthdatastore.parallel_search</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.Path.html">earthdaily.Path</a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.accessor.html">earthdaily.accessor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.core.html">earthdaily.core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.datasets.html">earthdaily.datasets</a></li>
@@ -209,167 +196,95 @@ Uses the current version by default.</p></li>
 </tr>
 </tbody>
 </table>
-<dl class="py method">
-<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.from_credentials">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_credentials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0.0.0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">presign_urls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_proxy_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.from_credentials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.from_credentials" title="Link to this definition"></a></dt>
-<dd><p>Secondary Constructor.
-Try to read Earth Data Store credentials from multiple sources, in the following order:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>from input credentials stored in a given JSON file</p></li>
-<li><p>from input credentials stored in a given TOML file</p></li>
-<li><p>from environement variables</p></li>
-<li><p>from the $HOME/.earthdaily/credentials TOML file and a given profile</p></li>
-<li><p>from the $HOME/.earthdaily/credentials TOML file and the “default” profile</p></li>
-</ul>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference internal" href="earthdaily.earthdatastore.Path.html#earthdaily.earthdatastore.Path" title="earthdaily.earthdatastore.Path"><em>Path</em></a><em>, </em><em>optional</em>) – The path to the TOML file containing the Earth Data Store credentials.
-Uses “$HOME/.earthdaily/credentials” by default.</p></li>
-<li><p><strong>profile</strong> (<em>profile</em><em>, </em><em>optional</em>) – Name of the profile to use in the TOML file.
-Uses “default” by default.</p></li>
-<li><p><strong>client_version</strong> (<em>str</em><em>, </em><em>optional</em>) – The version of the client.
-Uses the current version by default.</p></li>
-<li><p><strong>asset_proxy_enabled</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use asset proxy URLs, by default False</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A <a class="reference internal" href="#earthdaily.earthdatastore.Auth" title="earthdaily.earthdatastore.Auth"><code class="xref py py-class docutils literal notranslate"><span class="pre">Auth</span></code></a> instance</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#earthdaily.earthdatastore.Auth" title="earthdaily.earthdatastore.Auth">Auth</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials" title="Link to this definition"></a></dt>
-<dd><dl class="simple">
-<dt>Try to read Earth Data Store credentials from multiple sources, in the following order:</dt><dd><ul class="simple">
-<li><p>from input credentials stored in a given JSON file</p></li>
-<li><p>from input credentials stored in a given TOML file</p></li>
-<li><p>from environement variables</p></li>
-<li><p>from the $HOME/.earthdaily/credentials TOML file and a given profile</p></li>
-<li><p>from the $HOME/.earthdaily/credentials TOML file and the “default” profile</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference internal" href="earthdaily.earthdatastore.Path.html#earthdaily.earthdatastore.Path" title="earthdaily.earthdatastore.Path"><em>Path</em></a><em>, </em><em>optional</em>) – The path to the TOML file containing the Earth Data Store credentials.
-Uses “$HOME/.earthdaily/credentials” by default.</p></li>
-<li><p><strong>profile</strong> (<em>profile</em><em>, </em><em>optional</em>) – Name of the profile to use in the TOML file.
-Uses “default” by default.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary containing credentials</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials_from_ini">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials_from_ini</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials_from_ini"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials_from_ini" title="Link to this definition"></a></dt>
-<dd><p>Read Earth Data Store credentials from a ini file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ini_path</strong> (<a class="reference internal" href="earthdaily.earthdatastore.Path.html#earthdaily.earthdatastore.Path" title="earthdaily.earthdatastore.Path"><em>Path</em></a>) – The path to the INI file containing the Earth Data Store credentials.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary containing credentials</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials_from_json">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials_from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials_from_json" title="Link to this definition"></a></dt>
-<dd><p>Read Earth Data Store credentials from a JSON file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>json_path</strong> (<a class="reference internal" href="earthdaily.earthdatastore.Path.html#earthdaily.earthdatastore.Path" title="earthdaily.earthdatastore.Path"><em>Path</em></a>) – The path to the JSON file containing the Earth Data Store credentials.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary containing credentials</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials_from_environment">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials_from_environment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials_from_environment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials_from_environment" title="Link to this definition"></a></dt>
-<dd><p>Read Earth Data Store credentials from environment variables.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dictionary containing credentials</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials_from_toml">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials_from_toml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">toml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials_from_toml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials_from_toml" title="Link to this definition"></a></dt>
-<dd><p>Read Earth Data Store credentials from a TOML file</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>toml_path</strong> (<a class="reference internal" href="earthdaily.earthdatastore.Path.html#earthdaily.earthdatastore.Path" title="earthdaily.earthdatastore.Path"><em>Path</em></a><em>, </em><em>optional</em>) – The path to the TOML file containing the Earth Data Store credentials.</p></li>
-<li><p><strong>profile</strong> (<em>profile</em><em>, </em><em>optional</em>) – Name of the profile to use in the TOML file</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary containing credentials</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.get_access_token">
-<span class="sig-name descname"><span class="pre">get_access_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.get_access_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.get_access_token" title="Link to this definition"></a></dt>
-<dd><p>Retrieve an access token for interacting with the EarthDataStore API.</p>
-<p>By default, the method will look for environment variables:
-EDS_AUTH_URL, EDS_SECRET, and EDS_CLIENT_ID. Alternatively, a configuration
-object or dictionary can be passed to override these values.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>config</strong> (<a class="reference internal" href="earthdaily.earthdatastore.EarthDataStoreConfig.html#earthdaily.earthdatastore.EarthDataStoreConfig" title="earthdaily.earthdatastore.EarthDataStoreConfig"><em>EarthDataStoreConfig</em></a><em>, </em><em>optional</em>) – A configuration object containing the Earth Data Store credentials.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The access token for authenticating with the Earth Data Store API.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.client">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="earthdaily.earthdatastore.Client.html#earthdaily.earthdatastore.Client" title="pystac_client.client.Client"><span class="pre">Client</span></a></em><a class="headerlink" href="#earthdaily.earthdatastore.Auth.client" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Client</span></em><a class="headerlink" href="#earthdaily.earthdatastore.Auth.client" title="Link to this definition"></a></dt>
 <dd><p>Create an instance of pystac client from EarthDataSTore</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A <a class="reference internal" href="earthdaily.earthdatastore.Client.html#earthdaily.earthdatastore.Client" title="earthdaily.earthdatastore.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">Client</span></code></a> instance for this Catalog.</p>
+<dd class="field-odd"><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">Client</span></code> instance for this Catalog.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.datacube">
+<span class="sig-name descname"><span class="pre">datacube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intersects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_statistics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clear_cover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefer_alternate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'download'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_default_scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common_band_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_calibration_collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'first'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cloud_search_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.datacube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.datacube" title="Link to this definition"></a></dt>
+<dd><p>Create a datacube.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collections</strong> (<em>str</em><em> | </em><em>list</em>) – If several collections, the first collection will be the reference collection (for spatial resolution).</p></li>
+<li><p><strong>datetime</strong> (<em>Either a single datetime</em><em> or </em><em>datetime range used to filter results.</em>) – <p>You may express a single datetime using a <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code>
+instance, a <a class="reference external" href="https://tools.ietf.org/html/rfc3339">RFC 3339-compliant</a>
+timestamp, or a simple date string (see below). Instances of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code> may be either
+timezone aware or unaware. Timezone aware instances will be converted to
+a UTC timestamp before being passed
+to the endpoint. Timezone unaware instances are assumed to represent UTC
+timestamps. You may represent a
+datetime range using a <code class="docutils literal notranslate"><span class="pre">&quot;/&quot;</span></code> separated string as described in the
+spec, or a list, tuple, or iterator
+of 2 timestamps or datetime instances. For open-ended ranges, use either
+<code class="docutils literal notranslate"><span class="pre">&quot;..&quot;</span></code> (<code class="docutils literal notranslate"><span class="pre">'2020-01-01:00:00:00Z/..'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">['2020-01-01:00:00:00Z',</span> <span class="pre">'..']</span></code>) or a value of <code class="docutils literal notranslate"><span class="pre">None</span></code>
+(<code class="docutils literal notranslate"><span class="pre">['2020-01-01:00:00:00Z',</span> <span class="pre">None]</span></code>).</p>
+<p>If using a simple date string, the datetime can be specified in
+<code class="docutils literal notranslate"><span class="pre">YYYY-mm-dd</span></code> format, optionally truncating
+to <code class="docutils literal notranslate"><span class="pre">YYYY-mm</span></code> or just <code class="docutils literal notranslate"><span class="pre">YYYY</span></code>. Simple date strings will be expanded to
+include the entire time period, for example:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017</span></code> expands to <code class="docutils literal notranslate"><span class="pre">2017-01-01T00:00:00Z/2017-12-31T23:59:59Z</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017-06</span></code> expands to <code class="docutils literal notranslate"><span class="pre">2017-06-01T00:00:00Z/2017-06-30T23:59:59Z</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017-06-10</span></code> expands to
+<code class="docutils literal notranslate"><span class="pre">2017-06-10T00:00:00Z/2017-06-10T23:59:59Z</span></code></p></li>
+</ul>
+<p>If used in a range, the end of the range expands to the end of that
+day/month/year, for example:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017/2018</span></code> expands to
+<code class="docutils literal notranslate"><span class="pre">2017-01-01T00:00:00Z/2018-12-31T23:59:59Z</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017-06/2017-07</span></code> expands to
+<code class="docutils literal notranslate"><span class="pre">2017-06-01T00:00:00Z/2017-07-31T23:59:59Z</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2017-06-10/2017-06-11</span></code> expands to
+<code class="docutils literal notranslate"><span class="pre">2017-06-10T00:00:00Z/2017-06-11T23:59:59Z</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>assets</strong> (<em>None</em><em> | </em><em>list</em><em> | </em><em>dict</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
+<li><p><strong>intersects</strong> (<em>(</em><em>gpd.GeoDataFrame</em><em>, </em><em>str</em><em>(</em><em>wkt</em><em>)</em><em>, </em><em>dict</em><em>(</em><em>json</em><em>)</em><em>)</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
+<li><p><strong>bbox</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
+<li><p><strong>mask_with</strong> (<em>(</em><em>None</em><em>, </em><em>str</em><em>, </em><em>list</em><em>)</em><em>, </em><em>optional</em>) – “native” mask, or “ag_cloud_mask”, or [“ag_cloud_mask”,”native”],
+and so if ag_cloud_mask is not available, will switch to native.
+The default is None.</p></li>
+<li><p><strong>mask_statistics</strong> (<em>bool</em><em> | </em><em>int</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is False.</p></li>
+<li><p><strong>clear_cover</strong> (<em>(</em><em>int</em><em>, </em><em>float</em><em>)</em><em>, </em><em>optional</em>) – Percent of clear data above a field (from 0 to 100).
+The default is None.</p></li>
+<li><p><strong>prefer_alternate</strong> (<em>(</em><em>str</em><em>, </em><em>False</em><em>)</em><em>, </em><em>optional</em>) – Uses the alternate/download href instead of the default href.
+The default is “download”.</p></li>
+<li><p><strong>search_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is {}.</p></li>
+<li><p><strong>add_default_scale_factor</strong> (<em>bool</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is True.</p></li>
+<li><p><strong>common_band_names</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is True.</p></li>
+<li><p><strong>cross_calibration_collection</strong> (<em>(</em><em>None</em><em> | </em><em>str</em><em>)</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
+<li><p><strong>properties</strong> (<em>(</em><em>bool</em><em> | </em><em>str</em><em> | </em><em>list</em><em>)</em><em>, </em><em>optional</em>) – Retrieve properties per item. The default is False.</p></li>
+<li><p><strong>**kwargs</strong> (<em>TYPE</em>) – <p>DESCRIPTION.
+: TYPE</p>
+<blockquote>
+<div><p>DESCRIPTION.</p>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – DESCRIPTION.</p></li>
+<li><p><strong>Warning</strong> – DESCRIPTION.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ds</strong> – DESCRIPTION.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>TYPE</p>
 </dd>
 </dl>
 </dd></dl>
@@ -498,83 +413,174 @@ StacCollectionExplorer.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.datacube">
-<span class="sig-name descname"><span class="pre">datacube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intersects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_statistics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clear_cover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefer_alternate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'download'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_default_scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common_band_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_calibration_collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'first'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cloud_search_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.datacube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.datacube" title="Link to this definition"></a></dt>
-<dd><p>Create a datacube.</p>
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.find_cloud_mask_items">
+<span class="sig-name descname"><span class="pre">find_cloud_mask_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items_collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cloudmask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ag_cloud_mask'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.find_cloud_mask_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.find_cloud_mask_items" title="Link to this definition"></a></dt>
+<dd><p>Search the catalog for the ag_cloud_mask items matching the given items_collection.
+The ag_cloud_mask items are searched in the <cite>ag_cloud_mask_collection_id</cite> collection using the
+<cite>ag_cloud_mask_item_id</cite> properties of the items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>items_collection</strong> (<em>pystac.ItemCollection</em>) – The items to find corresponding ag cloud mask items for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The filtered item collection.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pystac.ItemCollection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.from_credentials">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_credentials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0.0.0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">presign_urls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_proxy_enabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.from_credentials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.from_credentials" title="Link to this definition"></a></dt>
+<dd><p>Secondary Constructor.
+Try to read Earth Data Store credentials from multiple sources, in the following order:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>from input credentials stored in a given JSON file</p></li>
+<li><p>from input credentials stored in a given TOML file</p></li>
+<li><p>from environement variables</p></li>
+<li><p>from the $HOME/.earthdaily/credentials TOML file and a given profile</p></li>
+<li><p>from the $HOME/.earthdaily/credentials TOML file and the “default” profile</p></li>
+</ul>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>collections</strong> (<em>str</em><em> | </em><em>list</em>) – If several collections, the first collection will be the reference collection (for spatial resolution).</p></li>
-<li><p><strong>datetime</strong> (<em>Either a single datetime</em><em> or </em><em>datetime range used to filter results.</em>) – <p>You may express a single datetime using a <a class="reference internal" href="earthdaily.earthdatastore.cube_utils.harmonizer.datetime.html#earthdaily.earthdatastore.cube_utils.harmonizer.datetime" title="datetime.datetime"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>
-instance, a <a class="reference external" href="https://tools.ietf.org/html/rfc3339">RFC 3339-compliant</a>
-timestamp, or a simple date string (see below). Instances of
-<a class="reference internal" href="earthdaily.earthdatastore.cube_utils.harmonizer.datetime.html#earthdaily.earthdatastore.cube_utils.harmonizer.datetime" title="datetime.datetime"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> may be either
-timezone aware or unaware. Timezone aware instances will be converted to
-a UTC timestamp before being passed
-to the endpoint. Timezone unaware instances are assumed to represent UTC
-timestamps. You may represent a
-datetime range using a <code class="docutils literal notranslate"><span class="pre">&quot;/&quot;</span></code> separated string as described in the
-spec, or a list, tuple, or iterator
-of 2 timestamps or datetime instances. For open-ended ranges, use either
-<code class="docutils literal notranslate"><span class="pre">&quot;..&quot;</span></code> (<code class="docutils literal notranslate"><span class="pre">'2020-01-01:00:00:00Z/..'</span></code>,
-<code class="docutils literal notranslate"><span class="pre">['2020-01-01:00:00:00Z',</span> <span class="pre">'..']</span></code>) or a value of <code class="docutils literal notranslate"><span class="pre">None</span></code>
-(<code class="docutils literal notranslate"><span class="pre">['2020-01-01:00:00:00Z',</span> <span class="pre">None]</span></code>).</p>
-<p>If using a simple date string, the datetime can be specified in
-<code class="docutils literal notranslate"><span class="pre">YYYY-mm-dd</span></code> format, optionally truncating
-to <code class="docutils literal notranslate"><span class="pre">YYYY-mm</span></code> or just <code class="docutils literal notranslate"><span class="pre">YYYY</span></code>. Simple date strings will be expanded to
-include the entire time period, for example:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">2017</span></code> expands to <code class="docutils literal notranslate"><span class="pre">2017-01-01T00:00:00Z/2017-12-31T23:59:59Z</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">2017-06</span></code> expands to <code class="docutils literal notranslate"><span class="pre">2017-06-01T00:00:00Z/2017-06-30T23:59:59Z</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">2017-06-10</span></code> expands to
-<code class="docutils literal notranslate"><span class="pre">2017-06-10T00:00:00Z/2017-06-10T23:59:59Z</span></code></p></li>
-</ul>
-<p>If used in a range, the end of the range expands to the end of that
-day/month/year, for example:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">2017/2018</span></code> expands to
-<code class="docutils literal notranslate"><span class="pre">2017-01-01T00:00:00Z/2018-12-31T23:59:59Z</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">2017-06/2017-07</span></code> expands to
-<code class="docutils literal notranslate"><span class="pre">2017-06-01T00:00:00Z/2017-07-31T23:59:59Z</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">2017-06-10/2017-06-11</span></code> expands to
-<code class="docutils literal notranslate"><span class="pre">2017-06-10T00:00:00Z/2017-06-11T23:59:59Z</span></code></p></li>
-</ul>
-</p></li>
-<li><p><strong>assets</strong> (<em>None</em><em> | </em><em>list</em><em> | </em><em>dict</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
-<li><p><strong>intersects</strong> (<em>(</em><em>gpd.GeoDataFrame</em><em>, </em><em>str</em><em>(</em><em>wkt</em><em>)</em><em>, </em><em>dict</em><em>(</em><em>json</em><em>)</em><em>)</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
-<li><p><strong>bbox</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
-<li><p><strong>mask_with</strong> (<em>(</em><em>None</em><em>, </em><em>str</em><em>, </em><em>list</em><em>)</em><em>, </em><em>optional</em>) – “native” mask, or “ag_cloud_mask”, or [“ag_cloud_mask”,”native”],
-and so if ag_cloud_mask is not available, will switch to native.
-The default is None.</p></li>
-<li><p><strong>mask_statistics</strong> (<em>bool</em><em> | </em><em>int</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is False.</p></li>
-<li><p><strong>clear_cover</strong> (<em>(</em><em>int</em><em>, </em><em>float</em><em>)</em><em>, </em><em>optional</em>) – Percent of clear data above a field (from 0 to 100).
-The default is None.</p></li>
-<li><p><strong>prefer_alternate</strong> (<em>(</em><em>str</em><em>, </em><em>False</em><em>)</em><em>, </em><em>optional</em>) – Uses the alternate/download href instead of the default href.
-The default is “download”.</p></li>
-<li><p><strong>search_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is {}.</p></li>
-<li><p><strong>add_default_scale_factor</strong> (<em>bool</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is True.</p></li>
-<li><p><strong>common_band_names</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is True.</p></li>
-<li><p><strong>cross_calibration_collection</strong> (<em>(</em><em>None</em><em> | </em><em>str</em><em>)</em><em>, </em><em>optional</em>) – DESCRIPTION. The default is None.</p></li>
-<li><p><strong>properties</strong> (<em>(</em><em>bool</em><em> | </em><em>str</em><em> | </em><em>list</em><em>)</em><em>, </em><em>optional</em>) – Retrieve properties per item. The default is False.</p></li>
-<li><p><strong>**kwargs</strong> (<em>TYPE</em>) – <p>DESCRIPTION.
-: TYPE</p>
-<blockquote>
-<div><p>DESCRIPTION.</p>
-</div></blockquote>
-</p></li>
+<li><p><strong>path</strong> (<em>Path</em><em>, </em><em>optional</em>) – The path to the TOML file containing the Earth Data Store credentials.
+Uses “$HOME/.earthdaily/credentials” by default.</p></li>
+<li><p><strong>profile</strong> (<em>profile</em><em>, </em><em>optional</em>) – Name of the profile to use in the TOML file.
+Uses “default” by default.</p></li>
+<li><p><strong>client_version</strong> (<em>str</em><em>, </em><em>optional</em>) – The version of the client.
+Uses the current version by default.</p></li>
+<li><p><strong>asset_proxy_enabled</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use asset proxy URLs, by default False</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>ValueError</strong> – DESCRIPTION.</p></li>
-<li><p><strong>Warning</strong> – DESCRIPTION.</p></li>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#earthdaily.earthdatastore.Auth" title="earthdaily.earthdatastore.Auth"><code class="xref py py-class docutils literal notranslate"><span class="pre">Auth</span></code></a> instance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#earthdaily.earthdatastore.Auth" title="earthdaily.earthdatastore.Auth">Auth</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.get_access_token">
+<span class="sig-name descname"><span class="pre">get_access_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.get_access_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.get_access_token" title="Link to this definition"></a></dt>
+<dd><p>Retrieve an access token for interacting with the EarthDataStore API.</p>
+<p>By default, the method will look for environment variables:
+EDS_AUTH_URL, EDS_SECRET, and EDS_CLIENT_ID. Alternatively, a configuration
+object or dictionary can be passed to override these values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<a class="reference internal" href="earthdaily.earthdatastore.EarthDataStoreConfig.html#earthdaily.earthdatastore.EarthDataStoreConfig" title="earthdaily.earthdatastore.EarthDataStoreConfig"><em>EarthDataStoreConfig</em></a><em>, </em><em>optional</em>) – A configuration object containing the Earth Data Store credentials.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The access token for authenticating with the Earth Data Store API.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Try to read Earth Data Store credentials from multiple sources, in the following order:</dt><dd><ul class="simple">
+<li><p>from input credentials stored in a given JSON file</p></li>
+<li><p>from input credentials stored in a given TOML file</p></li>
+<li><p>from environement variables</p></li>
+<li><p>from the $HOME/.earthdaily/credentials TOML file and a given profile</p></li>
+<li><p>from the $HOME/.earthdaily/credentials TOML file and the “default” profile</p></li>
 </ul>
 </dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>Path</em><em>, </em><em>optional</em>) – The path to the TOML file containing the Earth Data Store credentials.
+Uses “$HOME/.earthdaily/credentials” by default.</p></li>
+<li><p><strong>profile</strong> (<em>profile</em><em>, </em><em>optional</em>) – Name of the profile to use in the TOML file.
+Uses “default” by default.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing credentials</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials_from_environment">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials_from_environment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials_from_environment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials_from_environment" title="Link to this definition"></a></dt>
+<dd><p>Read Earth Data Store credentials from environment variables.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ds</strong> – DESCRIPTION.</p>
+<dd class="field-odd"><p>Dictionary containing credentials</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>TYPE</p>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials_from_ini">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials_from_ini</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials_from_ini"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials_from_ini" title="Link to this definition"></a></dt>
+<dd><p>Read Earth Data Store credentials from a ini file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ini_path</strong> (<em>Path</em>) – The path to the INI file containing the Earth Data Store credentials.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing credentials</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials_from_json">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials_from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials_from_json" title="Link to this definition"></a></dt>
+<dd><p>Read Earth Data Store credentials from a JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>json_path</strong> (<em>Path</em>) – The path to the JSON file containing the Earth Data Store credentials.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing credentials</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.read_credentials_from_toml">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_credentials_from_toml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">toml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.read_credentials_from_toml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.read_credentials_from_toml" title="Link to this definition"></a></dt>
+<dd><p>Read Earth Data Store credentials from a TOML file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>toml_path</strong> (<em>Path</em><em>, </em><em>optional</em>) – The path to the TOML file containing the Earth Data Store credentials.</p></li>
+<li><p><strong>profile</strong> (<em>profile</em><em>, </em><em>optional</em>) – Name of the profile to use in the TOML file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing credentials</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -599,7 +605,7 @@ The default is “download”.</p></li>
 <dd class="field-even"><p><strong>items_collection</strong> – The filtered STAC items.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="earthdaily.earthdatastore.ItemCollection.html#earthdaily.earthdatastore.ItemCollection" title="earthdaily.earthdatastore.ItemCollection">ItemCollection</a></p>
+<dd class="field-odd"><p>ItemCollection</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
@@ -681,25 +687,6 @@ The default is “download”.</p></li>
 </div>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="earthdaily.earthdatastore.Auth.find_cloud_mask_items">
-<span class="sig-name descname"><span class="pre">find_cloud_mask_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items_collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cloudmask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ag_cloud_mask'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/earthdatastore.html#Auth.find_cloud_mask_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.earthdatastore.Auth.find_cloud_mask_items" title="Link to this definition"></a></dt>
-<dd><p>Search the catalog for the ag_cloud_mask items matching the given items_collection.
-The ag_cloud_mask items are searched in the <cite>ag_cloud_mask_collection_id</cite> collection using the
-<cite>ag_cloud_mask_item_id</cite> properties of the items.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>items_collection</strong> (<em>pystac.ItemCollection</em>) – The items to find corresponding ag cloud mask items for.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The filtered item collection.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pystac.ItemCollection</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -708,8 +695,8 @@ The ag_cloud_mask items are searched in the <cite>ag_cloud_mask_collection_id</c
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="earthdaily.earthdatastore.Any.html" class="btn btn-neutral float-left" title="earthdaily.earthdatastore.Any" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="earthdaily.earthdatastore.Client.html" class="btn btn-neutral float-right" title="earthdaily.earthdatastore.Client" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="earthdaily.earthdatastore.validate_property_condition.html" class="btn btn-neutral float-left" title="earthdaily.earthdatastore.validate_property_condition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="earthdaily.earthdatastore.EarthDataStoreConfig.html" class="btn btn-neutral float-right" title="earthdaily.earthdatastore.EarthDataStoreConfig" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

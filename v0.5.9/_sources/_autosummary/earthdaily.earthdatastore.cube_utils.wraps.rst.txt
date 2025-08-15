@@ -1,6 +1,0 @@
-earthdaily.earthdatastore.cube\_utils.wraps
-===========================================
-
-.. currentmodule:: earthdaily.earthdatastore.cube_utils
-
-.. autofunction:: wraps

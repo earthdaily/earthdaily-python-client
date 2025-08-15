@@ -1,6 +1,0 @@
-earthdaily.earthdatastore.cube\_utils.zonal\_stats
-==================================================
-
-.. currentmodule:: earthdaily.earthdatastore.cube_utils
-
-.. autofunction:: zonal_stats

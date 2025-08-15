@@ -1,6 +1,0 @@
-earthdaily.version
-==================
-
-.. currentmodule:: earthdaily
-
-.. autofunction:: version

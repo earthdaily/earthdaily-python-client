@@ -14,7 +14,6 @@ earthdaily.legacy.accessor.whittaker
       :toctree:
       :nosignatures:
    
-      solve_banded
       whittaker
    .. automodule:: earthdaily.legacy.accessor.whittaker
       :members:

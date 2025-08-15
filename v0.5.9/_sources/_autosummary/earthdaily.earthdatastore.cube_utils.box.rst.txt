@@ -1,6 +1,0 @@
-earthdaily.earthdatastore.cube\_utils.box
-=========================================
-
-.. currentmodule:: earthdaily.earthdatastore.cube_utils
-
-.. autofunction:: box

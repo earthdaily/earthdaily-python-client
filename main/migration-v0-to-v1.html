@@ -108,15 +108,15 @@
 <section id="installation-with-optional-dependencies">
 <h3>Installation with Optional Dependencies<a class="headerlink" href="#installation-with-optional-dependencies" title="Link to this heading"></a></h3>
 <p>For <strong>platform API functionality</strong> (recommended for v1 features):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily<span class="o">[</span>platform<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;earthdaily[platform]&quot;</span>
 </pre></div>
 </div>
 <p>For <strong>legacy v0 functionality</strong> (if you need backward compatibility):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily<span class="o">[</span>legacy<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;earthdaily[legacy]&quot;</span>
 </pre></div>
 </div>
 <p>For <strong>both platform and legacy features</strong>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily<span class="o">[</span>platform,legacy<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;earthdaily[platform,legacy]&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -203,7 +203,7 @@
 </pre></div>
 </div>
 <p>Load environment variables in your code:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>  <span class="c1"># pip install python-dotenv</span>
 <span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;.env&quot;</span><span class="p">)</span>  <span class="c1"># Required for authentication</span>
 </pre></div>
 </div>
@@ -279,9 +279,13 @@
 </section>
 <section id="v1-examples">
 <h2>📋 v1 Examples<a class="headerlink" href="#v1-examples" title="Link to this heading"></a></h2>
+<p><strong>Note</strong>: To use <code class="docutils literal notranslate"><span class="pre">.env</span></code> files, install <code class="docutils literal notranslate"><span class="pre">python-dotenv</span></code> separately:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>python-dotenv
+</pre></div>
+</div>
 <section id="basic-client-setup">
 <h3>Basic Client Setup<a class="headerlink" href="#basic-client-setup" title="Link to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>  <span class="c1"># pip install python-dotenv</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSClient</span><span class="p">,</span> <span class="n">EDSConfig</span>
 
 <span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;.env&quot;</span><span class="p">)</span>  <span class="c1"># Load credentials</span>
@@ -361,8 +365,8 @@
 <h2>📖 Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/">API Documentation</a></p></li>
-<li><p><a class="reference download internal" download="" href="_downloads/85d812e3208ecb09d083deeff5d3bfc1/quick_start.py"><span class="xref download myst">Quick Start Example</span></a></p></li>
-<li><p><span class="xref myst">Contributing Guide</span></p></li>
+<li><p><a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/blob/main/examples/quick_start.py">Quick Start Example</a></p></li>
+<li><p><a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/blob/main/CONTRIBUTING.md">Contributing Guide</a></p></li>
 <li><p><a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/issues">GitHub Issues</a></p></li>
 </ul>
 </section>
@@ -371,7 +375,7 @@
 <p>If you encounter issues during migration:</p>
 <ol class="arabic simple">
 <li><p>Check the <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/issues">GitHub Issues</a></p></li>
-<li><p>Review the <a class="reference internal" href="#../examples/"><span class="xref myst">examples</span></a> directory</p></li>
+<li><p>Review the <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/">examples</a> directory</p></li>
 <li><p>Create a new issue with your specific migration question</p></li>
 </ol>
 <p>Welcome to EarthDaily Python Client v1! 🎉</p>

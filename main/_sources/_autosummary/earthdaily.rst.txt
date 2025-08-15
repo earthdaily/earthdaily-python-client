@@ -9,47 +9,13 @@
 
    
    
-   .. rubric:: Functions
-   .. autosummary::
-      :toctree:
-      :nosignatures:
-   
-      version
-   .. automodule:: earthdaily
-      :members:
-      :exclude-members: APIRequester, Authentication, EDSClient, EDSConfig, HTTPClient, HTTPRequest, HTTPResponse, PackageNotFoundError
-      :undoc-members:
-      :noindex:
    
    
    
-   
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-      :toctree:
-      :template: custom-class-template.rst
-      :nosignatures:
-   
-      APIRequester
-      Authentication
-      EDSClient
-      EDSConfig
-      HTTPClient
-      HTTPRequest
-      HTTPResponse
    
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-      :toctree:
-   
-      PackageNotFoundError
    
    
 

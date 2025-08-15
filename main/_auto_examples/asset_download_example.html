@@ -96,7 +96,27 @@ to download assets from STAC items.</p>
 - Organizing downloaded files</p>
 <p>Requirements:
 - Set your EDS credentials as environment variables or in a .env file
-- Install with platform support: pip install earthdaily[platform]</p>
+- Install with platform support: pip install ‘earthdaily[platform]’</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>📥 EarthDaily Asset Download Examples
+============================================================
+
+This example demonstrates various asset download methods.
+Choose a demo to run:
+
+1. Basic asset download (visual assets)
+2. Advanced download configurations
+3. Multi-collection download
+4. Run all demos
+
+💥 Unexpected error in main: Cannot use input() builtin function in Sphinx-Gallery examples
+
+💡 Make sure you have set your EDS credentials as environment variables:
+   EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1"># Load environment variables from .env file</span>
@@ -383,7 +403,7 @@ to download assets from STAC items.</p>
     <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">❌ Import Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;💡 Make sure to install with platform support:&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   pip install earthdaily[platform]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   pip install &#39;earthdaily[platform]&#39;&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💥 Unexpected error in main: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💡 Make sure you have set your EDS credentials as environment variables:&quot;</span><span class="p">)</span>
@@ -394,6 +414,7 @@ to download assets from STAC items.</p>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.004 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-asset-download-example-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/33140bc40de30f7a6c8716086ede29dd/asset_download_example.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">asset_download_example.ipynb</span></code></a></p>

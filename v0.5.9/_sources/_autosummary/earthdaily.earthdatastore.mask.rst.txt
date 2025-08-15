@@ -16,7 +16,6 @@ earthdaily.earthdatastore.mask
    
       QA_PIXEL_cloud_detection
       filter_clear_cover
-      geometry_mask
    .. automodule:: earthdaily.earthdatastore.mask
       :members:
       :exclude-members: Mask, 

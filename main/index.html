@@ -88,7 +88,7 @@
 <div class="line"><strong>Author</strong>: EarthDaily</div>
 <div class="line"><strong>Source code</strong>: <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client">Git project</a></div>
 <div class="line"><strong>Bug tracker</strong>: <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/issues">Git issues</a></div>
-<div class="line"><strong>Generated</strong>: Jun 25, 2025</div>
+<div class="line"><strong>Generated</strong>: Aug 15, 2025</div>
 <div class="line"><strong>License</strong>: MIT</div>
 </div>
 </aside>
@@ -119,19 +119,19 @@
 </section>
 <section id="recommended-installation-platform-features">
 <h4>Recommended Installation (Platform Features)<a class="headerlink" href="#recommended-installation-platform-features" title="Link to this heading"></a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily<span class="o">[</span>platform<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;earthdaily[platform]&quot;</span>
 </pre></div>
 </div>
 </section>
 <section id="legacy-support-v0-compatibility">
 <h4>Legacy Support (v0 Compatibility)<a class="headerlink" href="#legacy-support-v0-compatibility" title="Link to this heading"></a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily<span class="o">[</span>legacy<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;earthdaily[legacy]&quot;</span>
 </pre></div>
 </div>
 </section>
 <section id="full-installation-all-features">
 <h4>Full Installation (All Features)<a class="headerlink" href="#full-installation-all-features" title="Link to this heading"></a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>earthdaily<span class="o">[</span>platform,legacy<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;earthdaily[platform,legacy]&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -146,10 +146,14 @@
 <span class="nv">EDS_API_URL</span><span class="o">=</span>https://api.earthdaily.com
 </pre></div>
 </div>
+<p><strong>Note</strong>: To use <code class="docutils literal notranslate"><span class="pre">.env</span></code> files, install <code class="docutils literal notranslate"><span class="pre">python-dotenv</span></code> separately:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>python-dotenv
+</pre></div>
+</div>
 </section>
 <section id="quick-start">
 <h3>🏃 Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>  <span class="c1"># pip install python-dotenv</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSClient</span><span class="p">,</span> <span class="n">EDSConfig</span>
 
 <span class="c1"># Load environment variables</span>
@@ -325,7 +329,7 @@
     <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01T00:00:00Z/2024-02-01T00:00:00Z&quot;</span><span class="p">,</span>
     <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">74.2</span><span class="p">,</span> <span class="mf">40.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.9</span><span class="p">,</span> <span class="mf">40.9</span><span class="p">],</span>  <span class="c1"># NYC area</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-    <span class="n">export_format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span>
+    <span class="n">export_format</span><span class="o">=</span><span class="s2">&quot;stacjson&quot;</span>
 <span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job ID: </span><span class="si">{</span><span class="n">search_job</span><span class="o">.</span><span class="n">job_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
@@ -507,24 +511,12 @@
 <h4>Download Data<a class="headerlink" href="#download-data" title="Link to this heading"></a></h4>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download assets from search results</span>
 <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
-    <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">download_item_assets</span><span class="p">(</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">stac_item</span><span class="o">.</span><span class="n">download_assets</span><span class="p">(</span>
         <span class="n">item</span><span class="p">,</span>
-        <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">],</span>
-        <span class="n">path</span><span class="o">=</span><span class="s2">&quot;./downloads&quot;</span>
+        <span class="n">asset_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">],</span>
+        <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./downloads&quot;</span><span class="p">,</span>
+        <span class="n">max_workers</span><span class="o">=</span><span class="mi">3</span>
     <span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="error-handling">
-<h4>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">earthdaily.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">EDSAPIError</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">search_result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">pystac_client</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-        <span class="n">collections</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;invalid-collection&quot;</span><span class="p">]</span>
-    <span class="p">)</span>
-<span class="k">except</span> <span class="n">EDSAPIError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -533,14 +525,14 @@
 <h3>📚 Documentation &amp; Examples<a class="headerlink" href="#documentation-examples" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/">📖 <strong>Full API Documentation</strong></a></p></li>
-<li><p><a class="reference internal" href="#docs/migration-v0-to-v1.md"><span class="xref myst">🔄 <strong>Migration Guide (v0 → v1)</strong></span></a></p></li>
-<li><p><a class="reference internal" href="#examples/"><span class="xref myst">📝 <strong>Quick Start Examples</strong></span></a></p></li>
-<li><p><a class="reference internal" href="#custom_examples/"><span class="xref myst">🧪 <strong>Jupyter Notebooks</strong></span></a></p></li>
+<li><p><a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/blob/main/docs/migration-v0-to-v1.md">🔄 <strong>Migration Guide (v0 → v1)</strong></a></p></li>
+<li><p><a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/">📝 <strong>Quick Start Examples</strong></a></p></li>
+<li><p><a class="reference external" href="https://earthdaily.github.io/EDA-Documentation/EDS%20Examples/EDS%20Examples/">🧪 <strong>Jupyter Notebooks</strong></a></p></li>
 </ul>
 </section>
 <section id="contributing">
 <h3>🤝 Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h3>
-<p>We welcome contributions! Please see our <a class="reference internal" href="#CONTRIBUTING.md"><span class="xref myst">Contributing Guide</span></a> for details on:</p>
+<p>We welcome contributions! Please see our <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/blob/main/CONTRIBUTING.md">Contributing Guide</a> for details on:</p>
 <ul class="simple">
 <li><p>Development setup</p></li>
 <li><p>Code style guidelines</p></li>
@@ -550,7 +542,7 @@
 </section>
 <section id="license">
 <h3>📄 License<a class="headerlink" href="#license" title="Link to this heading"></a></h3>
-<p>This project is licensed under the MIT License - see the <a class="reference internal" href="#LICENSE"><span class="xref myst">LICENSE</span></a> file for details.</p>
+<p>This project is licensed under the MIT License - see the <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/blob/main/LICENSE">LICENSE</a> file for details.</p>
 </section>
 <section id="support">
 <h3>🆘 Support<a class="headerlink" href="#support" title="Link to this heading"></a></h3>
@@ -559,10 +551,9 @@
 <li><p>📖 Check the <a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/">documentation</a></p></li>
 <li><p>🐛 <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/issues/new">Open an issue</a> for bugs</p></li>
 <li><p>💬 Ask questions in <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/discussions">GitHub Discussions</a></p></li>
-<li><p>📧 Contact our support team</p></li>
 </ul>
 <hr class="docutils" />
-<p><strong>Ready to get started?</strong> Check out our <a class="reference internal" href="#examples/quick_start.py"><span class="xref myst">Quick Start Example</span></a> or explore the <a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/">API Documentation</a>! 🚀</p>
+<p><strong>Ready to get started?</strong> Check out our <a class="reference external" href="https://github.com/earthdaily/earthdaily-python-client/blob/main/examples/quick_start.py">Quick Start Example</a> or explore the <a class="reference external" href="https://earthdaily.github.io/earthdaily-python-client/">API Documentation</a>! 🚀</p>
 </section>
 </section>
 <div class="toctree-wrapper compound">
@@ -696,6 +687,23 @@ poetry<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </s
 <p>Thank you for contributing to EarthDaily Python Client!</p>
 </section>
 </section>
+<p>MIT License</p>
+<p>Copyright (c) 2025 EarthDaily</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the “Software”), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/earthdaily.html#module-earthdaily" title="earthdaily"><code class="xref py py-obj docutils literal notranslate"><span class="pre">earthdaily</span></code></a></p></td>

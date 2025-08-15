@@ -17,22 +17,13 @@ earthdaily.legacy
       EarthDataStore
    .. automodule:: earthdaily.legacy
       :members:
-      :exclude-members: APIRequester, 
+      :exclude-members: 
       :undoc-members:
       :noindex:
    
    
    
    
-   
-   .. rubric:: Classes
-
-   .. autosummary::
-      :toctree:
-      :template: custom-class-template.rst
-      :nosignatures:
-   
-      APIRequester
    
    
 

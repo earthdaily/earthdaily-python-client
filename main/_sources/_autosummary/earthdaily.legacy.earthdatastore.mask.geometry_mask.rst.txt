@@ -1,6 +1,0 @@
-earthdaily.legacy.earthdatastore.mask.geometry\_mask
-====================================================
-
-.. currentmodule:: earthdaily.legacy.earthdatastore.mask
-
-.. autofunction:: geometry_mask

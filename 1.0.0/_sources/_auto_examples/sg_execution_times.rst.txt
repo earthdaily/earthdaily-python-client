@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.000** total execution time for 4 files **from _auto_examples**:
+**00:00.033** total execution time for 4 files **from _auto_examples**:
 
 .. container::
 
@@ -32,15 +32,15 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
+   * - :ref:`sphx_glr__auto_examples_quick_start.py` (``quick_start.py``)
+     - 00:00.025
+     - 0.0
    * - :ref:`sphx_glr__auto_examples_asset_download_example.py` (``asset_download_example.py``)
-     - 00:00.000
+     - 00:00.003
      - 0.0
    * - :ref:`sphx_glr__auto_examples_bulk_search_example.py` (``bulk_search_example.py``)
-     - 00:00.000
+     - 00:00.003
      - 0.0
    * - :ref:`sphx_glr__auto_examples_datacube_example.py` (``datacube_example.py``)
-     - 00:00.000
-     - 0.0
-   * - :ref:`sphx_glr__auto_examples_quick_start.py` (``quick_start.py``)
-     - 00:00.000
+     - 00:00.003
      - 0.0

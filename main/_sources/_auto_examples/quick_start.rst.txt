@@ -36,6 +36,27 @@ Requirements:
 
 .. GENERATED FROM PYTHON SOURCE LINES 18-138
 
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    🚀 Initializing EarthDaily Client...
+
+    💥 Error in main workflow: Missing required fields: client_id (or EDS_CLIENT_ID), client_secret (or EDS_SECRET), token_url (or EDS_AUTH_URL)
+
+    💡 Make sure you have set your EDS credentials as environment variables:
+       EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL
+
+
+
+
+
+
+|
+
 .. code-block:: Python
 
 
@@ -158,6 +179,11 @@ Requirements:
 
     if __name__ == "__main__":
         main()
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** (0 minutes 0.018 seconds)
 
 
 .. _sphx_glr_download__auto_examples_quick_start.py:

@@ -9,18 +9,6 @@ earthdaily.platform.models
 
    
    
-   .. rubric:: Functions
-   .. autosummary::
-      :toctree:
-      :nosignatures:
-   
-      dataclass
-   .. automodule:: earthdaily.platform.models
-      :members:
-      :exclude-members: UploadConfig, 
-      :undoc-members:
-      :noindex:
-   
    
    
    

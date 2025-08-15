@@ -15,17 +15,13 @@ earthdaily.earthdatastore
       :nosignatures:
    
       apply_single_condition
-      dataclass
-      datacube
       enhance_assets
       filter_items
-      metacube
-      parallel_search
       post_query_items
       validate_property_condition
    .. automodule:: earthdaily.earthdatastore
       :members:
-      :exclude-members: Any, Auth, Client, EarthDataStoreConfig, ItemCollection, Path, Retry, StacApiIO, StacCollectionExplorer, NoItemsFoundError
+      :exclude-members: Auth, EarthDataStoreConfig, StacCollectionExplorer, 
       :undoc-members:
       :noindex:
    
@@ -40,26 +36,13 @@ earthdaily.earthdatastore
       :template: custom-class-template.rst
       :nosignatures:
    
-      Any
       Auth
-      Client
       EarthDataStoreConfig
-      ItemCollection
-      Path
-      Retry
-      StacApiIO
       StacCollectionExplorer
    
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-      :toctree:
-   
-      NoItemsFoundError
    
    
 
@@ -72,4 +55,5 @@ earthdaily.earthdatastore
 
    cube_utils
    mask
+   parallel_search
 

@@ -33,9 +33,30 @@ Features demonstrated:
 
 Requirements:
 - Set your EDS credentials as environment variables or in a .env file
-- Install with legacy support: pip install earthdaily[legacy]
+- Install with legacy support: pip install 'earthdaily[legacy]'
 
 .. GENERATED FROM PYTHON SOURCE LINES 19-226
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    🚀 Initializing EarthDaily Client with legacy support...
+
+    💥 Unexpected error: Missing required fields: client_id (or EDS_CLIENT_ID), client_secret (or EDS_SECRET), token_url (or EDS_AUTH_URL)
+
+    💡 Make sure you have set your EDS credentials as environment variables:
+       EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL
+
+
+
+
+
+
+|
 
 .. code-block:: Python
 
@@ -237,7 +258,7 @@ Requirements:
         except ImportError as e:
             print(f"\n❌ Import Error: {e}")
             print("💡 Make sure to install with legacy support:")
-            print("   pip install earthdaily[legacy]")
+            print("   pip install 'earthdaily[legacy]'")
         except Exception as e:
             print(f"\n💥 Unexpected error: {e}")
             print("\n💡 Make sure you have set your EDS credentials as environment variables:")
@@ -246,6 +267,11 @@ Requirements:
 
     if __name__ == "__main__":
         main()
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** (0 minutes 0.003 seconds)
 
 
 .. _sphx_glr_download__auto_examples_datacube_example.py:

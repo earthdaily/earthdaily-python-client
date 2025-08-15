@@ -15,16 +15,13 @@ earthdaily.legacy.earthdatastore
       :nosignatures:
    
       apply_single_condition
-      datacube
       enhance_assets
       filter_items
-      metacube
-      parallel_search
       post_query_items
       validate_property_condition
    .. automodule:: earthdaily.legacy.earthdatastore
       :members:
-      :exclude-members: APIRequester, Any, Auth, Client, ItemCollection, Retry, StacApiIO, StacCollectionExplorer, NoItemsFoundError
+      :exclude-members: Auth, StacCollectionExplorer, 
       :undoc-members:
       :noindex:
    
@@ -39,25 +36,12 @@ earthdaily.legacy.earthdatastore
       :template: custom-class-template.rst
       :nosignatures:
    
-      APIRequester
-      Any
       Auth
-      Client
-      ItemCollection
-      Retry
-      StacApiIO
       StacCollectionExplorer
    
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-      :toctree:
-   
-      NoItemsFoundError
    
    
 
@@ -70,4 +54,5 @@ earthdaily.legacy.earthdatastore
 
    cube_utils
    mask
+   parallel_search
 

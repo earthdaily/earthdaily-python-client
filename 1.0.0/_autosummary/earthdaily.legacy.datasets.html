@@ -55,33 +55,14 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="earthdaily.html">earthdaily</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.version.html">earthdaily.version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.APIRequester.html">earthdaily.APIRequester</a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.Authentication.html">earthdaily.Authentication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.EDSClient.html">earthdaily.EDSClient</a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.EDSConfig.html">earthdaily.EDSConfig</a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPClient.html">earthdaily.HTTPClient</a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPRequest.html">earthdaily.HTTPRequest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.HTTPResponse.html">earthdaily.HTTPResponse</a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.PackageNotFoundError.html">earthdaily.PackageNotFoundError</a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.Authentication"><code class="docutils literal notranslate"><span class="pre">Authentication</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.APIRequester"><code class="docutils literal notranslate"><span class="pre">APIRequester</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPClient"><code class="docutils literal notranslate"><span class="pre">HTTPClient</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPRequest"><code class="docutils literal notranslate"><span class="pre">HTTPRequest</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.HTTPResponse"><code class="docutils literal notranslate"><span class="pre">HTTPResponse</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.EDSClient"><code class="docutils literal notranslate"><span class="pre">EDSClient</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="earthdaily.html#earthdaily.EDSConfig"><code class="docutils literal notranslate"><span class="pre">EDSConfig</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="earthdaily.exceptions.html">earthdaily.exceptions</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="earthdaily.legacy.html">earthdaily.legacy</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.legacy.EarthDataStore.html">earthdaily.legacy.earthdatastore</a></li>
-<li class="toctree-l3"><a class="reference internal" href="earthdaily.legacy.APIRequester.html">earthdaily.legacy.APIRequester</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.legacy.accessor.html">earthdaily.legacy.accessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="earthdaily.legacy.core.html">earthdaily.legacy.core</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">earthdaily.legacy.datasets</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.datasets.load_pivot.html">earthdaily.legacy.datasets.load_pivot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.datasets.load_pivot_corumba.html">earthdaily.legacy.datasets.load_pivot_corumba</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#earthdaily.legacy.datasets.load_pivot"><code class="docutils literal notranslate"><span class="pre">load_pivot()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#earthdaily.legacy.datasets.load_pivot_corumba"><code class="docutils literal notranslate"><span class="pre">load_pivot_corumba()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="earthdaily.legacy.datasets.data.html">earthdaily.legacy.datasets.data</a></li>
 </ul>
 </li>
@@ -155,46 +136,6 @@
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">earthdaily.legacy.datasets.</span></span><span class="sig-name descname"><span class="pre">load_pivot_corumba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_wkt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_geojson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/legacy/datasets.html#load_pivot_corumba"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>A pivot located in Corumba (between Goianas and Brasilia, Brazil).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>to_wkt</strong> (<em>BOOL</em><em>, </em><em>optional</em>) – Returns the pivot as a wkt. The default is False.</p></li>
-<li><p><strong>to_geojson</strong> (<em>BOOL</em><em>, </em><em>optional</em>) – Returns the pivot as a geojson. The default is False.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>pivot</strong> – DESCRIPTION.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str, GeoDataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="earthdaily.legacy.datasets.load_pivot">
-<span class="sig-prename descclassname"><span class="pre">earthdaily.legacy.datasets.</span></span><span class="sig-name descname"><span class="pre">load_pivot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_wkt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_geojson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/legacy/datasets.html#load_pivot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.legacy.datasets.load_pivot" title="Link to this definition"></a></dt>
-<dd><p>A pivot located in Nebraska.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>to_wkt</strong> (<em>BOOL</em><em>, </em><em>optional</em>) – Returns the pivot as a wkt. The default is False.</p></li>
-<li><p><strong>to_geojson</strong> (<em>BOOL</em><em>, </em><em>optional</em>) – Returns the pivot as a geojson. The default is False.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>pivot</strong> – DESCRIPTION.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str, GeoDataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="earthdaily.legacy.datasets.load_pivot_corumba">
-<span class="sig-prename descclassname"><span class="pre">earthdaily.legacy.datasets.</span></span><span class="sig-name descname"><span class="pre">load_pivot_corumba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_wkt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_geojson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/earthdaily/legacy/datasets.html#load_pivot_corumba"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#earthdaily.legacy.datasets.load_pivot_corumba" title="Link to this definition"></a></dt>
 <dd><p>A pivot located in Corumba (between Goianas and Brasilia, Brazil).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

@@ -20,15 +20,7 @@ earthdaily.platform
       :template: custom-class-template.rst
       :nosignatures:
    
-      APIRequester
-      AssetAccessMode
-      BulkDeleteService
-      BulkInsertService
-      BulkSearchService
-      Client
       PlatformService
-      StacApiIO
-      StacItemService
    
    
 

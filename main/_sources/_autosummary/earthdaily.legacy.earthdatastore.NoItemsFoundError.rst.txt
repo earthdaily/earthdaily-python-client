@@ -1,6 +1,0 @@
-earthdaily.legacy.earthdatastore.NoItemsFoundError
-==================================================
-
-.. currentmodule:: earthdaily.legacy.earthdatastore
-
-.. autoexception:: NoItemsFoundError

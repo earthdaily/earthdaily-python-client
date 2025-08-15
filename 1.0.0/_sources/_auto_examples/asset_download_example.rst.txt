@@ -37,6 +37,36 @@ Requirements:
 
 .. GENERATED FROM PYTHON SOURCE LINES 19-315
 
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    📥 EarthDaily Asset Download Examples
+    ============================================================
+
+    This example demonstrates various asset download methods.
+    Choose a demo to run:
+
+    1. Basic asset download (visual assets)
+    2. Advanced download configurations
+    3. Multi-collection download
+    4. Run all demos
+
+    💥 Unexpected error in main: Cannot use input() builtin function in Sphinx-Gallery examples
+
+    💡 Make sure you have set your EDS credentials as environment variables:
+       EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL
+
+
+
+
+
+
+|
+
 .. code-block:: Python
 
 
@@ -335,6 +365,11 @@ Requirements:
 
     if __name__ == "__main__":
         main()
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** (0 minutes 0.003 seconds)
 
 
 .. _sphx_glr_download__auto_examples_asset_download_example.py:

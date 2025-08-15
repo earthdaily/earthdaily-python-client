@@ -1,6 +1,0 @@
-earthdaily.earthdatastore.NoItemsFoundError
-===========================================
-
-.. currentmodule:: earthdaily.earthdatastore
-
-.. autoexception:: NoItemsFoundError

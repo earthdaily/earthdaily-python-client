@@ -32,9 +32,38 @@ Features demonstrated:
 
 Requirements:
 - Set your EDS credentials as environment variables or in a .env file
-- Install with platform support: pip install earthdaily[platform]
+- Install with platform support: pip install 'earthdaily[platform]'
 
 .. GENERATED FROM PYTHON SOURCE LINES 18-274
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    🌍 EarthDaily Bulk Search Examples
+    ============================================================
+
+    This example demonstrates bulk search capabilities.
+    Choose a demo to run:
+
+    1. Small bulk search demo (GOES collection, limited results)
+    2. Custom bulk search configuration
+    3. Run both demos
+
+    💥 Unexpected error in main: Cannot use input() builtin function in Sphinx-Gallery examples
+
+    💡 Make sure you have set your EDS credentials as environment variables:
+       EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL
+
+
+
+
+
+
+|
 
 .. code-block:: Python
 
@@ -285,7 +314,7 @@ Requirements:
         except ImportError as e:
             print(f"\n❌ Import Error: {e}")
             print("💡 Make sure to install with platform support:")
-            print("   pip install earthdaily[platform]")
+            print("   pip install 'earthdaily[platform]'")
         except Exception as e:
             print(f"\n💥 Unexpected error in main: {e}")
             print("\n💡 Make sure you have set your EDS credentials as environment variables:")
@@ -294,6 +323,11 @@ Requirements:
 
     if __name__ == "__main__":
         main()
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** (0 minutes 0.003 seconds)
 
 
 .. _sphx_glr_download__auto_examples_bulk_search_example.py:
