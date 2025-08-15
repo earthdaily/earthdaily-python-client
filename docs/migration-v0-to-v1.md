@@ -260,8 +260,8 @@ All v0 methods are available through `client.legacy.*`
 ## 📖 Additional Resources
 
 - [API Documentation](https://earthdaily.github.io/earthdaily-python-client/)
-- [Quick Start Example](../examples/quick_start.py)
-- [Contributing Guide](../CONTRIBUTING.md)
+- [Quick Start Example](https://github.com/earthdaily/earthdaily-python-client/blob/main/examples/quick_start.py)
+- [Contributing Guide](https://github.com/earthdaily/earthdaily-python-client/blob/main/CONTRIBUTING.md)
 - [GitHub Issues](https://github.com/earthdaily/earthdaily-python-client/issues)
 
 ## 🆘 Need Help?
@@ -269,7 +269,7 @@ All v0 methods are available through `client.legacy.*`
 If you encounter issues during migration:
 
 1. Check the [GitHub Issues](https://github.com/earthdaily/earthdaily-python-client/issues)
-2. Review the [examples](../examples/) directory
+2. Review the [examples](https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/) directory
 3. Create a new issue with your specific migration question
 
 Welcome to EarthDaily Python Client v1! 🎉 

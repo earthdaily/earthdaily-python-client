@@ -391,13 +391,13 @@ for item in items:
 ## 📚 Documentation & Examples
 
 - [📖 **Full API Documentation**](https://earthdaily.github.io/earthdaily-python-client/)
-- [🔄 **Migration Guide (v0 → v1)**](docs/migration-v0-to-v1.md)
-- [📝 **Quick Start Examples**](examples/)
+- [🔄 **Migration Guide (v0 → v1)**](https://github.com/earthdaily/earthdaily-python-client/blob/main/docs/migration-v0-to-v1.md)
+- [📝 **Quick Start Examples**](https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/)
 - [🧪 **Jupyter Notebooks**](https://earthdaily.github.io/EDA-Documentation/EDS%20Examples/EDS%20Examples/)
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
+We welcome contributions! Please see our [Contributing Guide](https://github.com/earthdaily/earthdaily-python-client/blob/main/CONTRIBUTING.md) for details on:
 
 - Development setup
 - Code style guidelines
@@ -406,7 +406,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/earthdaily/earthdaily-python-client/blob/main/LICENSE) file for details.
 
 ## 🆘 Support
 
@@ -418,4 +418,4 @@ Need help? Here's how to get support:
 
 ---
 
-**Ready to get started?** Check out our [Quick Start Example](examples/quick_start.py) or explore the [API Documentation](https://earthdaily.github.io/earthdaily-python-client/)! 🚀
+**Ready to get started?** Check out our [Quick Start Example](https://github.com/earthdaily/earthdaily-python-client/blob/main/examples/quick_start.py) or explore the [API Documentation](https://earthdaily.github.io/earthdaily-python-client/)! 🚀
