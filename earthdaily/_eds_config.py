@@ -61,6 +61,20 @@ class EDSConfig:
         A flag indicating whether to bypass authentication. Defaults to False.
     asset_access_mode: AssetAccessMode, optional
         The mode of access for assets. Defaults to AssetAccessMode.PRESIGNED_URLS.
+    max_retries: int, optional
+        Maximum number of retry attempts for HTTP requests that fail due to transient errors
+        (e.g., 429, 500, 502, 503, 504 status codes). The client will attempt the request
+        up to this many times before giving up. Defaults to 3.
+    retry_backoff_factor: float, optional
+        Backoff factor for exponential retry delays between HTTP request attempts.
+        The delay between retries is calculated using the formula:
+        `delay = backoff_factor * (2 ** (retry_count - 1))` seconds.
+        Defaults to 1.0.
+
+        Examples:
+        - backoff_factor=1.0: delays of 1s, 2s, 4s for retries 1, 2, 3
+        - backoff_factor=0.5: delays of 0.5s, 1s, 2s for retries 1, 2, 3
+        - backoff_factor=2.0: delays of 2s, 4s, 8s for retries 1, 2, 3
 
     Raises:
     -------
@@ -81,6 +95,8 @@ class EDSConfig:
 
     # Platform specific configurations
     asset_access_mode: AssetAccessMode = AssetAccessMode.PRESIGNED_URLS
+    max_retries: int = 3
+    retry_backoff_factor: float = 1.0
 
     def __post_init__(self):
         """Validate that required fields are provided and raise errors if not."""

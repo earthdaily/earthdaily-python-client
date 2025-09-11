@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7]
+
+### Added
+- Moved example notebooks from to the earthdaily-python-client repository
+
+## [1.0.6]
+
+### Added
+- HTTPClient now accepts `max_retries` and `retry_backoff_factor` parameters for improved error handling
+- Retry configuration support in APIRequester and EDSConfig
+
+## [1.0.5]
+
+### Fixed
+- Fixed "include" logic for collections like `sentinel-1-grd` when assets have dots in their asset keys (e.g., `measurement/iw-vv.tiff`)
+
 ## [1.0.4]
 
 ### Fixed

@@ -781,7 +781,7 @@ class Auth:
                 "properties",
             ]
         }
-        fields["include"].extend([f"assets.{asset}" for asset in assets])
+        fields["include"].extend([f"assets.'{asset}'" for asset in assets])
         return fields
 
     @parallel_search

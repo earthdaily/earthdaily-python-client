@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import ANY, MagicMock, patch
 
+from pystac_client.stac_api_io import StacApiIO
+
 from earthdaily._api_requester import APIRequester
 from earthdaily._auth_client import Authentication
 from earthdaily._eds_config import EDSConfig
@@ -47,6 +49,11 @@ class TestPlatformService(unittest.TestCase):
                 "X-EDA-Client-User-Agent": ANY,
             },
         )
+
+        # Verify StacApiIO is passed to Client.open
+        stac_io = mock_client_open.call_args[1]["stac_io"]
+        self.assertIsInstance(stac_io, StacApiIO)
+        self.assertIsNotNone(stac_io.session)
 
         self.assertEqual(platform_service.pystac_client, mock_client)
 

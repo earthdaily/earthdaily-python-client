@@ -1,0 +1,10 @@
+earthdaily[platform]==1.0.0
+dask[distributed]
+requests
+numpy
+pandas
+python-dotenv
+odc-stac
+matplotlib
+xarray
+pystac-client

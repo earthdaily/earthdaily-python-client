@@ -1,5 +1,7 @@
 from pystac_client import Client
 from pystac_client.stac_api_io import StacApiIO
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from earthdaily._api_requester import APIRequester
 from earthdaily._eds_config import AssetAccessMode
@@ -47,8 +49,19 @@ class PlatformService:
             headers["X-Signed-Asset-Urls"] = "True"
         if api_requester.auth:
             headers["Authorization"] = f"Bearer {api_requester.auth.get_token()}"
+
+        stac_io = StacApiIO()
+        retry_strategy = Retry(
+            total=api_requester.config.max_retries,
+            status_forcelist=[429, 500, 502, 503, 504],
+            backoff_factor=api_requester.config.retry_backoff_factor,
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        stac_io.session.mount("http://", adapter)
+        stac_io.session.mount("https://", adapter)
+
         self.pystac_client = Client.open(
             f"{api_requester.base_url}/platform/v1/stac",
-            stac_io=StacApiIO(max_retries=3),
+            stac_io=stac_io,
             headers=headers,
         )

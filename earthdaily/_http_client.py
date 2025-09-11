@@ -1,7 +1,9 @@
 from typing import Any, Dict, Optional
 
 import requests
+from requests.adapters import HTTPAdapter
 from requests.structures import CaseInsensitiveDict
+from urllib3.util.retry import Retry
 
 
 class HTTPRequest:
@@ -69,6 +71,24 @@ class HTTPClient:
         Sends the HTTP request and returns the HTTP response.
     """
 
+    def __init__(self, max_retries=3, retry_backoff_factor=1.0):
+        self.max_retries = max_retries
+        self.retry_backoff_factor = retry_backoff_factor
+        self._session = None
+
+    def _get_session(self):
+        if self._session is None:
+            retry_strategy = Retry(
+                total=self.max_retries,
+                status_forcelist=[429, 500, 502, 503, 504],
+                backoff_factor=self.retry_backoff_factor,
+            )
+            adapter = HTTPAdapter(max_retries=retry_strategy)
+            self._session = requests.Session()
+            self._session.mount("https://", adapter)
+            self._session.mount("http://", adapter)
+        return self._session
+
     def send(self, request: HTTPRequest) -> HTTPResponse:
         """
         Sends an HTTP request and returns the HTTP response.
@@ -83,7 +103,8 @@ class HTTPClient:
         HTTPResponse:
             The response object containing status code, body, and headers.
         """
-        response = requests.request(
+        session = self._get_session()
+        response = session.request(
             method=request.method,
             url=request.url,
             headers=request.headers,
