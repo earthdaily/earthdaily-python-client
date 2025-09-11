@@ -1,0 +1,10 @@
+earthdaily[platform,legacy]==1.0.0
+requests
+numpy
+geopandas
+python-dotenv
+odc-stac
+matplotlib
+shapely
+pandas
+xarray

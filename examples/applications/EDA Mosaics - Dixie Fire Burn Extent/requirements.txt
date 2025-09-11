@@ -1,0 +1,13 @@
+earthdaily[platform,legacy]==1.0.0
+dask[distributed]
+requests
+numpy
+xarray
+rasterio
+shapely
+pandas
+python-dotenv
+odc-stac
+matplotlib
+rioxarray
+geopandas

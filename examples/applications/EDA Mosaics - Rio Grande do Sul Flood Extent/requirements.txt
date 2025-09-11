@@ -1,0 +1,11 @@
+earthdaily[platform,legacy]==1.0.0
+scikit-image
+dask[distributed]
+requests
+numpy
+pandas
+python-dotenv
+odc-stac
+matplotlib
+rioxarray
+geopandas

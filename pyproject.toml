@@ -1,6 +1,6 @@
 [project]
 name = "earthdaily"
-version = "1.0.4"
+version = "1.0.7"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
@@ -49,6 +49,11 @@ ruff = "^0.12.2"
 tox = "^4.27.0"
 pytest = "^8.4.1"
 pytest-cov = "^6.2.1"
+pytest-xdist = "^3.6.0"
+pytest-asyncio = "^0.25.0"
+nbclient = "^0.10.2"
+nbformat = "^5.10.4"
+ipykernel = "^6.29.5"
 types-tqdm = "^4.67.0.20250516"
 
 [tool.poetry.group.docs.dependencies]
@@ -78,7 +83,7 @@ select = ["E", "F", "I"]
 ignore = []
 
 [tool.pytest.ini_options]
-addopts = "--cov=earthdaily --cov-report=term-missing"
+addopts = "--cov=earthdaily --cov-report=term-missing --ignore=tests/test_notebooks"
 testpaths = ["tests"]
 
 [tool.mypy]

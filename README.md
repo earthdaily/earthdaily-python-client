@@ -81,6 +81,33 @@ config = EDSConfig(
 client = EDSClient(config)
 ```
 
+### Advanced Configuration Options
+
+The `EDSConfig` class supports additional configuration options for customizing client behavior:
+
+```python
+config = EDSConfig(
+    # ... authentication parameters ...
+    
+    # HTTP retry configuration
+    max_retries=5,                    # Maximum retry attempts (default: 3)
+    retry_backoff_factor=2.0,         # Exponential backoff factor (default: 1.0)
+    
+    # Asset access mode
+    asset_access_mode="presigned-urls"  # "presigned-urls", "proxy-urls", or "raw"
+)
+```
+
+#### Retry Configuration
+
+- **`max_retries`**: Maximum number of retry attempts
+- **`retry_backoff_factor`**: Backoff factor for retry delays
+
+**Examples:**
+- `retry_backoff_factor=1.0`: Delays of 1s, 2s, 4s
+- `retry_backoff_factor=0.5`: Delays of 0.5s, 1s, 2s  
+- `retry_backoff_factor=2.0`: Delays of 2s, 4s, 8s
+
 ## 🌍 Core Features
 
 ### Platform API Integration
@@ -390,10 +417,11 @@ for item in items:
 
 ## 📚 Documentation & Examples
 
+- [📖 **EDA Documentation**](https://earthdaily.github.io/EDA-Documentation/)
 - [📖 **Full API Documentation**](https://earthdaily.github.io/earthdaily-python-client/)
 - [🔄 **Migration Guide (v0 → v1)**](https://github.com/earthdaily/earthdaily-python-client/blob/main/docs/migration-v0-to-v1.md)
 - [📝 **Quick Start Examples**](https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/)
-- [🧪 **Jupyter Notebooks**](https://earthdaily.github.io/EDA-Documentation/EDS%20Examples/EDS%20Examples/)
+- [🧪 **Jupyter Notebooks**](https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/applications/)
 
 ## 🤝 Contributing
 

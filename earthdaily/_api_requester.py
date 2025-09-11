@@ -49,7 +49,7 @@ class APIRequester:
         self.config = config
         self.base_url = config.base_url
         self.auth = auth
-        self.http_client = HTTPClient()
+        self.http_client = HTTPClient(config.max_retries, config.retry_backoff_factor)
         self.headers = self._generate_headers()
 
     def _generate_headers(self) -> dict[str, str]:
