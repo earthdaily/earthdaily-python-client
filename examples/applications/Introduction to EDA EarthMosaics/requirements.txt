@@ -1,0 +1,8 @@
+earthdaily[platform]==1.0.0
+requests
+numpy
+pandas
+python-dotenv
+odc-stac
+matplotlib
+xarray

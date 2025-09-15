@@ -68,6 +68,26 @@ class TestEDSConfig(unittest.TestCase):
 
         self.assertEqual(config.asset_access_mode, AssetAccessMode.RAW)
 
+    def test_retry_config_defaults(self):
+        os.environ["EDS_CLIENT_ID"] = "env_client_id"
+        os.environ["EDS_SECRET"] = "env_client_secret"
+        os.environ["EDS_AUTH_URL"] = "env_token_url"
+
+        config = EDSConfig()
+
+        self.assertEqual(config.max_retries, 3)
+        self.assertEqual(config.retry_backoff_factor, 1.0)
+
+    def test_retry_config_custom(self):
+        os.environ["EDS_CLIENT_ID"] = "env_client_id"
+        os.environ["EDS_SECRET"] = "env_client_secret"
+        os.environ["EDS_AUTH_URL"] = "env_token_url"
+
+        config = EDSConfig(max_retries=5, retry_backoff_factor=2.0)
+
+        self.assertEqual(config.max_retries, 5)
+        self.assertEqual(config.retry_backoff_factor, 2.0)
+
     def test_load_from_json_file(self):
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(
