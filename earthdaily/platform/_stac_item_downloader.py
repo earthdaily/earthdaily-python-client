@@ -73,7 +73,7 @@ class ItemDownloader:
             Dict mapping asset keys to downloaded file paths
         """
         if isinstance(item, Item):
-            item_dict = item.to_dict()
+            item_dict = item.to_dict(transform_hrefs=False)
         elif isinstance(item, dict):
             try:
                 # Attempt to validate the item structure

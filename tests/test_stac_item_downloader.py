@@ -239,6 +239,23 @@ class TestItemDownloader(unittest.TestCase):
             self.assertEqual(result["visual"], Path("/test/output/visual.tif"))
 
     @patch("pathlib.Path.mkdir")
+    def test_download_assets_pystac_item_transform_hrefs(self, mock_mkdir):
+        """Test that to_dict is called with transform_hrefs=False to avoid STAC resolution errors"""
+        with patch.object(self.pystac_item, "to_dict") as mock_to_dict:
+            mock_to_dict.return_value = self.sample_item_dict
+
+            with patch.object(self.downloader, "_download_single_asset") as mock_download_single:
+                mock_download_single.return_value = Path("/test/output/visual.tif")
+
+                result = self.downloader.download_assets(
+                    item=self.pystac_item, asset_keys=["visual"], output_dir="/test/output", href_type="href"
+                )
+
+            mock_to_dict.assert_called_once_with(transform_hrefs=False)
+            self.assertEqual(len(result), 1)
+            self.assertEqual(result["visual"], Path("/test/output/visual.tif"))
+
+    @patch("pathlib.Path.mkdir")
     def test_download_assets_with_href_type(self, mock_mkdir):
         """Test download_assets with custom href_type"""
         with patch.object(self.downloader, "_download_single_asset") as mock_download_single:

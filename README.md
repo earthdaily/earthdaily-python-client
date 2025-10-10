@@ -73,10 +73,10 @@ client = EDSClient(config)
 ```python
 # Direct configuration (without .env file)
 config = EDSConfig(
-    client_id="your_client_id",
+    client_id="EARTHDAILY_API_TOKEN",
     client_secret="your_client_secret",
-    token_url="https://your-auth-url.com/oauth/token",
-    api_url="https://api.earthdaily.com"
+    token_url="https://api.earthdaily.com/account_management/v1/authentication/api_tokens/exchange",
+    base_url="https://api.earthdaily.com"
 )
 client = EDSClient(config)
 ```
