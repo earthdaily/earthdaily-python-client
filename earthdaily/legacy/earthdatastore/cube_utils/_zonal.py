@@ -112,7 +112,7 @@ class StatisticalOperations:
     """Handles statistical computations on spatial data."""
 
     @staticmethod
-    def zonal_stats(dataset: xr.Dataset, positions: List[np.ndarray], reducers: List[str]) -> xr.DataArray:
+    def zonal_stats(dataset: xr.Dataset, positions: List[np.ndarray], reducers: List[str]) -> xr.Dataset:
         """Compute zonal statistics for given positions using specified reducers.
 
         Args:
@@ -121,7 +121,7 @@ class StatisticalOperations:
             reducers: List of statistical operations to perform
 
         Returns:
-            xarray.DataArray: Computed statistics
+            xarray.Dataset: Computed statistics
 
         Notes:
             Uses xarray's apply_ufunc for parallel processing and efficient computation
@@ -146,7 +146,7 @@ class StatisticalOperations:
             return zs.swapaxes(-1, 0).swapaxes(-1, -2)
 
         # Apply the function using xarray's parallel processing capabilities
-        return xr.apply_ufunc(
+        result = xr.apply_ufunc(
             _zonal_stats_ufunc,
             dataset,
             vectorize=False,
@@ -161,6 +161,9 @@ class StatisticalOperations:
                 "output_sizes": dict(feature=len(positions), zonal_statistics=len(reducers)),
             },
         )
+        if isinstance(result, xr.DataArray):
+            return result.to_dataset(name="zonal")
+        return result
 
 
 def zonal_stats(
@@ -444,7 +447,7 @@ def _format_numpy_output(
 
     # Assign coordinates
     coords = {"index": ("feature", index), "geometry": ("feature", geometry_wkt)}
-    stats = stats.assign_coords(**coords)
+    stats = stats.assign_coords(coords)
     stats = stats.set_index(feature=list(coords.keys()))
 
     # Preserve additional columns if requested

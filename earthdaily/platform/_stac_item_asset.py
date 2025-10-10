@@ -86,7 +86,7 @@ class EarthDailyAPIResolver(DomainPatternResolver):
 class ResolverRegistry:
     """Registry for asset resolvers."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._resolvers: list[AssetResolver] = []
 
     def register(self, resolver: AssetResolver) -> None:

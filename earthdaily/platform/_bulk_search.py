@@ -21,7 +21,9 @@ class BulkSearchRequest(BaseRequest):
     collections: Optional[List[Union[str, Any]]]
         List of one or more Collection IDs or pystac.Collection instances.
     export_format: Optional[str]
-        The format to export the results in.
+        The format to export the results in. E.g. "geoparquet", "stacjson".
+    export_type: Optional[str]
+        The type of export to perform. E.g. "standard", "lake".
     limit: int
         A recommendation to the service as to the number of items to return
         per page of results. Defaults to 100.
@@ -51,6 +53,7 @@ class BulkSearchRequest(BaseRequest):
 
     collections: Optional[List[Union[str, Any]]] = None
     export_format: Optional[str] = None
+    export_type: Optional[str] = None
     limit: int = 100
     ids: Optional[List[str]] = None
     bbox: Optional[Union[List[float], tuple, Any]] = None
@@ -177,6 +180,7 @@ class BulkSearchService:
         filter_lang: Optional[str] = None,
         sortby: Optional[Union[str, List[str]]] = None,
         fields: Optional[List[str]] = None,
+        export_type: Optional[str] = None,
     ) -> BulkSearchCreateResponse:
         """
         Create a new bulk search request in the Earth Data Store.
@@ -190,7 +194,7 @@ class BulkSearchService:
         collections: Optional[List[Union[str, Any]]]
             List of one or more Collection IDs or pystac.Collection instances.
         export_format: Optional[str]
-            The format to export the results in.
+            The format to export the results in. E.g. "geoparquet", "stacjson".
         limit: int
             A recommendation to the service as to the number of items to return
             per page of results. Defaults to 100.
@@ -216,6 +220,8 @@ class BulkSearchService:
             A single field or list of fields to sort the response by.
         fields: Optional[List[str]]
             A list of fields to include in the response.
+        export_type: Optional[str]
+            The type of export to perform. E.g. "standard", "lake".
 
         Returns
         -------
@@ -230,6 +236,7 @@ class BulkSearchService:
         request_data = BulkSearchRequest(
             collections=collections,
             export_format=export_format,
+            export_type=export_type,
             limit=limit,
             ids=ids,
             bbox=bbox,

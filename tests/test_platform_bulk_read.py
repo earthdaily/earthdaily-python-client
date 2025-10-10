@@ -46,7 +46,8 @@ class TestBulkSearchService(unittest.TestCase):
         # Call with all possible parameters
         result = self.service.create(
             collections=["test_collection"],
-            export_format="geojson",
+            export_format="geoparquet",
+            export_type="standard",
             limit=500,
             ids=["item1", "item2"],
             bbox=[0, 0, 1, 1],
@@ -66,7 +67,8 @@ class TestBulkSearchService(unittest.TestCase):
         args, _ = self.mock_api_requester.send_request.call_args
         body = args[0].body
         self.assertEqual(body["collections"], ["test_collection"])
-        self.assertEqual(body["export_format"], "geojson")
+        self.assertEqual(body["export_format"], "geoparquet")
+        self.assertEqual(body["export_type"], "standard")
         self.assertEqual(body["limit"], 500)
         self.assertEqual(body["ids"], ["item1", "item2"])
         self.assertEqual(body["bbox"], [0, 0, 1, 1])

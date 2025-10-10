@@ -1,4 +1,4 @@
-name: earthdaily-python-client CI
+name: Tests, Lint, Format, and Type Check
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
   test:
     permissions:
       contents: read
-    name: Unit Tests (Python ${{ matrix.python-version }})
+    name: Python ${{ matrix.python-version }} (lint, format, mypy, tests, coverage)
     runs-on: ${{ github.repository_visibility == 'private' && 'ed-runner-set' || 'ubuntu-latest' }}
     strategy:
       matrix:
@@ -26,7 +26,7 @@ jobs:
           - python-version: "3.13"
             tox_env: py313
     container:
-      image: python:${{ matrix.python-version }}
+      image: ghcr.io/astral-sh/uv:python${{ matrix.python-version }}-trixie-slim
     
     steps:
       - uses: actions/checkout@v4
@@ -34,13 +34,7 @@ jobs:
       - name: Install GDAL and dependencies
         run: |
           apt-get update
-          apt-get install -y gdal-bin libgdal-dev
+          apt-get install -y build-essential gdal-bin libgdal-dev
 
-      - name: Install Poetry
-        run: pip install poetry
-
-      - name: Install test dependencies
-        run: poetry install --only tests
-
-      - name: Run tests with tox
-        run: poetry run tox -e ${{ matrix.tox_env }}
+      - name: Run all checks with tox
+        run: uv run --with tox-uv tox -e ${{ matrix.tox_env }},lint,format,mypy -v
