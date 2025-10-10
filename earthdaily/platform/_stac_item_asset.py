@@ -70,7 +70,7 @@ class EarthDailyAPIResolver(DomainPatternResolver):
 
     domain_pattern = re.compile(r".*\.earthdaily\.com$")
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None) -> None:
         self.api_key = api_key
 
     def get_download_url(self, url: str) -> str:
@@ -86,7 +86,7 @@ class EarthDailyAPIResolver(DomainPatternResolver):
 class ResolverRegistry:
     """Registry for asset resolvers."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._resolvers: list[AssetResolver] = []
 
     def register(self, resolver: AssetResolver) -> None:

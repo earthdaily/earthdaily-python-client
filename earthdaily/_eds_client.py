@@ -17,7 +17,7 @@ except ImportError:
     _HAS_PLATFORM = False
 
 try:
-    from earthdaily.internal import InternalService
+    from earthdaily.internal import InternalService  # type: ignore[import]
 
     _HAS_INTERNAL = True
 except ImportError:
