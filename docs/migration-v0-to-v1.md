@@ -18,7 +18,7 @@ v1 represents a major evolution of the EarthDaily Python client with:
 
 ## 📦 Installation
 
-**Python Version Support**: Python 3.10, 3.11, 3.12, and 3.13
+**Python Version Support**: Python 3.10, 3.11, 3.12, 3.13, 3.14
 
 ### Basic Installation
 
@@ -41,6 +41,11 @@ pip install "earthdaily[legacy]"
 For **both platform and legacy features**:
 ```bash
 pip install "earthdaily[platform,legacy]"
+```
+
+For **full features with utils (for .env file and Jupyter notebooks)**:
+```bash
+pip install "earthdaily[platform,legacy,utils]"
 ```
 
 ## 🔄 Key Differences
@@ -103,7 +108,7 @@ EDS_API_URL=https://api.earthdaily.com
 
 Load environment variables in your code:
 ```python
-from dotenv import load_dotenv  # pip install python-dotenv
+from dotenv import load_dotenv
 load_dotenv(".env")  # Required for authentication
 ```
 
@@ -179,14 +184,14 @@ items = client.legacy.search(
 
 ## 📋 v1 Examples
 
-**Note**: To use `.env` files, install `python-dotenv` separately:
+**Note**: To use `.env` files and Jupyter notebooks, install with the `utils` extra:
 ```bash
-pip install python-dotenv
+pip install "earthdaily[utils]"
 ```
 
 ### Basic Client Setup
 ```python
-from dotenv import load_dotenv  # pip install python-dotenv
+from dotenv import load_dotenv
 from earthdaily import EDSClient, EDSConfig
 
 load_dotenv(".env")  # Load credentials

@@ -112,6 +112,9 @@ class APIRequester:
         elif self.config.asset_access_mode == AssetAccessMode.PROXY_URLS:
             headers["X-Proxy-Asset-Urls"] = "True"
 
+        if self.config.bypass_auth:
+            headers["X-User-User-Type"] = "user"
+
         return headers
 
     def send_request(self, request: HTTPRequest) -> HTTPResponse:

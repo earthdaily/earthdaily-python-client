@@ -4,6 +4,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0]
+
+### Added
+- New `datacube` module with DatacubeService for creating and managing datacubes from STAC items.
+
+## [1.4.0]
+
+### Added
+- New `ordering` module with EDC ordering service via `client.ordering.edc`
+
+## [1.3.0]
+
+### Added
+- New `apply_cloud_mask()` function in `earthdaily.legacy.datacube` for flexible cloud masking with custom pixel values, geometry-aware statistics, and coverage-based filtering
+
+## [1.2.2]
+
+### Added
+- Support for Python 3.14
+
+## [1.2.1]
+
+### Added
+- New `utils` optional dependency group for user convenience tools (`python-dotenv`, `jupyter`, `ipykernel`)
+
+## [1.2.0]
+
+### Added
+- Added `replace_href_with` parameter to `cube_utils.datacube()` function to enable using alternate asset URLs (default: `"alternate.download.href"`)
+
+### Changed
+- General refactoring and improvements to legacy `cube_utils.datacube()`
+
+## [1.1.3]
+
+### Fixed
+- Fixed pre-signing functionality when `bypass_auth` is set to `True` by adding required user type header
+
+## [1.1.2]
+
+### Added
+- Credential validation on `EDSClient` initialization to catch authentication issues early
+
+### Changed
+- Improved authentication error messages to provide specific, helpful details for different failure scenarios (invalid credentials, connection errors, timeouts, etc.)
+
 ## [1.1.1]
 
 ### Fixed

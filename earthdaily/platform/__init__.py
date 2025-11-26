@@ -43,10 +43,6 @@ class PlatformService:
             "Accept": "application/json",
             **api_requester.headers,
         }
-        if asset_access_mode == AssetAccessMode.PROXY_URLS:
-            headers["X-Proxy-Asset-Urls"] = "True"
-        elif asset_access_mode == AssetAccessMode.PRESIGNED_URLS:
-            headers["X-Signed-Asset-Urls"] = "True"
         if api_requester.auth:
             headers["Authorization"] = f"Bearer {api_requester.auth.get_token()}"
 

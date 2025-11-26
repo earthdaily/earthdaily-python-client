@@ -1,224 +1,138 @@
 """
-Datacube Creation Example
-=========================
+Datacube Module Example
+========================
 
-This example demonstrates how to create datacubes using the EarthDaily Python client v1
-with the legacy API for backward compatibility.
-
-Features demonstrated:
-- Using the legacy API for v0.x compatibility
-- Loading sample geometries
-- Creating datacubes with various parameters
-- Working with masking and cloud filtering
-- Basic datacube operations
+Demonstrates ALL datacube capabilities:
+- Creation, masking, indices, spatial ops, temporal ops, visualization, properties
 
 Requirements:
-- Set your EDS credentials as environment variables or in a .env file
-- Install with legacy support: pip install 'earthdaily[legacy]'
+- pip install 'earthdaily[datacube]'
+- Set EDS credentials as environment variables
 """
 
-import warnings
-
-# Load environment variables from .env file
 try:
     from dotenv import load_dotenv
 
     load_dotenv()
 except ImportError:
-    print("💡 Consider installing python-dotenv to automatically load .env files:")
-    print("   pip install python-dotenv")
+    pass
+
+import geopandas as gpd
+import matplotlib.pyplot as plt
+from shapely.geometry import box
 
 from earthdaily import EDSClient, EDSConfig
-from earthdaily.exceptions import EDSAPIError
-from earthdaily.legacy import datasets
-
-# Suppress warnings for cleaner output
-warnings.filterwarnings("ignore", category=UserWarning)
-
-
-def initialize_client():
-    """Initialize the EarthDaily API client."""
-    print("🚀 Initializing EarthDaily Client with legacy support...")
-    config = EDSConfig()
-    client = EDSClient(config)
-    print("✅ Client initialized successfully!")
-    return client
-
-
-def load_sample_geometry():
-    """Load a sample geometry for testing."""
-    print("\n📍 Loading sample pivot geometry...")
-
-    # Load the built-in pivot geometry
-    pivot = datasets.load_pivot()
-    try:
-        # Try to access geometry attributes
-        geom_type = getattr(pivot, "geometry", None)
-        bounds = getattr(pivot, "total_bounds", None)
-        if geom_type is not None and bounds is not None:
-            print(f"   Geometry type: {geom_type.iloc[0].geom_type}")
-            print(f"   Bounds: {bounds}")
-        else:
-            print("   Sample geometry loaded")
-    except (AttributeError, IndexError):
-        print("   Sample geometry loaded")
-
-    return pivot
-
-
-def create_basic_datacube(client, geometry):
-    """Create a basic datacube with Sentinel-2 data."""
-    print("\n🔍 Creating basic Sentinel-2 datacube...")
-
-    try:
-        datacube = client.legacy.datacube(
-            collections="sentinel-2-l2a",
-            intersects=geometry,
-            datetime=["2023-06-01", "2023-08-01"],  # Summer months
-            assets=["red", "green", "blue", "nir"],
-            rescale=True,  # Convert to reflectance values
-        )
-
-        print("✅ Datacube created successfully!")
-        print(f"   Shape: {datacube.sizes}")
-        print(f"   Variables: {list(datacube.data_vars)}")
-        print(f"   Time range: {datacube.time.min().values} to {datacube.time.max().values}")
-        print(f"   Coordinate system: {datacube.rio.crs}")
-        print(f"   Spatial resolution: {abs(datacube.rio.resolution()[0]):.1f}m")
-
-        return datacube
-
-    except Exception as e:
-        print(f"❌ Error creating basic datacube: {e}")
-        return None
-
-
-def create_masked_datacube(client, geometry):
-    """Create a datacube with cloud masking."""
-    print("\n☁️ Creating cloud-masked datacube...")
-
-    try:
-        datacube = client.legacy.datacube(
-            collections="sentinel-2-l2a",
-            intersects=geometry,
-            datetime=["2023-06-01", "2023-08-01"],
-            assets=["red", "green", "blue", "nir"],
-            mask_with="native",  # Use native SCL mask
-            clear_cover=30,  # Require at least 30% clear pixels
-            rescale=True,
-        )
-
-        print("✅ Masked datacube created successfully!")
-        print(f"   Shape: {datacube.sizes}")
-        print(f"   Variables: {list(datacube.data_vars)}")
-        print(f"   Clear pixel percentages: {datacube.clear_percent.values}")
-
-        return datacube
-
-    except Exception as e:
-        print(f"❌ Error creating masked datacube: {e}")
-        return None
-
-
-def analyze_datacube(datacube, name="datacube"):
-    """Perform basic analysis on a datacube."""
-    if datacube is None:
-        return
-
-    print(f"\n📊 Analyzing {name}...")
-
-    # Calculate NDVI
-    if "red" in datacube.data_vars and "nir" in datacube.data_vars:
-        ndvi = (datacube.nir - datacube.red) / (datacube.nir + datacube.red)
-        print(f"   NDVI range: {float(ndvi.min()):.3f} to {float(ndvi.max()):.3f}")
-        print(f"   Mean NDVI: {float(ndvi.mean()):.3f}")
-
-    # Show temporal information
-    if len(datacube.time) > 1:
-        print(f"   Number of time steps: {len(datacube.time)}")
-        # Calculate time resolution in days
-        time_diff = datacube.time[1] - datacube.time[0]
-        days = time_diff.values.astype("timedelta64[D]").astype(int)
-        print(f"   Time resolution: ~{days} days")
-
-    # Show spatial information
-    print(f"   Spatial dimensions: {datacube.sizes['x']} x {datacube.sizes['y']} pixels")
-    print(f"   Total pixels per time step: {datacube.sizes['x'] * datacube.sizes['y']:,}")
-
-
-def demonstrate_search_functionality(client, geometry):
-    """Demonstrate the search functionality without creating a datacube."""
-    print("\n🔍 Demonstrating search functionality...")
-
-    try:
-        # Search for items
-        items = client.legacy.search(
-            collections="sentinel-2-l2a",
-            intersects=geometry,
-            datetime=["2023-07-01", "2023-07-31"],
-            query={"eo:cloud_cover": {"lt": 20}},  # Low cloud cover
-        )
-
-        print(f"✅ Found {len(items)} items with <20% cloud cover")
-
-        # Show details of first few items
-        for i, item in enumerate(items[:3]):
-            print(f"   {i + 1}. {item.id}")
-            print(f"      Date: {item.datetime}")
-            print(f"      Cloud cover: {item.properties.get('eo:cloud_cover', 'N/A')}%")
-
-        return items
-
-    except Exception as e:
-        print(f"❌ Error in search: {e}")
-        return []
 
 
 def main():
-    """Main function to demonstrate datacube creation workflows."""
-    try:
-        # Initialize client
-        client = initialize_client()
+    config = EDSConfig()
+    client = EDSClient(config)
 
-        # Load sample geometry
-        geometry = load_sample_geometry()
+    search_result = client.platform.pystac_client.search(
+        collections=["sentinel-2-l2a"],
+        datetime="2024-07-01T00:00:00Z/2024-07-15T23:59:59Z",
+        bbox=[-122.5, 37.7, -122.3, 37.9],
+        query={"eo:cloud_cover": {"lt": 20}},
+        max_items=2,
+    )
+    items = list(search_result.items())
+    print(f"Found {len(items)} items\n")
 
-        # Demonstrate search functionality
-        items = demonstrate_search_functionality(client, geometry)
+    if not items:
+        return
 
-        if len(items) > 0:
-            print(f"\n✅ Found {len(items)} suitable items. Proceeding with datacube creation...")
+    datacube = client.datacube.create(
+        items=items,
+        assets=["red", "green", "blue", "nir", "scl"],
+        resolution=60,
+    )
+    print(f"1. Created: {datacube.shape}")
 
-            # Create basic datacube
-            basic_cube = create_basic_datacube(client, geometry)
-            analyze_datacube(basic_cube, "basic datacube")
+    masked = datacube.apply_mask(mask_band="scl", exclude_values=[3, 8, 9, 10], mask_statistics=True)
+    print(f"2. Masked: {len(masked.timestamps)} timestamps")
 
-            # Create masked datacube
-            masked_cube = create_masked_datacube(client, geometry)
-            analyze_datacube(masked_cube, "masked datacube")
+    with_indices = masked.add_indices(["NDVI"], R=masked.data["red"], N=masked.data["nir"])
+    print(f"3. Added indices: {with_indices.bands}")
 
-            print("\n✨ Datacube example completed successfully!")
-            print("💡 Next steps:")
-            print("   - Try different collections (sentinel-1-rtc, landsat-c2l2-sr)")
-            print("   - Experiment with different time periods")
-            print("   - Use your own geometries")
-            print("   - Calculate vegetation indices or other analytics")
+    if len(with_indices.timestamps) >= 2:
+        times = sorted(with_indices.data.time.values)
+        time_filtered = with_indices.select_time(str(times[0]), str(times[-1]))
+        print(f"4. Time filtered: {len(time_filtered.timestamps)} timestamps")
+    else:
+        time_filtered = with_indices
+        print(f"4. Time filtering skipped: only {len(with_indices.timestamps)} timestamp(s)")
 
-        else:
-            print("\n❌ No suitable items found for the specified criteria.")
-            print("💡 Try adjusting the date range or cloud cover threshold.")
+    rechunked = time_filtered.rechunk({"x": 512, "y": 512, "time": 1})
+    print(f"5. Rechunked: {rechunked.shape}")
 
-    except EDSAPIError as e:
-        print(f"\n❌ API Error: {e}")
-        print(f"   Status Code: {e.status_code}")
-    except ImportError as e:
-        print(f"\n❌ Import Error: {e}")
-        print("💡 Make sure to install with legacy support:")
-        print("   pip install 'earthdaily[legacy]'")
-    except Exception as e:
-        print(f"\n💥 Unexpected error: {e}")
-        print("\n💡 Make sure you have set your EDS credentials as environment variables:")
-        print("   EDS_CLIENT_ID, EDS_SECRET, EDS_AUTH_URL, EDS_API_URL")
+    print("\nProperties:")
+    print(f"  bands: {rechunked.bands}")
+    print(f"  timestamps: {len(rechunked.timestamps)}")
+    print(f"  crs: {rechunked.crs}")
+    print(f"  resolution: {rechunked.resolution}")
+    print(f"  extent: {rechunked.extent}")
+    print(f"  data: {type(rechunked.data).__name__}")
+
+    aggregated = rechunked.temporal_aggregate(method="mean", freq="1ME")
+    print(f"6. Temporal aggregate: {len(aggregated.timestamps)} timestamps")
+
+    resampled = rechunked.resample(freq="7D", method="median")
+    print(f"7. Resampled: {len(resampled.timestamps)} timestamps")
+
+    whittaker_smoothed = rechunked.whittaker(beta=10000)
+    print(f"8. Whittaker smoothed: {whittaker_smoothed.shape}")
+
+    merged = rechunked.merge(rechunked)
+    print(f"9. Merged: {merged.bands}")
+
+    extent = rechunked.extent
+    if extent:
+        x_min, y_min, x_max, y_max = extent
+        x_margin = (x_max - x_min) * 0.2
+        y_margin = (y_max - y_min) * 0.2
+
+        geometry_shape = box(x_min + x_margin, y_min + y_margin, x_max - x_margin, y_max - y_margin)
+        gdf = gpd.GeoDataFrame([1], geometry=[geometry_shape], crs=rechunked.crs)
+        geometry = gdf.to_crs("EPSG:4326").geometry.iloc[0].__geo_interface__
+
+        clipped = rechunked.clip(geometry)
+        print(f"10. Clipped: {clipped.shape}")
+
+        zonal_result = rechunked.zonal_stats(geometry, reducers=["mean", "std"])
+        print(f"11. Zonal stats: {type(zonal_result).__name__}")
+    else:
+        print("10. Clipping skipped: no extent available")
+        print("11. Zonal stats skipped: no extent available")
+
+    info_text = rechunked.info()
+    print(f"12. Info: {info_text}")
+
+    rgb_data = rechunked.data[["red", "green", "blue"]]
+    rgb_array = rgb_data.to_array(dim="bands")
+    rgb_valid = rgb_array.where(rgb_array.notnull())
+    if rgb_valid.notnull().any():
+        vmin = float(rgb_valid.quantile(0.02).values)
+        vmax = float(rgb_valid.quantile(0.98).values)
+    else:
+        vmin, vmax = 0, 1
+
+    rgb_plot = rechunked.plot_rgb(red="red", green="green", blue="blue", vmin=vmin, vmax=vmax)
+    print(f"13. RGB plot: {type(rgb_plot).__name__}")
+    rgb_plot.fig.savefig("rgb_plot.png", dpi=150, bbox_inches="tight")
+    print("    Saved to: rgb_plot.png")
+    plt.close(rgb_plot.fig)
+
+    band_plot = rechunked.plot_band("NDVI", cmap="RdYlGn", robust=True)
+    print(f"14. Band plot (NDVI): {type(band_plot).__name__}")
+    band_plot.fig.savefig("band_plot.png", dpi=150, bbox_inches="tight")
+    print("    Saved to: band_plot.png")
+    plt.close(band_plot.fig)
+
+    thumb = rechunked.thumbnail(red="red", green="green", blue="blue", time_index=0, vmin=vmin, vmax=vmax)
+    print(f"15. Thumbnail: {type(thumb).__name__}")
+    thumb.savefig("thumbnail.png", dpi=150, bbox_inches="tight")
+    print("    Saved to: thumbnail.png")
+    plt.close(thumb)
 
 
 if __name__ == "__main__":

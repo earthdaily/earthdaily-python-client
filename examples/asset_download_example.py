@@ -25,8 +25,8 @@ try:
 
     load_dotenv()
 except ImportError:
-    print("💡 Consider installing python-dotenv to automatically load .env files:")
-    print("   pip install python-dotenv")
+    print("💡 Consider installing the utils extra to automatically load .env files:")
+    print("   pip install 'earthdaily[platform,utils]'")
 
 from earthdaily import EDSClient, EDSConfig
 from earthdaily._eds_config import AssetAccessMode

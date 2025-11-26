@@ -172,7 +172,8 @@ class ItemDownloader:
 
         return results
 
-    def _get_asset_href(self, asset: dict, href_type: str) -> Optional[str]:
+    @staticmethod
+    def _get_asset_href(asset: dict, href_type: str) -> Optional[str]:
         """
         Get the appropriate href from an asset based on href_type.
 
