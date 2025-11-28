@@ -11,8 +11,6 @@ jobs:
 
     name: Upload release to PyPI
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/astral-sh/uv:python3.14-trixie-slim
     environment:
       name: pypi
       url: https://pypi.org/p/earthdaily
@@ -21,6 +19,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
 
       - name: Build package
         run: uv build
