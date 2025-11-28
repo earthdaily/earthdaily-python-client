@@ -23,3 +23,9 @@ class UnsupportedAssetException(Exception):
     """Exception raised when an asset is not supported for download."""
 
     pass
+
+
+class DownloadValidationError(Exception):
+    """Exception raised when download validation fails (e.g., invalid chunk size or size mismatch)."""
+
+    pass

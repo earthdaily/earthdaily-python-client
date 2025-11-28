@@ -1,0 +1,61 @@
+name: Bug report
+description: Report a bug or regression in the EarthDaily Python Client
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Thanks for helping improve the EarthDaily Python Client.
+        Please provide enough detail so we can reproduce the issue quickly.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe what happened and what you expected instead.
+      placeholder: The EDSClient raises ... but should ...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Provide the minimal code, CLI commands, or notebook cells required to trigger the issue.
+      placeholder: |
+        1. Configure EDSClient with ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: Describe the correct result you expected.
+      placeholder: I expected ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include runtime details so we can reproduce the issue.
+      placeholder: |
+        - earthdaily version: 1.2.3
+        - Installation extras: platform, legacy
+        - Python version: 3.12
+        - OS: macOS 14.6
+        - Execution context: local shell / notebook / CI
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Logs and diagnostics (optional)
+      description: Paste stack traces, HTTP responses, or attach screenshots.
+      render: shell
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context (optional)
+      description: Link related issues, pull requests, or reference data that help diagnose the problem.
+

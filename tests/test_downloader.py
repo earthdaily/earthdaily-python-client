@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 from requests.exceptions import ConnectionError, HTTPError
 
 from earthdaily._downloader import HttpDownloader
-from earthdaily.exceptions import UnsupportedAssetException
+from earthdaily.exceptions import DownloadValidationError, UnsupportedAssetException
 
 
 class TestHttpDownloader(unittest.TestCase):
@@ -41,11 +41,12 @@ class TestHttpDownloader(unittest.TestCase):
 
     @patch("earthdaily._downloader.requests.get")
     def test_download_file_success(self, mock_get):
+        content = b"content"
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.headers = {"content-length": "100"}
+        mock_response.headers = {"content-length": str(len(content))}
         mock_response.url = "http://example.com/file.txt"
-        mock_response.iter_content.return_value = [b"content"]
+        mock_response.iter_content.return_value = [content]
         mock_get.return_value.__enter__.return_value = mock_response
 
         result = self.downloader.download_file("http://example.com/file.txt", self.save_location, quiet=True)
@@ -56,11 +57,12 @@ class TestHttpDownloader(unittest.TestCase):
 
     @patch("earthdaily._downloader.requests.get")
     def test_download_file_redirect(self, mock_get):
+        content = b"content"
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.headers = {"content-length": "100"}
+        mock_response.headers = {"content-length": str(len(content))}
         mock_response.url = "http://example.com/redirected-file.txt"
-        mock_response.iter_content.return_value = [b"content"]
+        mock_response.iter_content.return_value = [content]
         mock_get.return_value.__enter__.return_value = mock_response
 
         result = self.downloader.download_file("http://example.com/file.txt", self.save_location, quiet=True)
@@ -70,21 +72,18 @@ class TestHttpDownloader(unittest.TestCase):
 
     @patch("earthdaily._downloader.requests.get")
     def test_download_file_redirect_edge_cases(self, mock_get):
-        """Test edge cases in URL redirection handling"""
-
-        # Case 1: Redirected URL with filename that has no extension
+        content = b"content"
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.headers = {"content-length": "100"}
+        mock_response.headers = {"content-length": str(len(content))}
         mock_response.url = "http://example.com/redirected-file-without-extension"
-        mock_response.iter_content.return_value = [b"content"]
+        mock_response.iter_content.return_value = [content]
         mock_get.return_value.__enter__.return_value = mock_response
 
         result = self.downloader.download_file("http://example.com/file.txt", self.save_location, quiet=True)
 
         self.assertEqual(result[1], self.save_location / "file.txt")
 
-        # Case 2: Redirected URL with empty filename
         mock_response.url = "http://example.com/"
 
         result = self.downloader.download_file("http://example.com/file.txt", self.save_location, quiet=True)
@@ -93,14 +92,14 @@ class TestHttpDownloader(unittest.TestCase):
 
     @patch("earthdaily._downloader.requests.get")
     def test_download_file_with_redirects_disabled(self, mock_get):
-        """Test behavior when redirects are disabled but server redirects anyway"""
         no_redirect_downloader = HttpDownloader(supported_protocols=["http", "https"], allow_redirects=False)
 
+        content = b"content"
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.headers = {"content-length": "100"}
+        mock_response.headers = {"content-length": str(len(content))}
         mock_response.url = "http://example.com/redirected-file.txt"
-        mock_response.iter_content.return_value = [b"content"]
+        mock_response.iter_content.return_value = [content]
         mock_get.return_value.__enter__.return_value = mock_response
 
         result = no_redirect_downloader.download_file("http://example.com/file.txt", self.save_location, quiet=True)
@@ -147,11 +146,12 @@ class TestHttpDownloader(unittest.TestCase):
     @patch("earthdaily._downloader.tqdm")
     @patch("earthdaily._downloader.requests.get")
     def test_download_file_quiet_mode(self, mock_get, mock_tqdm):
+        content = b"content"
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.headers = {"content-length": "100"}
+        mock_response.headers = {"content-length": str(len(content))}
         mock_response.url = "http://example.com/file.txt"
-        mock_response.iter_content.return_value = [b"content"]
+        mock_response.iter_content.return_value = [content]
         mock_get.return_value.__enter__.return_value = mock_response
 
         self.downloader.download_file("http://example.com/file.txt", self.save_location, quiet=True)
@@ -161,9 +161,102 @@ class TestHttpDownloader(unittest.TestCase):
         mock_tqdm.assert_called()
 
     def test_get_request_headers(self):
-        # Test default implementation returns empty dict
         headers = self.downloader.get_request_headers()
         self.assertEqual(headers, {})
+
+    def test_validate_chunk_size_valid(self):
+        self.downloader._validate_chunk_size(1)
+        self.downloader._validate_chunk_size(8192)
+        self.downloader._validate_chunk_size(100 * 1024 * 1024)
+
+    def test_validate_chunk_size_too_small(self):
+        with self.assertRaises(DownloadValidationError) as context:
+            self.downloader._validate_chunk_size(0)
+        self.assertIn("must be at least", str(context.exception))
+
+        with self.assertRaises(DownloadValidationError) as context:
+            self.downloader._validate_chunk_size(-1)
+        self.assertIn("must be at least", str(context.exception))
+
+    def test_validate_chunk_size_too_large(self):
+        with self.assertRaises(DownloadValidationError) as context:
+            self.downloader._validate_chunk_size(100 * 1024 * 1024 + 1)
+        self.assertIn("must not exceed", str(context.exception))
+
+    def test_validate_chunk_size_non_integer(self):
+        with self.assertRaises(DownloadValidationError) as context:
+            self.downloader._validate_chunk_size(8192.5)
+        self.assertIn("must be an integer", str(context.exception))
+
+        with self.assertRaises(DownloadValidationError) as context:
+            self.downloader._validate_chunk_size("8192")
+        self.assertIn("must be an integer", str(context.exception))
+
+    def test_validate_total_size_valid(self):
+        self.downloader._validate_total_size(100, 100, "http://example.com/file.txt")
+        self.downloader._validate_total_size(0, 100, "http://example.com/file.txt")
+
+    def test_validate_total_size_mismatch(self):
+        with self.assertRaises(DownloadValidationError) as context:
+            self.downloader._validate_total_size(100, 50, "http://example.com/file.txt")
+        self.assertIn("size mismatch", str(context.exception))
+        self.assertIn("expected 100 bytes", str(context.exception))
+        self.assertIn("got 50 bytes", str(context.exception))
+
+    @patch("earthdaily._downloader.requests.get")
+    def test_download_file_invalid_chunk_size(self, mock_get):
+        with self.assertRaises(DownloadValidationError):
+            self.downloader.download_file("http://example.com/file.txt", self.save_location, chunk_size=0)
+        mock_get.assert_not_called()
+
+    @patch("earthdaily._downloader.requests.get")
+    def test_download_file_invalid_chunk_size_continue_on_error(self, mock_get):
+        result = self.downloader.download_file(
+            "http://example.com/file.txt", self.save_location, chunk_size=-1, continue_on_error=True
+        )
+        self.assertIsNone(result)
+
+    @patch("earthdaily._downloader.requests.get")
+    def test_download_file_size_mismatch(self, mock_get):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.headers = {"content-length": "100"}
+        mock_response.url = "http://example.com/file.txt"
+        mock_response.iter_content.return_value = [b"short"]
+        mock_get.return_value.__enter__.return_value = mock_response
+
+        with self.assertRaises(DownloadValidationError) as context:
+            self.downloader.download_file("http://example.com/file.txt", self.save_location, quiet=True)
+        self.assertIn("size mismatch", str(context.exception))
+
+    @patch("earthdaily._downloader.requests.get")
+    def test_download_file_size_mismatch_continue_on_error(self, mock_get):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.headers = {"content-length": "100"}
+        mock_response.url = "http://example.com/file.txt"
+        mock_response.iter_content.return_value = [b"short"]
+        mock_get.return_value.__enter__.return_value = mock_response
+
+        result = self.downloader.download_file(
+            "http://example.com/file.txt", self.save_location, quiet=True, continue_on_error=True
+        )
+        self.assertIsNone(result)
+
+    @patch("earthdaily._downloader.requests.get")
+    def test_download_file_no_content_length_header(self, mock_get):
+        content = b"content"
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.headers = {}
+        mock_response.url = "http://example.com/file.txt"
+        mock_response.iter_content.return_value = [content]
+        mock_get.return_value.__enter__.return_value = mock_response
+
+        result = self.downloader.download_file("http://example.com/file.txt", self.save_location, quiet=True)
+
+        self.assertEqual(result[0], "http://example.com/file.txt")
+        self.assertEqual(result[1], self.save_location / "file.txt")
 
 
 if __name__ == "__main__":

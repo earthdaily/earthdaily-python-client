@@ -8,7 +8,7 @@ from requests.exceptions import ConnectionError, HTTPError, RequestException, Ti
 from tqdm import tqdm
 
 from earthdaily._eds_logging import LoggerConfig
-from earthdaily.exceptions import UnsupportedAssetException
+from earthdaily.exceptions import DownloadValidationError, UnsupportedAssetException
 
 logger = LoggerConfig(logger_name=__name__).get_logger()
 
@@ -27,6 +27,8 @@ class HttpDownloader:
     """
 
     timeout = 120  # Seconds
+    MIN_CHUNK_SIZE = 1
+    MAX_CHUNK_SIZE = 100 * 1024 * 1024  # 100 MB
 
     def __init__(
         self,
@@ -43,6 +45,24 @@ class HttpDownloader:
         """
         self.supported_protocols = supported_protocols
         self.allow_redirects = allow_redirects
+
+    def _validate_chunk_size(self, chunk_size: int) -> None:
+        if not isinstance(chunk_size, int):
+            raise DownloadValidationError(f"chunk_size must be an integer, got {type(chunk_size).__name__}")
+        if chunk_size < self.MIN_CHUNK_SIZE:
+            raise DownloadValidationError(
+                f"chunk_size must be at least {self.MIN_CHUNK_SIZE} byte(s), got {chunk_size}"
+            )
+        if chunk_size > self.MAX_CHUNK_SIZE:
+            raise DownloadValidationError(
+                f"chunk_size must not exceed {self.MAX_CHUNK_SIZE} bytes (100 MB), got {chunk_size}"
+            )
+
+    def _validate_total_size(self, expected_size: int, actual_size: int, file_url: str) -> None:
+        if expected_size > 0 and actual_size != expected_size:
+            raise DownloadValidationError(
+                f"Downloaded file size mismatch for {file_url}: expected {expected_size} bytes, got {actual_size} bytes"
+            )
 
     def is_supported_file(self, file_url: str) -> bool:
         """
@@ -93,6 +113,7 @@ class HttpDownloader:
         file_name = os.path.basename(parsed_url.path)
 
         try:
+            self._validate_chunk_size(chunk_size)
             with requests.get(
                 file_url,
                 stream=True,
@@ -102,7 +123,6 @@ class HttpDownloader:
             ) as response:
                 response.raise_for_status()
 
-                # Get filename from the final URL if there was a redirect
                 if self.allow_redirects and response.url != file_url:
                     final_url = urlparse(response.url)
                     final_filename = os.path.basename(final_url.path)
@@ -112,6 +132,7 @@ class HttpDownloader:
                 file_path = Path(save_location).joinpath(file_name)
                 total_size = int(response.headers.get("content-length", 0))
 
+                downloaded_size = 0
                 with open(file_path, "wb") as file:
                     if not quiet:
                         with tqdm(
@@ -123,14 +144,17 @@ class HttpDownloader:
                         ) as progress_bar:
                             for chunk in response.iter_content(chunk_size=chunk_size):
                                 size = file.write(chunk)
+                                downloaded_size += size
                                 progress_bar.update(size)
                     else:
                         for chunk in response.iter_content(chunk_size=chunk_size):
-                            file.write(chunk)
+                            downloaded_size += file.write(chunk)
+
+                self._validate_total_size(total_size, downloaded_size, file_url)
 
                 return file_url, file_path
 
-        except (HTTPError, ConnectionError, Timeout, RequestException, OSError) as err:
+        except (HTTPError, ConnectionError, Timeout, RequestException, OSError, DownloadValidationError) as err:
             error_message = f"Error downloading {file_url}: {err}"
             if continue_on_error:
                 logger.warning(error_message)
