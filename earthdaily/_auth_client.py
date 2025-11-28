@@ -70,16 +70,41 @@ class Authentication:
 
             token_data = response.json()
 
-            if "access_token" not in token_data:
+            if "access_token" not in token_data or "expires_in" not in token_data:
                 raise ValueError(f"Invalid response from Auth provider: {token_data}")
 
             self.expiry = time.time() + token_data["expires_in"]
             self.token = token_data["access_token"]
 
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 401:
+                raise ValueError(
+                    f"Authentication failed (401 Unauthorized): Invalid credentials. "
+                    f"The EDS_AUTH_URL ({self.token_url}) is reachable, but the EDS_CLIENT_ID "
+                    f"or EDS_SECRET are invalid. Please verify your credentials."
+                )
+            else:
+                raise ValueError(
+                    f"Authentication failed (HTTP {e.response.status_code}): {str(e)}. "
+                    f"Please verify your configuration."
+                )
+        except requests.exceptions.ConnectionError as e:
+            raise ValueError(
+                f"Authentication failed: Unable to connect to EDS_AUTH_URL ({self.token_url}). "
+                f"Error: {str(e)}. Please verify your network connection and that the URL is correct."
+            )
+        except requests.exceptions.Timeout:
+            raise ValueError(
+                f"Authentication failed: Connection timeout to EDS_AUTH_URL ({self.token_url}). "
+                f"Please verify your network connection."
+            )
         except requests.RequestException as e:
             raise ValueError(f"Authentication failed: {e}")
         except json.JSONDecodeError as e:
-            raise ValueError(f"Failed to decode JSON response: {e}")
+            raise ValueError(
+                f"Authentication failed: Invalid JSON response from auth endpoint. "
+                f"Error: {e}. The endpoint may have returned an unexpected response."
+            )
 
     def get_token(self) -> str:
         """

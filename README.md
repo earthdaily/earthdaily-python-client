@@ -16,7 +16,7 @@ The EarthDaily Python Client is a comprehensive library for interacting with the
 
 ## 📦 Installation
 
-**Supported Python Versions**: 3.10, 3.11, 3.12, 3.13
+**Supported Python Versions**: 3.10, 3.11, 3.12, 3.13, 3.14
 
 ### Basic Installation
 ```bash
@@ -38,6 +38,11 @@ pip install "earthdaily[legacy]"
 pip install "earthdaily[platform,legacy]"
 ```
 
+### Full Installation with utils (for .env file and Jupyter notebooks)
+```bash
+pip install "earthdaily[platform,legacy,utils]"
+```
+
 ## 🔧 Environment Setup
 
 Create a `.env` file in your project root with your credentials:
@@ -50,15 +55,15 @@ EDS_AUTH_URL=https://your-auth-url.com/oauth/token
 EDS_API_URL=https://api.earthdaily.com
 ```
 
-**Note**: To use `.env` files, install `python-dotenv` separately:
+**Note**: To use `.env` files and Jupyter notebooks, install with the `utils` extra:
 ```bash
-pip install python-dotenv
+pip install "earthdaily[utils]"
 ```
 
 ## 🏃 Quick Start
 
 ```python
-from dotenv import load_dotenv  # pip install python-dotenv
+from dotenv import load_dotenv
 from earthdaily import EDSClient, EDSConfig
 
 # Load environment variables

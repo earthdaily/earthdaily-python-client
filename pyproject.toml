@@ -1,13 +1,13 @@
 [project]
 name = "earthdaily"
-version = "1.1.1"
+version = "1.5.0"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
 ]
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.10,<3.15"
 
 dependencies = [
     "requests>=2.32.4",
@@ -19,6 +19,9 @@ platform = [
     "tqdm>=4.66.5",
     "pystac>=1.12.1",
     "pystac-client>=0.8.6",
+]
+ordering = [
+    "pystac>=1.12.1",
 ]
 legacy = [
     "tqdm>=4.66.5",
@@ -42,6 +45,25 @@ legacy = [
     "flox (>=0.10.0,<0.11.0)",
     "protobuf>=5.29.5",  # Security fix via spyndex dependency chain
 ]
+datacube = [
+    "numpy>=2.2.2",
+    "pystac>=1.12.1",
+    "pandas>=2.2.3",
+    "geopandas>=1.0.1",
+    "xarray>=2025.1.2",
+    "rasterio>=1.4.3",
+    "scipy>=1.15.1",
+    "odc-stac>=0.4.0",
+    "rioxarray>=0.18.2",
+    "spyndex>=0.7.0",
+    "dask",
+    "matplotlib>=3.0.0",
+]
+utils = [
+    "python-dotenv>=1.0.0",
+    "ipykernel>=7.0.0",
+    "jupyter>=1.0.0",
+]
 
 [dependency-groups]
 tests = [
@@ -53,7 +75,7 @@ tests = [
     "pytest-asyncio>=0.25.0",
     "nbclient>=0.10.2",
     "nbformat>=5.10.4",
-    "ipykernel>=6.29.5",
+    "ipykernel>=7.0.0",
     "types-tqdm>=4.67.0.20250516",
     "mypy>=1.18.2",
 ]
@@ -116,6 +138,7 @@ module = [
     "numpy.*",
     "click.*",
     "nbformat.*",
-    "nbclient.*"
+    "nbclient.*",
+    "pyarrow.*",
 ]
 ignore_missing_imports = true

@@ -326,41 +326,21 @@ class Auth:
     def __init__(
         self,
         api_requester: APIRequester,
-        presign_urls=True,
-        asset_proxy_enabled=False,
     ):
         """
         A client for interacting with the Earth Data Store API.
-        By default, Earth Data Store will look for environment variables called
-        EDS_AUTH_URL, EDS_SECRET and EDS_CLIENT_ID.
 
         Parameters
         ----------
-        config : str | dict, optional
-            The path to the json file containing the Earth Data Store credentials,
-            or a dict with those credentials.
-        asset_proxy_enabled : bool, optional
-            Use asset proxy URLs, by default False
+        api_requester: APIRequester
+            An instance of APIRequester used to send HTTP requests to the EDS API.
 
         Returns
         -------
         None.
-
-        Example
-        --------
-        >>> eds = earthdaily.earthdatastore()
-        >>> collection = "venus-l2a"
-        >>> theia_location = "MEAD"
-        >>> max_cloud_cover = 20
-        >>> query = { "theia:location": {"eq": theia_location}, "eo:cloud_cover": {"lt": max_cloud_cover} }
-        >>> items = eds.search(collections=collection, query=query)
-        >>> print(len(items))
-        132
         """
 
         self.api_requester = api_requester
-        self.__presign_urls = presign_urls
-        self.__asset_proxy_enabled = asset_proxy_enabled
         self._first_items_: dict = {}
         self._staccollectionexplorer: dict = {}
         self.client = self._get_client()
@@ -380,8 +360,6 @@ class Auth:
             "Accept": "application/json",
             **self.api_requester.headers,
             "Authorization": f"Bearer {self.api_requester.auth.get_token()}" if self.api_requester.auth else None,
-            "X-Signed-Asset-Urls": str(self.__presign_urls),
-            "X-Proxy-Asset-Urls": str(self.__asset_proxy_enabled),
         }
 
         retry = Retry(

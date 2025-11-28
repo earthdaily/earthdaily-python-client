@@ -1,20 +1,22 @@
 import json
 import logging
-import warnings
 from collections import defaultdict
 from functools import wraps
-from typing import Any, Callable
+from typing import Any, Callable, Literal, Optional, Union
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
 import rioxarray
 import xarray as xr
+from odc import stac
+from pystac import Item
 from rasterio.enums import Resampling
-from rasterio.errors import NotGeoreferencedWarning
 from shapely.geometry import box
+from stackstac import stack
 
 from earthdaily.legacy.core import options
+from earthdaily.platform._stac_item_downloader import ItemDownloader
 
 from ._zonal import zonal_stats
 from .asset_mapper import AssetMapper
@@ -169,13 +171,10 @@ def _autofix_unfrozen_coords_dtype(ds):
 def _cube_odc(
     items_collection,
     assets=None,
-    times=None,
     dtype="float32",
     properties=False,
     **kwargs,
 ):
-    from odc import stac
-
     if "epsg" in kwargs:
         kwargs["crs"] = f"EPSG:{kwargs['epsg']}"
         kwargs.pop("epsg")
@@ -224,8 +223,6 @@ def _cube_odc(
 
 
 def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
-    from stackstac import stack
-
     if "epsg" in kwargs:
         kwargs["epsg"] = int(kwargs["epsg"])
     if kwargs.get("geobox") is not None:
@@ -252,72 +249,115 @@ def _cube_stackstac(items_collection, assets=None, times=None, **kwargs):
     return ds
 
 
-def _disable_known_datacube_warning():
-    if options.disable_known_warning:
-        warnings.filterwarnings(
-            "ignore",
-            message="Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.",
-            category=NotGeoreferencedWarning,
-            module="rasterio.warp",
-        )
-        warnings.filterwarnings(
-            "ignore",
-            category=RuntimeWarning,
-            message="invalid value encountered in cast",
-            module="dask.array.chunk",
-        )
-        warnings.filterwarnings("ignore", category=RuntimeWarning, message="All-NaN slice encountered")
-        warnings.filterwarnings("ignore", category=RuntimeWarning, message="Mean of empty slice")
+def _replace_item_hrefs(items: list[Item], href_path: str) -> list[Item]:
+    for item in items:
+        for asset in item.assets.values():
+            asset_dict = asset.to_dict()
+            href = ItemDownloader._get_asset_href(asset_dict, href_path)
+            if href:
+                asset.href = href
+    return items
 
 
 def datacube(
-    items_collection=None,
-    bbox=None,
-    intersects=None,
-    assets: list | dict | None = None,
-    engine="odc",
-    rescale=True,
-    groupby_date="mean",
-    common_band_names=True,
-    cross_calibration_items: list | None = None,
+    items_collection: list[Item] = [],
+    bbox: Optional[Union[list[float], tuple, Any]] = None,
+    intersects: Optional[Union[str, dict[str, Any]]] = None,
+    assets: Optional[list | dict] = None,
+    engine: Literal["odc", "stackstac"] = "odc",
+    rescale: bool = True,
+    groupby_date: Optional[Literal["mean", "median", "min", "max", "sum"]] = "mean",
+    common_band_names: bool = True,
+    cross_calibration_items: Optional[list[Item]] = None,
     properties: bool | str | list = False,
+    replace_href_with: str = "alternate.download.href",
     **kwargs,
-):
-    _disable_known_datacube_warning()
+) -> xr.Dataset:
+    """
+    Create an xarray datacube from a collection of STAC items.
+
+    Parameters
+    ----------
+    items_collection : list[pystac.Item], optional
+        Collection of PySTAC Item objects to process into a datacube.
+    bbox : list[float] | tuple | Any, optional
+        Bounding box for spatial filtering. Can be a list, tuple, or similar of coordinates [minx, miny, maxx, maxy].
+    intersects : str | dict[str, Any], optional
+        Geometry for spatial intersection
+    assets : list or dict, optional
+        Assets to include in the datacube. If dict, maps original asset names to desired names in output.
+    engine : {"odc", "stackstac"}, default "odc"
+        Backend engine to use for datacube creation.
+    rescale : bool, default True
+        Whether to apply scale and offset transformations from STAC metadata.
+    groupby_date : {"mean", "median", "min", "max", "sum"} or None, default "mean"
+        Aggregation method when multiple observations exist for the same date. Set to None to skip grouping.
+    common_band_names : bool, default True
+        Whether to use common band names (e.g., "red", "blue") instead of collection-specific names.
+    cross_calibration_items : list[pystac.Item], optional
+        PySTAC Item objects to use for cross-sensor calibration/harmonization.
+    properties : bool or str or list, default False
+        STAC properties to include as coordinates. If True, includes all properties.
+        If str or list, includes specified properties.
+    replace_href_with : str, default "alternate.download.href"
+        Path to alternate href in asset dictionary to replace the default href.
+        Uses dot notation (e.g., "alternate.download.href").
+        Set to None or empty string to use default asset hrefs.
+    **kwargs : dict
+        Additional arguments passed to the underlying engine (odc-stac or stackstac).
+        Common options include: epsg, resolution, chunks, geobox, resampling.
+
+    Returns
+    -------
+    xr.Dataset
+        Xarray dataset containing the datacube with dimensions (time, y, x) and data variables for each asset.
+
+    Raises
+    ------
+    NotImplementedError
+        If an unsupported engine is specified.
+    ValueError
+        If there's a mismatch between items and datacube dimensions during rescaling.
+    """
     logging.info(f"Building datacube with {len(items_collection)} items")
+
+    if replace_href_with:
+        items_collection = _replace_item_hrefs(items_collection, replace_href_with)
+
     times = [
         np.datetime64(d.datetime.strftime("%Y-%m-%d %X.%f")).astype("datetime64[ns]")
         for d in items_collection
-        if "datetime" in d.__dict__
+        if "datetime" in d.__dict__ and d.datetime is not None
     ] or None
 
-    engines: dict[str, Callable[..., Any]] = {"odc": _cube_odc, "stackstac": _cube_stackstac}
-    if engine not in engines:
-        raise NotImplementedError(
-            f"Engine '{engine}' not supported. Only {' and '.join(list(engines.keys()))} are currently supported."
-        )
     if common_band_names and not isinstance(assets, dict):
         aM = AssetMapper()
         assets = aM.map_collection_assets(items_collection[0].collection_id, assets)
+
+    assets_keys = None
     if isinstance(assets, dict):
         assets_keys = list(assets.keys())
-    if engine == "odc" and intersects is not None:
-        kwargs["geopolygon"] = GeometryManager(intersects).to_geopandas()
-    if engine == "stackstac" and intersects is not None:
-        kwargs["bounds_latlon"] = list(GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds)
 
-    # create datacube using the defined engine (default is odc stac)
-    ds = engines[engine](
-        items_collection,
-        assets=assets_keys if isinstance(assets, dict) else assets,
-        times=times,
-        properties=properties,
-        **kwargs,
-    )
-
-    # check nodata per asset (data_vars)
-    # TODO : replace the original no_data with a defined value
-    # (like min float) because of rescale
+    if engine == "odc":
+        if intersects is not None:
+            kwargs["geopolygon"] = GeometryManager(intersects).to_geopandas()
+        ds = _cube_odc(
+            items_collection,
+            assets=assets_keys if isinstance(assets, dict) else assets,
+            properties=properties,
+            **kwargs,
+        )
+    elif engine == "stackstac":
+        if intersects is not None:
+            kwargs["bounds_latlon"] = list(GeometryManager(intersects).to_geopandas().to_crs(epsg=4326).total_bounds)
+        ds = _cube_stackstac(
+            items_collection,
+            assets=assets_keys if isinstance(assets, dict) else assets,
+            times=times,
+            **kwargs,
+        )
+    else:
+        raise NotImplementedError(f"Engine {engine} not supported. Only 'odc' and 'stackstac' are currently supported.")
 
     nodatas = {}
     for ds_asset in ds.data_vars:
@@ -339,12 +379,9 @@ def datacube(
             if nodata == 0 or nodata:
                 nodatas.update({ds_asset: nodata})
             break
-    # apply nodata
     ds = _apply_nodata(ds, nodatas)
     if rescale:
-        ds = rescale_assets_with_items(items_collection, ds, assets=assets)  # type: ignore[arg-type]
-
-    # drop na dates
+        ds = rescale_assets_with_items(items_collection, ds, assets=assets)
     ds = ds.isel(dict(time=np.where(~np.isnan(ds.time))[0]))
 
     if groupby_date:
@@ -355,9 +392,6 @@ def datacube(
         intersects = GeometryManager(intersects).to_geopandas()
 
     if isinstance(intersects, gpd.GeoDataFrame):
-        # optimize by perclipping using bbox
-        # no need anymore thanks to geobox/geopolygon in doc
-        # ds = ds.rio.clip_box(*intersects.to_crs(ds.rio.crs).total_bounds)
         ds = ds.rio.clip(intersects.to_crs(ds.rio.crs).geometry)
     if engine == "stackstac":
         ds = _autofix_unfrozen_coords_dtype(ds)
@@ -382,9 +416,9 @@ def datacube(
 
 
 def rescale_assets_with_items(
-    items_collection: list,
+    items_collection: list[Item],
     ds: xr.Dataset,
-    assets: None | list[str] = None,
+    assets: Optional[list | dict] = None,
     boa_offset_applied_control: bool = True,
     boa_offset_applied_force_by_date: bool = True,
 ) -> xr.Dataset:
@@ -393,12 +427,12 @@ def rescale_assets_with_items(
 
     Parameters
     ----------
-    items_collection : List
-        Collection of items containing asset scaling information.
+    items_collection : list[pystac.Item]
+        Collection of PySTAC Item objects containing asset scaling information.
     ds : xarray.Dataset
         Input dataset to be rescaled.
-    assets : List[str], optional
-        List of assets to rescale. If None, uses all dataset variables.
+    assets : list | dict, optional
+        Assets to rescale. If None, uses all dataset variables.
     boa_offset_applied_control : bool, default True
         Apply Bottom of Atmosphere (BOA) offset control for Sentinel-2 L2A data.
     boa_offset_applied_force_by_date : bool, default True
@@ -436,6 +470,8 @@ def rescale_assets_with_items(
         item = items_collection[idx]
 
         # Date validation
+        if item.datetime is None:
+            raise ValueError("Item datetime is None. Cannot validate dates for rescaling.")
         if pd.Timestamp(time).strftime("%Y%m%d") != item.datetime.strftime("%Y%m%d"):
             raise ValueError("Mismatch between items and datacube dates. Set rescale to False.")
 

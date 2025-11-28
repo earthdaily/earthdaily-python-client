@@ -23,6 +23,20 @@ try:
 except ImportError:
     _HAS_INTERNAL = False
 
+try:
+    from earthdaily.ordering import OrderingService
+
+    _HAS_ORDERING = True
+except ImportError:
+    _HAS_ORDERING = False
+
+try:
+    from earthdaily.datacube import DatacubeService
+
+    _HAS_DATACUBE = True
+except ImportError:
+    _HAS_DATACUBE = False
+
 
 class EDSClient:
     """
@@ -48,16 +62,25 @@ class EDSClient:
         Initialize the EDSClient with the provided configuration.
 
         This constructor sets up the authentication and API request handling components based on the
-        provided EDSConfig settings.
+        provided EDSConfig settings. Authentication is performed immediately to validate credentials.
 
         Parameters:
         ----------
         config: EDSConfig
             The configuration object containing client_id, client_secret, token_url, and base_url.
+
+        Raises:
+        -------
+        ValueError:
+            If authentication fails due to invalid credentials, connection errors, or other issues.
         """
         self.config = config
         self.auth = self._create_auth() if not config.bypass_auth else None
         self.api_requester = APIRequester(config=config, auth=self.auth)
+
+        if not config.bypass_auth and self.auth:
+            # Validate credentials on initialization to fail fast
+            self.auth.authenticate()
 
     def _create_auth(self) -> Authentication:
         """
@@ -136,3 +159,51 @@ class EDSClient:
         if not hasattr(self, "_internal_service"):
             self._internal_service = InternalService(self.api_requester)
         return self._internal_service
+
+    @property
+    def ordering(self):
+        """
+        Lazily initializes and returns the OrderingService for interacting with ordering API endpoints.
+
+        Returns:
+        -------
+        OrderingService:
+            The service that interacts with ordering operations.
+
+        Raises:
+        -------
+        ImportError:
+            If the ordering module dependencies are not available.
+        """
+        if not _HAS_ORDERING:
+            raise ImportError(
+                "Ordering functionality requires additional dependencies. "
+                "Install with: pip install 'earthdaily[ordering]'"
+            )
+        if not hasattr(self, "_ordering_service"):
+            self._ordering_service = OrderingService(self.api_requester)
+        return self._ordering_service
+
+    @property
+    def datacube(self):
+        """
+        Lazily initializes and returns the DatacubeService for creating and managing datacubes.
+
+        Returns:
+        -------
+        DatacubeService:
+            The service that handles datacube creation and operations.
+
+        Raises:
+        -------
+        ImportError:
+            If the datacube module dependencies are not available.
+        """
+        if not _HAS_DATACUBE:
+            raise ImportError(
+                "Datacube functionality requires additional dependencies. "
+                "Install with: pip install 'earthdaily[datacube]'"
+            )
+        if not hasattr(self, "_datacube_service"):
+            self._datacube_service = DatacubeService()
+        return self._datacube_service

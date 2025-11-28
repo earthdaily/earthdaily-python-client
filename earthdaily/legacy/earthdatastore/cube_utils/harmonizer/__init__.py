@@ -10,6 +10,7 @@ import xarray as xr
 
 
 class Harmonizer:
+    @staticmethod
     def harmonize(items_collection, ds, cross_cal_items, assets):
         """
         Harmonize a dataset using cross_cal items from EarthDaily collection.
@@ -98,6 +99,7 @@ class Harmonizer:
 
         return ds_
 
+    @staticmethod
     def xcal_functions_parser(functions, dataarray: xr.DataArray):
         xscaled_dataarray = []
         for idx_function, function in enumerate(functions):
@@ -115,6 +117,7 @@ class Harmonizer:
             dataarray = xr.where(op["condition"], dataarray * op["scale"] + op["offset"], dataarray)
         return dataarray
 
+    @staticmethod
     def apply_to_asset(functions, dataarray: xr.DataArray, band_name):
         if len(functions) == 1:
             # Single function
@@ -125,6 +128,7 @@ class Harmonizer:
             dataarray = Harmonizer.xcal_functions_parser(functions, dataarray)
         return dataarray
 
+    @staticmethod
     def check_timerange(xcal_item, item_datetime):
         start_date = datetime.strptime(xcal_item.properties["published"], "%Y-%m-%dT%H:%M:%SZ")
         start_date = start_date.replace(tzinfo=pytz.UTC)

@@ -157,10 +157,16 @@ class GeometryManager:
         if isinstance(geometry, (dict, str)):
             self.input_type = "GeoJson"
             try:
-                return gpd.read_file(geometry, driver="GeoJson", crs="EPSG:4326")
+                gdf = gpd.read_file(geometry)
+                if gdf.crs is None:
+                    gdf = gdf.set_crs("EPSG:4326")
+                return gdf
             except Exception:
                 try:
-                    return gpd.read_file(json.dumps(geometry), driver="GeoJson", crs="EPSG:4326")
+                    gdf = gpd.read_file(json.dumps(geometry))
+                    if gdf.crs is None:
+                        gdf = gdf.set_crs("EPSG:4326")
+                    return gdf
                 except Exception:
                     pass
 
