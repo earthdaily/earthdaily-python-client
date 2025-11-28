@@ -1,0 +1,43 @@
+name: Feature request
+description: Request a new feature or improvement for the EarthDaily Python Client
+title: "[Feature/Improvement]: "
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Thanks for proposing improvements to the EarthDaily Python Client.
+        Share as much context as possible so we can evaluate the request quickly.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe the feature or improvement you would like to see.
+      placeholder: Add support for ...
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: Explain the workflow limitation or user need this request solves.
+      placeholder: Today we cannot ...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution (optional)
+      description: If you have ideas on how this could work, share them here.
+      placeholder: Introduce a new method ...
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered (optional)
+      description: List any workarounds or other approaches you evaluated.
+      placeholder: We considered using ...
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context (optional)
+      description: Provide related issues, documentation links, or example data that clarify the request.
+
