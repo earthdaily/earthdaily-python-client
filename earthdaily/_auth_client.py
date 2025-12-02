@@ -77,7 +77,8 @@ class Authentication:
             self.token = token_data["access_token"]
 
         except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 401:
+            status_code = e.response.status_code if e.response is not None else None
+            if status_code == 401:
                 raise ValueError(
                     f"Authentication failed (401 Unauthorized): Invalid credentials. "
                     f"The EDS_AUTH_URL ({self.token_url}) is reachable, but the EDS_CLIENT_ID "
@@ -85,8 +86,7 @@ class Authentication:
                 )
             else:
                 raise ValueError(
-                    f"Authentication failed (HTTP {e.response.status_code}): {str(e)}. "
-                    f"Please verify your configuration."
+                    f"Authentication failed (HTTP {status_code}): {str(e)}. Please verify your configuration."
                 )
         except requests.exceptions.ConnectionError as e:
             raise ValueError(
