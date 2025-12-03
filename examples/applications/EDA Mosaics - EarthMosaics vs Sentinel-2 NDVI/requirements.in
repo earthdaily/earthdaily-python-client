@@ -1,0 +1,10 @@
+dask[distributed]
+requests
+numpy
+pandas
+python-dotenv
+odc-stac
+matplotlib
+xarray
+pystac-client
+ipykernel

@@ -1,0 +1,6 @@
+earthdaily[platform,utils]==1.5.1
+numpy
+pandas
+odc-stac
+matplotlib
+xarray

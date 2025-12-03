@@ -1,0 +1,12 @@
+earthdaily[platform,utils]==1.5.1
+scikit-image
+dask[distributed]
+requests
+numpy
+pandas
+python-dotenv
+odc-stac
+matplotlib
+rioxarray
+geopandas
+spyndex
