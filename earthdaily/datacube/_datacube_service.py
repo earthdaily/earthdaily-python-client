@@ -2,7 +2,7 @@ from typing import Any
 
 from pystac import Item
 
-from earthdaily.datacube._builder import build_datacube
+from earthdaily.datacube._builder import _deduplicate_items, build_datacube
 from earthdaily.datacube._datacube import Datacube
 from earthdaily.datacube.constants import DEFAULT_DTYPE, DEFAULT_ENGINE, DEFAULT_HREF_PATH, DEFAULT_NODATA
 
@@ -19,8 +19,13 @@ class DatacubeService:
         properties: bool | str | list[str] = False,
         engine: str = DEFAULT_ENGINE,
         replace_href_with: str = DEFAULT_HREF_PATH,
+        deduplicate_by: list[str] | None = None,
+        deduplicate_keep: str = "last",
         **kwargs,
     ) -> Datacube:
+        if deduplicate_by:
+            items = _deduplicate_items(items, deduplicate_by, deduplicate_keep)
+
         dataset = build_datacube(
             items=items,
             assets=assets,

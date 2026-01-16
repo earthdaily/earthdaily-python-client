@@ -269,6 +269,46 @@ class TestDatacubeService(unittest.TestCase):
             replace_href_with=DEFAULT_HREF_PATH,
         )
 
+    @patch("earthdaily.datacube._datacube_service.build_datacube")
+    @patch("earthdaily.datacube._datacube_service._deduplicate_items")
+    def test_create_with_deduplicate_by(self, mock_deduplicate, mock_build_datacube):
+        mock_build_datacube.return_value = self.mock_dataset
+        mock_deduplicate.return_value = self.mock_items
+
+        result = self.service.create(
+            items=self.mock_items,
+            deduplicate_by=["date", "proj:transform"],
+            deduplicate_keep="last",
+        )
+
+        self.assertIsInstance(result, Datacube)
+        mock_deduplicate.assert_called_once_with(self.mock_items, ["date", "proj:transform"], "last")
+
+    @patch("earthdaily.datacube._datacube_service.build_datacube")
+    @patch("earthdaily.datacube._datacube_service._deduplicate_items")
+    def test_create_without_deduplicate_by_skips_deduplication(self, mock_deduplicate, mock_build_datacube):
+        mock_build_datacube.return_value = self.mock_dataset
+
+        result = self.service.create(items=self.mock_items)
+
+        self.assertIsInstance(result, Datacube)
+        mock_deduplicate.assert_not_called()
+
+    @patch("earthdaily.datacube._datacube_service.build_datacube")
+    @patch("earthdaily.datacube._datacube_service._deduplicate_items")
+    def test_create_metadata_reflects_deduplicated_count(self, mock_deduplicate, mock_build_datacube):
+        mock_build_datacube.return_value = self.mock_dataset
+        deduplicated_items = [MagicMock(spec=Item), MagicMock(spec=Item)]
+        mock_deduplicate.return_value = deduplicated_items
+
+        original_items = [MagicMock(spec=Item) for _ in range(5)]
+        result = self.service.create(
+            items=original_items,
+            deduplicate_by=["date"],
+        )
+
+        self.assertEqual(result._metadata["items_count"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

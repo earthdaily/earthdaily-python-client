@@ -95,17 +95,6 @@ def _scaled_band(data_array):
     return data_array.astype("float32") * scale_value + offset_value
 
 
-def _deduplicate_time(cube):
-    if "time" not in cube.data.dims:
-        return cube, False
-    dataset = cube.data
-    unique_count = len(set(dataset.time.values))
-    if unique_count == len(dataset.time.values):
-        return cube, False
-    dedup = dataset.drop_duplicates("time", keep="first")
-    return cube.with_dataset(dedup), True
-
-
 def _prepare_visualization_cube(cube):
     dataset = cube.data
     y_dim = next((dim for dim in ("y", "latitude", "lat", "Y") if dim in dataset.dims), None)
@@ -150,10 +139,13 @@ def main():
     print(f"  Available assets: {sample_assets[:10]}...")
     print()
 
+    # Tip: Pass pool=N to enable parallel COG metadata fetching for faster loading
+    # Example: client.datacube.create(..., pool=os.cpu_count())
     datacube = client.datacube.create(
         items=items,
         assets=SPECTRAL_ASSETS,
         resolution=TARGET_RESOLUTION,
+        deduplicate_by=["date"],
     )
     print(f"1. Created datacube: {datacube.shape}")
     print(f"   Bands: {datacube.bands}")
@@ -162,6 +154,7 @@ def main():
         items=items,
         assets=QUALITY_MASK_ASSETS,
         resolution=TARGET_RESOLUTION,
+        deduplicate_by=["date"],
     )
     print(f"2. Created quality mask datacube: {quality_mask_cube.shape}")
     print(f"   Quality mask bands: {quality_mask_cube.bands}")
@@ -249,29 +242,22 @@ def main():
     print(f"  extent: {rechunked.extent}")
     print(f"  data type: {type(rechunked.data).__name__}")
 
-    temporal_source, deduped = _deduplicate_time(rechunked)
-    if deduped:
-        print(
-            f"   Note: detected duplicate timestamps; keeping first occurrence of each "
-            f"time step ({len(rechunked.timestamps)} -> {len(temporal_source.timestamps)})."
-        )
-
-    if len(temporal_source.timestamps) >= 2:
-        aggregated = temporal_source.temporal_aggregate(method="mean", freq=TEMPORAL_AGG_FREQ)
+    if len(rechunked.timestamps) >= 2:
+        aggregated = rechunked.temporal_aggregate(method="mean", freq=TEMPORAL_AGG_FREQ)
         print(f"\n7. Temporal aggregate (monthly mean): {len(aggregated.timestamps)} timestamps")
 
-        resampled = temporal_source.resample(freq=RESAMPLE_FREQ, method="median")
+        resampled = rechunked.resample(freq=RESAMPLE_FREQ, method="median")
         print(f"8. Resampled (7-day median): {len(resampled.timestamps)} timestamps")
 
-        unique_times_after = len(set(temporal_source.data.time.values))
-        time_index = temporal_source.data.indexes.get("time")
+        unique_times_after = len(set(rechunked.data.time.values))
+        time_index = rechunked.data.indexes.get("time")
         if time_index is not None:
             unique_days = len(time_index.floor("D").unique())
         else:
             unique_days = unique_times_after
         if unique_times_after >= 2 and unique_days >= WHITTAKER_MIN_DAYS:
             try:
-                whittaker_smoothed = temporal_source.whittaker(beta=WHITTAKER_BETA)
+                whittaker_smoothed = rechunked.whittaker(beta=WHITTAKER_BETA)
                 print(f"9. Whittaker smoothed: {whittaker_smoothed.shape}")
             except Exception as e:
                 print(f"9. Whittaker smoothing skipped: {e}")
@@ -306,9 +292,9 @@ def main():
 
     info_text = rechunked.info()
     print(f"\n13. Datacube info:\n{info_text}")
-    plot_source, plot_downsampled = _prepare_visualization_cube(temporal_source)
+    plot_source, plot_downsampled = _prepare_visualization_cube(rechunked)
     if plot_downsampled:
-        original_shape = temporal_source.shape
+        original_shape = rechunked.shape
         reduced_shape = plot_source.shape
         print(
             "   Note: downsampled visualization cube from "
