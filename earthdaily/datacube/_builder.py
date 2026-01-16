@@ -84,6 +84,68 @@ def _replace_item_hrefs(items: list[Item], href_path: str) -> list[Item]:
     return items
 
 
+def _get_dedup_key_value(item: Item, key: str) -> str:
+    """Extract a value from a STAC item for deduplication key building."""
+    if key == "date":
+        if item.datetime:
+            return item.datetime.strftime("%Y-%m-%d")
+        return item.id
+    elif key == "collection_id":
+        return item.collection_id or ""
+    else:
+        return str(item.properties.get(key, ""))
+
+
+def _deduplicate_items(
+    items: Sequence[Item],
+    deduplicate_by: list[str],
+    deduplicate_keep: str = "last",
+) -> list[Item]:
+    """
+    Deduplicate STAC items based on specified properties.
+
+    Parameters
+    ----------
+    items : Sequence[Item]
+        List of STAC items to deduplicate
+    deduplicate_by : list[str]
+        List of properties to use as composite key for deduplication.
+        Supported values:
+        - "date": Date part of item.datetime (YYYY-MM-DD)
+        - "collection_id": item.collection_id
+        - Any other string: Looks up in item.properties (e.g., "proj:transform")
+    deduplicate_keep : str
+        Which item to keep when duplicates found: "first" or "last".
+        Default is "last".
+
+    Returns
+    -------
+    list[Item]
+        Deduplicated items
+    """
+    if deduplicate_keep not in ("first", "last"):
+        raise ValueError(f"deduplicate_keep must be 'first' or 'last', got '{deduplicate_keep}'")
+
+    seen: dict[tuple[str, ...], Item] = {}
+    for item in items:
+        key = tuple(_get_dedup_key_value(item, k) for k in deduplicate_by)
+
+        if deduplicate_keep == "last":
+            seen[key] = item
+        else:
+            if key not in seen:
+                seen[key] = item
+
+    original_count = len(items)
+    deduped = list(seen.values())
+    if len(deduped) < original_count:
+        logger.info(
+            f"Deduplicated items: {original_count} -> {len(deduped)} (by {deduplicate_by}, keep={deduplicate_keep})"
+        )
+
+    return deduped
+
+
 def build_datacube(
     items: Sequence[Item],
     assets: list[str] | dict[str, str] | None = None,
@@ -127,7 +189,23 @@ def build_datacube(
     replace_href_with : str
         Path to alternate href in asset dictionary (dot notation, e.g., 'alternate.download.href')
     **kwargs
-        Additional arguments passed to the engine loader
+        Additional arguments passed to the engine loader (odc.stac.load).
+        Common options include:
+
+        - **pool** : int, optional
+            Thread pool size for parallel COG metadata fetching.
+            Recommended: `os.cpu_count()` for faster datacube creation.
+            Example: `datacube.create(..., pool=8)`
+        - **resolution** : float, optional
+            Output resolution in CRS units
+        - **crs** : str, optional
+            Target coordinate reference system (e.g., 'EPSG:4326')
+        - **resampling** : str, optional
+            Resampling method (e.g., 'nearest', 'bilinear')
+        - **fail_on_error** : bool, optional
+            If True (default), raise an error when an asset fails to load (e.g., 404).
+            If False, skip failed assets and continue loading. Useful when some
+            assets may be missing or corrupted.
 
     Returns
     -------
@@ -143,6 +221,7 @@ def build_datacube(
     if loader is None:
         available = ", ".join(sorted(_ENGINE_LOADERS.keys())) or "none"
         raise DatacubeCreationError(f"Engine '{engine}' not supported. Available engines: {available}")
+
     logger.info(f"Building datacube with {len(items)} items using {engine} engine")
     return loader(
         items=items,
@@ -194,6 +273,7 @@ def _load_datacube_with_odc(
             kwargs["resampling"] = Resampling(kwargs["resampling"]).name
 
     kwargs["chunks"] = kwargs.get("chunks", DEFAULT_CHUNKS)
+
     if nodata is not None:
         if "nodata" in kwargs and kwargs["nodata"] != nodata:
             logger.warning("Overriding nodata value from kwargs with explicit nodata argument.")

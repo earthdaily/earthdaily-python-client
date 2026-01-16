@@ -31,7 +31,7 @@ from earthdaily.datacube.constants import (
     DEFAULT_ZONAL_REDUCERS,
     DIM_TIME,
 )
-from earthdaily.datacube.models import AggregationMethod, CompatType
+from earthdaily.datacube.models import AggregationMethod, CompatType, GroupByOption
 
 
 class Datacube:
@@ -154,9 +154,12 @@ class Datacube:
         return self._create_new(smoothed_dataset)
 
     def temporal_aggregate(
-        self, method: AggregationMethod = DEFAULT_AGGREGATION, freq: str = DEFAULT_TEMPORAL_FREQ
+        self,
+        method: AggregationMethod = DEFAULT_AGGREGATION,
+        freq: str = DEFAULT_TEMPORAL_FREQ,
+        groupby: GroupByOption | None = None,
     ) -> Datacube:
-        aggregated_dataset = temporal_aggregate(self._dataset, method, freq)
+        aggregated_dataset = temporal_aggregate(self._dataset, method, freq, groupby)
         return self._create_new(aggregated_dataset)
 
     def resample(self, freq: str, method: AggregationMethod = DEFAULT_AGGREGATION) -> Datacube:

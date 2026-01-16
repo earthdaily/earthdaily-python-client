@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0]
+
+### Added
+
+- `platform.search()` method for STAC item search with optional concurrent execution
+- `days_per_chunk` parameter to split datetime ranges and execute searches concurrently
+- `max_workers` parameter to control concurrent thread pool size (default 10, capped at 10)
+- `max_items_per_chunk` parameter to limit items fetched per time chunk in concurrent search
+
+## [1.7.0]
+
+### Added
+
+- `deduplicate_by` parameter for `datacube.create()` to deduplicate STAC items before datacube creation
+- `deduplicate_keep` parameter to control which item to keep when duplicates found (`"first"` or `"last"`)
+- `pool` parameter passthrough to odc.stac.load for parallel COG metadata fetching
+
+## [1.6.1]
+
+### Added
+
+- `groupby` parameter for `datacube.temporal_aggregate()` to aggregate by available dates (e.g., `groupby="time.date"`)
+
+## [1.6.0]
+
+### Added
+
+- Collection helpers for Sentinel-1 and Sentinel-2 data access (`Sentinel1CollectionHelper`, `Sentinel2CollectionHelper`)
+- Pre-configured collection templates with factory methods (`create_dual_pol`, `create_rgb`, `create_vegetation`, etc.)
+- Cloud cover filtering and orbit direction filtering capabilities
+- Built-in vegetation indices calculation (NDVI, NDWI)
+- Metadata analysis tools for processing information and band details
+- `STGeometry` class for spatiotemporal geometry handling
+- Helper example scripts (`sentinel1_helper_example.py`, `sentinel2_helper_example.py`) 
+
 ## [1.5.1]
 
 ### Added

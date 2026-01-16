@@ -211,6 +211,17 @@ class TestTemporalAggregate(unittest.TestCase):
         self.assertIn("band1", result.data_vars)
         self.assertIn("band2", result.data_vars)
 
+    def test_temporal_aggregate_groupby_date(self):
+        result = temporal_aggregate(self.dataset, method="mean", groupby="time.date")
+        self.assertIsInstance(result, xr.Dataset)
+        self.assertIn("band1", result.data_vars)
+        self.assertIn("time", result.dims)
+        self.assertTrue(np.issubdtype(result.time.dtype, np.datetime64))
+
+    def test_temporal_aggregate_groupby_unsupported(self):
+        with self.assertRaises(ValueError):
+            temporal_aggregate(self.dataset, method="mean", groupby="time.month")
+
 
 if __name__ == "__main__":
     unittest.main()

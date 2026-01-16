@@ -12,6 +12,7 @@ from pystac import Asset, Item
 from rasterio.enums import Resampling
 
 from earthdaily.datacube._builder import (
+    _deduplicate_items,
     _load_datacube_with_odc,
     _normalize_longitude_coordinate,
     _replace_item_hrefs,
@@ -267,6 +268,128 @@ class TestDatacubeBuilderEngines(unittest.TestCase):
         with self.assertRaises(DatacubeCreationError) as ctx:
             _load_datacube_with_odc(items=items)
         self.assertIn("Unexpected error", str(ctx.exception))
+
+
+class TestDeduplicateItems(unittest.TestCase):
+    def _make_item(
+        self,
+        item_id: str,
+        dt: datetime | None = None,
+        collection_id: str | None = None,
+        properties: dict[str, Any] | None = None,
+    ) -> Item:
+        item = Item(
+            id=item_id,
+            geometry=None,
+            bbox=None,
+            datetime=dt or datetime(2020, 1, 1),
+            properties=properties or {},
+        )
+        item.collection_id = collection_id
+        return item
+
+    def test_deduplicate_by_date_keeps_last(self) -> None:
+        items = [
+            self._make_item("item-1", datetime(2020, 1, 1)),
+            self._make_item("item-2", datetime(2020, 1, 1)),
+            self._make_item("item-3", datetime(2020, 1, 2)),
+        ]
+        result = _deduplicate_items(items, deduplicate_by=["date"], deduplicate_keep="last")
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0].id, "item-2")
+        self.assertEqual(result[1].id, "item-3")
+
+    def test_deduplicate_by_date_keeps_first(self) -> None:
+        items = [
+            self._make_item("item-1", datetime(2020, 1, 1)),
+            self._make_item("item-2", datetime(2020, 1, 1)),
+            self._make_item("item-3", datetime(2020, 1, 2)),
+        ]
+        result = _deduplicate_items(items, deduplicate_by=["date"], deduplicate_keep="first")
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0].id, "item-1")
+        self.assertEqual(result[1].id, "item-3")
+
+    def test_deduplicate_by_collection_id(self) -> None:
+        items = [
+            self._make_item("item-1", collection_id="sentinel-2"),
+            self._make_item("item-2", collection_id="sentinel-2"),
+            self._make_item("item-3", collection_id="landsat"),
+        ]
+        result = _deduplicate_items(items, deduplicate_by=["collection_id"], deduplicate_keep="last")
+        self.assertEqual(len(result), 2)
+
+    def test_deduplicate_by_property(self) -> None:
+        items = [
+            self._make_item("item-1", properties={"proj:transform": "tile-A"}),
+            self._make_item("item-2", properties={"proj:transform": "tile-A"}),
+            self._make_item("item-3", properties={"proj:transform": "tile-B"}),
+        ]
+        result = _deduplicate_items(items, deduplicate_by=["proj:transform"], deduplicate_keep="last")
+        self.assertEqual(len(result), 2)
+
+    def test_deduplicate_by_multiple_keys(self) -> None:
+        items = [
+            self._make_item("item-1", datetime(2020, 1, 1), properties={"proj:transform": "tile-A"}),
+            self._make_item("item-2", datetime(2020, 1, 1), properties={"proj:transform": "tile-A"}),
+            self._make_item("item-3", datetime(2020, 1, 1), properties={"proj:transform": "tile-B"}),
+            self._make_item("item-4", datetime(2020, 1, 2), properties={"proj:transform": "tile-A"}),
+        ]
+        result = _deduplicate_items(items, deduplicate_by=["date", "proj:transform"], deduplicate_keep="last")
+        self.assertEqual(len(result), 3)
+
+    def test_deduplicate_no_duplicates(self) -> None:
+        items = [
+            self._make_item("item-1", datetime(2020, 1, 1)),
+            self._make_item("item-2", datetime(2020, 1, 2)),
+            self._make_item("item-3", datetime(2020, 1, 3)),
+        ]
+        result = _deduplicate_items(items, deduplicate_by=["date"], deduplicate_keep="last")
+        self.assertEqual(len(result), 3)
+
+    def test_deduplicate_empty_list(self) -> None:
+        result = _deduplicate_items([], deduplicate_by=["date"], deduplicate_keep="last")
+        self.assertEqual(len(result), 0)
+
+    def test_deduplicate_invalid_keep_raises(self) -> None:
+        items = [self._make_item("item-1")]
+        with self.assertRaises(ValueError) as ctx:
+            _deduplicate_items(items, deduplicate_by=["date"], deduplicate_keep="invalid")
+        self.assertIn("must be 'first' or 'last'", str(ctx.exception))
+
+    def test_deduplicate_invalid_keep_raises_with_empty_list(self) -> None:
+        with self.assertRaises(ValueError) as ctx:
+            _deduplicate_items([], deduplicate_by=["date"], deduplicate_keep="invalid")
+        self.assertIn("must be 'first' or 'last'", str(ctx.exception))
+
+    def test_deduplicate_item_without_datetime_uses_id(self) -> None:
+        item1 = Item(
+            id="item-1",
+            geometry=None,
+            bbox=None,
+            datetime=None,
+            properties={"start_datetime": "2020-01-01T00:00:00Z", "end_datetime": "2020-01-01T23:59:59Z"},
+        )
+        item2 = Item(
+            id="item-1",
+            geometry=None,
+            bbox=None,
+            datetime=None,
+            properties={"start_datetime": "2020-01-01T00:00:00Z", "end_datetime": "2020-01-01T23:59:59Z"},
+        )
+        items = [item1, item2]
+        result = _deduplicate_items(items, deduplicate_by=["date"], deduplicate_keep="last")
+        self.assertEqual(len(result), 1)
+
+    def test_deduplicate_with_pipe_in_property_no_false_collision(self) -> None:
+        items = [
+            self._make_item("item-1", properties={"field1": "a|b", "field2": "c"}),
+            self._make_item("item-2", properties={"field1": "a", "field2": "b|c"}),
+        ]
+        result = _deduplicate_items(items, deduplicate_by=["field1", "field2"], deduplicate_keep="last")
+        self.assertEqual(len(result), 2)
+        ids = {item.id for item in result}
+        self.assertEqual(ids, {"item-1", "item-2"})
 
 
 if __name__ == "__main__":

@@ -813,7 +813,7 @@ wheels = [
 
 [[package]]
 name = "earthdaily"
-version = "1.5.1"
+version = "1.8.0"
 source = { editable = "." }
 dependencies = [
     { name = "requests" },

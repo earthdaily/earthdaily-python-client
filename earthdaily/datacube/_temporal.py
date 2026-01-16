@@ -1,10 +1,11 @@
 import numpy as np
+import pandas as pd
 import xarray as xr
 
 from earthdaily.datacube._whittaker import whittaker_smooth as _whittaker_smooth_impl
 from earthdaily.datacube.constants import DEFAULT_TEMPORAL_FREQ, DEFAULT_WHITTAKER_BETA, DIM_TIME
 from earthdaily.datacube.exceptions import DatacubeOperationError
-from earthdaily.datacube.models import AggregationMethod
+from earthdaily.datacube.models import AggregationMethod, GroupByOption
 
 
 def whittaker_smooth(
@@ -19,25 +20,46 @@ def whittaker_smooth(
     return result_dataset
 
 
-def temporal_aggregate(dataset: xr.Dataset, method: AggregationMethod, freq: str = DEFAULT_TEMPORAL_FREQ) -> xr.Dataset:
+def temporal_aggregate(
+    dataset: xr.Dataset,
+    method: AggregationMethod,
+    freq: str = DEFAULT_TEMPORAL_FREQ,
+    groupby: GroupByOption | None = None,
+) -> xr.Dataset:
     if DIM_TIME not in dataset.dims:
         raise DatacubeOperationError("Dataset does not have a time dimension")
 
-    resampled = dataset.resample(time=freq)
+    if groupby is not None:
+        try:
+            groupby = GroupByOption(groupby)
+        except ValueError:
+            raise ValueError(f"Unsupported groupby value: {groupby}. Supported: {[e.value for e in GroupByOption]}")
+
+    grouped: xr.core.groupby.DatasetGroupBy | xr.core.resample.DatasetResample
+    if groupby is not None:
+        grouped = dataset.groupby(groupby)
+    else:
+        grouped = dataset.resample(time=freq)
 
     if method == "mean":
-        return resampled.mean()
+        result = grouped.mean()
     elif method == "median":
-        return resampled.median()
+        result = grouped.median()
     elif method == "min":
-        return resampled.min()
+        result = grouped.min()
     elif method == "max":
-        return resampled.max()
+        result = grouped.max()
     elif method == "sum":
-        return resampled.sum()
+        result = grouped.sum()
     elif method == "std":
-        return resampled.std()
+        result = grouped.std()
     elif method == "var":
-        return resampled.var()
+        result = grouped.var()
     else:
         raise ValueError(f"Unsupported aggregation method: {method}")
+
+    if groupby == GroupByOption.DATE:
+        result = result.rename({"date": "time"})
+        result = result.assign_coords(time=pd.to_datetime(result.time.values))
+
+    return result
