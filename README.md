@@ -45,13 +45,25 @@ pip install "earthdaily[platform,legacy,utils]"
 
 ## 🔧 Environment Setup
 
+The EarthPlatform STAC API is protected by bearer authentication. A bearer token is generated using OAuth Client Credentials Flow. The required `client_id`, `client_secret`, and `access_token_url` values can be found on the [Account Management Console](https://console.earthdaily.com/account).
+
+### Getting Your Credentials
+
+1. Go to the [Account Management Console](https://console.earthdaily.com/account)
+2. Click the **Provision New API Credentials** button to generate your API credentials
+3. Copy the generated `client_secret` value — this will be your `EDS_SECRET`
+
+For more details, see the [API Authentication Guide](https://earthdaily.github.io/EDA-Documentation/GettingStarted/APIAuthentication/).
+
+### Configure Your Environment
+
 Create a `.env` file in your project root with your credentials:
 
 ```bash
 # .env
-EDS_CLIENT_ID=your_client_id
-EDS_SECRET=your_client_secret
-EDS_AUTH_URL=https://your-auth-url.com/oauth/token
+EDS_CLIENT_ID=EARTHDAILY_API_TOKEN
+EDS_SECRET=<Go to Account Management Console, click Provision New API Credentials, copy the client_secret>
+EDS_AUTH_URL=https://api.earthdaily.com/account_management/v1/authentication/api_tokens/exchange
 EDS_API_URL=https://api.earthdaily.com
 ```
 
@@ -79,7 +91,7 @@ client = EDSClient(config)
 # Direct configuration (without .env file)
 config = EDSConfig(
     client_id="EARTHDAILY_API_TOKEN",
-    client_secret="your_client_secret",
+    client_secret="<Go to Account Management Console, click Provision New API Credentials, copy the client_secret>",
     token_url="https://api.earthdaily.com/account_management/v1/authentication/api_tokens/exchange",
     base_url="https://api.earthdaily.com"
 )

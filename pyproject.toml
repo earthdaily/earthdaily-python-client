@@ -1,6 +1,6 @@
 [project]
 name = "earthdaily"
-version = "1.8.0"
+version = "1.10.0"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
@@ -43,7 +43,7 @@ legacy = [
     "dask<2025.3.0",  # see: https://github.com/earthdaily/earthdaily-python-client/issues/173
     "dask-image>=2024.5.3",
     "flox (>=0.10.0,<0.11.0)",
-    "protobuf>=5.29.5",  # Security fix via spyndex dependency chain
+    "protobuf>=6.33.5",  # see https://github.com/advisories/GHSA-7gcm-g887-7qv7
 ]
 datacube = [
     "numpy>=2.2.2",
@@ -64,6 +64,9 @@ utils = [
     "ipykernel>=7.0.0",
     "jupyter>=1.0.0",
 ]
+internal = [
+    "boto3>=1.35.0",
+]
 
 [dependency-groups]
 tests = [
@@ -77,6 +80,7 @@ tests = [
     "nbformat>=5.10.4",
     "ipykernel>=7.0.0",
     "types-tqdm>=4.67.0.20250516",
+    "boto3-stubs[events]>=1.35.0",
     "mypy>=1.18.2",
 ]
 docs = [

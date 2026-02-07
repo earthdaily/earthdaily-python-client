@@ -43,6 +43,7 @@ class TestDatacubeService(unittest.TestCase):
             dtype=DEFAULT_DTYPE,
             nodata=DEFAULT_NODATA,
             properties=False,
+            apply_scale_offset=False,
             engine=DEFAULT_ENGINE,
             replace_href_with=DEFAULT_HREF_PATH,
         )
@@ -77,6 +78,7 @@ class TestDatacubeService(unittest.TestCase):
             dtype=custom_dtype,
             nodata=custom_nodata,
             properties=False,
+            apply_scale_offset=False,
             engine=custom_engine,
             replace_href_with=custom_href_path,
         )
@@ -98,6 +100,7 @@ class TestDatacubeService(unittest.TestCase):
             dtype=DEFAULT_DTYPE,
             nodata=DEFAULT_NODATA,
             properties=False,
+            apply_scale_offset=False,
             engine=DEFAULT_ENGINE,
             replace_href_with=DEFAULT_HREF_PATH,
         )
@@ -117,6 +120,7 @@ class TestDatacubeService(unittest.TestCase):
             dtype=DEFAULT_DTYPE,
             nodata=DEFAULT_NODATA,
             properties=True,
+            apply_scale_offset=False,
             engine=DEFAULT_ENGINE,
             replace_href_with=DEFAULT_HREF_PATH,
         )
@@ -138,6 +142,7 @@ class TestDatacubeService(unittest.TestCase):
             dtype=DEFAULT_DTYPE,
             nodata=DEFAULT_NODATA,
             properties=properties_list,
+            apply_scale_offset=False,
             engine=DEFAULT_ENGINE,
             replace_href_with=DEFAULT_HREF_PATH,
         )
@@ -191,6 +196,7 @@ class TestDatacubeService(unittest.TestCase):
             dtype=DEFAULT_DTYPE,
             nodata=DEFAULT_NODATA,
             properties=False,
+            apply_scale_offset=False,
             engine=DEFAULT_ENGINE,
             replace_href_with=DEFAULT_HREF_PATH,
         )
@@ -225,6 +231,7 @@ class TestDatacubeService(unittest.TestCase):
             dtype=DEFAULT_DTYPE,
             nodata=DEFAULT_NODATA,
             properties=False,
+            apply_scale_offset=False,
             engine=DEFAULT_ENGINE,
             replace_href_with=DEFAULT_HREF_PATH,
         )
@@ -246,6 +253,7 @@ class TestDatacubeService(unittest.TestCase):
             dtype=DEFAULT_DTYPE,
             nodata=DEFAULT_NODATA,
             properties=False,
+            apply_scale_offset=False,
             engine=DEFAULT_ENGINE,
             replace_href_with=DEFAULT_HREF_PATH,
         )
@@ -265,6 +273,7 @@ class TestDatacubeService(unittest.TestCase):
             dtype=DEFAULT_DTYPE,
             nodata=None,
             properties=False,
+            apply_scale_offset=False,
             engine=DEFAULT_ENGINE,
             replace_href_with=DEFAULT_HREF_PATH,
         )

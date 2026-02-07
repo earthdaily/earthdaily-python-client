@@ -114,6 +114,7 @@ class APIRequester:
 
         if self.config.bypass_auth:
             headers["X-User-User-Type"] = "user"
+            headers["X-User-External-Downloads-Enabled"] = "true"
 
         return headers
 
