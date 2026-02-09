@@ -10,7 +10,7 @@ class TestSentinel2CollectionHelper(unittest.TestCase):
         self.helper = Sentinel2CollectionHelper(self.mock_client)
 
     def test_class_constants_and_factories(self):
-        self.assertEqual(Sentinel2CollectionHelper.COLLECTION_ID, "sentinel-2-l2a")
+        self.assertEqual(Sentinel2CollectionHelper.COLLECTION_ID, "sentinel-2-c1-l2a")
         rgb = Sentinel2CollectionHelper.create_rgb(self.mock_client)
         self.assertEqual(rgb.assets, ["red", "green", "blue"])
         veg = Sentinel2CollectionHelper.create_vegetation(self.mock_client)
@@ -183,7 +183,7 @@ class TestSentinel2CollectionHelper(unittest.TestCase):
     def test_repr(self):
         repr_str = repr(self.helper)
         self.assertIn("Sentinel2CollectionHelper", repr_str)
-        self.assertIn("sentinel-2-l2a", repr_str)
+        self.assertIn("sentinel-2-c1-l2a", repr_str)
 
     def test_scl_constants(self):
         self.assertEqual(Sentinel2CollectionHelper.SCL_CLOUD_SHADOW, 3)

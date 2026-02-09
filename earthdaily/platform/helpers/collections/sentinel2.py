@@ -22,7 +22,7 @@ class Sentinel2CollectionHelper:
     This class provides easy access to Sentinel-2 Level-2A atmospherically corrected data.
     """
 
-    COLLECTION_ID = "sentinel-2-l2a"
+    COLLECTION_ID = "sentinel-2-c1-l2a"
 
     ASSET_BANDS = {
         # Visible bands (10m)

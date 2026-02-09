@@ -17,6 +17,7 @@ from earthdaily.exceptions import EDSAPIError
 
 class EdcProductType(str, Enum):
     VISUAL_RGB = "VISUAL_RGB"
+    SCIENCE_ORTHO = "SCIENCE_ORTHO"
 
 
 @dataclass

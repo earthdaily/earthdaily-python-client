@@ -25,6 +25,103 @@ from earthdaily.datacube.exceptions import DatacubeCreationError
 
 logger = logging.getLogger(__name__)
 
+
+def _apply_scale_offset(
+    ds: xr.Dataset,
+    items: Sequence[Item],
+) -> xr.Dataset:
+    """
+    Apply scale and offset from STAC raster:bands metadata to convert raw values to physical values.
+
+    Transforms raw pixel values to physical units (e.g., reflectance) using:
+        physical_value = (raw_value * scale) + offset
+
+    Scale and offset are read from each item's asset metadata (raster:bands extension).
+    If not present, defaults to scale=1.0 and offset=0.0 (identity transform).
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        Dataset with raw pixel values
+    items : Sequence[Item]
+        STAC items containing raster:bands metadata with scale/offset
+
+    Returns
+    -------
+    xr.Dataset
+        Dataset with scale and offset applied
+    """
+    if DIM_TIME not in ds.coords:
+        logger.debug("Skipping scale/offset: dataset has no time dimension")
+        return ds
+
+    assets = list(ds.data_vars.keys())
+    if not assets:
+        return ds
+
+    # Build lookup mapping normalized timestamps to STAC items.
+    # Normalize to UTC-naive timestamps to handle timezone differences
+    # (e.g., UTC vs local timezone offsets) - same approach as properties handling.
+    item_by_time: dict[pd.Timestamp, Item] = {}
+    for stac_item in items:
+        timestamp = getattr(stac_item, "datetime", None) or stac_item.properties.get("datetime")
+        if timestamp:
+            normalized_time = pd.to_datetime(timestamp, utc=True).tz_convert(None)
+            item_by_time[normalized_time] = stac_item
+
+    dataset_times = pd.to_datetime(ds.coords[DIM_TIME].values, utc=True).tz_convert(None)
+
+    transformed_assets: dict[str, xr.DataArray] = {}
+    unmatched_times: list[pd.Timestamp] = []
+
+    for asset_name in assets:
+        if asset_name not in ds.data_vars:
+            continue
+
+        scale_offset_groups: dict[tuple[float, float], list[int]] = {}
+
+        for idx, normalized_time in enumerate(dataset_times):
+            item = item_by_time.get(normalized_time)
+            if item is None and normalized_time not in unmatched_times:
+                unmatched_times.append(normalized_time)
+
+            scale, offset = 1.0, 0.0
+
+            if item and asset_name in item.assets:
+                raster_bands = item.assets[asset_name].extra_fields.get("raster:bands", [])
+                if raster_bands:
+                    raw_scale = raster_bands[0].get("scale")
+                    raw_offset = raster_bands[0].get("offset")
+                    scale = raw_scale if raw_scale is not None else 1.0
+                    offset = raw_offset if raw_offset is not None else 0.0
+
+            scale_offset_groups.setdefault((scale, offset), []).append(idx)
+
+        if not scale_offset_groups or (len(scale_offset_groups) == 1 and (1.0, 0.0) in scale_offset_groups):
+            continue
+
+        transformed_chunks = []
+        for (scale, offset), time_indices in scale_offset_groups.items():
+            chunk = ds[asset_name].isel({DIM_TIME: time_indices})
+            if scale != 1.0 or offset != 0.0:
+                chunk = chunk * scale + offset
+            transformed_chunks.append(chunk)
+
+        transformed_assets[asset_name] = xr.concat(transformed_chunks, dim=DIM_TIME).sortby(DIM_TIME)
+
+    if transformed_assets:
+        ds = ds.assign(transformed_assets)
+        logger.info(f"Applied scale/offset to {len(transformed_assets)} asset(s): {list(transformed_assets.keys())}")
+
+    if unmatched_times:
+        logger.debug(
+            f"Could not find STAC items for {len(unmatched_times)} dataset time(s); "
+            f"using identity transform (scale=1, offset=0) for those times"
+        )
+
+    return ds
+
+
 EngineLoader = Callable[..., xr.Dataset]
 _ENGINE_LOADERS: dict[str, EngineLoader] = {}
 
@@ -154,6 +251,7 @@ def build_datacube(
     dtype: str = DEFAULT_DTYPE,
     nodata: float | int | None = DEFAULT_NODATA,
     properties: bool | str | list[str] = False,
+    apply_scale_offset: bool = False,
     engine: str = DEFAULT_ENGINE,
     replace_href_with: str = DEFAULT_HREF_PATH,
     **kwargs,
@@ -183,6 +281,11 @@ def build_datacube(
         NaN or -9999. Default uses the engine default.
     properties : bool | str | list[str]
         STAC properties to include as coordinates
+    apply_scale_offset : bool, default False
+        Apply scale and offset from STAC raster:bands metadata to convert raw
+        pixel values to physical units (e.g., reflectance).
+        Uses the formula: physical_value = (raw_value * scale) + offset.
+        Set to True to get physical values (e.g., 0-1 reflectance).
     engine : str
         Engine to use for datacube creation. Default: 'odc'.
         Additional engines can be registered via `register_engine_loader()`.
@@ -231,6 +334,7 @@ def build_datacube(
         dtype=dtype,
         nodata=nodata,
         properties=properties,
+        apply_scale_offset=apply_scale_offset,
         replace_href_with=replace_href_with,
         **kwargs,
     )
@@ -245,6 +349,7 @@ def _load_datacube_with_odc(
     dtype: str = DEFAULT_DTYPE,
     nodata: float | int | None = DEFAULT_NODATA,
     properties: bool | str | list[str] = False,
+    apply_scale_offset: bool = False,
     replace_href_with: str = DEFAULT_HREF_PATH,
     **kwargs,
 ) -> xr.Dataset:
@@ -365,6 +470,9 @@ def _load_datacube_with_odc(
         ds = ds.rename({DIM_LATITUDE: DIM_Y, DIM_LONGITUDE: DIM_X})
 
     ds = ds.chunk(kwargs["chunks"])
+
+    if apply_scale_offset:
+        ds = _apply_scale_offset(ds, items)
 
     if isinstance(assets, dict):
         ds = ds.rename_vars({k: v for k, v in assets.items() if k in ds.data_vars})

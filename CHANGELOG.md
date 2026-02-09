@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0]
+
+### Added
+
+- `SCIENCE_ORTHO` product type for EDC ordering service (`EdcProductType.SCIENCE_ORTHO`)
+
+## [1.9.3]
+
+### Fixed
+
+- Added `X-User-External-Downloads-Enabled` header when `bypass_auth` is enabled, allowing users behind VPN to access external downloads
+
+## [1.9.2]
+
+### Changed
+
+- Bump `protobuf` dependency to `>=6.33.5` to fix security vulnerability (see https://github.com/advisories/GHSA-7gcm-g887-7qv7)
+
+## [1.9.0]
+
+### Added
+
+- `apply_scale_offset` parameter for `datacube.build_datacube()` to convert raw values to physical units using STAC metadata
+
+### Changed
+
+- `Sentinel2CollectionHelper` now uses `sentinel-2-c1-l2a` collection (avoids radiometric offset inconsistency from ESA Processing Baseline 04.00)
+
 ## [1.8.0]
 
 ### Added

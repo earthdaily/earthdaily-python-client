@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import unittest
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 from unittest import mock
 
@@ -12,6 +12,7 @@ from pystac import Asset, Item
 from rasterio.enums import Resampling
 
 from earthdaily.datacube._builder import (
+    _apply_scale_offset,
     _deduplicate_items,
     _load_datacube_with_odc,
     _normalize_longitude_coordinate,
@@ -390,6 +391,284 @@ class TestDeduplicateItems(unittest.TestCase):
         self.assertEqual(len(result), 2)
         ids = {item.id for item in result}
         self.assertEqual(ids, {"item-1", "item-2"})
+
+
+class TestApplyScaleOffset(unittest.TestCase):
+    """Tests for _apply_scale_offset function."""
+
+    def _make_item_with_scale_offset(
+        self,
+        dt: datetime,
+        asset_name: str = "red",
+        scale: float = 1.0,
+        offset: float = 0.0,
+    ) -> Item:
+        """Create a STAC item with raster:bands metadata containing scale/offset."""
+        extra_fields = {"raster:bands": [{"scale": scale, "offset": offset}]}
+        asset = FakeAsset(href="http://example.com/data.tif", extra_fields=extra_fields)
+        item = Item(
+            id=f"item-{dt.isoformat()}",
+            geometry=None,
+            bbox=None,
+            datetime=dt,
+            properties={},
+        )
+        item.add_asset(asset_name, asset)
+        return item
+
+    def _make_dataset(self, times: list[datetime], asset_name: str = "red") -> xr.Dataset:
+        """Create a simple dataset with raw pixel values."""
+        time_index = pd.to_datetime(times)
+        data = xr.DataArray(
+            np.ones((len(times), 2, 2)) * 1000,  # Raw pixel value of 1000
+            dims=(DIM_TIME, DIM_Y, DIM_X),
+            coords={
+                DIM_TIME: time_index,
+                DIM_Y: [0, 1],
+                DIM_X: [0, 1],
+            },
+        )
+        return xr.Dataset({asset_name: data})
+
+    def test_apply_scale_offset_transforms_values(self) -> None:
+        """Test that scale and offset are correctly applied to raw pixel values."""
+        dt = datetime(2020, 1, 1)
+        # scale=0.0001 converts 1000 to 0.1 reflectance
+        item = self._make_item_with_scale_offset(dt, scale=0.0001, offset=0.0)
+        ds = self._make_dataset([dt])
+
+        result = _apply_scale_offset(ds, [item])
+
+        # 1000 * 0.0001 + 0 = 0.1
+        np.testing.assert_allclose(result["red"].values, 0.1)
+
+    def test_apply_scale_offset_with_offset(self) -> None:
+        """Test that offset is correctly applied."""
+        dt = datetime(2020, 1, 1)
+        # scale=0.0001, offset=-0.1 (like Sentinel-2 with BOA offset)
+        item = self._make_item_with_scale_offset(dt, scale=0.0001, offset=-0.1)
+        ds = self._make_dataset([dt])
+
+        result = _apply_scale_offset(ds, [item])
+
+        # 1000 * 0.0001 + (-0.1) = 0.0
+        np.testing.assert_allclose(result["red"].values, 0.0)
+
+    def test_apply_scale_offset_identity_transform_skipped(self) -> None:
+        """Test that identity transform (scale=1, offset=0) is skipped."""
+        dt = datetime(2020, 1, 1)
+        item = self._make_item_with_scale_offset(dt, scale=1.0, offset=0.0)
+        ds = self._make_dataset([dt])
+
+        result = _apply_scale_offset(ds, [item])
+
+        # Values should remain unchanged (1000)
+        np.testing.assert_allclose(result["red"].values, 1000)
+
+    def test_apply_scale_offset_multiple_times_different_coefficients(self) -> None:
+        """Test handling of multiple time steps with different scale/offset."""
+        dt1 = datetime(2020, 1, 1)
+        dt2 = datetime(2020, 1, 2)
+        item1 = self._make_item_with_scale_offset(dt1, scale=0.0001, offset=0.0)
+        item2 = self._make_item_with_scale_offset(dt2, scale=0.0001, offset=-0.1)
+        ds = self._make_dataset([dt1, dt2])
+
+        result = _apply_scale_offset(ds, [item1, item2])
+
+        # First time: 1000 * 0.0001 + 0 = 0.1
+        np.testing.assert_allclose(result["red"].isel({DIM_TIME: 0}).values, 0.1)
+        # Second time: 1000 * 0.0001 + (-0.1) = 0.0
+        np.testing.assert_allclose(result["red"].isel({DIM_TIME: 1}).values, 0.0)
+
+    def test_apply_scale_offset_missing_raster_bands_uses_identity(self) -> None:
+        """Test that missing raster:bands metadata defaults to identity transform."""
+        dt = datetime(2020, 1, 1)
+        # Item without raster:bands metadata
+        asset = FakeAsset(href="http://example.com/data.tif", extra_fields={})
+        item = Item(id="item-no-metadata", geometry=None, bbox=None, datetime=dt, properties={})
+        item.add_asset("red", asset)
+        ds = self._make_dataset([dt])
+
+        result = _apply_scale_offset(ds, [item])
+
+        # Values should remain unchanged (1000) - identity transform
+        np.testing.assert_allclose(result["red"].values, 1000)
+
+    def test_apply_scale_offset_no_time_dimension_returns_unchanged(self) -> None:
+        """Test that dataset without time dimension is returned unchanged."""
+        dt = datetime(2020, 1, 1)
+        item = self._make_item_with_scale_offset(dt, scale=0.0001, offset=0.0)
+        # Dataset without time dimension
+        ds = xr.Dataset({"red": xr.DataArray(np.ones((2, 2)) * 1000, dims=(DIM_Y, DIM_X))})
+
+        result = _apply_scale_offset(ds, [item])
+
+        # Values should remain unchanged since no time dimension
+        np.testing.assert_allclose(result["red"].values, 1000)
+
+    def test_apply_scale_offset_asset_not_in_item_uses_identity(self) -> None:
+        """Test that assets not in item use identity transform."""
+        dt = datetime(2020, 1, 1)
+        # Item has "blue" asset, but dataset has "red"
+        item = self._make_item_with_scale_offset(dt, asset_name="blue", scale=0.0001, offset=0.0)
+        ds = self._make_dataset([dt], asset_name="red")
+
+        result = _apply_scale_offset(ds, [item])
+
+        # Values should remain unchanged since asset not in item
+        np.testing.assert_allclose(result["red"].values, 1000)
+
+    def test_apply_scale_offset_explicit_none_values_use_defaults(self) -> None:
+        """Test that explicit None values for scale/offset default to identity transform."""
+        dt = datetime(2020, 1, 1)
+        # Create item with explicit None values in raster:bands metadata
+        extra_fields = {"raster:bands": [{"scale": None, "offset": None}]}
+        asset = FakeAsset(href="http://example.com/data.tif", extra_fields=extra_fields)
+        item = Item(id="item-none-values", geometry=None, bbox=None, datetime=dt, properties={})
+        item.add_asset("red", asset)
+        ds = self._make_dataset([dt])
+
+        result = _apply_scale_offset(ds, [item])
+
+        # Values should remain unchanged (1000) - None treated as identity transform
+        np.testing.assert_allclose(result["red"].values, 1000)
+
+    def test_apply_scale_offset_partial_none_values(self) -> None:
+        """Test that partial None values (scale None, offset set) work correctly."""
+        dt = datetime(2020, 1, 1)
+        # scale is None (should default to 1.0), offset is -100
+        extra_fields = {"raster:bands": [{"scale": None, "offset": -100}]}
+        asset = FakeAsset(href="http://example.com/data.tif", extra_fields=extra_fields)
+        item = Item(id="item-partial-none", geometry=None, bbox=None, datetime=dt, properties={})
+        item.add_asset("red", asset)
+        ds = self._make_dataset([dt])
+
+        result = _apply_scale_offset(ds, [item])
+
+        # 1000 * 1.0 + (-100) = 900
+        np.testing.assert_allclose(result["red"].values, 900)
+
+    def test_apply_scale_offset_timezone_aware_item_matches_naive_dataset(self) -> None:
+        """Test that timezone-aware STAC item datetime matches timezone-naive dataset times."""
+        # STAC item has UTC timezone-aware datetime
+        dt_utc = datetime(2020, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
+        item = self._make_item_with_scale_offset(dt_utc, scale=0.0001, offset=0.0)
+
+        # Dataset has timezone-naive datetime (same instant)
+        dt_naive = datetime(2020, 1, 1, 12, 0, 0)
+        ds = self._make_dataset([dt_naive])
+
+        result = _apply_scale_offset(ds, [item])
+
+        # Scale should be applied: 1000 * 0.0001 = 0.1
+        np.testing.assert_allclose(result["red"].values, 0.1)
+
+    def test_apply_scale_offset_different_timezone_representations(self) -> None:
+        """Test that timestamps with different TZ representations match correctly."""
+        # Two items at the same UTC instant but created differently
+        dt1 = datetime(2020, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
+        dt2 = datetime(2020, 1, 2, 12, 0, 0, tzinfo=timezone.utc)
+
+        item1 = self._make_item_with_scale_offset(dt1, scale=0.0001, offset=0.0)
+        item2 = self._make_item_with_scale_offset(dt2, scale=0.0002, offset=0.0)
+
+        # Dataset with timezone-naive times
+        ds = self._make_dataset(
+            [
+                datetime(2020, 1, 1, 12, 0, 0),
+                datetime(2020, 1, 2, 12, 0, 0),
+            ]
+        )
+
+        result = _apply_scale_offset(ds, [item1, item2])
+
+        # First time: 1000 * 0.0001 = 0.1
+        np.testing.assert_allclose(result["red"].isel({DIM_TIME: 0}).values, 0.1)
+        # Second time: 1000 * 0.0002 = 0.2
+        np.testing.assert_allclose(result["red"].isel({DIM_TIME: 1}).values, 0.2)
+
+    def test_apply_scale_offset_pandas_timestamp_with_tz(self) -> None:
+        """Test that pandas Timestamps with timezone info are handled correctly."""
+        # STAC item with UTC datetime
+        dt_utc = datetime(2020, 6, 15, 10, 30, 0, tzinfo=timezone.utc)
+        item = self._make_item_with_scale_offset(dt_utc, scale=0.0001, offset=-0.05)
+
+        # Create dataset with pandas Timestamp (simulating what odc.stac might produce)
+        time_index = pd.DatetimeIndex([pd.Timestamp("2020-06-15T10:30:00")])
+        data = xr.DataArray(
+            np.ones((1, 2, 2)) * 1000,
+            dims=(DIM_TIME, DIM_Y, DIM_X),
+            coords={
+                DIM_TIME: time_index,
+                DIM_Y: [0, 1],
+                DIM_X: [0, 1],
+            },
+        )
+        ds = xr.Dataset({"red": data})
+
+        result = _apply_scale_offset(ds, [item])
+
+        # 1000 * 0.0001 + (-0.05) = 0.05
+        np.testing.assert_allclose(result["red"].values, 0.05)
+
+    def test_apply_scale_offset_empty_time_dimension(self) -> None:
+        """Test that empty time dimension doesn't cause xr.concat error."""
+        # Create dataset with time dimension but zero elements
+        time_index = pd.DatetimeIndex([])
+        data = xr.DataArray(
+            np.ones((0, 2, 2)),  # Empty along time dimension
+            dims=(DIM_TIME, DIM_Y, DIM_X),
+            coords={
+                DIM_TIME: time_index,
+                DIM_Y: [0, 1],
+                DIM_X: [0, 1],
+            },
+        )
+        ds = xr.Dataset({"red": data})
+
+        # Even with items, should handle empty dataset gracefully
+        dt = datetime(2020, 1, 1)
+        item = self._make_item_with_scale_offset(dt, scale=0.0001, offset=0.0)
+
+        # Should not raise ValueError: No objects to concatenate
+        result = _apply_scale_offset(ds, [item])
+
+        # Dataset should be returned unchanged
+        assert result["red"].shape == (0, 2, 2)
+        assert DIM_TIME in result.coords
+
+    def test_apply_scale_offset_datetime_from_properties_fallback(self) -> None:
+        """Test that items with datetime=None but datetime in properties are matched correctly.
+
+        STAC items can have datetime=None when using datetime ranges (start_datetime/end_datetime).
+        In this case, the datetime should be retrieved from item.properties['datetime'].
+        """
+        dt = datetime(2020, 1, 1)
+        dt_str = "2020-01-01T00:00:00Z"
+
+        # Create item with datetime=None (simulating datetime range item)
+        # but with datetime in properties
+        extra_fields = {"raster:bands": [{"scale": 0.0001, "offset": 0.0}]}
+        asset = FakeAsset(href="http://example.com/data.tif", extra_fields=extra_fields)
+        item = Item(
+            id="item-datetime-range",
+            geometry=None,
+            bbox=None,
+            datetime=None,  # datetime=None, using datetime ranges
+            properties={
+                "datetime": dt_str,  # datetime in properties as fallback
+                "start_datetime": "2020-01-01T00:00:00Z",
+                "end_datetime": "2020-01-01T23:59:59Z",
+            },
+        )
+        item.add_asset("red", asset)
+
+        ds = self._make_dataset([dt])
+
+        result = _apply_scale_offset(ds, [item])
+
+        # Scale should be applied: 1000 * 0.0001 = 0.1
+        np.testing.assert_allclose(result["red"].values, 0.1)
 
 
 if __name__ == "__main__":
