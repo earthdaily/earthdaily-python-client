@@ -9,7 +9,8 @@ python-dotenv
 odc-stac
 matplotlib
 rioxarray
-geopandas
+geopandas>=1.1.2
 spyndex
 pillow>=12.1.1
 urllib3>=2.6.3
+nbconvert>=7.17.0

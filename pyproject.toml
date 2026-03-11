@@ -60,6 +60,7 @@ datacube = [
     "dask",
     "matplotlib>=3.0.0",
     "fonttools>=4.60.2",  # see https://github.com/advisories/GHSA-768j-98cg-p3fv
+    "pillow>=12.1.1",  # see https://github.com/advisories/GHSA-cfh3-3jmp-rvhc
 ]
 internal = [
     "boto3>=1.35.0",

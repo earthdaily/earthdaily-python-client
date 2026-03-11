@@ -6,3 +6,4 @@ matplotlib
 xarray
 pillow>=12.1.1
 urllib3>=2.6.3
+nbconvert>=7.17.0
