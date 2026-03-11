@@ -1,9 +1,14 @@
-earthdaily[platform,utils]==1.5.1
+earthdaily[platform,utils]==1.10.0
 numpy
 pandas
 odc-stac
 matplotlib
 xarray
-pillow>=12.1.1
-urllib3>=2.6.3
-nbconvert>=7.17.0
+
+# security overrides
+pillow>=12.1.1  # see https://github.com/advisories/GHSA-cfh3-3jmp-rvhc
+
+# security overrides (can be removed once earthdaily>=1.11.1 is published)
+urllib3>=2.6.3  # see https://github.com/advisories/GHSA-gm62-xv2j-4w53
+nbconvert>=7.17.0  # see https://github.com/advisories/GHSA-xm59-rqc7-hhvf
+tornado>=6.5.5  # see https://github.com/advisories/GHSA-78cv-mqj4-43f7

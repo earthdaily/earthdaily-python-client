@@ -226,8 +226,9 @@ toolz==1.1.0
     #   distributed
     #   odc-stac
     #   partd
-tornado==6.5.2
+tornado==6.5.5
     # via
+    #   -r examples/applications/EDA Mosaics - EarthMosaics vs Sentinel-2 NDVI/requirements.in
     #   distributed
     #   ipykernel
     #   jupyter-client

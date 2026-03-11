@@ -1,7 +1,10 @@
-earthdaily[platform,datacube,utils]==1.5.1
-distributed>=2026.1.0
+earthdaily[platform,datacube,utils]==1.10.0
+distributed>=2026.1.0  # see https://github.com/advisories/GHSA-c336-7962-wfj2
 shapely
-pillow>=12.1.1
-urllib3>=2.6.3
-geopandas>=1.1.2
-nbconvert>=7.17.0
+
+# security overrides (can be removed once earthdaily>=1.11.1 is published)
+urllib3>=2.6.3  # see https://github.com/advisories/GHSA-gm62-xv2j-4w53
+geopandas>=1.1.2  # see https://github.com/advisories/GHSA-6497-prx7-gpmq
+pillow>=12.1.1  # see https://github.com/advisories/GHSA-cfh3-3jmp-rvhc
+nbconvert>=7.17.0  # see https://github.com/advisories/GHSA-xm59-rqc7-hhvf
+tornado>=6.5.5  # see https://github.com/advisories/GHSA-78cv-mqj4-43f7

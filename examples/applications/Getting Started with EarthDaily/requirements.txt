@@ -78,7 +78,7 @@ decorator==5.2.1
     # via ipython
 defusedxml==0.7.1
     # via nbconvert
-earthdaily==1.5.1
+earthdaily==1.10.0
     # via -r examples/applications/Getting Started with EarthDaily/requirements.in
 executing==2.2.1
     # via stack-data
@@ -428,8 +428,9 @@ toolz==1.1.0
     #   dask
     #   odc-stac
     #   partd
-tornado==6.5.2
+tornado==6.5.5
     # via
+    #   -r examples/applications/Getting Started with EarthDaily/requirements.in
     #   ipykernel
     #   jupyter-client
     #   jupyter-server
