@@ -86,7 +86,7 @@ distributed==2026.1.2
     # via
     #   -r examples/applications/EDA Mosaics - Rio Grande do Sul Flood Extent/requirements.in
     #   dask
-earthdaily==1.5.1
+earthdaily==1.10.0
     # via -r examples/applications/EDA Mosaics - Rio Grande do Sul Flood Extent/requirements.in
 executing==2.2.1
     # via stack-data
@@ -466,8 +466,9 @@ toolz==1.1.0
     #   distributed
     #   odc-stac
     #   partd
-tornado==6.5.2
+tornado==6.5.5
     # via
+    #   -r examples/applications/EDA Mosaics - Rio Grande do Sul Flood Extent/requirements.in
     #   distributed
     #   ipykernel
     #   jupyter-client

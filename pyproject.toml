@@ -71,6 +71,7 @@ utils = [
     "ipykernel>=7.0.0",
     "jupyter>=1.0.0",
     "nbconvert>=7.17.0",  # see https://github.com/advisories/GHSA-xm59-rqc7-hhvf
+    "tornado>=6.5.5",  # see https://github.com/advisories/GHSA-78cv-mqj4-43f7
 ]
 
 [dependency-groups]

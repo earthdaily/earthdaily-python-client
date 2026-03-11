@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump `geopandas` dependency to `>=1.1.2` to fix SQL injection vulnerability in `to_postgis()` (see https://github.com/advisories/GHSA-6497-prx7-gpmq)
 - Bump `nbconvert` dependency to `>=7.17.0` to fix uncontrolled search path code execution on Windows (see https://github.com/advisories/GHSA-xm59-rqc7-hhvf)
 - Bump `fonttools` dependency to `>=4.60.2` to fix arbitrary file write and XML injection vulnerability (see https://github.com/advisories/GHSA-768j-98cg-p3fv)
+- Bump `tornado` dependency to `>=6.5.5` to fix incomplete cookie attribute validation (see https://github.com/advisories/GHSA-78cv-mqj4-43f7)
 
 ## [1.10.0]
 
