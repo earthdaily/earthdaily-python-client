@@ -1,6 +1,6 @@
 [project]
 name = "earthdaily"
-version = "1.10.0"
+version = "1.11.1"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
@@ -12,6 +12,7 @@ requires-python = ">=3.10,<3.15"
 dependencies = [
     "requests>=2.32.4",
     "toml>=0.10.2",
+    "urllib3>=2.6.3",  # see https://github.com/advisories/GHSA-gm62-xv2j-4w53
 ]
 
 [project.optional-dependencies]
@@ -30,7 +31,7 @@ legacy = [
     "pystac>=1.12.1",
     "pandas>=2.2.3",
     "pystac-client>=0.8.6",
-    "geopandas>=1.0.1",
+    "geopandas>=1.1.2",  # see https://github.com/advisories/GHSA-6497-prx7-gpmq
     "xarray>=2025.1.2",
     "rasterio>=1.4.3",
     "scipy>=1.15.1",
@@ -49,7 +50,7 @@ datacube = [
     "numpy>=2.2.2",
     "pystac>=1.12.1",
     "pandas>=2.2.3",
-    "geopandas>=1.0.1",
+    "geopandas>=1.1.2",  # see https://github.com/advisories/GHSA-6497-prx7-gpmq
     "xarray>=2025.1.2",
     "rasterio>=1.4.3",
     "scipy>=1.15.1",
@@ -58,30 +59,33 @@ datacube = [
     "spyndex>=0.7.0",
     "dask",
     "matplotlib>=3.0.0",
+    "fonttools>=4.60.2",  # see https://github.com/advisories/GHSA-768j-98cg-p3fv
+]
+internal = [
+    "boto3>=1.35.0",
+    "pystac>=1.10.0",
 ]
 utils = [
     "python-dotenv>=1.0.0",
     "ipykernel>=7.0.0",
     "jupyter>=1.0.0",
-]
-internal = [
-    "boto3>=1.35.0",
+    "nbconvert>=7.17.0",  # see https://github.com/advisories/GHSA-xm59-rqc7-hhvf
 ]
 
 [dependency-groups]
 tests = [
-    "ruff>=0.12.2",
-    "tox-uv>=1.28.0",
-    "pytest>=8.4.1",
-    "pytest-cov>=6.2.1",
-    "pytest-xdist>=3.6.0",
-    "pytest-asyncio>=0.25.0",
+    "ruff>=0.15.5",
+    "tox-uv>=1.33.2",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "pytest-xdist>=3.8.0",
+    "pytest-asyncio>=1.3.0",
     "nbclient>=0.10.2",
     "nbformat>=5.10.4",
-    "ipykernel>=7.0.0",
-    "types-tqdm>=4.67.0.20250516",
-    "boto3-stubs[events]>=1.35.0",
-    "mypy>=1.18.2",
+    "ipykernel>=7.2.0",
+    "types-tqdm>=4.67.3.20260205",
+    "boto3-stubs[events]>=1.42.63",
+    "mypy>=1.19.1",
 ]
 docs = [
     "sphinx>=8.1.3",
