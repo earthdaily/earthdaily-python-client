@@ -3,3 +3,5 @@ distributed>=2026.1.0
 shapely
 pillow>=12.1.1
 urllib3>=2.6.3
+geopandas>=1.1.2
+nbconvert>=7.17.0

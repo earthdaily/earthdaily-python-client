@@ -98,7 +98,7 @@ fqdn==1.5.1
     # via jsonschema
 fsspec==2025.10.0
     # via dask
-geopandas==1.1.1
+geopandas==1.1.3
     # via -r examples/applications/EDA Mosaics - Rio Grande do Sul Flood Extent/requirements.in
 h11==0.16.0
     # via httpcore
@@ -226,8 +226,9 @@ msgpack==1.1.2
     # via distributed
 nbclient==0.10.2
     # via nbconvert
-nbconvert==7.16.6
+nbconvert==7.17.0
     # via
+    #   -r examples/applications/EDA Mosaics - Rio Grande do Sul Flood Extent/requirements.in
     #   jupyter
     #   jupyter-server
 nbformat==5.10.4

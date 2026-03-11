@@ -96,8 +96,10 @@ fqdn==1.5.1
     # via jsonschema
 fsspec==2025.10.0
     # via dask
-geopandas==1.1.1
-    # via earthdaily
+geopandas==1.1.3
+    # via
+    #   -r examples/applications/EDA Mosaics - Dixie Fire Burn Extent/requirements.in
+    #   earthdaily
 h11==0.16.0
     # via httpcore
 httpcore==1.0.9
@@ -220,8 +222,9 @@ msgpack==1.1.2
     # via distributed
 nbclient==0.10.2
     # via nbconvert
-nbconvert==7.16.6
+nbconvert==7.17.0
     # via
+    #   -r examples/applications/EDA Mosaics - Dixie Fire Burn Extent/requirements.in
     #   jupyter
     #   jupyter-server
 nbformat==5.10.4
