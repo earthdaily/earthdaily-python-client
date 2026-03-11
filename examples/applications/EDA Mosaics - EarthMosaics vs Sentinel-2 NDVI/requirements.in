@@ -1,4 +1,5 @@
 dask[distributed]
+distributed>=2026.1.0
 requests
 numpy
 pandas
@@ -8,3 +9,5 @@ matplotlib
 xarray
 pystac-client
 ipykernel
+pillow>=12.1.1
+urllib3>=2.6.3
