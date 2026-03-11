@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.1]
+
+### Changed
+
+- Bump `urllib3` dependency to `>=2.6.3` to fix security vulnerability (see https://github.com/advisories/GHSA-gm62-xv2j-4w53)
+- Bump `geopandas` dependency to `>=1.1.2` to fix SQL injection vulnerability in `to_postgis()` (see https://github.com/advisories/GHSA-6497-prx7-gpmq)
+- Bump `nbconvert` dependency to `>=7.17.0` to fix uncontrolled search path code execution on Windows (see https://github.com/advisories/GHSA-xm59-rqc7-hhvf)
+- Bump `fonttools` dependency to `>=4.60.2` to fix arbitrary file write and XML injection vulnerability (see https://github.com/advisories/GHSA-768j-98cg-p3fv)
+
 ## [1.10.0]
 
 ### Added

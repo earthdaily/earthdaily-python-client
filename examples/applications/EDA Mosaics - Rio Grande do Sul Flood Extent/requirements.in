@@ -1,6 +1,7 @@
 earthdaily[platform,utils]==1.5.1
 scikit-image
 dask[distributed]
+distributed>=2026.1.0
 requests
 numpy
 pandas
@@ -10,3 +11,5 @@ matplotlib
 rioxarray
 geopandas
 spyndex
+pillow>=12.1.1
+urllib3>=2.6.3

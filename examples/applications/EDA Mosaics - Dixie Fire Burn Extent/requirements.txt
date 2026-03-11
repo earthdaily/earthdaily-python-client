@@ -69,7 +69,7 @@ contourpy==1.3.3
     # via matplotlib
 cycler==0.12.1
     # via matplotlib
-dask==2025.11.0
+dask==2026.1.2
     # via
     #   distributed
     #   earthdaily
@@ -82,7 +82,7 @@ decorator==5.2.1
     # via ipython
 defusedxml==0.7.1
     # via nbconvert
-distributed==2025.11.0
+distributed==2026.1.2
     # via -r examples/applications/EDA Mosaics - Dixie Fire Burn Extent/requirements.in
 earthdaily==1.5.1
     # via -r examples/applications/EDA Mosaics - Dixie Fire Burn Extent/requirements.in
@@ -110,8 +110,6 @@ idna==3.11
     #   httpx
     #   jsonschema
     #   requests
-importlib-metadata==8.7.0
-    # via dask
 ipykernel==7.1.0
     # via
     #   earthdaily
@@ -265,8 +263,6 @@ odc-loader==0.5.1
     # via odc-stac
 odc-stac==0.4.1
     # via earthdaily
-overrides==7.7.0
-    # via jupyter-server
 packaging==25.0
     # via
     #   dask
@@ -298,8 +294,10 @@ partd==1.4.2
     # via dask
 pexpect==4.9.0
     # via ipython
-pillow==12.0.0
-    # via matplotlib
+pillow==12.1.1
+    # via
+    #   -r examples/applications/EDA Mosaics - Dixie Fire Burn Extent/requirements.in
+    #   matplotlib
 platformdirs==4.5.0
     # via jupyter-core
 prometheus-client==0.23.1
@@ -475,19 +473,17 @@ traitlets==5.14.3
     #   nbformat
 typing-extensions==4.15.0
     # via
-    #   anyio
     #   beautifulsoup4
-    #   ipython
     #   odc-stac
-    #   referencing
 tzdata==2025.2
     # via
     #   arrow
     #   pandas
 uri-template==1.3.0
     # via jsonschema
-urllib3==2.5.0
+urllib3==2.6.3
     # via
+    #   -r examples/applications/EDA Mosaics - Dixie Fire Burn Extent/requirements.in
     #   distributed
     #   requests
 wcwidth==0.2.14
@@ -511,5 +507,3 @@ xarray==2025.11.0
     #   spyndex
 zict==3.0.0
     # via distributed
-zipp==3.23.0
-    # via importlib-metadata

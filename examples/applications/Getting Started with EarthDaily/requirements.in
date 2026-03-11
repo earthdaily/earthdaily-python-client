@@ -1,2 +1,4 @@
 earthdaily[platform,datacube,utils]==1.5.1
 shapely
+pillow>=12.1.1
+urllib3>=2.6.3
