@@ -38,7 +38,10 @@ class TestRetryFunctionality(unittest.TestCase):
         )
 
         api_requester = APIRequester(config=config)
-        PlatformService(api_requester, config.asset_access_mode)
+        service = PlatformService(api_requester, config.asset_access_mode)
+
+        # pystac_client is lazily created; access the property to trigger Client.open
+        _ = service.pystac_client
 
         # Verify StacApiIO is configured and passed to Client.open
         call_args = mock_client_open.call_args

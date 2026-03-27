@@ -76,6 +76,16 @@ class EDSConfig:
         - backoff_factor=0.5: delays of 0.5s, 1s, 2s for retries 1, 2, 3
         - backoff_factor=2.0: delays of 2s, 4s, 8s for retries 1, 2, 3
 
+    earthdata_token: str, optional
+        NASA EarthData JWT token for downloading EarthData assets.
+        If not provided, it defaults to `EARTHDATA_TOKEN` from environment variables.
+    eumetsat_client_id: str, optional
+        EUMETSAT API client ID for downloading EUMETSAT assets.
+        If not provided, it defaults to `EUMETSAT_CLIENT_ID` from environment variables.
+    eumetsat_client_secret: str, optional
+        EUMETSAT API client secret for downloading EUMETSAT assets.
+        If not provided, it defaults to `EUMETSAT_CLIENT_SECRET` from environment variables.
+
     Raises:
     -------
     ValueError
@@ -97,6 +107,10 @@ class EDSConfig:
     asset_access_mode: AssetAccessMode = AssetAccessMode.PRESIGNED_URLS
     max_retries: int = 3
     retry_backoff_factor: float = 1.0
+
+    earthdata_token: str = field(default_factory=lambda: os.getenv("EARTHDATA_TOKEN", ""))
+    eumetsat_client_id: str = field(default_factory=lambda: os.getenv("EUMETSAT_CLIENT_ID", ""))
+    eumetsat_client_secret: str = field(default_factory=lambda: os.getenv("EUMETSAT_CLIENT_SECRET", ""))
 
     def __post_init__(self):
         """Validate that required fields are provided and raise errors if not."""

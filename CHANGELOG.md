@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0]
+
+### Added
+
+- Download resolvers for EarthData (NASA), EUMETSAT, and S3 asset protocols
+- `EarthDataResolver` for NASA EarthData URLs with JWT token authentication
+- `EUMETSATResolver` for EUMETSAT Data Store URLs with OAuth2 client credentials
+- `S3Resolver` for `s3://` downloads via boto3 with `file:local_path` support and full S3 key path preservation
+- `EDSConfig` fields for third-party credentials: `earthdata_token`, `eumetsat_client_id`, `eumetsat_client_secret`
+- `download` optional dependency group (`pip install 'earthdaily[download]'`) for boto3-based S3 downloads
+- Progress bar (`tqdm`) support for S3 downloads
+
+### Changed
+
+- `ResolverRegistry.get_resolver()` now returns `None` instead of a `DefaultResolver` when no configured resolver matches
+- `get_resolver_for_url()` performs URL-based auto-discovery across known resolver classes before falling back to `DefaultResolver`
+- Non-HTTP URLs (e.g. `s3://`) no longer attempt a pointless HTTP fallback when direct download fails
+
 ## [1.11.1]
 
 ### Changed

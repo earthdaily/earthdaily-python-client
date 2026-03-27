@@ -40,7 +40,7 @@ class PlatformService:
         api_requester : APIRequester
             An instance of APIRequester used to send HTTP requests to the EDS API.
         asset_access_mode : AssetAccessMode
-            The mode of access for assets. Defaults to AssetAccessMode.PRESIGNED_URLS.
+            The mode of access for assets.
         """
         self.api_requester = api_requester
         self.bulk_search = BulkSearchService(api_requester)
@@ -55,7 +55,14 @@ class PlatformService:
             **api_requester.headers,
         }
 
-        self.pystac_client = self._create_pystac_client()
+        self._pystac_client: Optional[Client] = None
+
+    @property
+    def pystac_client(self) -> Client:
+        """Lazily create the pystac Client on first access to avoid an HTTP call at init time."""
+        if self._pystac_client is None:
+            self._pystac_client = self._create_pystac_client()
+        return self._pystac_client
 
     def _create_pystac_client(self) -> Client:
         """Create a new pystac Client instance with configured retry and fresh auth token."""

@@ -104,7 +104,7 @@ class TestAssetResolvers(unittest.TestCase):
         self.assertEqual(resolver2, mock_resolver2)
 
         resolver3 = registry.get_resolver("https://unknown.com/file.tif")
-        self.assertIsInstance(resolver3, DefaultResolver)
+        self.assertIsNone(resolver3)
 
     @patch("earthdaily.platform._stac_item_asset.resolver_registry.get_resolver")
     def test_get_resolver_for_url(self, mock_get_resolver):

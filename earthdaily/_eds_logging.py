@@ -31,6 +31,7 @@ class LoggerConfig:
         """
         logger = logging.getLogger(self.logger_name)
         logger.setLevel(self.log_level)
+        logger.propagate = False
 
         if not logger.hasHandlers():
             console_handler = logging.StreamHandler()

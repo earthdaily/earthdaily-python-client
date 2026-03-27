@@ -8,7 +8,7 @@ from earthdaily._api_requester import APIRequester
 from earthdaily._downloader import HttpDownloader
 from earthdaily._eds_config import AssetAccessMode
 from earthdaily._eds_logging import LoggerConfig
-from earthdaily.platform._stac_item_asset import get_resolver_for_url
+from earthdaily.platform._stac_item_asset import AssetResolver, get_resolver_for_url
 
 logger = LoggerConfig(logger_name=__name__).get_logger()
 
@@ -125,7 +125,7 @@ class ItemDownloader:
             download_url = resolver.get_download_url(href)
             headers = resolver.get_headers(href)
 
-            download_tasks.append((key, download_url, headers, output_path))
+            download_tasks.append((key, download_url, headers, output_path, resolver, asset_dict))
 
         results = {}
 
@@ -139,8 +139,10 @@ class ItemDownloader:
                         output_path=output_path,
                         quiet=quiet,
                         continue_on_error=continue_on_error,
+                        resolver=resolver,
+                        asset_metadata=asset_dict,
                     ): key
-                    for key, url, headers, output_path in download_tasks
+                    for key, url, headers, output_path, resolver, asset_dict in download_tasks
                 }
 
                 for future in as_completed(future_to_key):
@@ -154,7 +156,7 @@ class ItemDownloader:
                             raise e
                         logger.warning(f"Error downloading asset '{key}': {str(e)}")
         else:
-            for key, url, headers, output_path in download_tasks:
+            for key, url, headers, output_path, resolver, asset_dict in download_tasks:
                 try:
                     file_path = self._download_single_asset(
                         url=url,
@@ -162,6 +164,8 @@ class ItemDownloader:
                         output_path=output_path,
                         quiet=quiet,
                         continue_on_error=continue_on_error,
+                        resolver=resolver,
+                        asset_metadata=asset_dict,
                     )
                     if file_path:
                         results[key] = file_path
@@ -204,6 +208,8 @@ class ItemDownloader:
         output_path: Path,
         quiet: bool = False,
         continue_on_error: bool = False,
+        resolver: Optional[AssetResolver] = None,
+        asset_metadata: Optional[dict] = None,
     ) -> Optional[Path]:
         """
         Download a single asset.
@@ -214,10 +220,25 @@ class ItemDownloader:
             output_path: Directory to save the downloaded file
             quiet: Whether to suppress the progress bar
             continue_on_error: Whether to continue on error
+            resolver: The asset resolver that matched this URL. When the
+                resolver supports direct (non-HTTP) downloads (e.g. S3),
+                its ``download()`` method is tried first.
+            asset_metadata: Optional STAC asset dictionary passed to the
+                resolver for destination path resolution.
 
         Returns:
             Path to the downloaded file, or None if download failed and continue_on_error is True
         """
+        try:
+            if resolver is not None:
+                direct_result = resolver.download(url, output_path, quiet=quiet, asset_metadata=asset_metadata)
+                if direct_result is not None:
+                    return direct_result
+        except Exception as e:
+            if continue_on_error:
+                logger.warning(f"Direct download failed for {url}, falling back to HTTP: {e}")
+            else:
+                raise
         # When using proxy URLs (auto-detected from config), ensure redirects are enabled
         allow_redirects = self.allow_redirects
         if self.use_proxy_urls:
