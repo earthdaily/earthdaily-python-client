@@ -464,6 +464,7 @@ class TestItemDownloader(unittest.TestCase):
         mock_resolver = Mock()
         mock_resolver.get_download_url.return_value = "https://proxy.example.com/file.tif"
         mock_resolver.get_headers.return_value = {"Authorization": "Bearer proxy-token"}
+        mock_resolver.download.return_value = None
         mock_get_resolver.return_value = mock_resolver
 
         mock_downloader = Mock()

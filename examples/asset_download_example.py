@@ -33,14 +33,14 @@ from earthdaily._eds_config import AssetAccessMode
 from earthdaily.exceptions import EDSAPIError
 
 
-def initialize_client(asset_access_mode="presigned-urls"):
+def initialize_client(asset_access_mode="proxy-urls"):
     """Initialize the EarthDaily API client with specified asset access mode."""
     print(f"🚀 Initializing EarthDaily Client (Asset mode: {asset_access_mode})...")
 
     # Map string to enum
     mode_mapping = {"presigned-urls": AssetAccessMode.PRESIGNED_URLS, "proxy-urls": AssetAccessMode.PROXY_URLS}
 
-    config = EDSConfig(asset_access_mode=mode_mapping.get(asset_access_mode, AssetAccessMode.PRESIGNED_URLS))
+    config = EDSConfig(asset_access_mode=mode_mapping.get(asset_access_mode, AssetAccessMode.PROXY_URLS))
     client = EDSClient(config)
     print("✅ Client initialized successfully!")
     return client
@@ -180,7 +180,7 @@ def demo_basic_download():
     print("=" * 60)
 
     # Initialize client
-    client = initialize_client("presigned-urls")
+    client = initialize_client("proxy-urls")
 
     # Search for items
     items = search_for_items(client, "sentinel-2-l2a", 1)

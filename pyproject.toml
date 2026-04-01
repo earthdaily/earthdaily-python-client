@@ -1,6 +1,6 @@
 [project]
 name = "earthdaily"
-version = "1.11.1"
+version = "1.12.0"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
@@ -65,6 +65,10 @@ datacube = [
 internal = [
     "boto3>=1.35.0",
     "pystac>=1.10.0",
+    "tqdm>=4.66.5",
+]
+download = [
+    "boto3>=1.35.0",
 ]
 utils = [
     "python-dotenv>=1.0.0",

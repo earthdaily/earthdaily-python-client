@@ -864,7 +864,7 @@ wheels = [
 
 [[package]]
 name = "earthdaily"
-version = "1.11.1"
+version = "1.12.0"
 source = { editable = "." }
 dependencies = [
     { name = "requests" },
@@ -892,9 +892,13 @@ datacube = [
     { name = "xarray", version = "2025.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "xarray", version = "2025.10.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
+download = [
+    { name = "boto3" },
+]
 internal = [
     { name = "boto3" },
     { name = "pystac" },
+    { name = "tqdm" },
 ]
 legacy = [
     { name = "dask" },
@@ -972,6 +976,7 @@ tests = [
 
 [package.metadata]
 requires-dist = [
+    { name = "boto3", marker = "extra == 'download'", specifier = ">=1.35.0" },
     { name = "boto3", marker = "extra == 'internal'", specifier = ">=1.35.0" },
     { name = "dask", marker = "extra == 'datacube'" },
     { name = "dask", marker = "extra == 'legacy'", specifier = "<2025.3.0" },
@@ -1015,13 +1020,14 @@ requires-dist = [
     { name = "stackstac", marker = "extra == 'legacy'", specifier = ">=0.5.1" },
     { name = "toml", specifier = ">=0.10.2" },
     { name = "tornado", marker = "extra == 'utils'", specifier = ">=6.5.5" },
+    { name = "tqdm", marker = "extra == 'internal'", specifier = ">=4.66.5" },
     { name = "tqdm", marker = "extra == 'legacy'", specifier = ">=4.66.5" },
     { name = "tqdm", marker = "extra == 'platform'", specifier = ">=4.66.5" },
     { name = "urllib3", specifier = ">=2.6.3" },
     { name = "xarray", marker = "extra == 'datacube'", specifier = ">=2025.1.2" },
     { name = "xarray", marker = "extra == 'legacy'", specifier = ">=2025.1.2" },
 ]
-provides-extras = ["platform", "ordering", "legacy", "datacube", "internal", "utils"]
+provides-extras = ["platform", "ordering", "legacy", "datacube", "internal", "download", "utils"]
 
 [package.metadata.requires-dev]
 dev = [

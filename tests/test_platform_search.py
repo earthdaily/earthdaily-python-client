@@ -242,15 +242,14 @@ class TestCreatePystacClient(unittest.TestCase):
     def test_create_pystac_client_returns_new_instance(self, mock_client_open):
         mock_client_1 = MagicMock()
         mock_client_2 = MagicMock()
-        mock_client_3 = MagicMock()
-        mock_client_open.side_effect = [mock_client_1, mock_client_2, mock_client_3]
+        mock_client_open.side_effect = [mock_client_1, mock_client_2]
 
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
         client1 = service._create_pystac_client()
         client2 = service._create_pystac_client()
 
         self.assertIsNot(client1, client2)
-        self.assertEqual(mock_client_open.call_count, 3)
+        self.assertEqual(mock_client_open.call_count, 2)
 
     @patch("earthdaily.platform.Client.open")
     def test_create_pystac_client_uses_correct_url(self, mock_client_open):
@@ -277,18 +276,17 @@ class TestCreatePystacClient(unittest.TestCase):
     @patch("earthdaily.platform.Client.open")
     def test_create_pystac_client_fetches_fresh_token_each_call(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
-        tokens = ["token_1", "token_2", "token_3"]
+        tokens = ["token_1", "token_2"]
         self.mock_api_requester.auth.get_token.side_effect = tokens
 
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
         service._create_pystac_client()
         service._create_pystac_client()
 
-        self.assertEqual(self.mock_api_requester.auth.get_token.call_count, 3)
+        self.assertEqual(self.mock_api_requester.auth.get_token.call_count, 2)
         call_args_list = mock_client_open.call_args_list
         self.assertEqual(call_args_list[0][1]["headers"]["Authorization"], "Bearer token_1")
         self.assertEqual(call_args_list[1][1]["headers"]["Authorization"], "Bearer token_2")
-        self.assertEqual(call_args_list[2][1]["headers"]["Authorization"], "Bearer token_3")
 
 
 class TestConcurrentSearchThreadSafety(unittest.TestCase):

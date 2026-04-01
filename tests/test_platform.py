@@ -36,7 +36,13 @@ class TestPlatformService(unittest.TestCase):
         api_requester = APIRequester(config=config, auth=auth)
         platform_service = PlatformService(api_requester, config.asset_access_mode)
 
-        # Test pystac_client.Client.open
+        # pystac client is lazily created, so Client.open should not be called at init
+        mock_client_open.assert_not_called()
+
+        # Access the property to trigger lazy creation
+        self.assertEqual(platform_service.pystac_client, mock_client)
+
+        # Client.open should have been called exactly once
         mock_client_open.assert_called_once_with(
             "https://example.com/platform/v1/stac",
             stac_io=mock_client_open.call_args[1]["stac_io"],
@@ -54,8 +60,6 @@ class TestPlatformService(unittest.TestCase):
         stac_io = mock_client_open.call_args[1]["stac_io"]
         self.assertIsInstance(stac_io, StacApiIO)
         self.assertIsNotNone(stac_io.session)
-
-        self.assertEqual(platform_service.pystac_client, mock_client)
 
 
 if __name__ == "__main__":
