@@ -4,10 +4,40 @@ from pystac import Item
 
 from earthdaily.datacube._builder import _deduplicate_items, build_datacube
 from earthdaily.datacube._datacube import Datacube
+from earthdaily.datacube._enrichment import RasterMetadataEnricher
 from earthdaily.datacube.constants import DEFAULT_DTYPE, DEFAULT_ENGINE, DEFAULT_HREF_PATH, DEFAULT_NODATA
 
 
 class DatacubeService:
+    def enrich_raster_metadata(
+        self,
+        item: Item,
+        *,
+        force: bool = False,
+    ) -> Item:
+        """
+        Enrich a STAC item with projection and raster band metadata by reading asset files.
+
+        Opens each GeoTIFF asset with rasterio to extract CRS, transform, shape,
+        and per-band information (data type, nodata, scale, offset), then writes
+        these fields back into the STAC item structure as proj: and raster:bands
+        extension properties.
+
+        Parameters
+        ----------
+        item : Item
+            STAC item to enrich. The input item is not mutated.
+        force : bool, default False
+            If False, skip assets that already carry projection/raster metadata.
+            If True, overwrite existing values.
+
+        Returns
+        -------
+        Item
+            A new item with enriched metadata.
+        """
+        return RasterMetadataEnricher.enrich_item(item, force=force)
+
     def create(
         self,
         items: list[Item],
