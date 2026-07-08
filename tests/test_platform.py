@@ -10,7 +10,7 @@ from earthdaily.platform import PlatformService
 
 
 class TestPlatformService(unittest.TestCase):
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     @patch("earthdaily._auth_client.Authentication.get_token", return_value="mock_token")
     @patch("earthdaily._auth_client.requests.Session.post")
     def test_platform_service_initialization(self, mock_post, mock_get_token, mock_client_open):

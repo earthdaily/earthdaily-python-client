@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0]
+
+### Removed
+
+- **Legacy module removed**: The `earthdaily.legacy` package and `client.legacy` interface have been completely removed. This includes the legacy datacube, search, cloud masking, zonal statistics, whittaker smoothing, xarray accessor, asset mapper, harmonizer, and all related datasets.
+- **`[legacy]` optional dependency group**: The `pip install "earthdaily[legacy]"` install target no longer exists.
+- Legacy examples (`examples/legacy_examples/`, `examples/legacy_datacube_example.py`)
+- Legacy tests (`tests/test_legacy/`)
+- Migration guide (`docs/migration-v0-to-v1.md`)
+
+### Notes
+
+- Users who need legacy v0 datacube functionality should pin to `earthdaily<2.0.0`. The 1.x.x line will continue to receive security and critical bug fixes only.
+- The modern `client.datacube` module (`pip install "earthdaily[datacube]"`) is the replacement for all legacy datacube functionality.
+
+## [1.14.0]
+
+### Added
+
+- `EDSConfig.platform_cookie_enabled` and `EDSConfig.platform_cookie_auto_refresh` flags for proxy URL mode
+- `EDSClient.get_platform_cookie_file()` to write a short-lived platform asset cookie to a Netscape-format file for use with `GDAL_HTTP_COOKIEFILE`
+- `EDSClient.get_platform_cookie()` helper returning the raw cookie value
+- `EDSClient.start_platform_cookie_refresh()` / `stop_platform_cookie_refresh()` for the background refresh thread
+- `EDSClient.close()` and context-manager support
+
 ## [1.13.0]
 
 ### Added

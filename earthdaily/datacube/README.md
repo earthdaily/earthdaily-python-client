@@ -94,14 +94,6 @@ earthdaily/datacube/
 └── exceptions.py            # Custom exceptions
 ```
 
-## Design Principles
-
-- **Immutable**: Operations return new Datacube instances (functional style)
-- **Modular**: Separate files for different concerns
-- **Independent**: No legacy dependencies - all implementations are self-contained
-- **Type-safe**: Full type hints with mypy validation (Python 3.10+)
-- **Flexible**: Extensible architecture for future enhancements
-
 ## Examples
 
 See `examples/datacube_new_example.py` for a complete working example.

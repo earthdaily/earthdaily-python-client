@@ -10,7 +10,7 @@ The EarthDaily Python Client is a comprehensive library for interacting with the
 
 - **Platform API Access**: Full integration with EarthDaily platform services
 - **STAC Item Management**: Complete CRUD operations for STAC items
-- **Legacy Support**: Backward compatibility with v0 datacube functionality
+- **Datacube Module**: Modern, self-contained datacube creation and manipulation
 - **Modern Architecture**: Streamlined client design with comprehensive error handling
 - **Flexible Installation**: Modular installation options for different use cases
 
@@ -28,22 +28,26 @@ pip install earthdaily
 pip install "earthdaily[platform]"
 ```
 
-### Legacy Support (v0 Compatibility)
+### Datacube Support
 ```bash
-pip install "earthdaily[legacy]"
+pip install "earthdaily[datacube]"
 ```
 
 ### Full Installation (All Features)
 ```bash
-pip install "earthdaily[platform,legacy]"
+pip install "earthdaily[platform,datacube]"
 ```
 
 ### Full Installation with utils (for .env file and Jupyter notebooks)
 ```bash
-pip install "earthdaily[platform,legacy,utils]"
+pip install "earthdaily[platform,datacube,utils]"
 ```
 
-## 🔧 Environment Setup
+> **Looking for v1/legacy functionality?** The legacy module (`client.legacy`) was removed in v2.0.0.
+> If you need legacy datacube features, pin to v1.x.x (`earthdaily<2.0.0`).
+> The v1.x.x line will continue to receive security and critical bug fixes only.
+
+## Environment Setup
 
 The EarthPlatform STAC API is protected by bearer authentication. A bearer token is generated using OAuth Client Credentials Flow. The required `client_id`, `client_secret`, and `access_token_url` values can be found on the [Account Management Console](https://console.earthdaily.com/account).
 
@@ -125,6 +129,46 @@ config = EDSConfig(
 - `retry_backoff_factor=0.5`: Delays of 0.5s, 1s, 2s  
 - `retry_backoff_factor=2.0`: Delays of 2s, 4s, 8s
 
+### 🍪 Proxy Asset URLs And Cookie File
+
+When `asset_access_mode="proxy-urls"`, assets are served through authenticated
+proxy URLs. GDAL/rasterio cannot send the EDS bearer token, so the client can
+fetch a short-lived asset cookie and write it to a Netscape-format file that
+you pass through `GDAL_HTTP_COOKIEFILE`.
+
+Enable the feature on `EDSConfig` and ask the client for a cookie file. You
+must provide `path` explicitly so the credential-like file does not end up in
+an unexpected location (for example, committed to a repository):
+
+```python
+import rasterio
+from earthdaily import EDSClient, EDSConfig
+
+config = EDSConfig(
+    asset_access_mode="proxy-urls",
+    platform_cookie_enabled=True,
+    platform_cookie_auto_refresh=True,
+)
+
+with EDSClient(config) as client:
+    cookie_file = client.get_platform_cookie_file(
+        path="/tmp/earthdaily-platform-cookies.txt"
+    )
+
+    with rasterio.Env(GDAL_HTTP_COOKIEFILE=str(cookie_file)):
+        ...  # e.g. odc.stac.stac_load(...), rasterio.open(...)
+```
+
+- `platform_cookie_auto_refresh=True` starts a background daemon thread that
+  refreshes the cookie file in place before it expires.
+- `EDSClient.close()` (called automatically by the `with` statement) stops the
+  refresh thread and deletes the cookie file.
+- The parent directory of `path` must already exist; the client never creates
+  directories for you.
+
+See the [EarthMosaics notebook](examples/applications/Introduction%20to%20EDA%20EarthMosaics/Introduction%20to%20EDA%20EarthMosaics.ipynb)
+for a full example.
+
 ## 🌍 Core Features
 
 ### Platform API Integration
@@ -159,23 +203,6 @@ stac_item = {
 client.platform.stac_item.create_item("your-collection", stac_item)
 ```
 
-### Legacy Datacube Support
-
-Access v0 functionality through the legacy interface:
-```python
-from earthdaily.legacy.datasets import load_pivot
-
-# Load geometry and create datacube
-geometry = load_pivot()
-datacube = client.legacy.datacube(
-    "sentinel-2-l2a",
-    assets=["blue", "green", "red", "nir"],
-    intersects=geometry,
-    datetime=["2022-08-01", "2022-08-09"],
-    mask_with="native"
-)
-```
-
 ## 🏗️ Architecture Overview
 
 The client is organized into main modules:
@@ -187,10 +214,9 @@ The client is organized into main modules:
   - `bulk_insert`: Bulk data insertion
   - `bulk_delete`: Bulk data deletion
 
-- **`client.legacy`**: v0 compatibility layer
-  - `datacube()`: Create analysis-ready datacubes
-  - `search()`: Legacy search functionality
-  - Access to existing v0 methods
+- **`client.datacube`**: Datacube creation and manipulation
+  - `create()`: Create analysis-ready datacubes from STAC items
+  - Masking, temporal aggregation, spectral indices, zonal statistics, and more
 
 ## 🔧 Platform API Methods
 
@@ -366,51 +392,6 @@ for collection in collections:
     print(f"Collection: {collection.id}")
 ```
 
-## 🔄 Legacy Methods (`client.legacy`)
-
-### Create Datacubes
-```python
-from earthdaily.legacy.datasets import load_pivot
-
-# Load sample geometry
-geometry = load_pivot()
-
-# Create analysis-ready datacube
-datacube = client.legacy.datacube(
-    collections="sentinel-2-l2a",
-    assets=["blue", "green", "red", "nir"],
-    intersects=geometry,
-    datetime=["2022-08-01", "2022-08-09"],
-    mask_with="native",  # Apply cloud masking
-    clear_cover=50,      # Minimum 50% clear pixels
-    groupby_date="mean"  # Aggregate by date
-)
-```
-
-### Search Items
-```python
-# Search for items (legacy interface)
-items = client.legacy.search(
-    collections="sentinel-2-l2a",
-    intersects=geometry,
-    datetime=["2022-08-01", "2022-08-09"],
-    limit=100
-)
-print(f"Found {len(items)} items")
-```
-
-### Multi-Collection Datacubes
-```python
-# Create datacube from multiple collections
-datacube = client.legacy.datacube(
-    collections=["sentinel-2-l2a", "landsat-c2l2-sr"],
-    assets=["red", "green", "blue"],
-    intersects=geometry,
-    datetime="2022-08",
-    cross_calibration_collection="landsat-c2l2-sr"
-)
-```
-
 ## 🔍 Usage Examples
 
 ### Data Discovery
@@ -436,7 +417,6 @@ for item in items:
 
 - [📖 **EDA Documentation**](https://earthdaily.github.io/EDA-Documentation/)
 - [📖 **Full API Documentation**](https://earthdaily.github.io/earthdaily-python-client/)
-- [🔄 **Migration Guide (v0 → v1)**](https://github.com/earthdaily/earthdaily-python-client/blob/main/docs/migration-v0-to-v1.md)
 - [📝 **Quick Start Examples**](https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/)
 - [🧪 **Jupyter Notebooks**](https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/applications/)
 

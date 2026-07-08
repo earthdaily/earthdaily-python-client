@@ -19,7 +19,7 @@ class TestPlatformSearch(unittest.TestCase):
         self.mock_api_requester.config.max_retries = 3
         self.mock_api_requester.config.retry_backoff_factor = 0.5
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_search_without_days_per_chunk_uses_pystac_client(self, mock_client_open):
         mock_client = MagicMock()
         mock_items = [self._create_mock_item("item1"), self._create_mock_item("item2")]
@@ -40,7 +40,7 @@ class TestPlatformSearch(unittest.TestCase):
         )
         self.assertEqual(len(result), 2)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_search_with_days_per_chunk_none_uses_pystac_client(self, mock_client_open):
         mock_client = MagicMock()
         mock_items = [self._create_mock_item("item1")]
@@ -57,7 +57,7 @@ class TestPlatformSearch(unittest.TestCase):
         mock_client.search.assert_called_once()
         self.assertEqual(len(result), 1)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_search_without_datetime_uses_pystac_client(self, mock_client_open):
         mock_client = MagicMock()
         mock_items = [self._create_mock_item("item1")]
@@ -74,7 +74,7 @@ class TestPlatformSearch(unittest.TestCase):
         mock_client.search.assert_called_once()
         self.assertEqual(len(result), 1)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_search_with_days_per_chunk_auto_executes_concurrent(self, mock_client_open):
         mock_client = MagicMock()
         mock_items = [self._create_mock_item("item1")]
@@ -92,7 +92,7 @@ class TestPlatformSearch(unittest.TestCase):
         self.assertIsInstance(result, ItemCollection)
         self.assertGreater(mock_client_open.call_count, 1)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_search_with_days_per_chunk_int_executes_concurrent(self, mock_client_open):
         mock_client = MagicMock()
         mock_items = [self._create_mock_item("item1")]
@@ -130,7 +130,7 @@ class TestSplitDatetime(unittest.TestCase):
         self.mock_api_requester.config.max_retries = 3
         self.mock_api_requester.config.retry_backoff_factor = 0.5
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_string_format(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -142,7 +142,7 @@ class TestSplitDatetime(unittest.TestCase):
         for date_range in result:
             self.assertIn("/", date_range)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_tuple_format(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -155,7 +155,7 @@ class TestSplitDatetime(unittest.TestCase):
         self.assertIsInstance(result, list)
         self.assertGreater(len(result), 1)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_auto_calculates_chunks(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -166,7 +166,7 @@ class TestSplitDatetime(unittest.TestCase):
         self.assertGreater(len(result), 1)
         self.assertLessEqual(len(result), 15)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_small_range_returns_single(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -176,7 +176,7 @@ class TestSplitDatetime(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0], "2023-01-01/2023-01-15")
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_single_date_returns_as_is(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -186,7 +186,7 @@ class TestSplitDatetime(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0], "2023-01-01")
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_zero_days_per_chunk_raises_error(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -196,7 +196,7 @@ class TestSplitDatetime(unittest.TestCase):
 
         self.assertIn("days_per_chunk must be a positive integer", str(context.exception))
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_negative_days_per_chunk_raises_error(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -206,7 +206,7 @@ class TestSplitDatetime(unittest.TestCase):
 
         self.assertIn("days_per_chunk must be a positive integer", str(context.exception))
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_open_ended_start_raises_error(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -216,7 +216,7 @@ class TestSplitDatetime(unittest.TestCase):
 
         self.assertIn("days_per_chunk cannot be used with open-ended datetime intervals", str(context.exception))
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_open_ended_end_raises_error(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -238,7 +238,7 @@ class TestCreatePystacClient(unittest.TestCase):
         self.mock_api_requester.config.max_retries = 3
         self.mock_api_requester.config.retry_backoff_factor = 0.5
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_create_pystac_client_returns_new_instance(self, mock_client_open):
         mock_client_1 = MagicMock()
         mock_client_2 = MagicMock()
@@ -251,7 +251,7 @@ class TestCreatePystacClient(unittest.TestCase):
         self.assertIsNot(client1, client2)
         self.assertEqual(mock_client_open.call_count, 2)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_create_pystac_client_uses_correct_url(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
 
@@ -261,7 +261,7 @@ class TestCreatePystacClient(unittest.TestCase):
         call_args = mock_client_open.call_args
         self.assertEqual(call_args[0][0], "https://api.example.com/platform/v1/stac")
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_create_pystac_client_includes_auth_header(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
 
@@ -273,7 +273,7 @@ class TestCreatePystacClient(unittest.TestCase):
         self.assertIn("Authorization", headers)
         self.assertEqual(headers["Authorization"], "Bearer mock_token")
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_create_pystac_client_fetches_fresh_token_each_call(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         tokens = ["token_1", "token_2"]
@@ -299,7 +299,7 @@ class TestConcurrentSearchThreadSafety(unittest.TestCase):
         self.mock_api_requester.config.max_retries = 3
         self.mock_api_requester.config.retry_backoff_factor = 0.5
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_concurrent_search_creates_separate_clients(self, mock_client_open):
         clients_created = []
 
@@ -324,7 +324,7 @@ class TestConcurrentSearchThreadSafety(unittest.TestCase):
         self.assertEqual(len(unique_clients), len(clients_created))
 
     @patch("earthdaily.platform.ThreadPoolExecutor")
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_max_workers_capped_at_10(self, mock_client_open, mock_executor_class):
         mock_client = MagicMock()
         mock_client.search.return_value.items.return_value = iter([])
@@ -348,7 +348,7 @@ class TestConcurrentSearchThreadSafety(unittest.TestCase):
         actual_max_workers = mock_executor_class.call_args[1]["max_workers"]
         self.assertLessEqual(actual_max_workers, 10)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_max_items_with_days_per_chunk_raises_error(self, mock_client_open):
         mock_client = MagicMock()
         mock_client_open.return_value = mock_client
@@ -366,7 +366,7 @@ class TestConcurrentSearchThreadSafety(unittest.TestCase):
         self.assertIn("max_items cannot be used with concurrent search", str(context.exception))
         self.assertIn("max_items_per_chunk", str(context.exception))
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_max_workers_zero_raises_error(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -381,7 +381,7 @@ class TestConcurrentSearchThreadSafety(unittest.TestCase):
 
         self.assertIn("max_workers must be a positive integer", str(context.exception))
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_max_workers_negative_raises_error(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
@@ -396,7 +396,7 @@ class TestConcurrentSearchThreadSafety(unittest.TestCase):
 
         self.assertIn("max_workers must be a positive integer", str(context.exception))
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_max_items_per_chunk_passed_to_chunk_searches(self, mock_client_open):
         chunk_search_kwargs = []
 
@@ -425,7 +425,7 @@ class TestConcurrentSearchThreadSafety(unittest.TestCase):
         for kwargs in chunk_search_kwargs:
             self.assertEqual(kwargs.get("max_items"), 100)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_split_datetime_creates_non_overlapping_chunks(self, mock_client_open):
         mock_client_open.return_value = MagicMock()
         service = PlatformService(self.mock_api_requester, AssetAccessMode.PRESIGNED_URLS)
