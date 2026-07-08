@@ -1,10 +1,10 @@
+from __future__ import annotations
+
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
-from typing import Any, Literal, Optional, Union
+from typing import TYPE_CHECKING, Any, Literal, Optional, Union
 
 from pystac import ItemCollection
-from pystac_client import Client
-from pystac_client.stac_api_io import StacApiIO
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -15,6 +15,9 @@ from earthdaily.platform._bulk_delete import BulkDeleteService
 from earthdaily.platform._bulk_insert import BulkInsertService
 from earthdaily.platform._bulk_search import BulkSearchService
 from earthdaily.platform._stac_item import StacItemService
+
+if TYPE_CHECKING:
+    from pystac_client import Client
 
 logger = LoggerConfig(logger_name=__name__).get_logger()
 
@@ -66,6 +69,9 @@ class PlatformService:
 
     def _create_pystac_client(self) -> Client:
         """Create a new pystac Client instance with configured retry and fresh auth token."""
+        from pystac_client import Client
+        from pystac_client.stac_api_io import StacApiIO
+
         stac_io = StacApiIO()
         retry_strategy = Retry(
             total=self.api_requester.config.max_retries,

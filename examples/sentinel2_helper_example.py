@@ -14,7 +14,7 @@ Features demonstrated:
 
 Requirements:
 - Set your EDS credentials as environment variables or in a .env file
-- Install with collection helpers support: pip install "earthdaily[legacy,platform]"
+- Install with collection helpers support: pip install "earthdaily[datacube,platform]"
 """
 
 from datetime import datetime, timedelta

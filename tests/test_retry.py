@@ -23,7 +23,7 @@ class TestRetryFunctionality(unittest.TestCase):
         self.assertEqual(api_requester.http_client.max_retries, 5)
         self.assertEqual(api_requester.http_client.retry_backoff_factor, 2.0)
 
-    @patch("earthdaily.platform.Client.open")
+    @patch("pystac_client.Client.open")
     def test_platform_service_retry_session(self, mock_client_open):
         mock_client = Mock()
         mock_client_open.return_value = mock_client

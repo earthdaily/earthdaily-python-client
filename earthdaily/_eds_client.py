@@ -1,13 +1,9 @@
+from pathlib import Path
+
 from earthdaily._api_requester import APIRequester
 from earthdaily._auth_client import Authentication
 from earthdaily._eds_config import EDSConfig
-
-try:
-    from earthdaily.legacy import EarthDataStore
-
-    _HAS_LEGACY = True
-except ImportError:
-    _HAS_LEGACY = False
+from earthdaily._platform_cookie import DEFAULT_TTL_SECONDS, PlatformCookieManager
 
 try:
     from earthdaily.platform import PlatformService
@@ -77,6 +73,7 @@ class EDSClient:
         self.config = config
         self.auth = self._create_auth() if not config.bypass_auth else None
         self.api_requester = APIRequester(config=config, auth=self.auth)
+        self._platform_cookie_manager: PlatformCookieManager | None = None
 
         if not config.bypass_auth and self.auth:
             # Validate credentials on initialization to fail fast
@@ -116,29 +113,6 @@ class EDSClient:
         if not hasattr(self, "_platform_service"):
             self._platform_service = PlatformService(self.api_requester, self.config.asset_access_mode)
         return self._platform_service
-
-    @property
-    def legacy(self):
-        """
-        Lazily initializes and returns the LegacyService for interacting with v0.5.x earthdaily-python-client methods.
-
-        Returns:
-        -------
-        LegacyService:
-            The service that interacts with legacy API operations.
-
-        Raises:
-        -------
-        ImportError:
-            If the legacy module dependencies are not available.
-        """
-        if not _HAS_LEGACY:
-            raise ImportError(
-                "Legacy functionality requires additional dependencies. Install with: pip install 'earthdaily[legacy]'"
-            )
-        if not hasattr(self, "_legacy_service"):
-            self._legacy_service = EarthDataStore(self.api_requester)
-        return self._legacy_service
 
     @property
     def internal(self):
@@ -207,3 +181,115 @@ class EDSClient:
         if not hasattr(self, "_datacube_service"):
             self._datacube_service = DatacubeService()
         return self._datacube_service
+
+    def get_platform_cookie_file(
+        self,
+        path: str | Path,
+        force_refresh: bool = False,
+        ttl_seconds: int = DEFAULT_TTL_SECONDS,
+    ) -> Path:
+        """
+        Fetch a platform asset cookie and write it to a Netscape-format file for GDAL.
+
+        The returned file can be passed to GDAL/rasterio via the
+        `GDAL_HTTP_COOKIEFILE` environment variable (for example, through
+        `rasterio.Env(GDAL_HTTP_COOKIEFILE=...)` or `odc.stac.configure_rio(...)`
+        with dask) so that authenticated proxy asset URLs can be opened
+        without an `Authorization` header.
+
+        This method requires `EDSConfig(asset_access_mode="proxy-urls",
+        platform_cookie_enabled=True)`. If `platform_cookie_auto_refresh=True`,
+        a background daemon thread is started on first call to refresh the
+        cookie file before it expires.
+
+        Parameters
+        ----------
+        path : str | Path
+            Required path to the cookie file. The parent directory must already
+            exist; this method does not create directories. Choose a location
+            outside your repository (for example `/tmp/earthdaily-platform-cookies.txt`)
+            to avoid accidentally committing the credential-like file.
+        force_refresh : bool, default False
+            If True, force a fresh cookie fetch even if the current one is
+            still valid.
+        ttl_seconds : int, default 3600
+            Desired cookie lifetime in seconds. Sent to the cookie endpoint as
+            the `max_age` field. The server may clamp this value.
+
+        Returns
+        -------
+        Path
+            The resolved cookie file path.
+
+        Raises
+        ------
+        ValueError
+            If cookie support is not enabled, the client is not in proxy-urls
+            mode, `path` is missing, or the parent directory does not exist.
+        EDSAPIError
+            If the cookie endpoint returns an error or the response is missing
+            the expected `PLATFORM_ASSET` cookie.
+        """
+        manager = self._get_or_create_platform_cookie_manager()
+        return manager.get_cookie_file(path=path, force_refresh=force_refresh, ttl_seconds=ttl_seconds)
+
+    def get_platform_cookie(self) -> str:
+        """
+        Return the current platform asset cookie value, refreshing if needed.
+
+        Useful for non-GDAL callers that want to set a `Cookie` header directly.
+        Requires the same configuration as `get_platform_cookie_file()`.
+
+        Returns
+        -------
+        str
+            The raw cookie token value.
+
+        Raises
+        ------
+        ValueError
+            If cookie support is not enabled or the client is not in
+            proxy-urls mode.
+        EDSAPIError
+            If the cookie endpoint returns an error.
+        """
+        manager = self._get_or_create_platform_cookie_manager()
+        return manager.get_cookie_value()
+
+    def start_platform_cookie_refresh(self) -> None:
+        """
+        Start the background daemon thread that refreshes the platform cookie file.
+
+        Has no effect if already running. Requires a prior successful call to
+        `get_platform_cookie_file(path=...)` so a target path is known.
+        """
+        manager = self._get_or_create_platform_cookie_manager()
+        manager.start_auto_refresh()
+
+    def stop_platform_cookie_refresh(self) -> None:
+        """
+        Stop the background platform cookie refresh thread if it is running.
+        """
+        if self._platform_cookie_manager is not None:
+            self._platform_cookie_manager.stop_auto_refresh()
+
+    def close(self) -> None:
+        """
+        Release client-managed resources.
+
+        Stops the background platform cookie refresh thread and deletes the
+        cookie file if one was written by this client.
+        """
+        if self._platform_cookie_manager is not None:
+            self._platform_cookie_manager.close()
+
+    def __enter__(self) -> "EDSClient":
+        return self
+
+    def __exit__(self, exc_type, exc, tb) -> None:
+        self.close()
+
+    def _get_or_create_platform_cookie_manager(self) -> PlatformCookieManager:
+        if self._platform_cookie_manager is None:
+            self._platform_cookie_manager = PlatformCookieManager(api_requester=self.api_requester, config=self.config)
+        return self._platform_cookie_manager

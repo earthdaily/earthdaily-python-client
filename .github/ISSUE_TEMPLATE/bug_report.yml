@@ -41,7 +41,7 @@ body:
       description: Include runtime details so we can reproduce the issue.
       placeholder: |
         - earthdaily version: 1.2.3
-        - Installation extras: platform, legacy
+        - Installation extras: platform, datacube
         - Python version: 3.12
         - OS: macOS 14.6
         - Execution context: local shell / notebook / CI

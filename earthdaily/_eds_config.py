@@ -85,6 +85,16 @@ class EDSConfig:
     eumetsat_client_secret: str, optional
         EUMETSAT API client secret for downloading EUMETSAT assets.
         If not provided, it defaults to `EUMETSAT_CLIENT_SECRET` from environment variables.
+    platform_cookie_enabled: bool, optional
+        Whether to enable the platform asset cookie feature. When enabled,
+        `EDSClient.get_platform_cookie_file()` can fetch a short-lived cookie
+        from the platform and write it to a Netscape-format file suitable for
+        GDAL (`GDAL_HTTP_COOKIEFILE`) when `asset_access_mode="proxy-urls"`.
+        Defaults to False.
+    platform_cookie_auto_refresh: bool, optional
+        When True, a background daemon thread refreshes the platform asset
+        cookie file before it expires for as long as the client is alive.
+        Has no effect unless `platform_cookie_enabled=True`. Defaults to False.
 
     Raises:
     -------
@@ -111,6 +121,9 @@ class EDSConfig:
     earthdata_token: str = field(default_factory=lambda: os.getenv("EARTHDATA_TOKEN", ""))
     eumetsat_client_id: str = field(default_factory=lambda: os.getenv("EUMETSAT_CLIENT_ID", ""))
     eumetsat_client_secret: str = field(default_factory=lambda: os.getenv("EUMETSAT_CLIENT_SECRET", ""))
+
+    platform_cookie_enabled: bool = False
+    platform_cookie_auto_refresh: bool = False
 
     def __post_init__(self):
         """Validate that required fields are provided and raise errors if not."""

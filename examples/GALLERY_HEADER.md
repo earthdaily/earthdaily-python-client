@@ -1,14 +1,14 @@
 # EarthDaily Python Client Examples
 
-Welcome to the EarthDaily Python Client examples! These examples demonstrate the key features and capabilities of the v1 client.
+Welcome to the EarthDaily Python Client examples! These examples demonstrate the key features and capabilities of the v2 client.
 
 ## Available Examples
 
 ### 🚀 [Quick Start](quick_start.py)
-Get started quickly with searching and exploring STAC items using the new v1 API.
+Get started quickly with searching and exploring STAC items using the platform API.
 
 ### 📊 [Datacube Creation](datacube_example.py) 
-Learn how to create datacubes using the legacy API for backward compatibility with v0.x code.
+Learn how to create datacubes using the datacube module.
 
 ### 📥 [Asset Download](asset_download_example.py)
 Download satellite data assets with different access modes and configurations.
@@ -29,7 +29,7 @@ Perform large-scale searches and downloads using the bulk search functionality.
 2. **Install the required dependencies**:
    ```bash
    # For all examples
-   pip install "earthdaily[platform,legacy]"
+   pip install "earthdaily[platform,datacube]"
    ```
 
 3. **Run an example**:

@@ -1,6 +1,6 @@
 [project]
 name = "earthdaily"
-version = "1.13.0"
+version = "2.0.0"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
@@ -23,28 +23,6 @@ platform = [
 ]
 ordering = [
     "pystac>=1.12.1",
-]
-legacy = [
-    "tqdm>=4.66.5",
-    "joblib>=1.4.2",
-    "numpy>=2.2.2",
-    "pystac>=1.12.1",
-    "pandas>=2.2.3",
-    "pystac-client>=0.8.6",
-    "geopandas>=1.1.2",  # see https://github.com/advisories/GHSA-6497-prx7-gpmq
-    "xarray>=2025.1.2",
-    "rasterio>=1.4.3",
-    "scipy>=1.15.1",
-    "stackstac>=0.5.1",
-    "odc-stac>=0.3.11",
-    "psutil>=6.1.1",
-    "rioxarray>=0.18.2",
-    "spyndex>=0.7.0",
-    "pyarrow>=19.0.0",
-    "dask<2025.3.0",  # see: https://github.com/earthdaily/earthdaily-python-client/issues/173
-    "dask-image>=2024.5.3",
-    "flox (>=0.10.0,<0.11.0)",
-    "protobuf>=6.33.5",  # see https://github.com/advisories/GHSA-7gcm-g887-7qv7
 ]
 datacube = [
     "numpy>=2.2.2",
@@ -135,24 +113,16 @@ module = [
     "shapely.*",
     "rioxarray.*",
     "odc.*",
-    "stackstac.*",
     "dask.*",
-    "dask_image.*",
-    "numba.*",
     "rich.*",
-    "xvec.*",
     "spyndex.*",
-    "joblib.*",
     "matplotlib.*",
     "toml.*",
-    "psutil.*",
-    "pytz.*",
     "rasterio.*",
     "pystac.*",
     "numpy.*",
     "click.*",
     "nbformat.*",
     "nbclient.*",
-    "pyarrow.*",
 ]
 ignore_missing_imports = true
