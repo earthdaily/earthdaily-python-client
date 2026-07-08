@@ -3,7 +3,7 @@ name: Publish to PyPI
 on:
   push:
     tags:
-      - "1.*"  # Matches tags like 1.0.0b1, 1.0.0, 1.1.0, etc.
+      - "2.*"
 
 jobs:
   pypi-publish:
