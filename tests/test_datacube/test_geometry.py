@@ -2,7 +2,7 @@ import unittest
 
 import geopandas as gpd
 import numpy as np
-from shapely.geometry import box
+from shapely.geometry import LineString, MultiPolygon, Point, Polygon, box
 
 from earthdaily.datacube._geometry import bbox_to_geopandas, geometry_to_geopandas
 from earthdaily.datacube.constants import DEFAULT_BBOX_CRS
@@ -116,6 +116,57 @@ class TestGeometryToGeopandas(unittest.TestCase):
         invalid_string = "not a valid geometry"
         with self.assertRaises(ValueError):
             geometry_to_geopandas(invalid_string)
+
+    def test_shapely_polygon(self):
+        polygon = Polygon([(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)])
+        result = geometry_to_geopandas(polygon)
+        self.assertIsInstance(result, gpd.GeoDataFrame)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result.crs, DEFAULT_BBOX_CRS)
+        self.assertTrue(result.geometry.iloc[0].equals(polygon))
+
+    def test_shapely_point(self):
+        point = Point(1, 2)
+        result = geometry_to_geopandas(point)
+        self.assertIsInstance(result, gpd.GeoDataFrame)
+        self.assertTrue(result.geometry.iloc[0].equals(point))
+
+    def test_shapely_multipolygon(self):
+        multipolygon = MultiPolygon([box(0, 0, 1, 1), box(2, 2, 3, 3)])
+        result = geometry_to_geopandas(multipolygon)
+        self.assertIsInstance(result, gpd.GeoDataFrame)
+        self.assertTrue(result.geometry.iloc[0].equals(multipolygon))
+
+    def test_shapely_linestring(self):
+        linestring = LineString([(0, 0), (1, 1)])
+        result = geometry_to_geopandas(linestring)
+        self.assertIsInstance(result, gpd.GeoDataFrame)
+        self.assertTrue(result.geometry.iloc[0].equals(linestring))
+
+    def test_object_with_geo_interface(self):
+        class CustomGeometry:
+            __geo_interface__ = {
+                "type": "Polygon",
+                "coordinates": [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]],
+            }
+
+        result = geometry_to_geopandas(CustomGeometry())
+        self.assertIsInstance(result, gpd.GeoDataFrame)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result.crs, DEFAULT_BBOX_CRS)
+
+    def test_geodataframe_still_returned_as_is(self):
+        # GeoDataFrame also exposes __geo_interface__; the identity fast-path must win.
+        gdf = gpd.GeoDataFrame(geometry=[box(0, 0, 1, 1)], crs="EPSG:3857")
+        result = geometry_to_geopandas(gdf)
+        self.assertIs(result, gdf)
+        self.assertEqual(result.crs, "EPSG:3857")
+
+    def test_geoseries_crs_preserved_over_geo_interface(self):
+        # GeoSeries also exposes __geo_interface__; its CRS must not be lost.
+        gs = gpd.GeoSeries([box(0, 0, 1, 1)], crs="EPSG:3857")
+        result = geometry_to_geopandas(gs)
+        self.assertEqual(result.crs, "EPSG:3857")
 
     def test_unsupported_type(self):
         with self.assertRaises(ValueError) as context:

@@ -229,7 +229,7 @@ class TestDatacubeMethods(unittest.TestCase):
         result = self.dc.select_time(start="2024-01-02", end="2024-01-04")
 
         self.assertIsInstance(result, Datacube)
-        mock_select_time.assert_called_once_with(self.dataset, "2024-01-02", "2024-01-04")
+        mock_select_time.assert_called_once_with(self.dataset, "2024-01-02", "2024-01-04", None)
 
     @patch("earthdaily.datacube._datacube.rechunk_datacube")
     def test_rechunk(self, mock_rechunk):

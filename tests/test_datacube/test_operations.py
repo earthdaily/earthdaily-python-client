@@ -224,6 +224,94 @@ class TestSelectTimeRange(unittest.TestCase):
         with self.assertRaises(TypeError):
             select_time_range(self.dataset, start=start)
 
+    def test_select_single_date(self):
+        result = select_time_range(self.dataset, time="2024-01-03")
+        self.assertEqual(len(result.time), 1)
+        self.assertEqual(pd.Timestamp(result.time.values[0]), pd.Timestamp("2024-01-03"))
+
+    def test_select_multiple_dates(self):
+        result = select_time_range(self.dataset, time=["2024-01-03", "2024-01-07"])
+        self.assertEqual(len(result.time), 2)
+        self.assertEqual(
+            [str(pd.Timestamp(t).date()) for t in result.time.values],
+            ["2024-01-03", "2024-01-07"],
+        )
+
+    def test_select_multiple_dates_excludes_dates_in_between(self):
+        result = select_time_range(self.dataset, time=["2024-01-03", "2024-01-07"])
+        selected = [str(pd.Timestamp(t).date()) for t in result.time.values]
+        self.assertNotIn("2024-01-04", selected)
+        self.assertNotIn("2024-01-05", selected)
+
+    def test_select_date_only_matches_all_times_on_that_day(self):
+        times = pd.to_datetime(["2024-01-03T09:00:00", "2024-01-03T14:30:00", "2024-01-04T09:00:00"])
+        dataset = xr.Dataset(
+            {"band1": (["time", "y", "x"], np.random.rand(3, 10, 10))},
+            coords={"time": times, "y": np.arange(10), "x": np.arange(10)},
+        )
+
+        result = select_time_range(dataset, time="2024-01-03")
+        self.assertEqual(len(result.time), 2)
+
+    def test_select_exact_timestamp(self):
+        times = pd.to_datetime(["2024-01-03T09:00:00", "2024-01-03T14:30:00"])
+        dataset = xr.Dataset(
+            {"band1": (["time", "y", "x"], np.random.rand(2, 10, 10))},
+            coords={"time": times, "y": np.arange(10), "x": np.arange(10)},
+        )
+
+        result = select_time_range(dataset, time="2024-01-03T14:30:00")
+        self.assertEqual(len(result.time), 1)
+        self.assertEqual(pd.Timestamp(result.time.values[0]), pd.Timestamp("2024-01-03T14:30:00"))
+
+    def test_select_time_accepts_timestamp_objects(self):
+        result = select_time_range(self.dataset, time=pd.Timestamp("2024-01-03"))
+        self.assertEqual(len(result.time), 1)
+
+    def test_select_time_accepts_datetime64(self):
+        result = select_time_range(self.dataset, time=np.datetime64("2024-01-03"))
+        self.assertEqual(len(result.time), 1)
+
+    def test_select_time_preserves_requested_order_by_time(self):
+        result = select_time_range(self.dataset, time=["2024-01-07", "2024-01-03"])
+        selected = [str(pd.Timestamp(t).date()) for t in result.time.values]
+        self.assertEqual(selected, ["2024-01-03", "2024-01-07"])
+
+    def test_select_time_not_found_raises_error(self):
+        with self.assertRaises(DatacubeOperationError) as context:
+            select_time_range(self.dataset, time="2025-06-01")
+        self.assertIn("No data found for time(s)", str(context.exception))
+        self.assertIn("Available time range", str(context.exception))
+
+    def test_select_time_partially_found_returns_matches(self):
+        result = select_time_range(self.dataset, time=["2024-01-03", "2025-06-01"])
+        self.assertEqual(len(result.time), 1)
+
+    def test_select_time_invalid_value_raises_error(self):
+        with self.assertRaises(DatacubeOperationError) as context:
+            select_time_range(self.dataset, time="not-a-date")
+        self.assertIn("Invalid time value", str(context.exception))
+
+    def test_select_time_with_start_raises_error(self):
+        with self.assertRaises(DatacubeOperationError) as context:
+            select_time_range(self.dataset, start="2024-01-01", time="2024-01-03")
+        self.assertIn("Cannot combine 'time' with 'start' or 'end'", str(context.exception))
+
+    def test_select_time_with_end_raises_error(self):
+        with self.assertRaises(DatacubeOperationError) as context:
+            select_time_range(self.dataset, end="2024-01-05", time="2024-01-03")
+        self.assertIn("Cannot combine 'time' with 'start' or 'end'", str(context.exception))
+
+    def test_select_time_no_time_dimension_raises_error(self):
+        dataset_no_time = xr.Dataset(
+            {"band1": (["y", "x"], np.random.rand(10, 10))},
+            coords={"y": np.arange(10), "x": np.arange(10)},
+        )
+
+        with self.assertRaises(DatacubeOperationError) as context:
+            select_time_range(dataset_no_time, time="2024-01-01")
+        self.assertIn("Dataset does not have a time dimension", str(context.exception))
+
     def test_select_time_range_sorts_by_time(self):
         times_unsorted = (
             pd.date_range("2024-01-10", periods=5, freq="D").tolist()

@@ -32,24 +32,22 @@ RESOLVER_CLASSES: tuple[type[AssetResolver], ...] = (
 class ResolverRegistry:
     """Holds explicitly configured resolver instances.
 
-    Supports a one-time *lazy configure* callback so that heavy
-    initialisation (e.g. credential fetching) only runs when the
-    first download is actually attempted.
+    Supports a *lazy configure* callback so that heavy
+    initialisation (e.g. credential fetching) only runs when a
+    download is actually attempted. The callback receives the URL.
     """
 
     def __init__(self) -> None:
         self._resolvers: list[AssetResolver] = []
-        self._lazy_configure: Callable[[], None] | None = None
+        self._lazy_configure: Callable[[str], None] | None = None
 
-    def set_lazy_configure(self, setup: Callable[[], None]) -> None:
-        """Register a one-time callback that runs before the first resolver lookup."""
+    def set_lazy_configure(self, setup: Callable[[str], None]) -> None:
+        """Register a callback that runs before resolver lookup (receives URL)."""
         self._lazy_configure = setup
 
-    def _run_lazy_configure(self) -> None:
+    def _run_lazy_configure(self, url: str) -> None:
         if self._lazy_configure is not None:
-            setup = self._lazy_configure
-            self._lazy_configure = None
-            setup()
+            self._lazy_configure(url)
 
     def register(self, resolver: AssetResolver) -> None:
         """Add a configured resolver instance, replacing any existing one of the same type."""
@@ -59,9 +57,9 @@ class ResolverRegistry:
     def get_resolver(self, url: str) -> AssetResolver | None:
         """Return the first configured resolver that can handle *url*, or None.
 
-        Runs the lazy configure callback (if any) on the first call.
+        Runs the lazy configure callback (if any) before lookup.
         """
-        self._run_lazy_configure()
+        self._run_lazy_configure(url)
         for resolver in self._resolvers:
             if resolver.can_handle(url):
                 return resolver

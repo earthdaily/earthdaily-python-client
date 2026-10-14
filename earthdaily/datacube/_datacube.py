@@ -31,7 +31,7 @@ from earthdaily.datacube.constants import (
     DEFAULT_ZONAL_REDUCERS,
     DIM_TIME,
 )
-from earthdaily.datacube.models import AggregationMethod, CompatType, GroupByOption
+from earthdaily.datacube.models import AggregationMethod, CompatType, GroupByOption, TimeSelection
 
 
 class Datacube:
@@ -93,8 +93,10 @@ class Datacube:
         merged_dataset = merge_datacubes(self._dataset, other._dataset, compat=compat)
         return self._create_new(merged_dataset)
 
-    def select_time(self, start: str | None = None, end: str | None = None) -> Datacube:
-        filtered_dataset = select_time_range(self._dataset, start, end)
+    def select_time(
+        self, start: str | None = None, end: str | None = None, time: TimeSelection | None = None
+    ) -> Datacube:
+        filtered_dataset = select_time_range(self._dataset, start, end, time)
         return self._create_new(filtered_dataset)
 
     def rechunk(self, chunks: dict[str, Any]) -> Datacube:
@@ -168,7 +170,7 @@ class Datacube:
 
     @property
     def bands(self) -> list[str]:
-        return list(self._dataset.data_vars)
+        return [str(name) for name in self._dataset.data_vars]
 
     @property
     def timestamps(self) -> list:

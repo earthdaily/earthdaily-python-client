@@ -104,20 +104,20 @@ class TestLazyConfigure(unittest.TestCase):
 
     def test_lazy_configure_runs_on_first_get_resolver(self):
         called = []
-        resolver_registry.set_lazy_configure(lambda: called.append(True))
+        resolver_registry.set_lazy_configure(lambda url: called.append(url))
         resolver_registry._resolvers = []
 
         resolver_registry.get_resolver("https://example.com/f.tif")
-        assert called == [True]
+        assert called == ["https://example.com/f.tif"]
 
-    def test_lazy_configure_runs_only_once(self):
-        call_count = []
-        resolver_registry.set_lazy_configure(lambda: call_count.append(1))
+    def test_lazy_configure_passes_url_on_each_lookup(self):
+        called = []
+        resolver_registry.set_lazy_configure(lambda url: called.append(url))
         resolver_registry._resolvers = []
 
         resolver_registry.get_resolver("https://example.com/a.tif")
-        resolver_registry.get_resolver("https://example.com/b.tif")
-        assert len(call_count) == 1
+        resolver_registry.get_resolver("s3://bucket/b.tif")
+        assert called == ["https://example.com/a.tif", "s3://bucket/b.tif"]
 
     def test_lazy_configure_none_by_default(self):
         registry = ResolverRegistry()

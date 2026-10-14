@@ -121,7 +121,7 @@ def main():
             print("\n✨ Quick start completed successfully!")
             print(f"   Found {len(items)} items to work with.")
             print("   Try the other examples to learn about:")
-            print("   - Creating datacubes (datacube_example.py)")
+            print("   - Creating datacubes (datacube_examples/datacube_example.py)")
             print("   - Downloading assets (asset_download_example.py)")
             print("   - Bulk operations (bulk_search_example.py)")
         else:

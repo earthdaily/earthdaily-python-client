@@ -4,11 +4,12 @@ from typing import Any
 import geopandas as gpd
 from shapely import wkt
 from shapely.geometry import box, shape
+from shapely.geometry.base import BaseGeometry
 
 from earthdaily.datacube.constants import DEFAULT_BBOX_CRS
 
 
-def geometry_to_geopandas(geometry: str | dict[str, Any] | gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+def geometry_to_geopandas(geometry: str | dict[str, Any] | gpd.GeoDataFrame | BaseGeometry) -> gpd.GeoDataFrame:
     if isinstance(geometry, gpd.GeoDataFrame):
         return geometry
 
@@ -49,6 +50,10 @@ def geometry_to_geopandas(geometry: str | dict[str, Any] | gpd.GeoDataFrame) -> 
                 return gpd.GeoDataFrame(geometry=[geom], crs=DEFAULT_BBOX_CRS)
             except Exception:
                 pass
+
+    geo_interface = getattr(geometry, "__geo_interface__", None)
+    if isinstance(geo_interface, dict):
+        return geometry_to_geopandas(geo_interface)
 
     raise ValueError(f"Unsupported geometry type: {type(geometry)}")
 
