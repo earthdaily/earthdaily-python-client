@@ -171,6 +171,16 @@ class TestDatacubeBuilderEngines(unittest.TestCase):
         _replace_item_hrefs([item], "alternate.download.href")
         self.assertEqual(item.assets["band"].href, "original")
 
+    def test_replace_item_hrefs_warns_when_alternate_missing(self) -> None:
+        item = make_fake_item({"band": FakeAsset(href="https://private.blob/x.tif", extra_fields={"alternate": {}})})
+
+        with self.assertLogs("earthdaily.datacube._builder", level="WARNING") as logs:
+            _replace_item_hrefs([item], "alternate.download.href")
+
+        self.assertEqual(item.assets["band"].href, "https://private.blob/x.tif")
+        self.assertIn("alternate.download.href", logs.output[0])
+        self.assertIn("band", logs.output[0])
+
     @mock.patch("earthdaily.datacube._builder.geometry_to_geopandas", return_value="geo")
     @mock.patch("earthdaily.datacube._builder.bbox_to_geopandas")
     @mock.patch("earthdaily.datacube._builder.stac.load")
@@ -247,6 +257,28 @@ class TestDatacubeBuilderEngines(unittest.TestCase):
         items = self._make_items()
         with self.assertRaises(DatacubeCreationError):
             _load_datacube_with_odc(items=items, assets=["unknown"])
+
+    @mock.patch("earthdaily.datacube._builder.stac.load")
+    def test_load_datacube_with_odc_accepts_band_index_assets(self, mock_stac_load) -> None:
+        # odc-stac returns the band-index selector as the variable name; rename_vars
+        # then maps it to the caller-provided alias.
+        mock_stac_load.return_value = self._make_dataset().rename({"band": "band.2"})
+        items = self._make_items()
+
+        result = _load_datacube_with_odc(items=items, assets={"band.2": "cloud_mask"}, properties=False)
+
+        self.assertEqual(mock_stac_load.call_args.kwargs["bands"], ["band.2"])
+        self.assertIn("cloud_mask", result.data_vars)
+        self.assertNotIn("band.2", result.data_vars)
+
+    @mock.patch("earthdaily.datacube._builder.stac.load")
+    def test_load_datacube_with_odc_passes_band_index_list(self, mock_stac_load) -> None:
+        mock_stac_load.return_value = self._make_dataset()
+        items = self._make_items()
+
+        _load_datacube_with_odc(items=items, assets=["band.1", "band.2"], properties=False)
+
+        self.assertEqual(mock_stac_load.call_args.kwargs["bands"], ["band.1", "band.2"])
 
     @mock.patch("earthdaily.datacube._builder.stac.load", side_effect=ValueError("No such band/alias foo"))
     def test_load_datacube_with_odc_wraps_missing_band_error(self, mock_stac_load) -> None:

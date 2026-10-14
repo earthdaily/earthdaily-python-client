@@ -55,7 +55,7 @@ def _apply_scale_offset(
         logger.debug("Skipping scale/offset: dataset has no time dimension")
         return ds
 
-    assets = list(ds.data_vars.keys())
+    assets = [str(name) for name in ds.data_vars]
     if not assets:
         return ds
 
@@ -169,8 +169,10 @@ def _replace_item_hrefs(items: list[Item], href_path: str) -> list[Item]:
     if not href_path:
         return items
 
+    missing: set[str] = set()
+
     for item in items:
-        for asset in item.assets.values():
+        for asset_key, asset in item.assets.items():
             href_dict: dict[str, Any] = asset.to_dict()
             for key in href_path.split("."):
                 href_dict = href_dict.get(key, {})
@@ -178,7 +180,23 @@ def _replace_item_hrefs(items: list[Item], href_path: str) -> list[Item]:
                     break
             if isinstance(href_dict, str) and href_dict:
                 asset.href = href_dict
+            else:
+                missing.add(asset_key)
+
+    if missing:
+        logger.warning(
+            f"No '{href_path}' on asset(s): {', '.join(sorted(missing))}. Using their primary href instead, "
+            "which can fail at read time (e.g. HTTP 403/409) when it is not publicly accessible."
+        )
+
     return items
+
+
+def _asset_base_name(asset: str, available_assets: set[str]) -> str:
+    if asset in available_assets or "." not in asset:
+        return asset
+    base, _, band_index = asset.rpartition(".")
+    return base if band_index.isdigit() else asset
 
 
 def _get_dedup_key_value(item: Item, key: str) -> str:
@@ -272,7 +290,9 @@ def build_datacube(
     bbox : list[float] | tuple | None
         Bounding box [minx, miny, maxx, maxy] for spatial filtering
     intersects : Any
-        Geometry for spatial intersection (GeoJSON, WKT, GeoDataFrame)
+        Geometry for spatial intersection. Accepts GeoJSON (dict or string), WKT,
+        a GeoDataFrame/GeoSeries, or any object exposing a `__geo_interface__`
+        property (e.g. shapely geometries).
     dtype : str
         Data type for loaded arrays (default: 'float32')
     nodata : float | int | None
@@ -359,7 +379,9 @@ def _load_datacube_with_odc(
     if assets:
         available_assets = set(items[0].assets.keys())
         requested_assets = list(assets.keys()) if isinstance(assets, dict) else assets
-        missing_assets = [asset for asset in requested_assets if asset not in available_assets]
+        missing_assets = [
+            asset for asset in requested_assets if _asset_base_name(asset, available_assets) not in available_assets
+        ]
 
         if missing_assets:
             raise DatacubeCreationError(

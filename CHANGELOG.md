@@ -4,6 +4,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0]
+
+### Added
+
+- Python 3.15 support
+
+### Removed
+
+- Python 3.10 support
+
+## [2.0.5]
+
+### Added
+
+- `datacube.select_time()` now accepts a `time` argument for selecting one or more specific acquisitions (e.g. `select_time(time="2026-04-15")` or `select_time(time=["2026-04-15", "2026-06-01"])`). Date-only values match every acquisition on that day; values with a time component must match exactly
+
+## [2.0.4]
+
+### Added
+
+- `datacube.create()` now accepts shapely geometries (and any object exposing a `__geo_interface__` property) for `intersects`, matching what `platform.search()` already supported
+
+## [2.0.3]
+
+### Fixed
+
+- `datacube.create()` no longer rejects `asset.band_index` notation (e.g. `quality_mask.2`) for selecting a single band of a multi-band asset
+
+## [2.0.2]
+
+### Fixed
+
+- Download resolver setup no longer fetches credentials for every provider up front. Credentials are now resolved only for the provider matching the asset URL, so downloading only `s3://` assets no longer triggers unnecessary secret lookups (or the resulting access-denied warnings) on start-up.
+
+## [2.0.1]
+
+### Added
+
+- Warning when `datacube.create()` falls back to an asset's primary `href` because the `replace_href_with` path (default `alternate.download.href`) is missing
+
 ## [2.0.0]
 
 ### Removed

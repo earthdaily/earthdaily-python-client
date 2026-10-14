@@ -1,13 +1,13 @@
 [project]
 name = "earthdaily"
-version = "2.0.0"
+version = "2.1.0"
 description = "EarthDaily Python Client"
 authors = [
     { name = "EarthDaily", email = "info@earthdaily.com" }
 ]
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.10,<3.15"
+requires-python = ">=3.11,<3.16"
 
 dependencies = [
     "requests>=2.32.4",

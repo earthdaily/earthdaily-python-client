@@ -34,6 +34,8 @@ datacube = client.datacube.create(
 ### 1. Creation
 - `client.datacube.create(items, assets, resolution)` - Create datacubes from STAC items using odc-stac
 
+If `boto3` is installed and datacube loads fail with AWS credential errors, set `AWS_NO_SIGN_REQUEST=YES`. Rasterio will then skip the AWS credential chain for public and presigned objects.
+
 ### 2. Cloud Masking
 - `datacube.apply_mask(mask_band, clear_values, exclude_values)` - Apply cloud/quality masks with statistics
 - Supports custom mask functions and automatic clear cover calculation
@@ -44,7 +46,7 @@ datacube = client.datacube.create(
 - `datacube.rechunk(chunks)` - Optimize Dask chunking
 
 ### 4. Temporal Operations
-- `datacube.select_time(start, end)` - Filter by time range
+- `datacube.select_time(start, end)` - Filter by time range, or `select_time(time=...)` to select specific acquisitions
 - `datacube.temporal_aggregate(method, freq)` - Aggregate over time (mean, median, min, max, sum, std, var)
 - `datacube.resample(freq, method)` - Resample to different frequency
 - `datacube.whittaker(beta, weights)` - Temporal smoothing (Whittaker filter)
@@ -72,6 +74,28 @@ datacube = client.datacube.create(
 - `datacube.data` - Direct access to underlying xarray Dataset
 - `datacube.info()` - Print comprehensive datacube information
 
+## Write a GeoTIFF
+
+`rioxarray` is installed with the datacube extra and adds the `.rio` accessor. This writes one multiband float GeoTIFF for a single acquisition. Write one file per band by calling `to_raster` on each data variable instead.
+
+```python
+import rioxarray  # registers the .rio accessor
+
+ds = datacube.data
+
+rgb_ds = ds[["red", "green", "blue"]]
+if "time" in rgb_ds.dims:
+    rgb_ds = rgb_ds.squeeze("time", drop=True)  # single acquisition
+
+rgb = (
+    rgb_ds.to_array(dim="band")
+    .assign_coords(band=["red", "green", "blue"])
+    .transpose("band", "y", "x")
+)
+
+rgb.rio.to_raster("rgb_float32.tif", dtype="float32", compress="deflate", tiled=True)
+```
+
 ## Architecture
 
 The module is organized into separate files for maintainability:
@@ -96,5 +120,5 @@ earthdaily/datacube/
 
 ## Examples
 
-See `examples/datacube_new_example.py` for a complete working example.
+See `examples/datacube_examples/datacube_example.py` for a complete working example.
 

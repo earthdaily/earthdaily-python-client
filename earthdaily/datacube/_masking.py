@@ -1,5 +1,5 @@
 import warnings
-from typing import Any, Callable
+from typing import Any, Callable, Hashable
 
 import geopandas as gpd
 import numpy as np
@@ -299,7 +299,7 @@ def _apply_mask_statistics(
     xr.Dataset
         Dataset with clear_pixels and clear_percent coordinates added.
     """
-    spatial_dims = [d for d in mask.dims if d in [DIM_X, DIM_Y]]
+    spatial_dims: list[Hashable] = [d for d in mask.dims if d in [DIM_X, DIM_Y]]
     if not spatial_dims:
         spatial_dims = [d for d in mask.dims if d != DIM_TIME]
     if not spatial_dims:

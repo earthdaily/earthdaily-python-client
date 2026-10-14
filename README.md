@@ -2,9 +2,11 @@
 
 [![PyPI version](https://badge.fury.io/py/earthdaily.svg)](https://badge.fury.io/py/earthdaily)
 [![Documentation](https://img.shields.io/badge/Documentation-Online-brightgreen.svg)](https://earthdaily.github.io/earthdaily-python-client/)
-![Python Versions](https://img.shields.io/badge/Python-3.10%20|%203.11%20|%203.12%20|%203.13-blue)
+![Python Versions](https://img.shields.io/badge/Python-3.11%20|%203.12%20|%203.13%20|%203.14%20|%203.15-blue)
 
 The EarthDaily Python Client is a comprehensive library for interacting with the EarthDaily Analytics platform. It provides seamless access to satellite data, STAC item management, and platform APIs through a unified interface.
+
+EDS means Earth Data Store, the data platform behind this client. Requests go to the EarthPlatform STAC API.
 
 ## 🚀 Key Features
 
@@ -16,7 +18,7 @@ The EarthDaily Python Client is a comprehensive library for interacting with the
 
 ## 📦 Installation
 
-**Supported Python Versions**: 3.10, 3.11, 3.12, 3.13, 3.14
+**Supported Python Versions**: 3.11, 3.12, 3.13, 3.14, 3.15
 
 ### Basic Installation
 ```bash
@@ -41,6 +43,14 @@ pip install "earthdaily[platform,datacube]"
 ### Full Installation with utils (for .env file and Jupyter notebooks)
 ```bash
 pip install "earthdaily[platform,datacube,utils]"
+```
+
+### Install from a checkout
+
+The commands above install a release with `pip`. From a git checkout, [uv](https://docs.astral.sh/uv/) can install the client and its extras:
+
+```bash
+uv sync --extra platform --extra datacube
 ```
 
 > **Looking for v1/legacy functionality?** The legacy module (`client.legacy`) was removed in v2.0.0.
@@ -323,9 +333,18 @@ insert_job = client.platform.bulk_insert.create(
 
 #### Upload Data
 ```python
-# Prepare STAC items file and upload
-items_file = Path("./stac_items.jsonl")  # JSONL format
-insert_job.upload(items_file)
+# Prepare a directory of STAC items, one folder per item, each containing a
+# matching <item_id>.json file (plus any local assets to upload):
+#   stac_items/
+#     item-1/
+#       item-1.json
+#     item-2/
+#       item-2.json
+items_dir = Path("./stac_items")
+
+# Zip the directory into the bundle expected by the platform, then upload it
+bundle = client.platform.bulk_insert.zip_dir(items_dir)
+insert_job.upload(bundle)
 
 # Start the job
 insert_job.start()
@@ -351,8 +370,12 @@ delete_job = client.platform.bulk_delete.create(
 
 #### Upload Item IDs
 ```python
-# Prepare file with item IDs to delete
-ids_file = Path("./items_to_delete.txt")
+# Prepare a JSON file containing a list of item IDs to delete.
+# It must be a JSON array of unique strings, e.g.: ["item-1", "item-2", "item-3"]
+ids = ["item-1", "item-2", "item-3"]
+ids_file = Path("./items_to_delete.json")
+ids_file.write_text(json.dumps(ids))
+
 delete_job.upload(ids_file)
 
 # Start the deletion
@@ -415,8 +438,8 @@ for item in items:
 
 ## 📚 Documentation & Examples
 
-- [📖 **EDA Documentation**](https://earthdaily.github.io/EDA-Documentation/)
-- [📖 **Full API Documentation**](https://earthdaily.github.io/earthdaily-python-client/)
+- [📖 **Earth Data Store (EDS) documentation**](https://earthdaily.github.io/EDA-Documentation/)
+- [📖 **EarthDaily Python Client documentation**](https://earthdaily.github.io/earthdaily-python-client/)
 - [📝 **Quick Start Examples**](https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/)
 - [🧪 **Jupyter Notebooks**](https://github.com/earthdaily/earthdaily-python-client/tree/main/examples/applications/)
 

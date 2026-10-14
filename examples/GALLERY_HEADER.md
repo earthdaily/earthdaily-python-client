@@ -7,7 +7,7 @@ Welcome to the EarthDaily Python Client examples! These examples demonstrate the
 ### 🚀 [Quick Start](quick_start.py)
 Get started quickly with searching and exploring STAC items using the platform API.
 
-### 📊 [Datacube Creation](datacube_example.py) 
+### 📊 [Datacube Creation](datacube_examples/datacube_example.py) 
 Learn how to create datacubes using the datacube module.
 
 ### 📥 [Asset Download](asset_download_example.py)
